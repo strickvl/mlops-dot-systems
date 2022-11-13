@@ -1,5 +1,5 @@
 ---
-title: "mlops-dot-systems"
+title: "MLOps.systems"
 listing:
   contents: posts
   sort: "date desc"

@@ -2,14 +2,16 @@ project:
   type: website
 
 website:
-  title: "mlops-dot-systems"
+  title: "MLOps.systems"
   navbar:
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/
+        href: https://github.com/strickvl
+      - icon: mastodon
+        href: https://sigmoid.social/web/@alexstrick
       - icon: twitter
-        href: https://twitter.com
+        href: https://twitter.com/strickvl
 format:
   html:
     theme: cosmo
