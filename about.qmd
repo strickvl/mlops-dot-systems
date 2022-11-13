@@ -1,0 +1,30 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/strickvl
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/in/strickvl
+    - icon: github
+      text: Github
+      href: https://github.com/strickvl
+
+---
+
+I am an ML Engineer working at ZenML. This blog is a place for me to process and
+share what I learn along the way.
+
+Hi, I’m Alex.
+
+I am a software engineer based in London, UK. I recently built [Ekko](https://ekko-realtime.com), an open-source framework allowing developers to easily add realtime infrastructure and in-transit message processing to web applications.
+
+I have multiple years of experience in the Python, Ruby and JavaScript ecosystems and am comfortable working with Go, PostgreSQL, AWS cloud infrastructure and Docker.
+
+I have a PhD in History and authored several books based on my research work in Afghanistan.
+
+I have [a long-standing blog](https://www.alexstrick.com) that I will combine with this one at some point, but for now I intend to post technical posts here.
