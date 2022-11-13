@@ -9,7 +9,7 @@ date: '2022-02-27'
 description: The parse, yarl and datefinder packages are all ways in Python to help
   parse input data of different formats and types. Nothing essential here, but useful
   nonetheless.
-image: images/python-parsers/parse.png
+image: python-parsers/parse.png
 layout: post
 title: Three Python Helpers for Parsing Inputs
 toc: false

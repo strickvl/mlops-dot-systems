@@ -7,7 +7,7 @@ categories:
 - skillbuilding
 date: '2021-09-18'
 description: Some of the code libraries I plan on reading to improve my Pythonic style
-image: images/python-code.jpeg
+image: python-code.jpeg
 layout: post
 title: Reading Python Code
 toc: true

@@ -9,7 +9,7 @@ categories:
 date: '2021-11-29'
 description: How I used Prodigy to annotate my data ahead of training an object detection
   model
-image: images/2021-11-29-prodigy-object-detection-training/prodigy-redaction.png
+image: 2021-11-29-prodigy-object-detection-training/prodigy-redaction.png
 layout: post
 title: How to annotate image data for object detection with Prodigy
 toc: true
@@ -47,19 +47,19 @@ Note that the `--remove-base64` is to ensure that Prodigy doesn't store the raw 
 
 You get a local URL to go visit and you see an interface where you can make the necessary annotations:
 
-![]({{ site.baseurl }}/images/2021-11-29-prodigy-object-detection-training/prodigy-object-interface.png "This is the basic interface for annotating object detection data in Prodigy")
+![](2021-11-29-prodigy-object-detection-training/prodigy-object-interface.png "This is the basic interface for annotating object detection data in Prodigy")
 
 You can see that I am distinguishing between two different classes: redactions and content. Redactions are what we've been talking about above. Content, however, is a bounding box for the content on a page. Remember that at the end of all of this we want a percentage of the page that has been redacted. Some images have reduced sized images, where the actual content which could have been redacted only takes up half of the A4 page. If that whole section was redacted, I'd want a final amount closer to 100% for that image rather than the 50% I'd get if I just went with the total percentage of redacted pixels on the whole image file.
 
 Doing a few annotations, I ran into a couple of issues almost immediately. What do I do with a page like this:
 
-![]({{ site.baseurl }}/images/2021-11-29-prodigy-object-detection-training/full-square-annotation.png "The whole page is redacted... or is it?")
+![](2021-11-29-prodigy-object-detection-training/full-square-annotation.png "The whole page is redacted... or is it?")
 
 The whole text of the page is annotated, but the text only extended half-way down the page. There was only 50% of the page that could have been redacted, but should the content boundary box encompass more of the page, or just the only full-section redaction?
 
 And for the following image, what is the right way to think about how to make the annotation?
 
-![]({{ site.baseurl }}/images/2021-11-29-prodigy-object-detection-training/polygon-annotation.png "Should this be a single annotation, or two overlapping or adjoining boundary boxes?")
+![](2021-11-29-prodigy-object-detection-training/polygon-annotation.png "Should this be a single annotation, or two overlapping or adjoining boundary boxes?")
 
 This redaction encompasses multiple lines, so to some extent it doesn't make a difference whether we have overlapping annotations or two adjoining boundary boxes. But for the purposes of training our model, will this contribute to a less accurate model? Should I be using polygon boundaries (which Prodigy can also use for annotations)?
 

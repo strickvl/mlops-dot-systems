@@ -10,7 +10,7 @@ date: '2022-03-25'
 description: I setup a new Paperspace project that uses a custom Docker image to provision
   its environment, saving me a bunch of initial installation time and dependency bug
   pain. A huge productivity win!
-image: images/paperspace-docker-icevision/docker-image-cover.png
+image: paperspace-docker-icevision/docker-image-cover.png
 layout: post
 title: Building my own image to use IceVision with Paperspace
 toc: true
@@ -40,15 +40,15 @@ CMD make lfs && git lfs pull
 
 In order to set this up with Paperspace, you first have to go to your notebooks inside a project and click to create a new Paperspace notebook. 
 
-![]({{ site.baseurl }}/images/paperspace-docker-icevision/paperspace1.png "Creating a Paperspace notebook")
+![](paperspace-docker-icevision/paperspace1.png "Creating a Paperspace notebook")
 
 Once there, you can ignore the suggestion to "select a runtime", but rather select your machine from the available GPUs. I usually choose the RTX5000 and set it up for an auto-shutdown after 6 hours. 
 
-![]({{ site.baseurl }}/images/paperspace-docker-icevision/paperspace2.png "Selecting a GPU within Paperspace")
+![](paperspace-docker-icevision/paperspace2.png "Selecting a GPU within Paperspace")
 
 Then you want to click the 'Advanced Options' toggle so you can add in all the details of the image being used.
 
-![]({{ site.baseurl }}/images/paperspace-docker-icevision/paperspace3.png "Setting up the custom image in Paperspace")
+![](paperspace-docker-icevision/paperspace3.png "Setting up the custom image in Paperspace")
 
 This is what worked for me. In order to use [JupyterLab](https://jupyter.org/), the container command should be:
 

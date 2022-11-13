@@ -9,7 +9,7 @@ date: '2022-04-04'
 description: I wrote about some of the things that go into creating a really great
   portfolio project for machine learning. For this post I'm less interested in the
   technical achievements than I am in how it is presented.
-image: images/ml-portfolio-best-practices/healthsea.png
+image: ml-portfolio-best-practices/healthsea.png
 layout: post
 title: Some characteristics of best-in-class ML portfolio projects
 toc: false
@@ -19,7 +19,7 @@ toc: false
 [Ekko](https://ekko-realtime.com) was the last time I worked on a big project that would be presented publicly. An open-source framework that provided realtime infrastructure and
 in-transit message processing for web applications was a group project that I worked on together with three other colleagues, and we took the time to really make the *how* and the *why* really explicit. We made animations, diagrams, charts, and I learned a lot about what's hard when explaining technical projects, even when the audience is expected to be (mostly) technically literate.
 
-![]({{ site.baseurl }}/images/ml-portfolio-best-practices/ekko.png "A screenshot from the Ekko website")
+![](ml-portfolio-best-practices/ekko.png "A screenshot from the Ekko website")
 
 I've been working on [my redaction project](https://mlops.systems/categories/#redactionmodel) since December and slowly but surely I'm tying the ends together and getting ready for it to come to a close. As part of the final touches, I want to offer something equivalent to how we presented [Ekko](https://ekko-realtime.com). From reading around and exposure to various projects over the years, it seems to me that machine learning projects sometimes have different emphases and conventions. This blog post is my attempt to list some of the characteristics of really great ML portfolio projects, with an emphasis on how the project is presented.
 

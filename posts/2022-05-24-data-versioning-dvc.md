@@ -12,7 +12,7 @@ description: I show you why you probably want to be versioning your data alongsi
   your code. I introduce the basic functionality of DVC, the industry-standard tool
   for data versioning. I also explain specifically how I'm using DVC for my computer
   vision project.
-image: images/dvc/dvclogo.png
+image: dvc/dvclogo.png
 layout: post
 title: 'More Data, More Problems: Using DVC to handle data versioning for a computer
   vision problem'

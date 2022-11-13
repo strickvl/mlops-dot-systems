@@ -10,7 +10,7 @@ date: '2022-01-18'
 description: Reflections on the fifth chapter of Patrick Viafore's book, 'Robust Python'.
   We learn about how to use type annotations when collections (lists, dictionaries
   and sets, primarily) are involved.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: Using type annotation with collections in Python
 toc: true

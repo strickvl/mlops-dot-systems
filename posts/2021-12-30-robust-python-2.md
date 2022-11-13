@@ -9,7 +9,7 @@ categories:
 date: '2021-12-30'
 description: Reflections on the second chapter of Patrick Viafore's recent book, 'Robust
   Python'. We learn about types and how they fit into Python.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: What's special about types in Python?
 toc: false

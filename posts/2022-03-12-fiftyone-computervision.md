@@ -13,7 +13,7 @@ description: I used the under-appreciated tool FiftyOne to analyse the ways that
   object detection model is underperforming. For computer vision problems, it's really
   useful to have visual debugging aids and FiftyOne is a well-documented and solid
   tool to help with that.
-image: images/fiftyone-computervision/fiftyone-overview.png
+image: fiftyone-computervision/fiftyone-overview.png
 layout: post
 title: Figuring out why my object detection model is underperforming with FiftyOne,
   a great tool you probably haven't heard of
@@ -43,7 +43,7 @@ Enter [FiftyOne](https://voxel51.com/docs/fiftyone/).
 
 FiftyOne is a Python library that offers a visual interface to your data. For my redaction model, the base interface looks something like this:
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/fiftyone-overview.png "The basic view of the FiftyOne app")
+![](fiftyone-computervision/fiftyone-overview.png "The basic view of the FiftyOne app")
 
 You need to convert your dataset such that FiftyOne can interpret the structure of where images are stored as well as the annotations themselves, but many commonly-used formats are supported. In my case, COCO annotations are supported out of the box, so it was trivial to import the data to generate the above visualisation.
 
@@ -59,7 +59,7 @@ The first thing I did was visualise the ground truth annotations alongside the p
 
 This requires performing inference on a slice of our images. Unfortunately, I had to do that inference on my local (CPU) machine because FiftyOne doesn't work on Paperspace cloud machines on account of port forwarding choices that Paperspace make. This makes for a slightly slower iteration cycle, but once the inference is done you don't have to do it again.
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/groundtruth-predictions.gif "Comparing ground truth with predictions")
+![](fiftyone-computervision/groundtruth-predictions.gif "Comparing ground truth with predictions")
 
 You can see here that it's possible to selectively turn off and on the various overlaid annotations. If you want to compare how redactions are detected (and not see the content box), then this is an easy way to toggle between.
 
@@ -75,13 +75,13 @@ from fiftyone import ViewField as F
 high_conf_view = dataset.filter_labels("prediction", F("confidence") > 0.75)
 ```
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/highconfidence.png "Viewing high-confidence predictions")
+![](fiftyone-computervision/highconfidence.png "Viewing high-confidence predictions")
 
 ## 'Patches': detailed views for detected objects
 
 For a more fine-grained understanding on the ways our model is predicting redactions, we can create what are called 'patches' to view and scroll through prediction-by-prediction.
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/redaction-patch.png "Patch view of some predicted redactions")
+![](fiftyone-computervision/redaction-patch.png "Patch view of some predicted redactions")
 
 This is an excellent way to view things through the eyes of your model. These are all the objects it considers to be redactions. We'll get to finding the ones where it doesn't do as well in a bit, but this view allows us to immerse ourselves in the reality of how our model is predicting redaction boxes. We can see that certain types of boxes are well-represented in our dataset: coloured or shaded rectangles in particular.
 
@@ -89,11 +89,11 @@ This is an excellent way to view things through the eyes of your model. These ar
 
 We only have two classes in our training data: redaction and content, so doing a class analysis doesn't help us too much for this problem, but using the mean average precision (MAP) calculation we can see the difference between how well our model does on redactions vs content:
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/class-comparison.png "A classification report for our dataset")
+![](fiftyone-computervision/class-comparison.png "A classification report for our dataset")
 
 We can also easily plot an interactive chart that quite clearly displays these differences:
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/plotting-curves.png "Plotting the precision vs recall curves for our two classes")
+![](fiftyone-computervision/plotting-curves.png "Plotting the precision vs recall curves for our two classes")
 
 # Viewing the false positives and false negatives
 
@@ -101,17 +101,17 @@ The previous calculations also added some metadata to each image, denoting wheth
 
 This view is sorted by total number of false positives in an image. False positives are where the model confidently has predicted something to be a redaction box, for example, that is not actually a redaction box. 
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/false-positives.png "Predicted false positives")
+![](fiftyone-computervision/false-positives.png "Predicted false positives")
 
 In this image you can see that the model predicts a redaction box with 82% confidence that is clearly not a redaction. Note, too, how the smaller redactions to the right and the large partial redaction to the left were not detected.
 
 False negatives are where there were some redactions to be predicted, but our model never made those predictions (or was very unconfident in doing so).
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/false-negatives.png "False negatives & missing predictions")
+![](fiftyone-computervision/false-negatives.png "False negatives & missing predictions")
 
 In this image excerpt, you can see that some predictions were made, but many were also missed. This image shows the ground truth reality of what should have been predicted:
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/false-negatives-overlaid.png "Overlaying the ground truth, showing many false negatives")
+![](fiftyone-computervision/false-negatives-overlaid.png "Overlaying the ground truth, showing many false negatives")
 
 Scrolling through the examples with high numbers of false positives and false negatives gives me a really useful indication of which kinds of redactions with which I need to annotate and supplement my training data. I already had a sense of this from my own intuition, but it's excellent to see this confirmed in the data.
 
@@ -134,11 +134,11 @@ For my dataset, visualising similarity and uniqueness revealed what I already kn
 
 The mistakenness calculation is useful, however. It compares between the ground truth and the predictions to get a sense of which images it believes contains annotations that might be wrong. I can filter these such that we only show images where it is more than 80% confident mistakes have been made. Instantly it reveals a few examples where there have been annotation mistakes. To take one example, here you can see the ground truth annotations:
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/groundtruth-mistake.png "Ground truth mistakes")
+![](fiftyone-computervision/groundtruth-mistake.png "Ground truth mistakes")
 
 And here you can see what was predicted:
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/mistake-what-was-predicted.png "What was predicted, revealing mistakes in the ground truth annotations")
+![](fiftyone-computervision/mistake-what-was-predicted.png "What was predicted, revealing mistakes in the ground truth annotations")
 
 In this example, it was even clear from the beginning that redactions had been missed, and that the single annotation that had been made (a content box) was incorrect.
 
@@ -150,7 +150,7 @@ We can also view images that the FiftyOne brain tagged as containing missing ann
 session.view = dataset.match(F("possible_missing") > 0)
 ```
 
-![]({{ site.baseurl }}/images/fiftyone-computervision/missing-annotations.png "Suggestions for images containing annotations that were missing")
+![](fiftyone-computervision/missing-annotations.png "Suggestions for images containing annotations that were missing")
 
 Unfortunately the [`compute_hardness`](https://voxel51.com/docs/fiftyone/user_guide/brain.html#brain-sample-hardness) method only works for classification models currently, but regardless I think we have a lot to work with already.
 

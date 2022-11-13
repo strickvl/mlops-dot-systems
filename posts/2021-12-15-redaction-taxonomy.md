@@ -8,7 +8,7 @@ date: '2021-12-15'
 description: A brief analysis of some of the types of redactions that are commonly
   found in FOIA documents. I use these as the dataset used to train an object detection
   model for redactions.
-image: images/redaction-taxonomy/cover-image.jpg
+image: redaction-taxonomy/cover-image.jpg
 layout: post
 title: A Taxonomy of Redaction
 toc: true
@@ -23,7 +23,7 @@ Taking a close look at the actual parts of images that contain redactions gives 
 
 The first easy distinction to draw is that between digital and hand-applied redactions. 
 
-![]({{ site.baseurl }}/images/redaction-taxonomy/comparison1.png "It's pretty easy to tell the difference.")
+![](redaction-taxonomy/comparison1.png "It's pretty easy to tell the difference.")
 
 It seems that the trend in this is towards digital redactions. Perhaps it is seen as less reliable, or perhaps it's more time consuming to attach the reasons for redactions having happened. Perhaps, too, there are some legal reasons why each redaction needed to start having a specific reason applied to it.
 
@@ -35,7 +35,7 @@ It is more practically important to distinguish between redactions that are easy
 
 There isn't much point spending too long with the 'easy' redactions. These are usually whatever is boxy and blunt. It's the stereotype of a redacted document, one like what was used as the cover art on the (much-censored) [Guantánamo Diary](https://www.amazon.com/gp/product/B00KAEXM1K/ref=dbs_a_def_rwt_hsch_vapi_tkin_p1_i0?tag=soumet-20) by Mohamedou Ould Slahi.
 
-![]({{ site.baseurl }}/images/redaction-taxonomy/slahi-diary.png "The book was made into the film 'The Mauritanian'")
+![](redaction-taxonomy/slahi-diary.png "The book was made into the film 'The Mauritanian'")
 
 Sometimes you see that the entire page has been redacted with some kind of a coloured box. Other times entire columns of information has been redacted from a table. These definitely feel like they are the more recent types of redactions.
 
@@ -43,11 +43,11 @@ One thing that makes detecting redactions hard, on the other hand, is if the num
 
 The hardest of redactions seems like it is in examples like this:
 
-![]({{ site.baseurl }}/images/redaction-taxonomy/hard-pictures.png "White boxes on white boxes are hard to recognise!")
+![](redaction-taxonomy/hard-pictures.png "White boxes on white boxes are hard to recognise!")
 
 A white box on top of other white boxes! I often have to look quite closely at these to distinguish what is normal text and what is a redaction box. Some of them have a faint thin grey boundary box around them, which I guess ends up being pretty useful as a way to make that distinction. Surprisingly, the model that I've trained so far is not terrible at making these kinds of distinctions.
 
-![]({{ site.baseurl }}/images/redaction-taxonomy/hard-image-prediction.png "It even made a decent effort at recognising opaque boxes on a white background")
+![](redaction-taxonomy/hard-image-prediction.png "It even made a decent effort at recognising opaque boxes on a white background")
 
 I have a few hundred annotated images so far, but I now have an intuitive sense of the hard parts of the object detection test. I also have a sense of how represented I feel like those hard parts are — not very.
 

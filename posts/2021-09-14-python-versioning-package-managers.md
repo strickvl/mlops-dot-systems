@@ -8,7 +8,7 @@ categories:
 date: '2021-09-14'
 description: Getting a development environment setup for Python and having to choose
   between pyenv vs virtualenv vs venv
-image: images/pyenv_terminal_output.png
+image: pyenv_terminal_output.png
 layout: post
 title: A Baseline Python Development Setup
 toc: true

@@ -12,7 +12,7 @@ description: In this second post on data validation for the computer vision cont
   I show how you can use the automatic profiling feature of the Great Expectations
   library to get you started with increasing your confidence in your object detection
   annotations.
-image: images/great_expectations/g_e_logo.jpeg
+image: great_expectations/g_e_logo.jpeg
 layout: post
 title: 'How to trust the data you feed your model: data validation with Great Expectations
   in a computer vision context (part 2)'
@@ -85,7 +85,7 @@ context.save_expectation_suite(suite) # use this to save your suite in the conte
 
 The above code perhaps seems like a lot, but really all you're doing is getting your data, making the relevant connections between Great Expectations and your context, and then running the profiler so it can work its magic.
 
-![]({{ site.baseurl }}/images/great_expectations/profiler.jpg "You'll see output from the final `build_suite()` call that looks something like this.")
+![](great_expectations/profiler.jpg "You'll see output from the final `build_suite()` call that looks something like this.")
 
 You can't yet see the specific values that were imputed from your data, but even this high-level output shows you some of the expectations that it's thinking would be useful to create.
 
@@ -138,7 +138,7 @@ What you really want, however, is to run your expectations suite against *new* d
 
 In my case, the first thing I was interested to check was whether [the synthetic images](https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html) [I created](https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html) would match the expectations suite I'd created based off my core hand-annotated data. (Quick context if you haven't been following the project so far: I have a core dataset which is manually annotated for the objects inside images. I also created two sets of synthetic data to supplement the manual annotations, which [boosted my model performance](https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html) considerably.)
 
-![]({{ site.baseurl }}/images/great_expectations/ge_ui_validation.png "The web validation UI looks like this once you generate and open it.")
+![](great_expectations/ge_ui_validation.png "The web validation UI looks like this once you generate and open it.")
 
 The web UI is where you can go to get a visual overview of where your data is passing and failing to meet your (great) expectations. You will want (and I will need) to configure your expectations suite to meet the core assumptions you make about your data derived from your particular domain.
 

@@ -11,7 +11,7 @@ date: '2022-05-07'
 description: I created a few deployed MVP demos showcasing models I'd created while
   participating in the fastai course, uploading them to the Huggingface Hub and using
   a Gradio Demo hosted on Huggingface Spaces.
-image: images/redaction-mvp-huggingface/demo-screenshot.png
+image: redaction-mvp-huggingface/demo-screenshot.png
 layout: post
 title: A painless way to create an MVP demo using computer vision models
 toc: true
@@ -45,7 +45,7 @@ With that model exported, it was then easy to get a simple [Gradio](https://grad
 
 It's an easy step to go from having a Gradio app deployed to then hosting that same demo as a Huggingface Space, so I then did that. You can [access the demo here](https://huggingface.co/spaces/strickvl/fastai_redaction_classifier) at [`strickvl/fastai_redaction_classifier`](https://huggingface.co/spaces/strickvl/fastai_redaction_classifier).
 
-![]({{ site.baseurl }}/images/redaction-mvp-huggingface/classification-demo.png "A Gradio app hosted on Huggingface Spaces: an image classifier that detects whether an image input contains a redaction or not.")
+![](redaction-mvp-huggingface/classification-demo.png "A Gradio app hosted on Huggingface Spaces: an image classifier that detects whether an image input contains a redaction or not.")
 
 At this first stage I had the exported model itself uploaded inside the Spaces repository, but [this useful blog](https://huggingface.co/blog/fastai) by Omar Espejel showed how I could just upload my model directly to the Huggingface model hub. Instead of calling `learn.export('model.pkl')` and uploading the model file itself, I could just run the following code after authentication:
 
@@ -67,7 +67,7 @@ Thanks to a really simple and comprehensible [example](https://github.com/nuvic/
 
 If you [search for 'redacted document' images](https://duckduckgo.com/?q=redacted+document&t=osx&iax=images&ia=images) and save one of them do your local computer you can use those to try it out. It uses simple Javascript code to pass the image you upload into the inference API using a simple HTTP request. It parses the results and displays them as shown here:
 
-![]({{ site.baseurl }}/images/redaction-mvp-huggingface/gh-pages-demo.png "A demo using Github Pages to host a simple app showcasing the model inference.")
+![](redaction-mvp-huggingface/gh-pages-demo.png "A demo using Github Pages to host a simple app showcasing the model inference.")
 
 While the demo gives a sense of the model's capabilities, in reality you would probably not find it very helpful to use a web app that required you to feed a document's pages to it one by one. I started to think about a more complex application where you could upload a PDF and it would split the PDF for you and do all the inference behind the scenes.
 
@@ -78,7 +78,7 @@ I spent a brief half-hour considering deploying a simple [Flask](https://flask.p
 You can access the demo / MVP app that I created here:
 [https://huggingface.co/spaces/strickvl/redaction-detector](https://huggingface.co/spaces/strickvl/redaction-detector)
 
-![]({{ site.baseurl }}/images/redaction-mvp-huggingface/demo-screenshot.png "An MVP app for detection, extraction and analysis of PDF documents that contain redactions.")
+![](redaction-mvp-huggingface/demo-screenshot.png "An MVP app for detection, extraction and analysis of PDF documents that contain redactions.")
 
 This MVP app runs two models to mimic the experience of what a final deployed version of the project might look like.
 
@@ -107,7 +107,7 @@ There are two easy ways to deploy a Streamlit app: either host it natively on St
 
 I didn't convert all the various parts of my Gradio app over to work on Streamlit — in particular extraction of images and display as a carousel was non-trivial — but you can get a sense of the flexibility with this image:
 
-![]({{ site.baseurl }}/images/redaction-mvp-huggingface/demo-streamlit.png "A partly converted version of my demo app using Streamlit.")
+![](redaction-mvp-huggingface/demo-streamlit.png "A partly converted version of my demo app using Streamlit.")
 
 (Alternatively, you can try it out over on Huggingface Spaces [here](https://huggingface.co/spaces/strickvl/redaction-detector-streamlit).)
 

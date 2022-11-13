@@ -13,7 +13,7 @@ date: '2022-09-07'
 description: I explain the basics around data serialisation and deserialisation, why
   it's a commonly-encountered topic, and showcase where I had to implement some custom
   logic to serialise custom Python objects used in a computer vision project.
-image: images/serialisation/fabio-oyXis2kALVg-unsplash.jpg
+image: serialisation/fabio-oyXis2kALVg-unsplash.jpg
 layout: post
 title: 'Storing Bytes: what data serialisation is and why you need it for machine
   learning'

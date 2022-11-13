@@ -10,7 +10,7 @@ categories:
 date: '2021-09-06'
 description: How I trained a model to detect redactions in FOIA requests, using Prodigy
   for data labelling and the fastai library for model training
-image: images/redacted_section.png
+image: redacted_section.png
 layout: post
 title: Training a classifier to detect redacted documents with fastai
 toc: true
@@ -31,7 +31,7 @@ Under the [Freedom of Information Act](<https://en.wikipedia.org/wiki/Freedom_of
 
 Quite often, however, these images are censored or redacted.
 
-![]({{ site.baseurl }}/images/redacted_sample.png "A name and an email address have been redacted here")
+![](redacted_sample.png "A name and an email address have been redacted here")
 
 Knowing that this practice exists, I thought it might be interesting to train a model that could recognise whether a particular page contained some kind of redaction. This wasn't completely in line with what we covered during the first two chapters; I wasn't sure if the pre-trained model we used would work for this data set and use case.
 
@@ -51,11 +51,11 @@ At the end of the splitting-and-resizing process, I had a little over 67,000 ima
 
 I had used Explosion.ai's [Prodigy data labelling tool](https://prodi.gy) in the past and so already had a license. The interface is clean and everything works pretty much as you'd hope. I had some teething issues getting it all working, but [Prodigy co-creator Ines](https://twitter.com/_inesmontani) helped me [work through those queries](https://support.prodi.gy/t/labelling-a-set-of-images-classification/4608/1) and I was up and running pretty quickly.
 
-![]({{ site.baseurl }}/images/prodigy-interface.png "The interface for image classification looked like this")
+![](prodigy-interface.png "The interface for image classification looked like this")
 
 It took about three hours to annotate some 4600+ images. Then I could export a `.jsonl` file that contained the individual annotations for whether a particular image contained a redaction or not:
 
-![]({{ site.baseurl }}/images/annotations_jsonl.png)
+![](annotations_jsonl.png)
 
 From that point it was pretty trivial to parse the file (using the [`json-lines` package](https://pypi.org/project/json-lines/)), and to resize the images down further in order to separate redacted from unredacted:
 
@@ -122,7 +122,7 @@ The images get resized to 224x224 pixels, since this is the size that the `resne
 
 I train it for 10 epochs as I don't appear to reach a point where I'm overfitting. As you can see from this image, we reach an accuracy of around 96%.
 
-![]({{ site.baseurl }}/images/training_results.png)
+![](training_results.png)
 
 ## Experimenting with augmentations
 
@@ -144,7 +144,7 @@ Chapter two of the course book goes into a decent amount of detail of some of th
 
 Using [MyBinder](https://mybinder.org) and the [`voila` library](https://voila.readthedocs.io), alongside instructions from the book and the forums, I managed to get my model deployed. If you visit [this address](https://hub.gke2.mybinder.org/user/strickvl-binder-redaction-s1nr4p8k/voila/render/binder-redaction-classifier.ipynb?token=kReM2K-iSkmSjud5N28o8Q) you'll see an interface where you should first upload an image — i.e. a screenshot of a document. When you click 'classify', you'll then see a prediction of whether the image is redacted or not, as well as the confidence/probability that that prediction is true.
 
-![]({{ site.baseurl }}/images/mybinder_interface.png "Part of the MyBinder interface following a successful inference")
+![](mybinder_interface.png "Part of the MyBinder interface following a successful inference")
 
 ## Next steps
 

@@ -13,7 +13,7 @@ description: In this third and final post on data validation for the computer vi
   to the humble 'assert' statement. I conclude by setting out some guidelines for
   when you might want to be doing data validation and which tools might be more or
   less appropriate for your specific problem.
-image: images/great_expectations/evidently_ai_logo_fi.png
+image: great_expectations/evidently_ai_logo_fi.png
 layout: post
 title: 'How to trust the data you feed your model: alternative data validation solutions
   in a computer vision context (part 3)'
@@ -64,11 +64,11 @@ drift_report.save("reports/my_report.html")
 
 In this code, I'm comparing between the real (i.e. manually annotated) annotations and the 'hard' synthetic annotations that I created (and [blogged about recently](https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html)). I choose the columns I care about, tell Evidently which columns are numerical vs categorical features and save the report. (I can also display the report directly within a Jupyter notebook.) When I open the report, I see this:
 
-![]({{ site.baseurl }}/images/great_expectations/evidently-drift-comparison.png "The drift detection report produced by Evidently.")
+![](great_expectations/evidently-drift-comparison.png "The drift detection report produced by Evidently.")
 
 You can unfold the graphs to dive into the details for specific features, as in the following example where I take a look at the orientation of my annotations and see the difference between my manual annotations and the synthetically generated 'hard' batch:
 
-![]({{ site.baseurl }}/images/great_expectations/comparing-orientation.png "Comparing landscape vs portrait orientation of my redaction annotations using Evidently.")
+![](great_expectations/comparing-orientation.png "Comparing landscape vs portrait orientation of my redaction annotations using Evidently.")
 
 It doesn't surprise me too much that we have this disparity, since the only annotations that are portrait in the synthetically-generated set are those for the content box around the whole page. All the rest are landscape, and that's by design. (Note: you can make the comparisons using different statistical tests depending on your use case. I'm told that the next Evidently release will increase the number of available options for this.)
 
@@ -89,7 +89,7 @@ drift_report.save("reports/my_report-real-vs-hard-images.html")
 
 And we get this report:
 
-![]({{ site.baseurl }}/images/great_expectations/images-drift.png "Viewing a drift report comparing the core image data with my synthetically-created images.")
+![](great_expectations/images-drift.png "Viewing a drift report comparing the core image data with my synthetically-created images.")
 
 You can immediately see how certain things like the number of annotations and the number of redactions in an image was a bit different when comparing the two. We also seem to have a far more even distribution of file sizes in the synthetically generated images and that makes sense since that was essentially randomly determined.
 
@@ -109,7 +109,7 @@ quality_dashboard.save("reports/quality-report.html")
 
 You can get an idea of the report that it produces in the following screen recording from my browser:
 
-![]({{ site.baseurl }}/images/great_expectations/evidently-data-quality.gif "The Evidently data quality report when comparing my real image data with what was synthetically created.")
+![](great_expectations/evidently-data-quality.gif "The Evidently data quality report when comparing my real image data with what was synthetically created.")
 
 As a place to get started with understanding a dataset, this is a pretty nice visualisation and report to have in your toolkit, but even after immersion in your data it can be useful to take a step back with something like this data quality overview. For instance, it reveals quite clearly how the average number of annotations in my manually annotated dataset is quite a bit lower than that of my synthetically generated examples. Of course, that was by intention, but it is nice to see that confirmed in the data.
 
@@ -141,7 +141,7 @@ There are three points where it might make sense to do some data validation:
 - at the point just prior to training a model, i.e. after your data has been split into training and validation sets
 - at the point of inference (i.e. using the data being passed into the trained model)
 
-![]({{ site.baseurl }}/images/great_expectations/validation-when.png "The times it might make sense to do some validation.")
+![](great_expectations/validation-when.png "The times it might make sense to do some validation.")
 
 The first (at data ingestion) is essential, especially if you have any kind of continuous training or continuous deployment loop going on. You don't want to be training on data that clearly is unsuitable for training, or where the distribution has shifted so much that it's going to cause hidden problems down the line.
 

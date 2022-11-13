@@ -7,7 +7,7 @@ categories:
 date: '2021-09-10'
 description: A working setup for controlling your Python environment
 draft: 'true'
-image: images/pyenv_terminal_output.png
+image: pyenv_terminal_output.png
 layout: post
 title: Managing Python Environments with pyenv and pipenv
 toc: true

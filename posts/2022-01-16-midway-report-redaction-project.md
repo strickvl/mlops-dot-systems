@@ -10,7 +10,7 @@ categories:
 date: '2022-01-16'
 description: A report midway through my computer vision project to detect the presence
   of redactions on government documents.
-image: images/midway-report-redaction-project/midway-thumb.png
+image: midway-report-redaction-project/midway-thumb.png
 layout: post
 title: A Midway Report on my Computer Vision Project
 toc: false

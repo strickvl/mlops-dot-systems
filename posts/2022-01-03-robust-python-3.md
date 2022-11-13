@@ -10,7 +10,7 @@ date: '2022-01-03'
 description: Reflections on the third chapter of Patrick Viafore's recent book, 'Robust
   Python'. We get some quick practical examples of how to use type annotation and
   how to use tools like `mypy` to analyse how typed values pass through your code.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: Getting practical with type annotations and `mypy`
 toc: false

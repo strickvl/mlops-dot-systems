@@ -11,7 +11,7 @@ date: '2022-01-06'
 description: Some early thoughts on the benefits and possible drawbacks of using fastai's
   'nbdev' literate programming tool which is a suite of tools that allows you to Python
   software packages from Jupyter notebooks.
-image: images/nbdev-early-impressions/laura-ockel-UQ2Fw_9oApU-unsplash.jpg
+image: nbdev-early-impressions/laura-ockel-UQ2Fw_9oApU-unsplash.jpg
 layout: post
 title: Learning about 'nbdev' while building a Python package for PDF machine learning
   datasets

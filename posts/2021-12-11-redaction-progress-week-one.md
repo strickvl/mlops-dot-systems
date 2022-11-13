@@ -8,7 +8,7 @@ categories:
 - progressreport
 date: '2021-12-11'
 description: I made some progress on my redaction model.
-image: images/redaction-progress-week-one/redaction_sample_3-small.png
+image: redaction-progress-week-one/redaction_sample_3-small.png
 layout: post
 title: 73% accuracy for redaction object detection
 toc: true
@@ -40,15 +40,15 @@ This enables ipywidgets in the notebook, I think.
 
 Once through all of that, I was able to fine-tune a model based on the annotations which I currently have. I selected [VFNet](https://mlops.systems/redactionmodel/computervision/2021/11/30/vfnet-basics.html) as the model I wanted to use as the pertained model. After training for 40 epochs, I reached an accuracy of 73%:
 
-![]({{ site.baseurl }}/images/redaction-progress-week-one/first-training.png "Metrics from the last few epochs")
+![](redaction-progress-week-one/first-training.png "Metrics from the last few epochs")
 
 If we look at some of the results (using `model_type.show_results()`) we can get a sense of the parts it found easy and the parts which it found hard. (All the boxes below are what it as predicted, not the ground truth annotations.) Some identification of boxes went as you might expect:
 
-![]({{ site.baseurl }}/images/redaction-progress-week-one/redaction_sample_1.png "It was good at identifying solid and clear redactions")
+![](redaction-progress-week-one/redaction_sample_1.png "It was good at identifying solid and clear redactions")
 
 I was surprised that something like this worked as well as it did:
 
-![]({{ site.baseurl }}/images/redaction-progress-week-one/redaction_white_boxes.png "It even made a decent effort at recognising opaque boxes on a white background")
+![](redaction-progress-week-one/redaction_white_boxes.png "It even made a decent effort at recognising opaque boxes on a white background")
 
 It wasn't perfect, but I don't remember having annotated too many of this specific redaction type, so I'm fairly happy with how it worked out. You can see it still makes a number of mistakes and isn't always precise about where the boxes should go. I hope that'll improve as I add more examples of this type of redaction.
 

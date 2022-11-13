@@ -11,7 +11,7 @@ date: '2022-02-10'
 description: I iterated through several prototypes to get to a script that could autogenerate
   synthetic training data for my computer vision model. I hoped to bootstrap my training
   to get a bit jump in model performance.
-image: images/synthetic-image-data/synthetic-images-post.jpg
+image: synthetic-image-data/synthetic-images-post.jpg
 layout: post
 title: 'It''s raining bboxes: how I wrote a Python script to create 2097 synthetic
   images to help improve my machine learning model'

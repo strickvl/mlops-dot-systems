@@ -12,7 +12,7 @@ description: There are many pieces involved when deploying a model. This post co
   the ones that relate to my object detection model and I explain how I'm going to
   put together the pipelines that will drive a continuous training loop once it's
   all up.
-image: images/production-introduction/blemish-pipelines.png
+image: production-introduction/blemish-pipelines.png
 layout: post
 title: 'It takes a tribe: how I''m thinking about putting my object detection model
   into production'
@@ -28,7 +28,7 @@ If we're just exercising our curiosity or have a tight focus for our work, then 
 
 The next blog posts in this series will focus on the challenges and practicalities of getting a model 'in production'. I'll sidestep the nuances of exactly what we mean by 'in production' for the moment, but suffice it to say that the end goal is to have a way to not only make our model available to other consumers but also to deal with re-training and/or re-deploying new models to take the place of older or stale models. There is a whole spectrum of variety in this context that goes by the name "MLOps". This blog post will try to provide a high level overview of some of the basic elements relevant to getting my redaction model into production.
 
-![]({{ site.baseurl }}/images/production-introduction/blemish-pipelines.png "Keep reading to learn more about the different parts of my object detection workflows.")
+![](production-introduction/blemish-pipelines.png "Keep reading to learn more about the different parts of my object detection workflows.")
 
 ## 🚦 TL;DR: What will you learn?
 
@@ -67,7 +67,7 @@ All the above scenarios and more are some of the reasons why MLOps exists. We ca
 
 ## 🧱 Basic MLOps building blocks
 
-![]({{ site.baseurl }}/images/production-introduction/mlops-landscape.png "A somewhat notorious image offering an the overview of some of the MLOps tooling available to users.")
+![](production-introduction/mlops-landscape.png "A somewhat notorious image offering an the overview of some of the MLOps tooling available to users.")
 
 These are some of the tools available to those trying to put their models into production. This ['landscape'](https://landscape.lfai.foundation) showcases both the explosion of options for various parts of the full lifecycle as well as the way that this space hasn't yet settled on a set of best-in-class tools. For my redaction project, there are a few basics that will seek to have in place in order to meet the needs of the use case(s):
 
@@ -135,7 +135,7 @@ But what does this all mean for my project? What specifically will it all look l
 
 ## ✍️ Redaction Project Workflow #1: Annotation
 
-![]({{ site.baseurl }}/images/production-introduction/annotation-pipeline.png "The two parts of my annotation workflow.")
+![](production-introduction/annotation-pipeline.png "The two parts of my annotation workflow.")
 
 There are two main pieces to this pipeline that happens before we train our model. My model is still thirsty for annotations and data, so from the very beginning I want to integrate the annotation process in as part of how I set up the workflows. This way, I make it as easy as possible to annotate data and use that data for subsequent training or fine-tuning.
 
@@ -149,7 +149,7 @@ We only want to annotate images that haven't been annotated, so that check is th
 
 ## 🐙 Redaction Project Workflow #2: Continuous Training, Continuous Deployment
 
-![]({{ site.baseurl }}/images/production-introduction/continuous-training-pipeline.png "The core parts of the continuous training and deployment pipeline.")
+![](production-introduction/continuous-training-pipeline.png "The core parts of the continuous training and deployment pipeline.")
 
 This longer pipeline contains the core value and most compute-intensive processes like training. We take the data from the raw state as annotations and go all the way to deployment.
 

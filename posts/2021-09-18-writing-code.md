@@ -8,7 +8,7 @@ categories:
 date: '2021-09-18'
 description: A reminder that early on, nothing really beats writing code for growing
   as a coder
-image: images/writing-code.jpeg
+image: writing-code.jpeg
 layout: post
 title: Writing Code
 toc: true

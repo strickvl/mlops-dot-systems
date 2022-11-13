@@ -10,7 +10,7 @@ date: '2022-03-21'
 description: I'm reading Elton Stoneman's 'Learn Docker in a Month of Lunches' and
   blogging as I learn along the way. In chapters 1-3 we learn about the context for
   Docker as well as some basic commands for running and building containers.
-image: images/diamol/diamol-cover.jpg
+image: diamol/diamol-cover.jpg
 layout: post
 title: Starting Docker In A Month Of Lunches
 toc: true

@@ -7,7 +7,7 @@ categories:
 - computervision
 date: '2021-11-30'
 description: Some basics I learned about the object detection model `vfnet`.
-image: images/vfnet.png
+image: vfnet.png
 layout: post
 title: What is VFNet?
 toc: false
@@ -16,7 +16,7 @@ toc: false
 
 VFNet is short for VariFocalNet. This method of object detection was first released in 2008 and it scored 55.1 on the COCO test-dev benchmark, state-of-the-art at the time. There have since been [other improvements](https://paperswithcode.com/sota/object-detection-on-coco).
 
-![]({{ site.baseurl }}/images/vfnet-bounding-boxes.png "Bounding boxes to detect objects in an image")
+![](vfnet-bounding-boxes.png "Bounding boxes to detect objects in an image")
 
 The original paper is [here](https://arxiv.org/abs/2008.13367v2). The implementation of this model is [here](https://github.com/hyz-xmaster/VarifocalNet).
 

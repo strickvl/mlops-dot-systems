@@ -11,7 +11,7 @@ categories:
 date: '2022-10-16'
 description: I learned about prefix, postfix and infix notation, and how J evaluates
   mathematical expressions which makes the BIDMAS rules unnecessary.
-image: images/notational-precedence/j-precedence.png
+image: notational-precedence/j-precedence.png
 layout: post
 title: Avoiding BIDMAS, or how J does notation
 toc: false

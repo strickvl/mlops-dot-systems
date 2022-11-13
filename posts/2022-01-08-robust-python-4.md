@@ -11,7 +11,7 @@ description: Reflections on the fourth chapter of Patrick Viafore's recent book,
   Python'. We learn about the different options for combining types and constraining
   exactly which sets of types are permitted for a particular function or variable
   signature.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: Different ways to constrain types in Python
 toc: true

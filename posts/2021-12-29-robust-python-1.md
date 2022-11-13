@@ -9,7 +9,7 @@ categories:
 date: '2021-12-29'
 description: Reflections on the first chapter of Patrick Viafore's recent book, 'Robust
   Python'.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: What makes code robust?
 toc: false

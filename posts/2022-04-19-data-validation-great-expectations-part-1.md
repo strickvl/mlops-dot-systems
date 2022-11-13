@@ -12,7 +12,7 @@ description: An overview of the problem that data validation seeks to solve, exp
   through the lens of an object detection problem and some of the tradeoffs that such
   an approach might bring. I introduce and simplify the high-level concepts you need
   to use the Great Expectations library.
-image: images/great_expectations/g_e_logo.jpeg
+image: great_expectations/g_e_logo.jpeg
 layout: post
 title: 'How to trust the data you feed your model: data validation with Great Expectations
   in a computer vision context (part 1)'
@@ -77,7 +77,7 @@ I stated above that Great Expectations could be used as if you were adding tests
 
 Your expectations make up a 'suite', and you run your suite of expectations against a batch or data asset. There are another 10 or 20 concepts or terms that I'd need to define and connect together in a mental map before we covered everything about how Great Expectations works. Unfortunately, this is one of the things I found most confusing about getting to know the library through its documentation. From the outside, it appears that they had one set of terminology, but now it's partially changed to a different set of terms or abstractions. Presumably for reasons of backwards compatibility, some of the old abstractions remain in the documentation and explanations, which makes it not always clear to understand how the various pieces fit together.
 
-![]({{ site.baseurl }}/images/great_expectations/great_expecations_abstractions.png "My initial attempt at understanding how all the abstractions of Great Expectations related to one another…")
+![](great_expectations/great_expecations_abstractions.png "My initial attempt at understanding how all the abstractions of Great Expectations related to one another…")
 
 You can read [the glossary](https://docs.greatexpectations.io/docs/glossary) over at their documentation site if you want to learn more, but for now everything I explained above should suffice.
 

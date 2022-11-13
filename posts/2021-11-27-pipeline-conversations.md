@@ -8,7 +8,7 @@ categories:
 - appearances
 date: '2021-11-27'
 description: I will be co-hosting a new podcast about MLOps called Pipeline Conversations.
-image: images/pipeline_cover_small.jpeg
+image: pipeline_cover_small.jpeg
 layout: post
 title: Launching a podcast about MLOps
 toc: false

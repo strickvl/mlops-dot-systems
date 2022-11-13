@@ -10,7 +10,7 @@ date: '2022-02-05'
 description: Chapter 9 of 'Robust Python' dives into the uses of data classes, a user-defined
   datatype in which you can store heterogenous data together. They help formalise
   implicit concepts within your code and as a result also improve code readability.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: Upgrade your Python dicts with data classes
 toc: false

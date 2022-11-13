@@ -9,7 +9,7 @@ date: '2022-05-02'
 description: I learn a valuable lesson about how a model often will 'cheat' when training
   and sometimes the solution is a separate held-out set of 'test' data which can give
   a more accurate assessment of how well the model is performing.
-image: images/blupus_detection/blupus-training.png
+image: blupus_detection/blupus-training.png
 layout: post
 title: How my pet cat taught me a lesson about validation data for image classification
 toc: true
@@ -78,7 +78,7 @@ Luckily, chapter one gets into exactly this problem, showing an example of how e
 
 I discussed this when I presented this to those at the study group / meetup yesterday and we agreed that it'd be best if I held out some settings or locations from the training entirely. I took 30 minutes to do that in the evening and had a third 'test' dataset which consisted of 118 images of our cat in certain locations that the model wasn't trained on and thus couldn't use to cheat. I added a few more photos to the training data so that there were enough examples from which to learn.
 
-![]({{ site.baseurl }}/images/blupus_detection/training-data.png "Input data for the new model.")
+![](blupus_detection/training-data.png "Input data for the new model.")
 
 I was supposedly getting 98% accuracy now, but I knew that number to be false. I then needed to figure out how to get the accuracy for my held-out test set. With a lot of help from [Francesco](https://twitter.com/Fra_Pochetti) and [a really useful blogpost](https://benjaminwarner.dev/2021/10/01/inference-with-fastai#batch-prediction) on doing batch inference with fastai, I first got the predictions for my test data:
 
@@ -111,4 +111,4 @@ Nevertheless, this was a useful lesson for me to learn. I realised while working
 
 Following some discussion in the fastai forums, it was suggested that I take a look at [Grad-CAM](http://gradcam.cloudcv.org) in chapter 18. This is a technique to visualise the activations which allows you to see which parts of the image it is paying the most attention to (sort of). I ran the code using a sample Blupus image and this was the result. I don't understand how most (any?) of this works, but it was really cool to have a working result of sorts nonetheless!
 
-![]({{ site.baseurl }}/images/blupus_detection/gradcam.png "Mr Blupus activating the model.")
+![](blupus_detection/gradcam.png "Mr Blupus activating the model.")

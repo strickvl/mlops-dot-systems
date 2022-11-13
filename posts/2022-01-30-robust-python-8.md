@@ -9,7 +9,7 @@ categories:
 date: '2022-01-30'
 description: The eight chapter of Patrick Viafore's book, 'Robust Python', gets into
   enums which you can use when you have a grouping of some constants that belong together.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: How and where to use enums in Python
 toc: false

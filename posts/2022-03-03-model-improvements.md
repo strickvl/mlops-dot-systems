@@ -9,7 +9,7 @@ categories:
 date: '2022-03-03'
 description: I used a series of techniques to improve the performance of my model
   while creating a pathway to (hopefully) bigger gains going forward.
-image: images/model-improvements/coco_scores.png
+image: model-improvements/coco_scores.png
 layout: post
 title: Incremental Improvements to my Redaction Detection Model
 toc: true

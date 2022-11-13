@@ -7,7 +7,7 @@ categories:
 date: '2021-09-08'
 description: What I understand of the domain, prior to starting to work in this area
   full-time
-image: images/mlops-venn-diagram.png
+image: mlops-venn-diagram.png
 layout: post
 title: A Baseline Understanding of MLOps
 toc: true

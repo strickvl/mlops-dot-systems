@@ -10,7 +10,7 @@ date: '2022-02-08'
 description: 'Chapter 10 covers the last of the user-defined types explored in ''Robust
   Python'': classes. We learn what an ''invariant'' is and how to decide whether to
   use a data class or a class when rolling your own types.'
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: What are invariants and how can they help make your Python classes more robust?
 toc: true

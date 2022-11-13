@@ -10,7 +10,7 @@ date: '2022-01-22'
 description: Reflections on the sixth and seventh chapters of Patrick Viafore's book,
   'Robust Python'. We slowly wind down our discussion of type hints in Python code
   and think through using `mypy` and how to introduce type hints to a legacy codebase.
-image: images/robust-python/robust-python-cover.jpeg
+image: robust-python/robust-python-cover.jpeg
 layout: post
 title: Using mypy for Python type checking
 toc: true

@@ -7,7 +7,7 @@ categories:
 date: '2021-12-29'
 description: What I have learned so far about why the J language exists and what problems
   it tries to solve.
-image: images/j-language/jblue.png
+image: j-language/jblue.png
 layout: post
 title: Exploring J, an array programming language
 toc: false
