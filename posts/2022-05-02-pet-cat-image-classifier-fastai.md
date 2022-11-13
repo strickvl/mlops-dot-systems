@@ -1,6 +1,6 @@
 ---
 aliases:
-- /fastai/computervision/2022/05/02/pet-cat-image-classifier-fastai
+- /fastai/computervision/2022/05/02/pet-cat-image-classifier-fastai.html
 author: Alex Strick van Linschoten
 categories:
 - fastai

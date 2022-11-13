@@ -1,6 +1,6 @@
 ---
 aliases:
-- /mlops/2021/09/08/baseline-mlops-understanding
+- /mlops/2021/09/08/baseline-mlops-understanding.html
 author: Alex Strick van Linschoten
 categories:
 - mlops

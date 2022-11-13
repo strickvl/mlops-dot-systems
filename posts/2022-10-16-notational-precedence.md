@@ -1,6 +1,6 @@
 ---
 aliases:
-- /j/mathematics/mu123/q31/notation/2022/10/16/notational-precedence
+- /j/mathematics/mu123/q31/notation/2022/10/16/notational-precedence.html
 author: Alex Strick van Linschoten
 categories:
 - j

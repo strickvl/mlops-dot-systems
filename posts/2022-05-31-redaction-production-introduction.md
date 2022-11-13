@@ -1,6 +1,6 @@
 ---
 aliases:
-- /tools/redactionmodel/computervision/mlops/2022/05/31/redaction-production-introduction
+- /tools/redactionmodel/computervision/mlops/2022/05/31/redaction-production-introduction.html
 author: Alex Strick van Linschoten
 categories:
 - tools

@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/tools/2021/09/14/python-versioning-package-managers
+- /python/tools/2021/09/14/python-versioning-package-managers.html
 author: Alex Strick van Linschoten
 categories:
 - python

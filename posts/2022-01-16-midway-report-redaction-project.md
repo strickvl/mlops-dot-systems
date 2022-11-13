@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/fastai/tools/redactionmodel/2022/01/16/midway-report-redaction-project
+- /python/fastai/tools/redactionmodel/2022/01/16/midway-report-redaction-project.html
 author: Alex Strick van Linschoten
 categories:
 - python

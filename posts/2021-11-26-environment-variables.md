@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/2021/11/26/environment-variables
+- /python/2021/11/26/environment-variables.html
 author: Alex Strick van Linschoten
 categories:
 - python
@@ -28,4 +28,6 @@ os.environ.get('SOME_ENV_VARIABLE')
 os.environ('SOME_ENV_VARIABLE')
 ```
 
-For the final one (`os.environ('SOME_ENV_VARIABLE')`), if the variable doesn't exist, it'll return a `KeyError`, whereas the first two will just return `None` in that case.
+For the final one (`os.environ('SOME_ENV_VARIABLE')`), if the variable doesn't
+exist, it'll return a `KeyError`, whereas the first two will just return `None`
+in that case.

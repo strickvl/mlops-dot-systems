@@ -1,6 +1,6 @@
 ---
 aliases:
-- /fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2
+- /fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html
 author: Alex Strick van Linschoten
 categories:
 - fastai

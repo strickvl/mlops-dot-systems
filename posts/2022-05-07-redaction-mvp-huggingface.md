@@ -1,6 +1,6 @@
 ---
 aliases:
-- /fastai/computervision/redactionmodel/tools/2022/05/07/redaction-mvp-huggingface
+- /fastai/computervision/redactionmodel/tools/2022/05/07/redaction-mvp-huggingface.html
 author: Alex Strick van Linschoten
 categories:
 - fastai

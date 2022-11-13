@@ -1,6 +1,6 @@
 ---
 aliases:
-- /tools/dockerinamonthoflunches/books-i-read/2022/03/21/docker-in-a-month
+- /tools/dockerinamonthoflunches/books-i-read/2022/03/21/docker-in-a-month.html
 author: Alex Strick van Linschoten
 categories:
 - tools

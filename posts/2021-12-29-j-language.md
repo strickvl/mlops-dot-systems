@@ -1,6 +1,6 @@
 ---
 aliases:
-- /j/2021/12/29/j-language
+- /j/2021/12/29/j-language.html
 author: Alex Strick van Linschoten
 categories:
 - j

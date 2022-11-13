@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/skillbuilding/2022/04/04/ml-portfolio-best-practices
+- /computervision/skillbuilding/2022/04/04/ml-portfolio-best-practices.html
 author: Alex Strick van Linschoten
 categories:
 - computervision

@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/2021/09/10/python-environments
+- /python/2021/09/10/python-environments.html
 author: Alex Strick van Linschoten
 categories:
 - python

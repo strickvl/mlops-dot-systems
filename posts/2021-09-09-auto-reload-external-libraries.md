@@ -1,6 +1,6 @@
 ---
 aliases:
-- /jupyter/2021/09/09/auto-reload-external-libraries
+- /jupyter/2021/09/09/auto-reload-external-libraries.html
 author: Alex Strick van Linschoten
 categories:
 - jupyter
@@ -19,4 +19,7 @@ The code to insert somewhere into your Jupyter notebook is pretty simple:
 %autoreload 2
 ```
 
-When you're working on an external library or piece of Python code outside the contents of your notebook, this snippet will make sure that the updated functions and constants will always be available in their most-recently edited state.
+When you're working on an external library or piece of Python code outside the
+contents of your notebook, this snippet will make sure that the updated
+functions and constants will always be available in their most-recently edited
+state.

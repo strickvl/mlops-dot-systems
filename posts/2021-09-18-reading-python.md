@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/skillbuilding/2021/09/18/reading-python
+- /python/skillbuilding/2021/09/18/reading-python.html
 author: Alex Strick van Linschoten
 categories:
 - python

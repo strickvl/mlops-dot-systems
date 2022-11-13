@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/skillbuilding/2021/09/18/writing-code
+- /python/skillbuilding/2021/09/18/writing-code.html
 author: Alex Strick van Linschoten
 categories:
 - python

@@ -1,6 +1,6 @@
 ---
 aliases:
-- /redactionmodel/computervision/progressreport/2021/12/11/redaction-progress-week-one
+- /redactionmodel/computervision/progressreport/2021/12/11/redaction-progress-week-one.html
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

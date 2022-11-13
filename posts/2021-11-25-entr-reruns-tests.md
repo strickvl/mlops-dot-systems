@@ -1,6 +1,6 @@
 ---
 aliases:
-- /debugging/testing/tools/calmcode/2021/11/25/entr-reruns-tests
+- /debugging/testing/tools/calmcode/2021/11/25/entr-reruns-tests.html
 author: Alex Strick van Linschoten
 categories:
 - debugging

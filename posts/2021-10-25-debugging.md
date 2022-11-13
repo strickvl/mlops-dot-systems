@@ -1,6 +1,6 @@
 ---
 aliases:
-- /debugging/2021/10/25/debugging
+- /debugging/2021/10/25/debugging.html
 author: Alex Strick van Linschoten
 categories:
 - debugging

@@ -1,6 +1,6 @@
 ---
 aliases:
-- /redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training
+- /redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

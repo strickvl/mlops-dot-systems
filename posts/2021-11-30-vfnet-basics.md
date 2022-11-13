@@ -1,6 +1,6 @@
 ---
 aliases:
-- /redactionmodel/computervision/2021/11/30/vfnet-basics
+- /redactionmodel/computervision/2021/11/30/vfnet-basics.html
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

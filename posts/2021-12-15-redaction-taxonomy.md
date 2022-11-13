@@ -1,6 +1,6 @@
 ---
 aliases:
-- /redactionmodel/2021/12/15/redaction-taxonomy
+- /redactionmodel/2021/12/15/redaction-taxonomy.html
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

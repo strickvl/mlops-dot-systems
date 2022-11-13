@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/fastai/parttwo/2022/10/17/fastai-part-2-lesson-9-stable-diffusion
+- /computervision/fastai/parttwo/2022/10/17/fastai-part-2-lesson-9-stable-diffusion.html
 author: Alex Strick van Linschoten
 categories:
 - computervision

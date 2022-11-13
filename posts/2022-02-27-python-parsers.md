@@ -1,6 +1,6 @@
 ---
 aliases:
-- /python/tools/2022/02/27/python-parsers
+- /python/tools/2022/02/27/python-parsers.html
 author: Alex Strick van Linschoten
 categories:
 - python
