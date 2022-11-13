@@ -13,6 +13,9 @@ about:
     - icon: github
       text: Github
       href: https://github.com/strickvl
+    - icon: mastodon
+      text: Mastodon
+      href: https://sigmoid.social/web/@alexstrick
 
 ---
 
