@@ -1,6 +1,6 @@
 ---
 aliases:
-- /appearances/podcast/zenml/2021/11/27/pipeline-conversations
+- /zenml/podcast/appearances/2021/11/27/pipeline-conversations
 author: Alex Strick van Linschoten
 categories:
 - zenml

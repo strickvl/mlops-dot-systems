@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/mlops/redactionmodel/tools/2022/05/24/data-versioning-dvc
+- /tools/redactionmodel/computervision/mlops/2022/05/24/data-versioning-dvc
 author: Alex Strick van Linschoten
 categories:
 - tools

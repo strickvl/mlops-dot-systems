@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/redactionmodel/tools/2022/03/03/model-improvements
+- /redactionmodel/computervision/tools/2022/03/03/model-improvements
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

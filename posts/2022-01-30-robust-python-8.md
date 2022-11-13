@@ -1,6 +1,6 @@
 ---
 aliases:
-- /books-i-read/python/robustpython/2022/01/30/robust-python-8
+- /robustpython/python/books-i-read/2022/01/30/robust-python-8
 author: Alex Strick van Linschoten
 categories:
 - robustpython

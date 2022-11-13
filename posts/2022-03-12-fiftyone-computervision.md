@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/debugging/jupyter/redactionmodel/tools/2022/03/12/fiftyone-computervision
+- /redactionmodel/computervision/tools/debugging/jupyter/2022/03/12/fiftyone-computervision
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

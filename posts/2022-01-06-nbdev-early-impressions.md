@@ -1,6 +1,6 @@
 ---
 aliases:
-- /fastai/jupyter/python/tools/2022/01/06/nbdev-early-impressions
+- /python/jupyter/fastai/tools/2022/01/06/nbdev-early-impressions
 author: Alex Strick van Linschoten
 categories:
 - python

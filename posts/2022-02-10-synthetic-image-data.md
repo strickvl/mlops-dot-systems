@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/python/redactionmodel/tools/2022/02/10/synthetic-image-data
+- /redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel

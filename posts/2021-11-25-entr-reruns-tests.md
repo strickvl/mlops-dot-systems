@@ -1,6 +1,6 @@
 ---
 aliases:
-- /calmcode/debugging/testing/tools/2021/11/25/entr-reruns-tests
+- /debugging/testing/tools/calmcode/2021/11/25/entr-reruns-tests
 author: Alex Strick van Linschoten
 categories:
 - debugging
@@ -28,4 +28,5 @@ ls src/*.py | entr -c pytest test.py::test_some_feature
 
 So now, any time you change any Python file inside the `src` folder, it'll rerun your test. The `-c` flag will clear the terminal every time the test runs.
 
-[Many thanks to [calmcode](https://calmcode.io/) for continuing to make these really useful videos.]
+[Many thanks to [calmcode](https://calmcode.io/) for continuing to make these
+really useful videos.]

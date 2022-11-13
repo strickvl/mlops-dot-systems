@@ -1,6 +1,6 @@
 ---
 aliases:
-- /computervision/mlops/python/redactionmodel/tools/zenml/2022/09/07/serialisation
+- /redactionmodel/computervision/mlops/python/tools/zenml/2022/09/07/serialisation
 author: Alex Strick van Linschoten
 categories:
 - redactionmodel
