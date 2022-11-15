@@ -1,235 +1,235 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-27-safety-vulnerability-checker.html</loc>
-    <lastmod>2022-11-13T18:54:03.887Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-27-safety-vulnerability-checker.html</loc>
+    <lastmod>2022-11-15T20:17:03.674Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-06-redaction-classification-chapter-2.html</loc>
-    <lastmod>2022-11-13T18:54:04.363Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-06-redaction-classification-chapter-2.html</loc>
+    <lastmod>2022-11-15T20:17:04.108Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-03-03-model-improvements.html</loc>
-    <lastmod>2022-11-13T18:54:04.736Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-03-03-model-improvements.html</loc>
+    <lastmod>2022-11-15T20:17:04.410Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-03-25-paperspace-docker-icevision.html</loc>
-    <lastmod>2022-11-13T18:54:05.163Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-03-25-paperspace-docker-icevision.html</loc>
+    <lastmod>2022-11-15T20:17:04.703Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-09-07-serialisation.html</loc>
-    <lastmod>2022-11-13T18:54:05.858Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-09-07-serialisation.html</loc>
+    <lastmod>2022-11-15T20:17:05.161Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-27-pipeline-conversations.html</loc>
-    <lastmod>2022-11-13T18:54:06.333Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-27-pipeline-conversations.html</loc>
+    <lastmod>2022-11-15T20:17:05.428Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-03-robust-python-3.html</loc>
-    <lastmod>2022-11-13T18:54:06.756Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-03-robust-python-3.html</loc>
+    <lastmod>2022-11-15T20:17:05.727Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-02-08-robust-python-10.html</loc>
-    <lastmod>2022-11-13T18:54:07.258Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-02-08-robust-python-10.html</loc>
+    <lastmod>2022-11-15T20:17:06.089Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-08-baseline-mlops-understanding.html</loc>
-    <lastmod>2022-11-13T18:54:07.560Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-08-baseline-mlops-understanding.html</loc>
+    <lastmod>2022-11-15T20:17:06.361Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-10-25-debugging.html</loc>
-    <lastmod>2022-11-13T18:54:07.918Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-10-25-debugging.html</loc>
+    <lastmod>2022-11-15T20:17:06.666Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-18-writing-code.html</loc>
-    <lastmod>2022-11-13T18:54:08.232Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-18-writing-code.html</loc>
+    <lastmod>2022-11-15T20:17:06.941Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-11-fashion-mnist-pixel-similarity.html</loc>
-    <lastmod>2022-11-13T18:54:08.808Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-11-fashion-mnist-pixel-similarity.html</loc>
+    <lastmod>2022-11-15T20:17:07.433Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-14-python-versioning-package-managers.html</loc>
-    <lastmod>2022-11-13T18:54:09.192Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-14-python-versioning-package-managers.html</loc>
+    <lastmod>2022-11-15T20:17:07.761Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-12-29-robust-python-1.html</loc>
-    <lastmod>2022-11-13T18:54:09.501Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-12-29-robust-python-1.html</loc>
+    <lastmod>2022-11-15T20:17:08.030Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-10-16-notational-precedence.html</loc>
-    <lastmod>2022-11-13T18:54:09.841Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-10-16-notational-precedence.html</loc>
+    <lastmod>2022-11-15T20:17:08.304Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-30-robust-python-8.html</loc>
-    <lastmod>2022-11-13T18:54:10.474Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-30-robust-python-8.html</loc>
+    <lastmod>2022-11-15T20:17:08.863Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</loc>
-    <lastmod>2022-11-13T18:54:10.894Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</loc>
+    <lastmod>2022-11-15T20:17:09.263Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-21-on-failure.html</loc>
-    <lastmod>2022-11-13T18:54:11.212Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-21-on-failure.html</loc>
+    <lastmod>2022-11-15T20:17:09.542Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-13-sgd-whole-game.html</loc>
-    <lastmod>2022-11-13T18:54:11.583Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</loc>
+    <lastmod>2022-11-15T20:17:09.877Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-02-10-synthetic-image-data.html</loc>
-    <lastmod>2022-11-13T18:54:12.089Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-02-10-synthetic-image-data.html</loc>
+    <lastmod>2022-11-15T20:17:10.344Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</loc>
-    <lastmod>2022-11-13T18:54:12.478Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</loc>
+    <lastmod>2022-11-15T20:17:10.731Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</loc>
-    <lastmod>2022-11-13T18:54:13.006Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</loc>
+    <lastmod>2022-11-15T20:17:11.201Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-12-30-robust-python-2.html</loc>
-    <lastmod>2022-11-13T18:54:13.306Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-12-30-robust-python-2.html</loc>
+    <lastmod>2022-11-15T20:17:11.492Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-10-chapter1and2recall.html</loc>
-    <lastmod>2022-11-13T18:54:13.624Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-10-chapter1and2recall.html</loc>
+    <lastmod>2022-11-15T20:17:11.933Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-12-11-redaction-progress-week-one.html</loc>
-    <lastmod>2022-11-13T18:54:13.962Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-12-11-redaction-progress-week-one.html</loc>
+    <lastmod>2022-11-15T20:17:12.235Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-16-ch4-tensors.html</loc>
-    <lastmod>2022-11-13T18:54:14.418Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-16-ch4-tensors.html</loc>
+    <lastmod>2022-11-15T20:17:12.684Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-04-04-ml-portfolio-best-practices.html</loc>
-    <lastmod>2022-11-13T18:54:14.743Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</loc>
+    <lastmod>2022-11-15T20:17:12.985Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-25-entr-reruns-tests.html</loc>
-    <lastmod>2022-11-13T18:54:15.047Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-25-entr-reruns-tests.html</loc>
+    <lastmod>2022-11-15T20:17:13.285Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-15-fashion-mnist-neural-network.html</loc>
-    <lastmod>2022-11-13T18:54:15.422Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</loc>
+    <lastmod>2022-11-15T20:17:13.609Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-26-environment-variables.html</loc>
-    <lastmod>2022-11-13T18:54:15.707Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-26-environment-variables.html</loc>
+    <lastmod>2022-11-15T20:17:13.912Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-06-nbdev-early-impressions.html</loc>
-    <lastmod>2022-11-13T18:54:16.090Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-06-nbdev-early-impressions.html</loc>
+    <lastmod>2022-11-15T20:17:14.268Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-02-05-robust-python-9.html</loc>
-    <lastmod>2022-11-13T18:54:16.411Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-02-05-robust-python-9.html</loc>
+    <lastmod>2022-11-15T20:17:14.578Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-18-reading-python.html</loc>
-    <lastmod>2022-11-13T18:54:16.740Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-18-reading-python.html</loc>
+    <lastmod>2022-11-15T20:17:14.885Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-12-15-redaction-taxonomy.html</loc>
-    <lastmod>2022-11-13T18:54:17.089Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-12-15-redaction-taxonomy.html</loc>
+    <lastmod>2022-11-15T20:17:15.199Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-31-redaction-production-introduction.html</loc>
-    <lastmod>2022-11-13T18:54:17.599Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-31-redaction-production-introduction.html</loc>
+    <lastmod>2022-11-15T20:17:15.707Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-08-robust-python-4.html</loc>
-    <lastmod>2022-11-13T18:54:17.954Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-08-robust-python-4.html</loc>
+    <lastmod>2022-11-15T20:17:16.048Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-14-sgd-fashion-mnist.html</loc>
-    <lastmod>2022-11-13T18:54:18.379Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</loc>
+    <lastmod>2022-11-15T20:17:16.441Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-07-redaction-mvp-huggingface.html</loc>
-    <lastmod>2022-11-13T18:54:18.784Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-07-redaction-mvp-huggingface.html</loc>
+    <lastmod>2022-11-15T20:17:16.813Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-18-robust-python-5.html</loc>
-    <lastmod>2022-11-13T18:54:19.167Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-18-robust-python-5.html</loc>
+    <lastmod>2022-11-15T20:17:17.153Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-30-vfnet-basics.html</loc>
-    <lastmod>2022-11-13T18:54:19.453Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-30-vfnet-basics.html</loc>
+    <lastmod>2022-11-15T20:17:17.388Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-24-data-versioning-dvc.html</loc>
-    <lastmod>2022-11-13T18:54:20.164Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-24-data-versioning-dvc.html</loc>
+    <lastmod>2022-11-15T20:17:18.051Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-16-midway-report-redaction-project.html</loc>
-    <lastmod>2022-11-13T18:54:20.487Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-16-midway-report-redaction-project.html</loc>
+    <lastmod>2022-11-15T20:17:18.349Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</loc>
-    <lastmod>2022-11-13T18:54:20.923Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</loc>
+    <lastmod>2022-11-15T20:17:18.986Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-09-auto-reload-external-libraries.html</loc>
-    <lastmod>2022-11-13T18:54:21.207Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-09-auto-reload-external-libraries.html</loc>
+    <lastmod>2022-11-15T20:17:19.415Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-03-21-docker-in-a-month.html</loc>
-    <lastmod>2022-11-13T18:54:21.801Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-03-21-docker-in-a-month.html</loc>
+    <lastmod>2022-11-15T20:17:19.967Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-22-robust-python-6.html</loc>
-    <lastmod>2022-11-13T18:54:22.132Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-22-robust-python-6.html</loc>
+    <lastmod>2022-11-15T20:17:20.242Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-11-29-prodigy-object-detection-training.html</loc>
-    <lastmod>2022-11-13T18:54:22.507Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-11-29-prodigy-object-detection-training.html</loc>
+    <lastmod>2022-11-15T20:17:20.858Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-01-01-counter.html</loc>
-    <lastmod>2022-11-13T18:54:22.814Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-01-01-counter.html</loc>
+    <lastmod>2022-11-15T20:17:21.128Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-12-seven-steps-gradient-calculations.html</loc>
-    <lastmod>2022-11-13T18:54:23.172Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-12-seven-steps-gradient-calculations.html</loc>
+    <lastmod>2022-11-15T20:17:21.444Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-09-11-tfx-paper.html</loc>
-    <lastmod>2022-11-13T18:54:23.578Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-09-11-tfx-paper.html</loc>
+    <lastmod>2022-11-15T20:17:21.768Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2021-12-29-j-language.html</loc>
-    <lastmod>2022-11-13T18:54:23.914Z</lastmod>
+    <loc>https://mlops.systems/posts/2021-12-29-j-language.html</loc>
+    <lastmod>2022-11-15T20:17:22.042Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-05-21-nlp-redaction-classifier.html</loc>
-    <lastmod>2022-11-13T18:54:24.384Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-05-21-nlp-redaction-classifier.html</loc>
+    <lastmod>2022-11-15T20:17:22.470Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</loc>
-    <lastmod>2022-11-13T18:54:24.826Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</loc>
+    <lastmod>2022-11-15T20:17:22.898Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-02-27-python-parsers.html</loc>
-    <lastmod>2022-11-13T18:54:25.119Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-02-27-python-parsers.html</loc>
+    <lastmod>2022-11-15T20:17:23.162Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-03-12-fiftyone-computervision.html</loc>
-    <lastmod>2022-11-13T18:54:25.551Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-03-12-fiftyone-computervision.html</loc>
+    <lastmod>2022-11-15T20:17:23.578Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/posts/2022-04-06-synthetic-data-results.html</loc>
-    <lastmod>2022-11-13T18:54:25.962Z</lastmod>
+    <loc>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</loc>
+    <lastmod>2022-11-15T20:17:23.945Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/index.html</loc>
-    <lastmod>2022-11-13T18:54:27.278Z</lastmod>
+    <loc>https://mlops.systems/index.html</loc>
+    <lastmod>2022-11-15T20:17:25.092Z</lastmod>
   </url>
   <url>
-    <loc>https://strickvl.github.io/mlops-dot-systems/about.html</loc>
-    <lastmod>2022-11-13T18:54:27.542Z</lastmod>
+    <loc>https://mlops.systems/about.html</loc>
+    <lastmod>2022-11-15T20:17:25.338Z</lastmod>
   </url>
 </urlset>
