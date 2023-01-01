@@ -10,7 +10,32 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 16 Oct 2022 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 31 Dec 2022 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>On mathematical literacy</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m at the half-way point in <a href="https://www.open.ac.uk/courses/modules/mu123">MU123</a>, the first module in the mathematics degree I’m currently working towards. So far we’ve covered models, properties of numbers, some basic statistics, basic algebra and a starter kit on how to think about graphs.</p>
+<p>As the first thing you do in the BSc Mathematics (<a href="https://www.open.ac.uk/courses/maths/degrees/bsc-mathematics-q31">Q31</a>) The module is intended as a way for people who haven’t thought about or used mathematics for many years to re-engage. It gives a common vocabulary and shared understanding of several topics from different areas, such that eventually those with more (recent) experience can join classes with the late-starters (like myself).</p>
+<p>All of the above preamble is a way of saying that I understand why MU123 exists and have some sense of why it’s structured and programmed the way it is, but as a student, it can feel a little scattered. Specifically, it feels like we are being armed with a large bag of tricks. If you show me a graph, I can find the gradient and the y-intercept. If you give me <a href="https://www.mathsisfun.com/surds.html">a surd</a> to simplify, I know what to do. Asked to interpret the standard deviation summary for a data set, I have an intuition for what those numbers mean.</p>
+<p>All that is good and well, and there’s something satisfying to mastering the individual techniques, much like the early days of learning a new programming language. Some context to the use of the technique is given, but for the most part you are using the techniques to solve specific questions and problems.</p>
+<p>The missing piece is the sense of how all the various parts, all the tricks, connect together into the whole game of mathematics. For now, I’m writing this post to acknowledge the sense of there being a ‘lack’ in the programme but with the hope and anticipation that this will improve the further down the road we go.</p>
+<p>I should also probably take some responsibility for my own education. In particular, there are probably things I can be doing to make the connections and links myself based on how I’m understanding things as we go. The Open University programme for Maths very much seems to take an ‘a la carte’ approach which means that the onus is more on the student to fill in the gaps. This blog should probably serve as a record of my efforts to make those connections and fill in those gaps.</p>
+
+
+
+ ]]></description>
+  <category>mathematics</category>
+  <category>mu123</category>
+  <category>q31</category>
+  <guid>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</guid>
+  <pubDate>Sat, 31 Dec 2022 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Deep learning tricks all the way down, with a bit of mathematics for good measure</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4095,122 +4120,6 @@ CMD make lfs &amp;&amp; git lfs pull</code></pre>
   <guid>https://mlops.systems/posts/2022-03-25-paperspace-docker-icevision.html</guid>
   <pubDate>Thu, 24 Mar 2022 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/paperspace-docker-icevision/docker-image-cover.png" medium="image" type="image/png" height="115" width="144"/>
-</item>
-<item>
-  <title>Starting Docker In A Month Of Lunches</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-03-21-docker-in-a-month.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>As far as software engineers go, I’m still barely a spring chicken, six months into my job with <a href="https://zenml.io/">ZenML</a>. Working at a startup is fairly fast-paced and the ability to get going quickly with any number of libraries and tools is a requirement of the work. The number of things I could study, learn or practice is vastly larger than the amount of time I have. Accordingly, it helps to try to pick things that will be long-lasting, teach a cross-cutting skill or that are somehow fundamental.</p>
-<p>Two closely-connected technologies that I’ve realised I can no longer avoid are <a href="https://www.docker.com/">Docker</a> and <a href="https://kubernetes.io/">Kubernetes</a>. I have some high-level knowledge of both, having worked with Docker images on Ekko and having encountered Kubernetes in recent months, but it’s become clear in the last few weeks that they aren’t going away. More than that, it seems that not having a better (practical) grasp of some of the ins and outs of both is holding me back from grasping more complex decisions that are being made at work.</p>
-<p>[<em>Side-note: I’m very curious about <a href="https://podman.io/">Podman</a> as a Docker-adjacent alternative, but I need to understand Docker better first before I can make comparisons. I’d also note that I’m pretty sure that there are lots of cases where Kubernetes is overkill, and where it doesn’t make much sense to add all that complexity, particularly for smaller teams and projects. It’s nevertheless a feature of life in the MLOps space, it seems, so I must understand it.</em>]</p>
-<p>I’ve had my eye on two Manning books by <a href="https://blog.sixeyed.com/">Elton Stoneman</a> for a while, and now seems the perfect time to dive in. <a href="https://www.amazon.com/Learn-Docker-Month-Lunches-Stoneman-ebook/dp/B097824MVJ/ref=tmm_kin_swatch_0?qid=&amp;sr=&amp;tag=soumet-20&amp;_encoding=UTF8">Learn Docker in a Month of Lunches</a> and <a href="https://www.amazon.com/gp/product/B0978175TP/ref=dbs_a_def_rwt_bibl_vppi_i1?tag=soumet-20">Learn Kubernetes in a Month of Lunches</a> are very practical introductions to their subjects, come with good reviews and feedback and were published relatively recently. I’m especially happy that both books are extremely hands-on and even though I won’t in any way be an expert in either technology by the end, I’ll at least have some experience of having encountered the core use cases of both and maybe have a strong idea of what I do and don’t know.</p>
-<p>I’m not sure whether I’ll complete each one in exactly a month, but I’ll try to fast-track my reading. The chapters are written in such a way as to be digestible (including exercises) in around an hour. Stoneman says in the introduction to the Kubernetes book that it’s best to start with the Docker one, which I suppose makes sense given that one builds on the other.</p>
-<p>Just like <a href="https://mlops.systems/categories/#robustpython">my posts as I read through Robust Python</a> (which I haven’t stopped doing), I’ll write up various things that I learn along the way, mainly as notes for myself but perhaps it will have value beyond this limited goal. So far I’ve read through the first three chapters of the Docker book, so what follows are some notes on the key points from that.</p>
-<section id="core-docker-commands" class="level1">
-<h1>Core Docker Commands</h1>
-<p>The book has you running a lot of examples. Two commands mentioned (specific to this book) to help clean up the images and containers that you were using:</p>
-<pre class="shell"><code># clean up containers and application packages
-docker container rm -f $(docker container ls -aq)
-
-# to reclaim disk space
-docker image rm -f $(docker image ls -f reference='dial/*' -q)</code></pre>
-<p>Some core commands for interacting with a container:</p>
-<pre class="shell"><code># run a container
-docker container run CONTAINERNAME
-
-# run an interactive container with a connected terminal session
-docker container run --interactive --tty CONTAINERNAME
-
-# list running containers
-docker container ls
-# list all containers with any status
-docker container ls --all 
-
-# list processes running in a container
-# CONTAINERNAME could be part of the container ID as well
-docker container top CONTAINERNAME
-
-# show logs for a container
-docker container logs CONTAINERNAME
-
-# view all details about a container
-docker container inspect CONTAINERNAME
-
-# get stats on a particular container
-docker container stats CONTAINERNAME
-
-# special flags
-# --detach starts the container in the background
-# --publish publishes a port from the container to the computer
-
-# delete containers
-# the force flag shuts it down if still running
-docker container rm --force CONTAINERNAME
-
-# the nuclear option
-docker container rm --force $(docker container ls --all --quiet)</code></pre>
-</section>
-<section id="building-your-own-images-with-dockerfiles" class="level1">
-<h1>Building your own images with Dockerfiles</h1>
-<p>Some commands which are useful for making your own images:</p>
-<pre class="shell"><code># gets the image from DockerHub registry
-docker image pull IMAGENAME</code></pre>
-<p>Key mental models for Docker images:</p>
-<ul>
-<li>images are made up of ‘layers’</li>
-<li>Docker images are stored as lots of small files, brought together as one image when you build with a <code>Dockerfile</code>.</li>
-<li>each layer of an image corresponds to a line in your <code>Dockerfile</code></li>
-<li>layers are successively built on top of each other</li>
-<li>the order of the layers determines the cache invalidation. If something changes in a lower layer, then all subsequent layers are regenerated. It’s for this reason that it pays to be careful about the order in which you write the commands that make up your <code>Dockerfile</code>.</li>
-</ul>
-<p>It seems to be considered a good practice (at least where I am right now in the book) to pass in environment variables from the outside into your Docker image. This way you can keep configuration separate from how you actually run it. So you’d have a command something like this:</p>
-<pre class="shell"><code>docker container run --env EPOCHS=30 SOMEUSER/CONTAINERNAME</code></pre>
-<p>which would pass the <code>EPOCHS</code> environment variable into the runtime of the Docker image if it had been set up with something like this as a line inside the <code>Dockerfile</code>:</p>
-<pre><code>ENV EPOCHS="1"</code></pre>
-<p>Note that only the environment variables that you specifically select to be passed into the container get passed in.</p>
-<section id="dockerfile-layout" class="level2">
-<h2 class="anchored" data-anchor-id="dockerfile-layout">Dockerfile layout</h2>
-<p><code>Dockerfile</code>s seem to have some commonalities in terms of the structure:</p>
-<ul>
-<li>you start with a base image on which you’re building. These seem usually or often to be a base image containing a runtime for whatever language your application uses</li>
-<li>Then there’s often environment variables afterwards</li>
-<li>Then you can specify a <code>WORKDIR</code> which is the working directory for the application</li>
-<li>Then you can <code>COPY</code> files from your local filesystem into that working directory</li>
-<li>Then at the end you specify which <code>CMD</code> needs to be run in order to execute the application.</li>
-</ul>
-<p>Once you’re done with writing your <code>Dockerfile</code>, use the following command to build your image:</p>
-<pre class="shell"><code>docker image build --tag SOMENAME .</code></pre>
-<p>Note that final <code>.</code> trailing that command. The <code>.</code> states that the current directory is the ‘context’ and thus is used for when you’re copying in files using the <code>COPY</code> command.</p>
-<p>You can view the layers of your Docker image with the <code>docker image history IMAGENAME</code> command (which will output them to the terminal).</p>
-<p>To see how much disk space your containers and images are taking up, type <code>docker system df</code>.</p>
-<p>When you rebuild an image, you can specify this with a <code>:v2</code> after the name, as in this command:</p>
-<pre class="shell"><code>docker image build -t web-app:v2 .</code></pre>
-<p>When it comes to optimising your <code>Dockerfile</code>, bear the following in mind:</p>
-<blockquote class="blockquote">
-<p>“Any Dockerfile you write should be optimised so that the instructions are ordered by how frequently they change — with instructions that are unlikely to change at the start of the Dockerfile, and instructions most likely to change at the end. The goal is for most builds to only need to execute the last instruction, using the cache for everything else. That saves time, disk space, and network bandwidth when you start sharing your images.” (pp.&nbsp;42-43)</p>
-</blockquote>
-<p>Some command tips and tricks:</p>
-<ul>
-<li>combine multiple commands onto the same line</li>
-<li>put the <code>CMD</code> instruction early on as it’s unlikely to change</li>
-</ul>
-
-
-</section>
-</section>
-
- ]]></description>
-  <category>tools</category>
-  <category>dockerinamonthoflunches</category>
-  <category>books-i-read</category>
-  <guid>https://mlops.systems/posts/2022-03-21-docker-in-a-month.html</guid>
-  <pubDate>Sun, 20 Mar 2022 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/diamol/diamol-cover.jpg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>
