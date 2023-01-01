@@ -9,6 +9,7 @@ description: Thinking aloud about how to tie a collection of mathematical ‘tri
 layout: post
 title: On mathematical literacy
 toc: false
+include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 ---
 
 I’m at the half-way point in [MU123](https://www.open.ac.uk/courses/modules/mu123), the first module in the mathematics degree I’m currently working towards. So far we’ve covered models, properties of numbers, some basic statistics, basic algebra and a starter kit on how to think about graphs.
