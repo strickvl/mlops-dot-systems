@@ -19,3 +19,6 @@ format:
   html:
     theme: cosmo
     css: styles.css
+    include-in-header:
+      text: |
+        <script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
