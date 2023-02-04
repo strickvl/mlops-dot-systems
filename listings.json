@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2023-01-14-learning-j-chapter-1.html",
       "/posts/2023-01-01-on-mathematical-literacy.html",
       "/posts/2022-10-24-foundations-mnist-basics.html",
       "/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html",

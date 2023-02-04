@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Alex Strick van Linschoten">
-<meta name="dcterms.date" content="2022-01-16">
-<meta name="description" content="A report midway through my computer vision project to detect the presence of redactions on government documents.">
+<meta name="dcterms.date" content="2023-01-14">
+<meta name="description" content="Notes on chapter one of Roger Stokes’ ‘Learning J’ book.">
 
-<title>Alex Strick van Linschoten - A Midway Report on my Computer Vision Project</title>
+<title>Alex Strick van Linschoten - TITLE GOES HERE</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -77,7 +77,7 @@ setTimeout(ldinsp, 0);
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -127,17 +127,17 @@ setTimeout(ldinsp, 0);
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A Midway Report on my Computer Vision Project</h1>
+      <h1 class="title">TITLE GOES HERE</h1>
                   <div>
         <div class="description">
-          A report midway through my computer vision project to detect the presence of redactions on government documents.
+          Notes on chapter one of Roger Stokes’ ‘Learning J’ book.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">python</div>
-                <div class="quarto-category">fastai</div>
-                <div class="quarto-category">tools</div>
-                <div class="quarto-category">redactionmodel</div>
+                <div class="quarto-category">j</div>
+                <div class="quarto-category">learningj</div>
+                <div class="quarto-category">books-i-read</div>
+                <div class="quarto-category">mathematics</div>
               </div>
                   </div>
   </div>
@@ -155,7 +155,7 @@ setTimeout(ldinsp, 0);
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 16, 2022</p>
+        <p class="date">January 14, 2023</p>
       </div>
     </div>
     
@@ -166,31 +166,17 @@ setTimeout(ldinsp, 0);
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<p>(<em>This post is adapted from <a href="https://twitter.com/strickvl/status/1482645800656281604">a twitter thread</a>, so is a bit more terse than usual.</em>)</p>
-<p>I recently switched what I spend the majority of my professional life doing (history -&gt; software engineering). I’m currently working as an ML Engineer at <a href="https://github.com/zenml-io/zenml">ZenML</a> and really enjoying this new world of MLOps, filled as it is with challenges and opportunities.</p>
-<p>I wanted to get some context for the wider work of a data scientist to help me appreciate the problem we are trying to address at <a href="https://github.com/zenml-io/zenml">ZenML</a>, so looked around for a juicy machine learning problem to work on as a longer project.</p>
-<p>I was also encouraged by <a href="https://www.alexstrick.com/blog/fastai-lesson-zero">Jeremy Howard’s advice</a> to “build one project and make it great”. This approach seems like it has really paid off for those who’ve studied <a href="https://course.fast.ai">the fastai course</a> and I wanted to really go deep on something myself.</p>
-<p>Following some previous success working with other mentors from <a href="https://www.sharpestminds.com">SharpestMinds</a> on a previous project, I settled on Computer Vision and was lucky to find Farid AKA <a href="https://twitter.com/ai_fast_track"><span class="citation" data-cites="ai_fast_track">@ai_fast_track</span></a> to mentor me through the work.</p>
-<p>In the last 6 weeks, I’ve made what feels like good progress on the problem. This image offers an overview of the pieces I’ve been working on, to the point where the ‘solution’ to my original problem feels on the verge of being practically within reach.</p>
-<p><img src="{{ site.baseurl }}/images/midway-report-redaction-project/midway-presentation.jpeg" title="Some of the things I worked on over the past six weeks." class="img-fluid"></p>
-<p>After just a few lessons of the FastAI course, I <a href="https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html">trained a classification model</a> to ~95% accuracy to help me sort redacted images from unredacted images.</p>
-<p>I used Explosion’s Prodigy to <a href="https://mlops.systems/redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html">annotate an initial round</a> of data to pass into the next step, enjoying how the labelling process brought me into greater contact with the dataset along the way.</p>
-<p>I switched to using <a href="https://airctic.com/">IceVision</a> to help me with the more complicated object detection problem, using MMDetection and VFNet <a href="https://mlops.systems/redactionmodel/computervision/progressreport/2021/12/11/redaction-progress-week-one.html">to get pretty good results</a> early on.</p>
-<p>I’m currently in the process of creating my own synthetic images to boost the annotations I’ve manually made. (I’ll be writing about this process soon as well, as I’m learning a lot about why this is so important for these kinds of computer vision problems.)</p>
-<p>I’ve also been amazed at the effectiveness of self-training (i.e.&nbsp;using my initial model in my annotation loop to generate an initial set of annotations which I can easily amend as appropriate, then feeding those annotations in to create a better model and so on). More to follow on that step, too.</p>
-<p>I started using <a href="https://evidentlyai.com">Evidently</a> to do some drift detection, inspired by some work I was doing for ZenML on adding Evidently as an integration to our own tool. This helped me think about how new data was affecting the model and the training cycle. I feel like there’s a lot of depth here to understand, and am looking forward to diving in.</p>
-<p>I made a tiny little demo on <a href="https://huggingface.co/spaces">HuggingFace Spaces</a> to show off the current inference capabilities and to see the model in a setting that feels close to reality. This is a simple little <a href="https://www.gradio.app">Gradio</a> app but I liked how easy this was to put together (a couple of hours, mainly involving some build issues and a dodgy <code>requirements.txt</code> file)</p>
-<p>Along the way, I found it sometimes quite painful or fiddly to handle the PDF files that are the main data source for the project, so I built <a href="https://pypi.org/project/pdfsplitter/">my own Python package</a> to handle the hard work. I used fastai’s nbdev to <a href="https://mlops.systems/python/jupyter/fastai/tools/2022/01/06/nbdev-early-impressions.html">very quickly get the starters</a> of what I’m hoping might be a useful tool for others using PDF data for ML projects.</p>
-<p>Throughout all this, <a href="https://www.linkedin.com/in/farid-hassainia-ca/">Farid</a> has been patiently helping guide me forward. He saved me from going down some dark rabbit holes, from spending too long studying skills and parts of the problem that needed relatively little mastery in order to get to where I am.</p>
-<p>Farid has been a consistently enthusiastic and kind advocate for my work, moreover, and this has really helped me stay the course for this project that takes a decent chunk of my time (especially seeing as I do it completely aside / separately from my day job).</p>
-<p>I feel like I’m consistently making progress and learning the skills of a data scientist working in computer vision, even though I have so much left to learn! My project still has a ways to go before it’s ‘done’, but I’m confident that I’ll get there with Farid’s support. (Thank you!)</p>
+<p>I’m continuing my study of J, hoping to deepen my experience with the array language paradigm in general and J in specific. I’m hoping that I will (at some point) have enough experience with it to be able to support my mathematics explorations. To this end, instead of just bobbing around and looking at whatever feels shiniest, I’ll work my way through <a href="https://www.jsoftware.com/help/learning/contents.htm">Roger Stokes’ “Learning J”</a>. It seems to be a decent enough way to get going and explicitly doesn’t assume too much of me going into things, unlike other introductory texts like <a href="https://www.jsoftware.com/help/jforc/contents.htm">“J for C programmers”</a>.</p>
+<p>One of the things that I feel is missing from the Stokes book are exercises to get you thinking about and using J, so as I read I’ll be writing my own exercises to stimulate my own memory and to practice. I’ll include them at the end of each chapter’s notes.</p>
 
 
 
@@ -327,6 +313,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 

@@ -10,7 +10,29 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 31 Dec 2022 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 13 Jan 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>TITLE GOES HERE</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-01-14-learning-j-chapter-1.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m continuing my study of J, hoping to deepen my experience with the array language paradigm in general and J in specific. I’m hoping that I will (at some point) have enough experience with it to be able to support my mathematics explorations. To this end, instead of just bobbing around and looking at whatever feels shiniest, I’ll work my way through <a href="https://www.jsoftware.com/help/learning/contents.htm">Roger Stokes’ “Learning J”</a>. It seems to be a decent enough way to get going and explicitly doesn’t assume too much of me going into things, unlike other introductory texts like <a href="https://www.jsoftware.com/help/jforc/contents.htm">“J for C programmers”</a>.</p>
+<p>One of the things that I feel is missing from the Stokes book are exercises to get you thinking about and using J, so as I read I’ll be writing my own exercises to stimulate my own memory and to practice. I’ll include them at the end of each chapter’s notes.</p>
+
+
+
+ ]]></description>
+  <category>j</category>
+  <category>learningj</category>
+  <category>books-i-read</category>
+  <category>mathematics</category>
+  <guid>https://mlops.systems/posts/2023-01-14-learning-j-chapter-1.html</guid>
+  <pubDate>Fri, 13 Jan 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>On mathematical literacy</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4639,56 +4661,6 @@ In this post you learned:
   <guid>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</guid>
   <pubDate>Tue, 05 Apr 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/synthetic-data-results/hard-synthetic-performance-boost.png" medium="image" type="image/png" height="103" width="144"/>
-</item>
-<item>
-  <title>Some characteristics of best-in-class ML portfolio projects</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><a href="https://ekko-realtime.com">Ekko</a> was the last time I worked on a big project that would be presented publicly. An open-source framework that provided realtime infrastructure and in-transit message processing for web applications was a group project that I worked on together with three other colleagues, and we took the time to really make the <em>how</em> and the <em>why</em> really explicit. We made animations, diagrams, charts, and I learned a lot about what’s hard when explaining technical projects, even when the audience is expected to be (mostly) technically literate.</p>
-<p><img src="https://mlops.systems/posts/ml-portfolio-best-practices/ekko.png" title="A screenshot from the Ekko website" class="img-fluid"></p>
-<p>I’ve been working on <a href="https://mlops.systems/categories/#redactionmodel">my redaction project</a> since December and slowly but surely I’m tying the ends together and getting ready for it to come to a close. As part of the final touches, I want to offer something equivalent to how we presented <a href="https://ekko-realtime.com">Ekko</a>. From reading around and exposure to various projects over the years, it seems to me that machine learning projects sometimes have different emphases and conventions. This blog post is my attempt to list some of the characteristics of really great ML portfolio projects, with an emphasis on how the project is presented.</p>
-<section id="some-top-projects" class="level2">
-<h2 class="anchored" data-anchor-id="some-top-projects">Some top projects</h2>
-<ul>
-<li><a href="https://explosion.ai/blog/healthsea">Healthsea</a> by Edward Schmuhl (<a href="https://twitter.com/aestheticedwar1"><span class="citation" data-cites="aestheticedwar1">@aestheticedwar1</span></a>) is my current favourite project writeup, blending amazing visuals, full explanation and a clear overview</li>
-<li><a href="https://www.ahmedbesbes.com/blog/end-to-end-machine-learning">This project</a> (by <a href="https://twitter.com/ahmed_besbes_"><span class="citation" data-cites="ahmed_besbes_">@ahmed_besbes_</span></a>) was recommended to me and although it’s more of a step-through of how the project works and was created, it also is clearly presented and very visual.</li>
-<li>For computer vision projects, <a href="https://huggingface.co/spaces">Hugging Face Spaces</a> is a great place to find interesting Gradio demos, though after a while they blend into each other a little. HF Spaces also doesn’t seem like it gets used for full project explanation that often.</li>
-</ul>
-</section>
-<section id="characteristics-of-top-projects" class="level2">
-<h2 class="anchored" data-anchor-id="characteristics-of-top-projects">Characteristics of top projects</h2>
-<p>Some things I think make a great portfolio project stand out:</p>
-<ul>
-<li>visual design — looks count for a lot, for better or for worse.</li>
-<li>interactivity — if there is some kind of a demo or application that I can play around with in order to relate to concepts being written about, that’d be great.</li>
-<li>visual explanations alongside pure text — a diagram or animation can really help bring explanations to life.</li>
-<li>a clear overview — the structure of the writeup should be clear and readers should be able to get a high-level overview first without necessarily needing to read through every last detail.</li>
-<li>explain what problem you’re solving — spend (probably) more time than you think is necessary to explain what problem you’re solving and set up the context for the work you did.</li>
-<li>code snippets are ok, but don’t just dump your source code.</li>
-<li>present your dead ends — don’t just present the happy path; feel free to present things that didn’t work out as well. Readers will want to know that you encountered difficulties and there are benefits from seeing how you made decisions along the way.</li>
-<li>present further work and next steps — offer hints at what other work could be done on the project, even if you’re done with it for now.</li>
-<li>don’t lose track of the use case — show that you thought about the specific problem you were solving and not just as a technical problem in a void. (Real-world use cases have constraints, and your solution should live within a universe where those constraints directed you).</li>
-<li>Feel free to link out — you can easily link to other places where you’ve gone into the details about a particular problem you encountered. No need to cram every single last detail into the project portfolio.</li>
-<li>Don’t forget the purpose of the portfolio — it doesn’t need to be an exhaustive catalogue of every last detail; it just needs to offer a compelling overview that is understandable as an independent entity.</li>
-</ul>
-<p>There are other aspects which are more table stakes for anything you write online — no typos, clear writing and so on.</p>
-<p>I took the time to step back from the project to write this down as I move into a phase where I’ll increasingly focus on the full writeup and I wanted to have a list to remind me of the things I valued in these kinds of projects.</p>
-<p>If you have good examples of ML portfolio projects (or really great blog write-ups with interactivity and so on), please let me know in the comments!</p>
-
-
-</section>
-
- ]]></description>
-  <category>computervision</category>
-  <category>skillbuilding</category>
-  <guid>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</guid>
-  <pubDate>Sun, 03 Apr 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/ml-portfolio-best-practices/healthsea.png" medium="image" type="image/png" height="133" width="144"/>
 </item>
 </channel>
 </rss>
