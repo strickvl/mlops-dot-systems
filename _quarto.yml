@@ -4,6 +4,9 @@ project:
 website:
   title: "Alex Strick van Linschoten"
   site-url: "https://mlops.systems"
+  open-graph: true
+  twitter-card:
+    creator: "@strickvl"
   navbar:
     right:
       - about.qmd
