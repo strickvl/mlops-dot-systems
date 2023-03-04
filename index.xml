@@ -1792,6 +1792,9 @@ Training completed. Do not forget to share your model on huggingface.co/models =
 </section>
 
  ]]></description>
+  <category>fastai</category>
+  <category>nlp</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-21-nlp-redaction-classifier.html</guid>
   <pubDate>Fri, 20 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/nlp-redaction-classifier/filenames.png" medium="image" type="image/png" height="107" width="144"/>
@@ -2166,6 +2169,9 @@ Training completed. Do not forget to share your model on huggingface.co/models =
 
 
  ]]></description>
+  <category>fastai</category>
+  <category>computervision</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</guid>
   <pubDate>Sat, 14 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/ml-training-big-picture/neuralnetwork.png" medium="image" type="image/png" height="92" width="144"/>
@@ -2584,6 +2590,9 @@ Training completed. Do not forget to share your model on huggingface.co/models =
 </section>
 
  ]]></description>
+  <category>fastai</category>
+  <category>computervision</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</guid>
   <pubDate>Fri, 13 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/fashion-mnist/fashion-mnist-small.png" medium="image" type="image/png" height="142" width="144"/>
@@ -2783,6 +2792,9 @@ Training completed. Do not forget to share your model on huggingface.co/models =
 </section>
 
  ]]></description>
+  <category>fastai</category>
+  <category>computervision</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</guid>
   <pubDate>Thu, 12 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/ml-training-big-picture/sgd-mini.png" medium="image" type="image/png" height="93" width="144"/>
@@ -2920,6 +2932,9 @@ Training completed. Do not forget to share your model on huggingface.co/models =
 </section>
 
  ]]></description>
+  <category>fastai</category>
+  <category>computervision</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-12-seven-steps-gradient-calculations.html</guid>
   <pubDate>Wed, 11 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/ml-training-big-picture/seven-steps.png" medium="image" type="image/png" height="55" width="144"/>
@@ -3980,6 +3995,9 @@ Tip
 </section>
 
  ]]></description>
+  <category>fastai</category>
+  <category>computervision</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-11-fashion-mnist-pixel-similarity.html</guid>
   <pubDate>Tue, 10 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/fashion-mnist/fashion-mnist-small.png" medium="image" type="image/png" height="142" width="144"/>
@@ -4191,6 +4209,7 @@ In this post you learned:
  ]]></description>
   <category>fastai</category>
   <category>computervision</category>
+  <category>partone</category>
   <guid>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</guid>
   <pubDate>Sun, 01 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/blupus_detection/blupus-training.png" medium="image" type="image/png" height="161" width="144"/>
