@@ -5,6 +5,7 @@ author: Alex Strick van Linschoten
 categories:
 - fastai
 - computervision
+- partone
 date: '2022-05-02'
 description: I learn a valuable lesson about how a model often will 'cheat' when training
   and sometimes the solution is a separate held-out set of 'test' data which can give
