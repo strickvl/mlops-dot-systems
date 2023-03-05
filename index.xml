@@ -10,7 +10,492 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 31 Dec 2022 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 04 Mar 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Tricking my digits classifier with diffusion</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="building-a-modelprocess-that-can-generate-images-of-the-digit-eight" class="level1">
+<h1>Building a model/process that can generate images of the digit eight</h1>
+<p>In <a href="https://youtu.be/_7rMfsA24Ls">the lesson 9 video</a> of the FastAI course, Jeremy explains how diffusion models work at a very high level. (These initial videos were released to the public early on, though the rest of the course is still ongoing and thus hasn’t yet been released.) Early on we’re introduced to a basic algorithm which would work for generating images. In doing so, we are given a model for how to think about the diffusion process. This mental model itself reminds of how we train models in the standard machine learning workflow.</p>
+<p>The process goes as follows:</p>
+<ol type="1">
+<li>train a model that outputs a probability of whether a particular image is an image of a handwritten ‘8’ digit. (If one already exists, then use that, but let’s assume that it doesn’t).</li>
+<li>create an image that is just random noise (dimensions should correspond to those of our target image).</li>
+<li>calculate the derivatives for each pixel in that random noise image (with respect to the probability that the image is a handwritten ‘8’</li>
+<li>update the pixels (i.e.&nbsp;subtract from them) by some weighted amount according to the values for the derivatives for those pixels.</li>
+<li>iteratively do this a bunch of times and watch as our random noise image slowly turns into an image of a handwritten ‘8’ digit.</li>
+</ol>
+<p>On some level, the rest of the complexity around the actual Stable Diffusion models relate to things like being able to combine a text prompt with the image generation, or making the process of training the model more efficient and so on. But for now, I’m choosing to focus on the core process as described above.</p>
+<p>My choice to do this centered around the digit ‘8’ is arbitrary. We could as well have chosen something like ‘images of a shoe’ or whatever, but that potentially adds more complexity that could distract from the core process.</p>
+<section id="training-an-8-digit-classifier" class="level2">
+<h2 class="anchored" data-anchor-id="training-an-8-digit-classifier">1: Training an ‘8’ digit classifier</h2>
+<p>Training a model that can output the probability that a digit is a number eight is fairly trivial and is something that <a href="https://course.fast.ai">the FastAI part 1 course</a> prepares you well to tackle, so I’ll handle that first since it’s a pre-requisite for everything that happens subsequently.</p>
+<p>Needless to say, I’ll use the MNIST dataset as my source of training data. Potentially I can use Fashion MNIST as a stretch goal later on, but I’ll start with the digit ‘8’ and see where we get.</p>
+<div class="cell" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq pip</span>
+<span id="cb1-2"><span class="op" style="color: #5E5E5E;">!</span>pip install timm fastai torch datasets rich <span class="op" style="color: #5E5E5E;">-</span>Uqq</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
+<span id="cb2-2"><span class="im" style="color: #00769E;">import</span> timm</span>
+<span id="cb2-3"></span>
+<span id="cb2-4">torch.set_printoptions(precision<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">6</span>, sci_mode<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># dataset patched together from the original MNIST dataset</span></span>
+<span id="cb3-2">path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="st" style="color: #20794D;">"./mnist_8_or_not/training"</span>)</span>
+<span id="cb3-3">path.ls()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>(#4) [Path('mnist_8_or_not/training/not_8'),Path('mnist_8_or_not/training/8'),Path('mnist_8_or_not/training/.ipynb_checkpoints'),Path('mnist_8_or_not/training/eight_classifier.pkl')]</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">fnames <span class="op" style="color: #5E5E5E;">=</span> get_image_files(path)</span>
+<span id="cb5-2"><span class="kw" style="color: #003B4F;">def</span> label_func(x): <span class="cf" style="color: #003B4F;">return</span> x.parent.name</span>
+<span id="cb5-3"></span>
+<span id="cb5-4">dls <span class="op" style="color: #5E5E5E;">=</span> ImageDataLoaders.from_path_func(path, fnames, label_func)</span>
+<span id="cb5-5">dls.show_batch()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>As you can see, we now have a dataloader with images of handwritten eights and images of handwritten digits that are not eights. This data was taken from the MNIST dataset and reassembled for the purposes of making this model. (Heavy data class imbalance in favour of the not-eights, but putting that issue to one side for now).</p>
+<div class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">learn <span class="op" style="color: #5E5E5E;">=</span> vision_learner(dls, resnet34, metrics<span class="op" style="color: #5E5E5E;">=</span>error_rate)</span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="co" style="color: #5E5E5E;"># only train the model if we have no model already</span></span>
+<span id="cb6-4">model_path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
+<span id="cb6-5"><span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> model_path.exists():</span>
+<span id="cb6-6">    learn.fine_tune(<span class="dv" style="color: #AD0000;">5</span>)</span>
+<span id="cb6-7">learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">an_eight <span class="op" style="color: #5E5E5E;">=</span> Path(path <span class="op" style="color: #5E5E5E;">/</span> <span class="st" style="color: #20794D;">"8"</span>).ls()[<span class="dv" style="color: #AD0000;">0</span>]</span>
+<span id="cb7-2">not_an_eight <span class="op" style="color: #5E5E5E;">=</span> Path(path <span class="op" style="color: #5E5E5E;">/</span> <span class="st" style="color: #20794D;">"not_8"</span>).ls()[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">learn.predict(an_eight), learn.predict(not_an_eight)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>(('8', TensorBase(0), TensorBase([1.0000e+00, 5.5913e-07])),
+ ('not_8', TensorBase(1), TensorBase([2.2082e-06, 1.0000e+00])))</code></pre>
+</div>
+</div>
+<p>Our model is pretty good at detecting whether digits are eights or not. I only trained it for five epochs, but it was already getting an error rate of almost zero. Good enough for the purposes of this proof-of-concept exploration.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Union</span>
+<span id="cb10-2"></span>
+<span id="cb10-3"><span class="kw" style="color: #003B4F;">def</span> get_eight_probability(image_pth: Union[Path, torch.Tensor], learner: Learner) <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
+<span id="cb10-4">    _, _, probs <span class="op" style="color: #5E5E5E;">=</span> learner.predict(image_pth)</span>
+<span id="cb10-5">    <span class="cf" style="color: #003B4F;">return</span> probs[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">get_eight_probability(an_eight, learn)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display" data-execution_count="75">
+<pre><code>TensorBase(0.995113)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">get_eight_probability(not_an_eight, learn)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display" data-execution_count="76">
+<pre><code>TensorBase(0.000268)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="co" style="color: #5E5E5E;"># export our model so we don't have to retrain it every time from now on</span></span>
+<span id="cb15-2"><span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> model_path.exists():</span>
+<span id="cb15-3">    learn.export(<span class="st" style="color: #20794D;">"eight_classifier.pkl"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">loaded_learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
+<span id="cb16-2">get_eight_probability(an_eight, loaded_learn)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>TensorBase(0.999999)</code></pre>
+</div>
+</div>
+</section>
+<section id="create-a-random-noise-image" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-random-noise-image">2: Create a random noise image</h2>
+<p>So we have a way to get the probability that an image is an eight. Now we need to shift to the generation process, and we start by creating an image that is filled with random noise. We’ll shift to raw PyTorch code here probably so that it’s more explicit what’s going on, and so our ‘images’ will be Tensors. Let’s maybe make our images explicitly the same size as our training data, just to eliminate any confusion.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="im" style="color: #00769E;">from</span> PIL <span class="im" style="color: #00769E;">import</span> Image</span>
+<span id="cb18-2"></span>
+<span id="cb18-3">img <span class="op" style="color: #5E5E5E;">=</span> Image.<span class="bu" style="color: null;">open</span>(an_eight)</span>
+<span id="cb18-4">width, height <span class="op" style="color: #5E5E5E;">=</span> img.size</span>
+<span id="cb18-5"></span>
+<span id="cb18-6"><span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"Image dimensions: </span><span class="sc" style="color: #5E5E5E;">{</span>width<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> x </span><span class="sc" style="color: #5E5E5E;">{</span>height<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Image dimensions: 28 x 28</code></pre>
+</div>
+</div>
+<p>Now we can generate a 28x28 image with random noise scattered throughout it.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="im" style="color: #00769E;">import</span> torch</span>
+<span id="cb20-2"><span class="im" style="color: #00769E;">import</span> torchvision.transforms <span class="im" style="color: #00769E;">as</span> transforms</span>
+<span id="cb20-3"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb20-4"></span>
+<span id="cb20-5"><span class="co" style="color: #5E5E5E;"># Generate a 28x28 tensor filled with random noise</span></span>
+<span id="cb20-6">noise_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)</span>
+<span id="cb20-7"></span>
+<span id="cb20-8"><span class="co" style="color: #5E5E5E;"># Convert the tensor to an image</span></span>
+<span id="cb20-9">transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
+<span id="cb20-10">    transforms.ToPILImage(),</span>
+<span id="cb20-11">    transforms.Grayscale(num_output_channels<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb20-12">])</span>
+<span id="cb20-13">noise_image <span class="op" style="color: #5E5E5E;">=</span> transform(noise_tensor.squeeze())</span>
+<span id="cb20-14"></span>
+<span id="cb20-15"><span class="co" style="color: #5E5E5E;"># Display the image</span></span>
+<span id="cb20-16">plt.imshow(noise_image, cmap<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">'gray'</span>)</span>
+<span id="cb20-17">plt.axis(<span class="st" style="color: #20794D;">'off'</span>)</span>
+<span id="cb20-18">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Let’s turn that into a function so we can use it later on…</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="co" style="color: #5E5E5E;"># we don't end up using this first function much as we're working with tensors</span></span>
+<span id="cb21-2"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_image() <span class="op" style="color: #5E5E5E;">-&gt;</span> Image:</span>
+<span id="cb21-3">    <span class="co" style="color: #5E5E5E;"># Generate a 28x28 tensor filled with random noise</span></span>
+<span id="cb21-4">    noise_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)</span>
+<span id="cb21-5"></span>
+<span id="cb21-6">    <span class="co" style="color: #5E5E5E;"># Convert the tensor to an image</span></span>
+<span id="cb21-7">    transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
+<span id="cb21-8">        transforms.ToPILImage(),</span>
+<span id="cb21-9">        transforms.Grayscale(num_output_channels<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb21-10">    ])</span>
+<span id="cb21-11">    <span class="cf" style="color: #003B4F;">return</span> transform(noise_tensor.squeeze())</span>
+<span id="cb21-12"></span>
+<span id="cb21-13"><span class="co" style="color: #5E5E5E;"># we generate a 3x28x28 tensor with random values assigned</span></span>
+<span id="cb21-14"><span class="co" style="color: #5E5E5E;"># we ensure that we can use PyTorch's autograd on the values</span></span>
+<span id="cb21-15"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_tensor() <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
+<span id="cb21-16">    noise_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>, requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb21-17">    <span class="cf" style="color: #003B4F;">return</span> noise_tensor</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">get_noisy_starter_image()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="bu" style="color: null;">type</span>(get_noisy_starter_tensor())</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>torch.Tensor</code></pre>
+</div>
+</div>
+</section>
+<section id="get-the-derivatives-for-the-probability-that-its-an-eight" class="level2">
+<h2 class="anchored" data-anchor-id="get-the-derivatives-for-the-probability-that-its-an-eight">3: Get the derivatives for the probability that it’s an eight</h2>
+<p>Our task now is go through the pixels of this 28x28 image and get the derivatives of each pixel with respect to the probability that the image is a digit ‘8’. We don’t have to do this pixel by pixel (i.e.&nbsp;the ‘finite differencing method’) since we have PyTorch, so we can use ‘analytic derivatives’ to calculate the whole lot in a single sweep.</p>
+<p>(Sidebar: I’m using those terms to reference two ways of calculating gradients from the universe of calculus, but I don’t know anything really about what they signify or how they work. Just wanted to signal that I’m using them just because it came up in lesson 9 and it’s often nice to have a name to put to a technique, even if you don’t necessarily know how it works. If you don’t know how it works too, welcome to the club and know that you don’t always need to know everything at every moment :) )</p>
+<div class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">random_sample <span class="op" style="color: #5E5E5E;">=</span> get_noisy_starter_tensor()</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">random_sample.shape</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="83">
+<pre><code>torch.Size([1, 3, 28, 28])</code></pre>
+</div>
+</div>
+<section id="adding-and-updating-our-loss-function" class="level3">
+<h3 class="anchored" data-anchor-id="adding-and-updating-our-loss-function">Adding and updating our loss function</h3>
+<p>I experimented a bit with getting a loss function to do what I needed and it took several forms. I’m leaving the code here for posterity, but it doesn’t get used anywhere else in this blog. The two helper functions are for displaying a tensor in the notebook, and for turning a tensor into an image that can be displayed.</p>
+<div class="cell" data-execution_count="26">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><span class="kw" style="color: #003B4F;">def</span> new_eights_loss(preds: torch.Tensor, learner: Learner) <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
+<span id="cb28-2">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
+<span id="cb28-3">    <span class="cf" style="color: #003B4F;">return</span> torch.nn.functional.mse_loss(preds, targets)</span>
+<span id="cb28-4"></span>
+<span id="cb28-5"><span class="kw" style="color: #003B4F;">def</span> display_tensor(tns: torch.Tensor) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="va" style="color: #111111;">None</span>:</span>
+<span id="cb28-6">    plt.imshow(tns, cmap<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">'gray'</span>)</span>
+<span id="cb28-7">    plt.axis(<span class="st" style="color: #20794D;">'off'</span>)</span>
+<span id="cb28-8">    plt.show()</span>
+<span id="cb28-9"></span>
+<span id="cb28-10"><span class="kw" style="color: #003B4F;">def</span> tns_to_img(tns: torch.Tensor) <span class="op" style="color: #5E5E5E;">-&gt;</span> Image:</span>
+<span id="cb28-11">    transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
+<span id="cb28-12">        transforms.ToPILImage(),</span>
+<span id="cb28-13">        transforms.Grayscale(num_output_channels<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb28-14">        ])</span>
+<span id="cb28-15">    <span class="cf" style="color: #003B4F;">return</span> display_tensor(transform(tns.squeeze()))</span></code></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="automating-the-iterations" class="level2">
+<h2 class="anchored" data-anchor-id="automating-the-iterations">Automating the iterations</h2>
+<p>At this point we should just give it a try. In what follows, we get an image of something that isn’t an eight, then iterate a number of times through the <code>iterate_image</code> function which:</p>
+<ul>
+<li>ensures that we’re tracking and calculating the gradients on the image</li>
+<li>gets the predictions for our image (i.e.&nbsp;whether it’s an eight or not) and passing them through a softmax</li>
+<li>we pass our predictions and our targets into a <code>l1_loss</code> function (i.e.&nbsp;the mean absolute error) to get the loss for these predictions.</li>
+<li>we call <code>backward()</code> on the loss so that the gradients are calculated</li>
+<li>we then update our image data by some constant times our gradients (just like we do in the normal ML training loop)</li>
+<li>we zero out the gradients prior to the next iteration</li>
+</ul>
+<p>(Every 15 iterations we output the loss as well as the image at that particular moment.)</p>
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="im" style="color: #00769E;">import</span> torchvision.transforms <span class="im" style="color: #00769E;">as</span> transforms</span>
+<span id="cb29-2"></span>
+<span id="cb29-3">transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
+<span id="cb29-4">    transforms.ToTensor(),</span>
+<span id="cb29-5">    transforms.Normalize(</span>
+<span id="cb29-6">        mean<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.485</span>, <span class="fl" style="color: #AD0000;">0.456</span>, <span class="fl" style="color: #AD0000;">0.406</span>],</span>
+<span id="cb29-7">        std<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.229</span>, <span class="fl" style="color: #AD0000;">0.224</span>, <span class="fl" style="color: #AD0000;">0.225</span>]</span>
+<span id="cb29-8">    )</span>
+<span id="cb29-9">])</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">image <span class="op" style="color: #5E5E5E;">=</span> transform(Image.<span class="bu" style="color: null;">open</span>(not_an_eight).convert(<span class="st" style="color: #20794D;">"RGB"</span>))</span>
+<span id="cb30-2">_ <span class="op" style="color: #5E5E5E;">=</span> image.requires_grad_()</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="97">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb31-2"></span>
+<span id="cb31-3"><span class="kw" style="color: #003B4F;">def</span> iterate_image(image, iota: <span class="bu" style="color: null;">int</span>, update_rate: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.1</span>):</span>
+<span id="cb31-4">    image.requires_grad_()</span>
+<span id="cb31-5">    preds <span class="op" style="color: #5E5E5E;">=</span> torch.softmax(loaded_learn.model(image[<span class="va" style="color: #111111;">None</span>]), dim<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb31-6">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
+<span id="cb31-7">    <span class="co" style="color: #5E5E5E;"># loss = torch.nn.functional.mse_loss(preds, targets)</span></span>
+<span id="cb31-8">    loss <span class="op" style="color: #5E5E5E;">=</span> torch.nn.functional.l1_loss(preds, targets)</span>
+<span id="cb31-9">    loss.backward()</span>
+<span id="cb31-10">    <span class="cf" style="color: #003B4F;">if</span> i <span class="op" style="color: #5E5E5E;">%</span> <span class="dv" style="color: #AD0000;">15</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb31-11">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb31-12">    </span>
+<span id="cb31-13">    image.data <span class="op" style="color: #5E5E5E;">-=</span> (update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data)</span>
+<span id="cb31-14">    image.grad.zero_()</span>
+<span id="cb31-15">    </span>
+<span id="cb31-16">    <span class="cf" style="color: #003B4F;">if</span> i <span class="op" style="color: #5E5E5E;">%</span> <span class="dv" style="color: #AD0000;">15</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb31-17">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
+<span id="cb31-18">        </span>
+<span id="cb31-19">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
+<span id="cb31-20">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
+<span id="cb31-21">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
+<span id="cb31-22">        </span>
+<span id="cb31-23">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
+<span id="cb31-24">        plt.imshow(image[<span class="dv" style="color: #AD0000;">0</span>].detach().numpy())</span>
+<span id="cb31-25">        plt.show()</span></code></pre></div>
+</div>
+<p>We iterate 50 times, and we our constant for the <code>update_rate</code> is fairly high (i.e.&nbsp;1). Normally for a learning_rate (the equivalent for this value) we would choose something between 0.01 and 0.1 so as not to update too far in any one direction.</p>
+<p>Also, just to confirm, these are our predictions for the <code>not_an_eight</code> image we’re using as the basis for this iterative process:</p>
+<div class="cell" data-execution_count="96">
+<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1">learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
+<span id="cb32-2">learn.predict(not_an_eight)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display" data-execution_count="96">
+<pre><code>('not_8', TensorBase(1), TensorBase([    0.000268,     0.999732]))</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">50</span>):</span>
+<span id="cb34-2">    iterate_image(image, i, update_rate <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>grad_sum: -0.0006039840518496931, loss: 0.9997323155403137</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>grad_sum: -0.003538962686434388, loss: 0.0007090563885867596</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>grad_sum: -0.0011799032799899578, loss: 0.00022288746549747884</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-6.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>grad_sum: -0.0007250444614328444, loss: 0.00012537218572106212</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-8.png" class="img-fluid"></p>
+</div>
+</div>
+<p>As you can see, the loss reduces throughout (and would continue to do so were I to let it continue onwards). The image still looks like a two, however, and doesn’t seem to resemble an eight. So is it doing what we want? A quick check is to run that image we’ve updated / ‘generated’ into the model and get the predictions:</p>
+<div class="cell" data-execution_count="84">
+<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1">torch.sigmoid(loaded_learn.model(image[<span class="va" style="color: #111111;">None</span>]))</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="84">
+<pre><code>TensorBase([[0.989906, 0.010533]], grad_fn=&lt;AliasBackward0&gt;)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><span class="co" style="color: #5E5E5E;"># double-checking using a freshly imported learner to make sure</span></span>
+<span id="cb41-2">learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
+<span id="cb41-3">torch.sigmoid(learn.model(image[<span class="va" style="color: #111111;">None</span>]))</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="86">
+<pre><code>TensorBase([[0.989906, 0.010533]], grad_fn=&lt;AliasBackward0&gt;)</code></pre>
+</div>
+</div>
+<p>So even though the image still looks like a two, our model has been bamboozled into thinking it’s an eight. The iteration process has updated the weights just enough that we’ve minimised our loss, and our model now is almost completely certain that this is an image of an eight.</p>
+<p>I’ve tried the same process on the random noise and you don’t get quite as impressive updating as quickly as with our two, but maybe with more iterations it would gradually get there.</p>
+<p>Needless to say, this was a surprising result. I expected to have a neat progression through which the image would gradually look more and more like a number eight. This updating where we adjust enough to completely switch the predictions of the model from certainty that it isn’t an eight, to certainty that it is an eight, that was unexpected to say the least.</p>
+<p><em>I’m really appreciative of the various people who helped me during the process of working on this little experiment: Yogya, Kevin, and all those with whom I have the pleasure to meet each week in the <a href="https://www.meetup.com/delft-fast-ai-study-group/">Delft FastAI Study Group</a>.</em></p>
+</section>
+<section id="appendix-some-pytorch-things" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-some-pytorch-things">Appendix: Some PyTorch Things</h2>
+<p>I learned or encountered a lot of small PyTorch tricks while working on this, so making a note of them as a record for future reference:</p>
+<ul>
+<li><code>autograd</code> - this is PyTorch’s way of automatically calculating the gradients. I’ve never done this process manually myself, nor do I know how to do it, but I reckon this probably saves us a lot of time and complication.</li>
+<li><code>squeeze()</code> and <code>unsqueeze()</code> - these remove and add a dimension to a tensor. It can help in getting things into the right shape.</li>
+<li><code>view()</code> - maybe even more helpful when it comes to getting tensors in the right shape. I ran into lots of places where I was passing something of slightly the wrong shape or dimensions in somewhere and that was causing problems.</li>
+<li><code>zero_()</code> - a way of zeroing out the gradients in-place</li>
+<li><code>detach()</code> - this is a way of getting a copy of the current tensor, but one that isn’t attached to the graph of gradient calculations that are going on.</li>
+<li><code>requires_grad_()</code> - again, another way to ensure that a tensor has the gradient calculations enabled, and it happens in-place.</li>
+<li><code>torch.equals(t1, t2)</code> - a way of comparing two tensors to see if they’re identical or not.</li>
+</ul>
+<p>I discovered that FastAI’s <code>learn.predict()</code> function does some things to whatever you pass in, such that if you use it in the process above you’ll hit an error where it says that there are no longer any gradients to update / accumulate. This is why we’re passing our image values or our tensor directly into the model to get our predictions since this bypasses whatever FastAI is doing. I wasn’t able to fully grok / dig into exactly what’s happening there, but perhaps this is something to look into in the future.</p>
+<section id="debugging-tips" class="level3">
+<h3 class="anchored" data-anchor-id="debugging-tips">Debugging tips</h3>
+<p>On Saturday, I had basically a whole day of hitting lots of walls, somewhat-opaque PyTorch error messages galore. The thing that really seemed to help the most (and that my study group colleagues did with me on Sunday morning) was just to break out each individual step separately, inspecting the return values and the <code>.shape</code> and so on.</p>
+<p>Doing this systematically, interrogating what you expect to happen vs what you see being returned or happening definetely seems like the way to go. At this level of (non-)abstraction, however, there were quite a few PyTorch messages that were hard to wrap my head around. I suppose when you do this often enough you get an intuition for the kinds of ways these things fail, and how to massage your data into the formats required.</p>
+
+
+</section>
+</section>
+</section>
+
+ ]]></description>
+  <category>computervision</category>
+  <category>fastai</category>
+  <category>parttwo</category>
+  <guid>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</guid>
+  <pubDate>Sat, 04 Mar 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/stable-eights/sd.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>On mathematical literacy</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4658,56 +5143,6 @@ In this post you learned:
   <guid>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</guid>
   <pubDate>Tue, 05 Apr 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/synthetic-data-results/hard-synthetic-performance-boost.png" medium="image" type="image/png" height="103" width="144"/>
-</item>
-<item>
-  <title>Some characteristics of best-in-class ML portfolio projects</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><a href="https://ekko-realtime.com">Ekko</a> was the last time I worked on a big project that would be presented publicly. An open-source framework that provided realtime infrastructure and in-transit message processing for web applications was a group project that I worked on together with three other colleagues, and we took the time to really make the <em>how</em> and the <em>why</em> really explicit. We made animations, diagrams, charts, and I learned a lot about what’s hard when explaining technical projects, even when the audience is expected to be (mostly) technically literate.</p>
-<p><img src="https://mlops.systems/posts/ml-portfolio-best-practices/ekko.png" title="A screenshot from the Ekko website" class="img-fluid"></p>
-<p>I’ve been working on <a href="https://mlops.systems/categories/#redactionmodel">my redaction project</a> since December and slowly but surely I’m tying the ends together and getting ready for it to come to a close. As part of the final touches, I want to offer something equivalent to how we presented <a href="https://ekko-realtime.com">Ekko</a>. From reading around and exposure to various projects over the years, it seems to me that machine learning projects sometimes have different emphases and conventions. This blog post is my attempt to list some of the characteristics of really great ML portfolio projects, with an emphasis on how the project is presented.</p>
-<section id="some-top-projects" class="level2">
-<h2 class="anchored" data-anchor-id="some-top-projects">Some top projects</h2>
-<ul>
-<li><a href="https://explosion.ai/blog/healthsea">Healthsea</a> by Edward Schmuhl (<a href="https://twitter.com/aestheticedwar1"><span class="citation" data-cites="aestheticedwar1">@aestheticedwar1</span></a>) is my current favourite project writeup, blending amazing visuals, full explanation and a clear overview</li>
-<li><a href="https://www.ahmedbesbes.com/blog/end-to-end-machine-learning">This project</a> (by <a href="https://twitter.com/ahmed_besbes_"><span class="citation" data-cites="ahmed_besbes_">@ahmed_besbes_</span></a>) was recommended to me and although it’s more of a step-through of how the project works and was created, it also is clearly presented and very visual.</li>
-<li>For computer vision projects, <a href="https://huggingface.co/spaces">Hugging Face Spaces</a> is a great place to find interesting Gradio demos, though after a while they blend into each other a little. HF Spaces also doesn’t seem like it gets used for full project explanation that often.</li>
-</ul>
-</section>
-<section id="characteristics-of-top-projects" class="level2">
-<h2 class="anchored" data-anchor-id="characteristics-of-top-projects">Characteristics of top projects</h2>
-<p>Some things I think make a great portfolio project stand out:</p>
-<ul>
-<li>visual design — looks count for a lot, for better or for worse.</li>
-<li>interactivity — if there is some kind of a demo or application that I can play around with in order to relate to concepts being written about, that’d be great.</li>
-<li>visual explanations alongside pure text — a diagram or animation can really help bring explanations to life.</li>
-<li>a clear overview — the structure of the writeup should be clear and readers should be able to get a high-level overview first without necessarily needing to read through every last detail.</li>
-<li>explain what problem you’re solving — spend (probably) more time than you think is necessary to explain what problem you’re solving and set up the context for the work you did.</li>
-<li>code snippets are ok, but don’t just dump your source code.</li>
-<li>present your dead ends — don’t just present the happy path; feel free to present things that didn’t work out as well. Readers will want to know that you encountered difficulties and there are benefits from seeing how you made decisions along the way.</li>
-<li>present further work and next steps — offer hints at what other work could be done on the project, even if you’re done with it for now.</li>
-<li>don’t lose track of the use case — show that you thought about the specific problem you were solving and not just as a technical problem in a void. (Real-world use cases have constraints, and your solution should live within a universe where those constraints directed you).</li>
-<li>Feel free to link out — you can easily link to other places where you’ve gone into the details about a particular problem you encountered. No need to cram every single last detail into the project portfolio.</li>
-<li>Don’t forget the purpose of the portfolio — it doesn’t need to be an exhaustive catalogue of every last detail; it just needs to offer a compelling overview that is understandable as an independent entity.</li>
-</ul>
-<p>There are other aspects which are more table stakes for anything you write online — no typos, clear writing and so on.</p>
-<p>I took the time to step back from the project to write this down as I move into a phase where I’ll increasingly focus on the full writeup and I wanted to have a list to remind me of the things I valued in these kinds of projects.</p>
-<p>If you have good examples of ML portfolio projects (or really great blog write-ups with interactivity and so on), please let me know in the comments!</p>
-
-
-</section>
-
- ]]></description>
-  <category>computervision</category>
-  <category>skillbuilding</category>
-  <guid>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</guid>
-  <pubDate>Sun, 03 Apr 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/ml-portfolio-best-practices/healthsea.png" medium="image" type="image/png" height="133" width="144"/>
 </item>
 </channel>
 </rss>
