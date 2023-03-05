@@ -239,9 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#building-a-modelprocess-that-can-generate-images-of-the-digit-eight" id="toc-building-a-modelprocess-that-can-generate-images-of-the-digit-eight" class="nav-link active" data-scroll-target="#building-a-modelprocess-that-can-generate-images-of-the-digit-eight">Building a model/process that can generate images of the digit eight</a>
-  <ul class="collapse">
-  <li><a href="#training-an-8-digit-classifier" id="toc-training-an-8-digit-classifier" class="nav-link" data-scroll-target="#training-an-8-digit-classifier">1: Training an ‘8’ digit classifier</a></li>
+  <li><a href="#training-an-8-digit-classifier" id="toc-training-an-8-digit-classifier" class="nav-link active" data-scroll-target="#training-an-8-digit-classifier">1: Training an ‘8’ digit classifier</a></li>
   <li><a href="#create-a-random-noise-image" id="toc-create-a-random-noise-image" class="nav-link" data-scroll-target="#create-a-random-noise-image">2: Create a random noise image</a></li>
   <li><a href="#get-the-derivatives-for-the-probability-that-its-an-eight" id="toc-get-the-derivatives-for-the-probability-that-its-an-eight" class="nav-link" data-scroll-target="#get-the-derivatives-for-the-probability-that-its-an-eight">3: Get the derivatives for the probability that it’s an eight</a>
   <ul class="collapse">
@@ -252,7 +250,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#debugging-tips" id="toc-debugging-tips" class="nav-link" data-scroll-target="#debugging-tips">Debugging tips</a></li>
   </ul></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -262,8 +259,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<section id="building-a-modelprocess-that-can-generate-images-of-the-digit-eight" class="level1">
-<h1>Building a model/process that can generate images of the digit eight</h1>
 <p>In <a href="https://youtu.be/_7rMfsA24Ls">the lesson 9 video</a> of the FastAI course, Jeremy explains how diffusion models work at a very high level. (These initial videos were released to the public early on, though the rest of the course is still ongoing and thus hasn’t yet been released.) Early on we’re introduced to a basic algorithm which would work for generating images. In doing so, we are given a model for how to think about the diffusion process. This mental model itself reminds of how we train models in the standard machine learning workflow.</p>
 <p>The process goes as follows:</p>
 <ol type="1">
@@ -726,7 +721,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Doing this systematically, interrogating what you expect to happen vs what you see being returned or happening definetely seems like the way to go. At this level of (non-)abstraction, however, there were quite a few PyTorch messages that were hard to wrap my head around. I suppose when you do this often enough you get an intuition for the kinds of ways these things fail, and how to massage your data into the formats required.</p>
 
 
-</section>
 </section>
 </section>
 
