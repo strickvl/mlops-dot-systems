@@ -10,7 +10,328 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 04 Mar 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 17 Mar 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Building Blocks For Better Stable Eights</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-03-18-stable-eights-part-two.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><a href="https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html">My last blogpost</a> was about my attempt to try to generate images of handwritten ‘eight’ digits from random noise. It was an exploration of some of the process at work in diffusion models and the whole diffusion paradigm in general.</p>
+<p>It’s come up since then during our Sunday morning <a href="https://www.meetup.com/delft-fast-ai-study-group/">‘Delft FastAI Study Group’</a> sessions and we’ve been throwing around a few different ideas on how to improve the process to actually output eights. Two in particular seemed like things we’d want to try out:</p>
+<ol type="1">
+<li>Perceptual Loss</li>
+<li>Siamese Networks</li>
+</ol>
+<p>I thought I’d try to implement a starter version of both of these in order to learn what they are, and in order to present for our group discussion. Before we get started, we can get some boilerplate setup out of the way (i.e.&nbsp;the status quo by the end of the last post).</p>
+<section id="training-an-8-digit-classifier-initial-naive-approach" class="level2">
+<h2 class="anchored" data-anchor-id="training-an-8-digit-classifier-initial-naive-approach">1: Training an ‘8’ digit classifier (initial / naive approach)</h2>
+<div class="cell" data-tags="[]" data-execution_count="69">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq pip</span>
+<span id="cb1-2"><span class="op" style="color: #5E5E5E;">!</span>pip install fastai torch datasets rich <span class="op" style="color: #5E5E5E;">-</span>Uqq</span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;"># !pip install -Uqq timm</span></span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="im" style="color: #00769E;">import</span> IPython</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;"># automatically restart kernel</span></span>
+<span id="cb1-8">IPython.Application.instance().kernel.do_shutdown(restart<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>^C
+ERROR: Operation cancelled by user</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="69">
+<pre><code>{'status': 'ok', 'restart': True}</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>: </code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="45">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Union, Callable</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
+<span id="cb5-4"><span class="im" style="color: #00769E;">import</span> torch</span>
+<span id="cb5-5"><span class="im" style="color: #00769E;">import</span> torch.nn.functional <span class="im" style="color: #00769E;">as</span> F</span>
+<span id="cb5-6"><span class="im" style="color: #00769E;">import</span> torch.nn <span class="im" style="color: #00769E;">as</span> nn</span>
+<span id="cb5-7"><span class="im" style="color: #00769E;">from</span> torchvision.models <span class="im" style="color: #00769E;">import</span> vgg19</span>
+<span id="cb5-8"><span class="im" style="color: #00769E;">import</span> torchvision.models <span class="im" style="color: #00769E;">as</span> models</span>
+<span id="cb5-9"><span class="im" style="color: #00769E;">import</span> torchvision.transforms <span class="im" style="color: #00769E;">as</span> transforms</span>
+<span id="cb5-10"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb5-11"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb5-12"></span>
+<span id="cb5-13"></span>
+<span id="cb5-14"><span class="co" style="color: #5E5E5E;"># make sure the digits are human-readable</span></span>
+<span id="cb5-15">torch.set_printoptions(precision<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">6</span>, sci_mode<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>)</span>
+<span id="cb5-16"></span>
+<span id="cb5-17"><span class="co" style="color: #5E5E5E;"># dataset patched together from the original MNIST dataset</span></span>
+<span id="cb5-18">path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="st" style="color: #20794D;">"./mnist_8_or_not/training"</span>)</span>
+<span id="cb5-19">fnames <span class="op" style="color: #5E5E5E;">=</span> get_image_files(path)</span>
+<span id="cb5-20"></span>
+<span id="cb5-21"></span>
+<span id="cb5-22"><span class="kw" style="color: #003B4F;">def</span> label_func(x):</span>
+<span id="cb5-23">    <span class="cf" style="color: #003B4F;">return</span> x.parent.name</span>
+<span id="cb5-24"></span>
+<span id="cb5-25"></span>
+<span id="cb5-26">dls <span class="op" style="color: #5E5E5E;">=</span> ImageDataLoaders.from_path_func(path, fnames, label_func)</span>
+<span id="cb5-27"><span class="co" style="color: #5E5E5E;"># set environment based on hostname</span></span>
+<span id="cb5-28"><span class="im" style="color: #00769E;">import</span> os</span>
+<span id="cb5-29"></span>
+<span id="cb5-30">environment_type <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"unknown"</span></span>
+<span id="cb5-31"></span>
+<span id="cb5-32"><span class="cf" style="color: #003B4F;">if</span> <span class="st" style="color: #20794D;">"HOSTNAME"</span> <span class="kw" style="color: #003B4F;">in</span> os.environ:</span>
+<span id="cb5-33">    hostname <span class="op" style="color: #5E5E5E;">=</span> os.environ[<span class="st" style="color: #20794D;">"HOSTNAME"</span>]</span>
+<span id="cb5-34">    environment_type <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"local"</span> <span class="cf" style="color: #003B4F;">if</span> hostname <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"localhost"</span> <span class="cf" style="color: #003B4F;">else</span> <span class="st" style="color: #20794D;">"cloud"</span></span>
+<span id="cb5-35"></span>
+<span id="cb5-36">model_filename <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"eight_classifier.pkl"</span></span>
+<span id="cb5-37">model_base_path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="st" style="color: #20794D;">"/home/"</span>) <span class="cf" style="color: #003B4F;">if</span> environment_type <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"cloud"</span> <span class="cf" style="color: #003B4F;">else</span> Path(<span class="st" style="color: #20794D;">"./"</span>)</span>
+<span id="cb5-38"></span>
+<span id="cb5-39"><span class="co" style="color: #5E5E5E;"># only train the model if we have no model already</span></span>
+<span id="cb5-40">model_path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="ss" style="color: #20794D;">f"</span><span class="sc" style="color: #5E5E5E;">{</span>model_base_path<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">/</span><span class="sc" style="color: #5E5E5E;">{</span>model_filename<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb5-41"></span>
+<span id="cb5-42"><span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> model_path.exists():</span>
+<span id="cb5-43">    learn <span class="op" style="color: #5E5E5E;">=</span> vision_learner(dls, resnet34, metrics<span class="op" style="color: #5E5E5E;">=</span>error_rate)</span>
+<span id="cb5-44">    learn.fine_tune(<span class="dv" style="color: #AD0000;">6</span>)</span>
+<span id="cb5-45">    <span class="co" style="color: #5E5E5E;"># export our model so we don't have to retrain it every time from now on</span></span>
+<span id="cb5-46">    learn.export(<span class="ss" style="color: #20794D;">f"</span><span class="sc" style="color: #5E5E5E;">{</span>model_base_path<span class="sc" style="color: #5E5E5E;">}{</span>model_filename<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb5-47"><span class="cf" style="color: #003B4F;">else</span>:</span>
+<span id="cb5-48">    learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="ss" style="color: #20794D;">f"</span><span class="sc" style="color: #5E5E5E;">{</span>model_base_path<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">/</span><span class="sc" style="color: #5E5E5E;">{</span>model_filename<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb5-49">an_eight <span class="op" style="color: #5E5E5E;">=</span> Path(path <span class="op" style="color: #5E5E5E;">/</span> <span class="st" style="color: #20794D;">"8"</span>).ls()[<span class="dv" style="color: #AD0000;">0</span>]</span>
+<span id="cb5-50">not_an_eight <span class="op" style="color: #5E5E5E;">=</span> Path(path <span class="op" style="color: #5E5E5E;">/</span> <span class="st" style="color: #20794D;">"not_8"</span>).ls()[<span class="dv" style="color: #AD0000;">0</span>]</span>
+<span id="cb5-51"></span>
+<span id="cb5-52"></span>
+<span id="cb5-53"><span class="kw" style="color: #003B4F;">def</span> get_eight_probability(</span>
+<span id="cb5-54">    image_pth: Union[Path, torch.Tensor], learner: Learner</span>
+<span id="cb5-55">) <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
+<span id="cb5-56">    _, _, probs <span class="op" style="color: #5E5E5E;">=</span> learner.predict(image_pth)</span>
+<span id="cb5-57">    <span class="cf" style="color: #003B4F;">return</span> probs[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;"># we generate a 3x28x28 tensor with random values assigned</span></span>
+<span id="cb6-2"><span class="co" style="color: #5E5E5E;"># we ensure that we can use PyTorch's autograd on the values</span></span>
+<span id="cb6-3"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_tensor() <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
+<span id="cb6-4">    <span class="cf" style="color: #003B4F;">return</span> torch.randn(<span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>, requires_grad<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb6-5"></span>
+<span id="cb6-6"></span>
+<span id="cb6-7"><span class="co" style="color: #5E5E5E;"># this will allow us to display the tensor as an image</span></span>
+<span id="cb6-8"><span class="kw" style="color: #003B4F;">def</span> display_tensor(tns: torch.Tensor):</span>
+<span id="cb6-9">    <span class="co" style="color: #5E5E5E;"># Convert the tensor to a NumPy array</span></span>
+<span id="cb6-10">    image_array <span class="op" style="color: #5E5E5E;">=</span> tns.detach().numpy()</span>
+<span id="cb6-11"></span>
+<span id="cb6-12">    <span class="co" style="color: #5E5E5E;"># Clip the pixel values between 0 and 1</span></span>
+<span id="cb6-13">    image_array <span class="op" style="color: #5E5E5E;">=</span> np.clip(image_array, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb6-14"></span>
+<span id="cb6-15">    <span class="co" style="color: #5E5E5E;"># Transpose the array to (28, 28, 3) shape</span></span>
+<span id="cb6-16">    image_array <span class="op" style="color: #5E5E5E;">=</span> image_array.transpose((<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>, <span class="dv" style="color: #AD0000;">0</span>))</span>
+<span id="cb6-17"></span>
+<span id="cb6-18">    <span class="co" style="color: #5E5E5E;"># Display the image using Matplotlib</span></span>
+<span id="cb6-19">    plt.imshow(image_array)</span>
+<span id="cb6-20">    plt.show()</span></code></pre></div>
+</div>
+</section>
+<section id="using-perceptual-loss" class="level1">
+<h1>Using Perceptual Loss</h1>
+<p>I didn’t really have much of a sense of what perceptual loss was going into this, except that it was a loss function that was used in style transfer and that it was a way to measure the difference between two images.</p>
+<p>Specifically, you have to define a ‘feature extractor’ that takes an image and returns a set of features. The loss is then the difference between the features of the generated image and the features of the target image. Implicit in this is that you are using some pre-trained model to extract the features. For our purposes, I started out my experiments with <code>resnet18</code> but then switched over to <code>vgg19</code> after reading a bit more</p>
+<p>Perceptual loss, also known as content or feature loss, is a technique used to measure the similarity between two images at a higher, more perceptual level rather than pixel-by-pixel. It is particularly useful in tasks like style transfer, where the goal is to generate an image that combines the content of one image with the style of another.</p>
+<p>The basic idea behind perceptual loss is to extract high-level features from both the generated and target images using a pre-trained deep learning model, often a convolutional neural network (CNN). The loss is then calculated as the difference between the extracted features, rather than the raw pixel values.</p>
+<p>A feature extractor is a deep learning model that processes an image and outputs a set of features that capture meaningful information about the content of the image. These features can be thought of as a condensed representation of the image, which encodes its essential characteristics.</p>
+<p>To compute perceptual loss, we start by passing both the generated and target images through a pre-trained CNN, such as ResNet-18 or VGG-19. These networks are trained on large-scale image classification tasks and are already capable of extracting high-level features that represent the content of the images.</p>
+<p>Once the features are extracted, we compute the loss as the difference between the features of the generated image and the features of the target image. This difference can be calculated using various metrics, such as the mean squared error (MSE) or the L1-norm.</p>
+<p>The main advantage of perceptual loss is that it is less sensitive to small, local changes in pixel values and focuses more on the overall content of the images. This makes it well-suited for tasks like style transfer, where the objective is to preserve the content of the input image while applying the style of another image. By using a pre-trained feature extractor like VGG-19 the loss function can leverage the knowledge learned from a vast amount of image data to better capture and compare the perceptual content of the images.</p>
+<p>The code below includes my implementation of the perceptual loss function as well as an <code>vgg__iterate_image</code> function that I used to iterate over the image we’re generating.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
+<span id="cb7-2">    gen_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(generated_image)</span>
+<span id="cb7-3">    target_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(target_image)</span>
+<span id="cb7-4">    loss <span class="op" style="color: #5E5E5E;">=</span> nn.functional.l1_loss(gen_features, target_features)</span>
+<span id="cb7-5">    <span class="cf" style="color: #003B4F;">return</span> loss</span>
+<span id="cb7-6"></span>
+<span id="cb7-7"></span>
+<span id="cb7-8"><span class="kw" style="color: #003B4F;">def</span> vgg_iterate_image(</span>
+<span id="cb7-9">    image: torch.Tensor,</span>
+<span id="cb7-10">    target_image: torch.Tensor,</span>
+<span id="cb7-11">    iota: <span class="bu" style="color: null;">int</span>,</span>
+<span id="cb7-12">    update_rate: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.1</span>,</span>
+<span id="cb7-13">    update_printout: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>,</span>
+<span id="cb7-14">    no_image: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb7-15">):</span>
+<span id="cb7-16">    <span class="co" style="color: #5E5E5E;"># Load the pre-trained VGG model</span></span>
+<span id="cb7-17">    vgg <span class="op" style="color: #5E5E5E;">=</span> vgg19(pretrained<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>).features.<span class="bu" style="color: null;">eval</span>()</span>
+<span id="cb7-18">    <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> vgg.parameters():</span>
+<span id="cb7-19">        param.requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span></span>
+<span id="cb7-20"></span>
+<span id="cb7-21">    <span class="co" style="color: #5E5E5E;"># Choose a specific layer for the perceptual loss (e.g., 8th layer)</span></span>
+<span id="cb7-22">    feature_extractor <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(<span class="op" style="color: #5E5E5E;">*</span><span class="bu" style="color: null;">list</span>(vgg.children())[:<span class="dv" style="color: #AD0000;">9</span>])</span>
+<span id="cb7-23"></span>
+<span id="cb7-24">    image.requires_grad_()</span>
+<span id="cb7-25"></span>
+<span id="cb7-26">    <span class="co" style="color: #5E5E5E;"># Calculate perceptual loss</span></span>
+<span id="cb7-27">    loss <span class="op" style="color: #5E5E5E;">=</span> perceptual_loss(feature_extractor, image[<span class="va" style="color: #111111;">None</span>], target_image[<span class="va" style="color: #111111;">None</span>])</span>
+<span id="cb7-28">    loss.backward()</span>
+<span id="cb7-29"></span>
+<span id="cb7-30">    <span class="cf" style="color: #003B4F;">if</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb7-31">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"iter </span><span class="sc" style="color: #5E5E5E;">{</span>iota<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb7-32"></span>
+<span id="cb7-33">    image.data <span class="op" style="color: #5E5E5E;">-=</span> update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data</span>
+<span id="cb7-34">    image.grad.zero_()</span>
+<span id="cb7-35"></span>
+<span id="cb7-36">    <span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> no_image <span class="kw" style="color: #003B4F;">and</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb7-37">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
+<span id="cb7-38"></span>
+<span id="cb7-39">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
+<span id="cb7-40">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
+<span id="cb7-41">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
+<span id="cb7-42"></span>
+<span id="cb7-43">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
+<span id="cb7-44">        display_tensor(image)</span></code></pre></div>
+</div>
+<p>I also implemented a version for <code>resnet</code> but that didn’t work as well or converge as quickly as <code>vgg19</code> so I’m just including the code for posterity here.</p>
+<div class="cell" data-execution_count="52">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
+<span id="cb8-2">    gen_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(generated_image)</span>
+<span id="cb8-3">    target_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(target_image)</span>
+<span id="cb8-4">    loss <span class="op" style="color: #5E5E5E;">=</span> nn.functional.l1_loss(gen_features, target_features)</span>
+<span id="cb8-5">    <span class="cf" style="color: #003B4F;">return</span> loss</span>
+<span id="cb8-6"></span>
+<span id="cb8-7"></span>
+<span id="cb8-8"><span class="kw" style="color: #003B4F;">def</span> resnet_iterate_image(</span>
+<span id="cb8-9">    image: torch.Tensor,</span>
+<span id="cb8-10">    target_image: torch.Tensor,</span>
+<span id="cb8-11">    iota: <span class="bu" style="color: null;">int</span>,</span>
+<span id="cb8-12">    update_rate: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.1</span>,</span>
+<span id="cb8-13">    update_printout: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>,</span>
+<span id="cb8-14">    no_image: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb8-15">):</span>
+<span id="cb8-16">    <span class="co" style="color: #5E5E5E;"># Load the pre-trained ResNet model</span></span>
+<span id="cb8-17">    resnet <span class="op" style="color: #5E5E5E;">=</span> resnet18(pretrained<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)  <span class="co" style="color: #5E5E5E;"># Load the pre-trained ResNet-18 model</span></span>
+<span id="cb8-18">    resnet <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(</span>
+<span id="cb8-19">        <span class="op" style="color: #5E5E5E;">*</span><span class="bu" style="color: null;">list</span>(resnet.children())[:<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>]</span>
+<span id="cb8-20">    )  <span class="co" style="color: #5E5E5E;"># Remove the last fully connected layer</span></span>
+<span id="cb8-21">    resnet.<span class="bu" style="color: null;">eval</span>()  <span class="co" style="color: #5E5E5E;"># Set the ResNet model to evaluation mode</span></span>
+<span id="cb8-22">    <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> resnet.parameters():</span>
+<span id="cb8-23">        param.requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span></span>
+<span id="cb8-24"></span>
+<span id="cb8-25">    <span class="co" style="color: #5E5E5E;"># Choose a specific layer for the perceptual loss (e.g., layer before the last fully connected layer)</span></span>
+<span id="cb8-26">    feature_extractor <span class="op" style="color: #5E5E5E;">=</span> resnet</span>
+<span id="cb8-27"></span>
+<span id="cb8-28">    image.requires_grad_()</span>
+<span id="cb8-29">    preds <span class="op" style="color: #5E5E5E;">=</span> torch.softmax(learn.model(image[<span class="va" style="color: #111111;">None</span>]), dim<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb8-30">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
+<span id="cb8-31"></span>
+<span id="cb8-32">    <span class="co" style="color: #5E5E5E;"># Calculate perceptual loss</span></span>
+<span id="cb8-33">    loss <span class="op" style="color: #5E5E5E;">=</span> perceptual_loss(feature_extractor, image[<span class="va" style="color: #111111;">None</span>], target_image[<span class="va" style="color: #111111;">None</span>])</span>
+<span id="cb8-34">    loss.backward()</span>
+<span id="cb8-35"></span>
+<span id="cb8-36">    <span class="cf" style="color: #003B4F;">if</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb8-37">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"iter </span><span class="sc" style="color: #5E5E5E;">{</span>iota<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb8-38"></span>
+<span id="cb8-39">    image.data <span class="op" style="color: #5E5E5E;">-=</span> update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data</span>
+<span id="cb8-40">    image.grad.zero_()</span>
+<span id="cb8-41"></span>
+<span id="cb8-42">    <span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> no_image <span class="kw" style="color: #003B4F;">and</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb8-43">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
+<span id="cb8-44"></span>
+<span id="cb8-45">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
+<span id="cb8-46">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
+<span id="cb8-47">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
+<span id="cb8-48"></span>
+<span id="cb8-49">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
+<span id="cb8-50">        display_tensor(image)</span></code></pre></div>
+</details>
+</div>
+<p>Here we get our target image (a random one of our ‘eight’ digits from the training set) and apply the same transforms to get it in the same size and format as our random noise image.</p>
+<p>I reversed the values of the target image so that instead of being white squiggles on a black background, we now have black squiggles on a white background.</p>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">target_image_pil <span class="op" style="color: #5E5E5E;">=</span> Image.<span class="bu" style="color: null;">open</span>(an_eight).convert(<span class="st" style="color: #20794D;">'RGB'</span>)</span>
+<span id="cb9-2"></span>
+<span id="cb9-3">preprocess <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
+<span id="cb9-4">    transforms.Resize((<span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)),  <span class="co" style="color: #5E5E5E;"># Resize the image to match the input dimensions (3, 28, 28)</span></span>
+<span id="cb9-5">    transforms.ToTensor(),  <span class="co" style="color: #5E5E5E;"># Convert the image to a PyTorch tensor</span></span>
+<span id="cb9-6">    <span class="co" style="color: #5E5E5E;"># Normalize the image with mean and std (use the same mean and std as your input image preprocessing)</span></span>
+<span id="cb9-7">    transforms.Normalize(mean<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.485</span>, <span class="fl" style="color: #AD0000;">0.456</span>, <span class="fl" style="color: #AD0000;">0.406</span>], std<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.229</span>, <span class="fl" style="color: #AD0000;">0.224</span>, <span class="fl" style="color: #AD0000;">0.225</span>])</span>
+<span id="cb9-8">])</span>
+<span id="cb9-9"></span>
+<span id="cb9-10"><span class="co" style="color: #5E5E5E;"># Apply preprocessing</span></span>
+<span id="cb9-11">target_image <span class="op" style="color: #5E5E5E;">=</span> preprocess(target_image_pil)</span>
+<span id="cb9-12"></span>
+<span id="cb9-13">max_value <span class="op" style="color: #5E5E5E;">=</span> target_image.<span class="bu" style="color: null;">max</span>()</span>
+<span id="cb9-14">reversed_target_image <span class="op" style="color: #5E5E5E;">=</span> max_value <span class="op" style="color: #5E5E5E;">-</span> target_image</span></code></pre></div>
+</div>
+<p>For the iteration process, it’s fairly similar to what I did in the last post, only the number of iterations is still quite high. It prints out the image every 200 iterations so you can see it slowly converging and improving.</p>
+<p>I had to experiment around quite a bit with the ‘update_rate’ (going from very low (i.e.&nbsp;0.1) all the way up to 1000 at one point). I also decided to create the <code>reversed_target_image</code> at some point during this process because I suspected it might give better results. Here you can see the number 8 slowly emerging from the noise.</p>
+<div class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">random_sample <span class="op" style="color: #5E5E5E;">=</span> get_noisy_starter_tensor()</span>
+<span id="cb10-2"></span>
+<span id="cb10-3"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">1200</span>):</span>
+<span id="cb10-4">    vgg_iterate_image(</span>
+<span id="cb10-5">        random_sample,</span>
+<span id="cb10-6">        reversed_target_image,</span>
+<span id="cb10-7">        i,</span>
+<span id="cb10-8">        update_rate<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">8.0</span>,</span>
+<span id="cb10-9">        update_printout<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">200</span>,</span>
+<span id="cb10-10">    )</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 0 / grad_sum: -0.11695463210344315, loss: 3.349287986755371</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 200 / grad_sum: -0.05261861905455589, loss: 1.8285313844680786</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 400 / grad_sum: -0.05507233738899231, loss: 1.559353232383728</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-6.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 600 / grad_sum: -0.08732452243566513, loss: 1.4069606065750122</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-8.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 800 / grad_sum: -0.11042110621929169, loss: 1.3145689964294434</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-10.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1000 / grad_sum: -0.14137724041938782, loss: 1.2493029832839966</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-12.png" class="img-fluid"></p>
+</div>
+</div>
+<p>It took me a couple of hours to get to this point, and the inference and time to update each iteration was pretty slow. I suspect that it might be faster on a GPU, but I didn’t have one available to me at the time.</p>
+<p>Next time, I’ll try to implement a Siamese network and see if that gives me better results. (First will have to figure out what exactly that is and how it works!)</p>
+
+
+</section>
+
+ ]]></description>
+  <category>computervision</category>
+  <category>fastai</category>
+  <category>parttwo</category>
+  <guid>https://mlops.systems/posts/2023-03-18-stable-eights-part-two.html</guid>
+  <pubDate>Fri, 17 Mar 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/stable-eights/generated_8.png" medium="image" type="image/png" height="141" width="144"/>
+</item>
 <item>
   <title>Tricking my digits classifier with diffusion</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -5054,92 +5375,6 @@ In this post you learned:
   <guid>https://mlops.systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</guid>
   <pubDate>Mon, 18 Apr 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/great_expectations/g_e_logo.jpeg" medium="image" type="image/jpeg"/>
-</item>
-<item>
-  <title>‘I guess this is what data-centric AI is!’: Performance boosts after training with synthetic data</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/categories/#redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
-<p>A clean and focused dataset is probably at the top of the list of things that would be nice to have when starting to tackle a machine learning problem. For object detection, there are some <a href="https://huggingface.co/datasets?task_categories=task_categories:object-detection&amp;sort=downloads">useful starting points</a>, but for many use cases you’re probably going to have to start from scratch. This is what I’ve been doing <a href="https://mlops.systems/categories/#redactionmodel">for the past few months</a>: working to bootstrap my way into a dataset that allows me to get decent performance training a model that can recognise redactions made on documents.</p>
-<p>As part of that journey so far, some of the big things that I’ve taken time to do include:</p>
-<ul>
-<li><a href="https://mlops.systems/redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html">manually annotating</a> 1000+ images</li>
-<li>using a model-in-the-loop to help bootstrap that annotation process by <a href="https://mlops.systems/python/fastai/tools/redactionmodel/2022/01/16/midway-report-redaction-project.html">pre-filling annotation suggestions</a> on an image that I could then correct</li>
-<li><a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">creating synthetic images</a> to increase the size of my dataset used in training</li>
-<li>spending time <a href="https://mlops.systems/redactionmodel/computervision/tools/debugging/jupyter/2022/03/12/fiftyone-computervision.html">looking at what the model found difficult</a>, or what it got wrong</li>
-</ul>
-<p>At the end of my synthetic data creation blogpost, I mentioned that the next step would be to test the effect of adding in the new synthetic examples. Well… the results are in!</p>
-<section id="a-failed-attempt-to-train-with-synthetic-data" class="level2">
-<h2 class="anchored" data-anchor-id="a-failed-attempt-to-train-with-synthetic-data">A failed attempt to train with synthetic data</h2>
-<p>I wasn’t sure exactly how much synthetic data would be appropriate or performant to use, so created a loose experiment where I started with 20% of the total images and increasing up until I reached 50%. (I figured that more than 50% synthetic data probably wasn’t a great idea and would probably not help my model perform out in the real world.)</p>
-<p><img src="https://mlops.systems/posts/synthetic-data-results/synthetic-early-results.png" title="Results from the first phase using synthetic data" class="img-fluid"></p>
-<p>As you can see above: my initial experiment did not show great results. In fact, in several places, if I added synthetic data my model actually performed <em>worse</em>. This was a strong repudiation of my intuition of what would happen. After all, the whole point of adding the synthetic data was to get the model more of a chance to learn / train and thus improve its ability to recognise redaction object in documents.</p>
-<p>I dug into the data that I’d generated and the data I’d been using to train, and discovered a nasty bug which was tanking the performance. A week of debugging mislabelled bounding boxes in evenings after work and I was back with results that finally made sense.</p>
-</section>
-<section id="performance-boosts-after-adding-synthetic-data" class="level2">
-<h2 class="anchored" data-anchor-id="performance-boosts-after-adding-synthetic-data">Performance boosts after adding synthetic data</h2>
-<p><img src="https://mlops.systems/posts/synthetic-data-results/synthetic-mid-results.png" title="Results from the first phase using synthetic data" class="img-fluid"></p>
-<p>In this chart, at the bottom you can see how training the model without the synthetic data (<code>no-synthetic-batch16</code>) performed. Ok, not great. Then the next best performing (<code>combined-75real-25synthetic-randomsplit</code>)was when 25% of the total number of images was synthetic, and the rest were real manually annotated images. At the top, with around an 81% COCO score, was the model where I used 50% synthetic and 50% real images. This seemed to fit what my intuition said would happen.</p>
-<p>More synthetic data helped. I guessed that if I had millions of labelled images then the synthetic data would perhaps have been less useful, but starting from scratch it was really supporting the process.</p>
-<p>I was curious what would happen when I returned to <a href="https://voxel51.com">FiftyOne</a> to carry out some error analysis on the new model’s performance. Even before I had reached those results, I had a hunch that the synthetic images I’d created were perhaps too generic. I think they probably were helping boost some baseline performance of my model, but I knew they weren’t helping with the hard parts of detecting redactions.</p>
-</section>
-<section id="hard-examples-creating-targeted-synthetic-data" class="level2">
-<h2 class="anchored" data-anchor-id="hard-examples-creating-targeted-synthetic-data">‘Hard examples’: creating targeted synthetic data</h2>
-<p>As a reminder, this is the kind of image that is ‘hard’ for my model (or even a human) to be able to identify all the redactions:</p>
-<p><img src="https://mlops.systems/posts/synthetic-data-results/hard-detection.png" title="White boxes on white backgrounds are hard to identify as redactions" class="img-fluid"></p>
-<p>The <a href="https://voxel51.com">FiftyOne</a> visualisations of what was and wasn’t working validated my hunch: yes, synthetic data helped somewhat, but the model’s low performance seemed much more vulnerable to misrecognition of the hard examples. Even with a 50/50 split between synthetic data and real manually annotated data, the hard examples were still hard! (And the converse was also true: the model was <em>already</em> pretty good at identifying ‘easy’ redactions (e.g.&nbsp;of the black box type).</p>
-<p>If we look back at the example of a ‘hard’ redaction above, two things stood out:</p>
-<ol type="1">
-<li>They’re hard, even for a human! This was borne out in the way I needed to take special care not to forget or mislabel when I was adding manual annotations.</li>
-<li>There are <em>lots</em> of redactions on a single page/image.</li>
-</ol>
-<p>The second point was probably important, not only in the sense that there were more chances of getting something wrong on a single page, but also in the sense that the redactions were (relatively) small. The detection of small objects is almost its own field in the world of computer vision and I don’t know too much about it, but I do know it’s somewhat an unsolved problem. That said, finding a way to boost the performance of the models on these ‘hard’ examples (there were a few other types of hard image) seemed like it might tackle a significant shortcoming of my model.</p>
-<p>I decided to try creating a separate batch of synthetic image data, this time fully tailored to tackling some of the hardness mentioned above: it would have many small redactions on a single page, they would all be white boxes and there might also be things like tables with white box-like shapes coexisting next to redactions.</p>
-<p>Luckily, the work I’d done previously on creating synthetic data helped me get started quickly. I returned to <a href="https://borbpdf.com"><code>borb</code></a>, an open-source tool for quickly creating PDF documents that allows for a pretty flexible prototyping of layouts with all sorts of bells and whistles added. These were some of the documents I generated:</p>
-<p><img src="https://mlops.systems/posts/synthetic-data-results/hard-synthetic.gif" class="img-fluid"></p>
-<p>The hard images were hard, and I had created some synthetic chimeras that (I believed) approximated some of the features of the original hard images. I did not want to overbalance my training data, however, and took care not to create too many of this type of image.</p>
-<p>My script — as with <a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">the previous synthetic data</a> — also required me to create the annotation files at the same time as creating the document. With <code>borb</code> it was <em>relatively</em> trivial to get the bounding box data for objects created, and there was even in-built functionality to create and apply redactions onto a document. (I’m moving fairly quickly over the mechanics of how this all worked, but it’s not too far distant from how I described it in my previous post so I’d refer you there <a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">for more details</a>).</p>
-<p>Once the images were created and added to my datasets, it was time to retrain the model and see what benefit it brought.</p>
-<p><img src="https://mlops.systems/posts/synthetic-data-results/hard-synthetic-performance-boost.png" title="~3.5% boost when adding hard synthetic images into training data!" class="img-fluid"></p>
-<p>As you can see, the model jumped up from around 80.5 to 84% when I aded the hard synthetic examples in. That’s a pretty nice jump as far as I’m concerned, especially given that I only added in 300 images to the training data. I still had a little over a thousand of the original basic synthetic images that I was using, but this result showed me that tackling the badly performing parts of the model head-on seemed to have a positive outcome.</p>
-<p>At this point, I did some more experiments around the edges, applying other things I knew would probably boost the performance even more, notably first checking what would happen if I increased the image size from 512 to 640. I got up to an 86% COCO score with that improvement alone.</p>
-<p>In a final twist, I second-guessed myself and wondered whether the original synthetic data was even helping at all… I removed the thousand or so ‘basic’ synthetic images from the data and retrained the model. To my surprise, I achieved more or less the same COCO score as I had <em>with</em> the basic synthetic images. I’m taking this as a strong suggestion that my basic synthetic images aren’t actually helping as much as I’d thought, and that probably a smaller number of them as a % of the total would be beneficial.</p>
-</section>
-<section id="reflections-on-experimenting-with-synthetic-data" class="level2">
-<h2 class="anchored" data-anchor-id="reflections-on-experimenting-with-synthetic-data">Reflections on experimenting with synthetic data</h2>
-<p>So, what can I conclude from this whole excursion into the world of synthetic image creation as a way of boosting model performance?</p>
-<ul>
-<li>adding synthetic data really can help!</li>
-<li>the world of synthetic data creation is a <em>huge</em> rabbit hole and potentially you can get lost trying to create the perfect synthetic versions of your original data. (I mean this both in the sense of ‘there’s lots to learn’ as well as ‘you can spend or lose a <em>ton</em> of time here’.)</li>
-<li>Targeted synthetic data designed to clear up issues where the model has been identified as underperforming is probably best. (Conversely, and I’ll be careful how much I generalise here, middle-of-the-road synthetic data that doesn’t resemble the original dataset may not be worth your time.)</li>
-<li>Knowing your original data and domain really well helps. A lot. My intuition about what things the model would stumble on was fuelled by this knowledge of the documents and the domain, as well as by the experience of having done manual annotations for many hours.</li>
-</ul>
-<p>There are probably many (many) more things I can do to continually tinker away at this model to improve it:</p>
-<ul>
-<li>continue down the path of more error analysis, which would fuel more targeted addition of annotations, and so on.</li>
-<li>create better versions of synthetic data with more variation to encompass the various kinds of documents out in the real world.</li>
-<li>more self-training with the model in the loop to fuel my manual annotation process.</li>
-<li>further increases to the image size (perhaps in conjunction with progressive resizing).</li>
-<li>increasing the backbone from <code>resnet50</code> to <code>resnet101</code>.</li>
-</ul>
-<p>In general, improving the quality of the data used to train my model seems to have been (by far) the best way to improve my model performance. Hyper-parameter tuning of the sort that is often referenced in courses or in blog posts does not seem to have had much of a benefit.</p>
-<p>It is probably (mostly) good enough for my use case and for where I want to be heading with this project. There are other things that need addressing around the edges, notably parts of the project that could be made more robust and ‘production-ready’. More about that in due course, but for now please do comment below if you have suggestions for things that I haven’t thought of that might improve my model performance!</p>
-
-
-</section>
-
- ]]></description>
-  <category>tools</category>
-  <category>redactionmodel</category>
-  <category>computervision</category>
-  <guid>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</guid>
-  <pubDate>Tue, 05 Apr 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/synthetic-data-results/hard-synthetic-performance-boost.png" medium="image" type="image/png" height="103" width="144"/>
 </item>
 </channel>
 </rss>

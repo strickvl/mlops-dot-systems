@@ -2,6 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/saba.html",
+      "/posts/2023-03-18-stable-eights-part-two.html",
       "/posts/2023-03-05-stable-eights-adversarial.html",
       "/posts/2023-01-01-on-mathematical-literacy.html",
       "/posts/2022-10-24-foundations-mnist-basics.html",
