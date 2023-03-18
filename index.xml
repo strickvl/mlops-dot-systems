@@ -52,7 +52,7 @@ ERROR: Operation cancelled by user</code></pre>
 <pre><code>: </code></pre>
 </div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="45">
+<div class="cell" data-tags="[]" data-execution_count="1">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Union, Callable</span>
@@ -113,28 +113,32 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb5-56">    _, _, probs <span class="op" style="color: #5E5E5E;">=</span> learner.predict(image_pth)</span>
 <span id="cb5-57">    <span class="cf" style="color: #003B4F;">return</span> probs[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/strickvl/.pyenv/versions/3.10.4/envs/mlops-blog/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm</code></pre>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;"># we generate a 3x28x28 tensor with random values assigned</span></span>
-<span id="cb6-2"><span class="co" style="color: #5E5E5E;"># we ensure that we can use PyTorch's autograd on the values</span></span>
-<span id="cb6-3"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_tensor() <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
-<span id="cb6-4">    <span class="cf" style="color: #003B4F;">return</span> torch.randn(<span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>, requires_grad<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb6-5"></span>
-<span id="cb6-6"></span>
-<span id="cb6-7"><span class="co" style="color: #5E5E5E;"># this will allow us to display the tensor as an image</span></span>
-<span id="cb6-8"><span class="kw" style="color: #003B4F;">def</span> display_tensor(tns: torch.Tensor):</span>
-<span id="cb6-9">    <span class="co" style="color: #5E5E5E;"># Convert the tensor to a NumPy array</span></span>
-<span id="cb6-10">    image_array <span class="op" style="color: #5E5E5E;">=</span> tns.detach().numpy()</span>
-<span id="cb6-11"></span>
-<span id="cb6-12">    <span class="co" style="color: #5E5E5E;"># Clip the pixel values between 0 and 1</span></span>
-<span id="cb6-13">    image_array <span class="op" style="color: #5E5E5E;">=</span> np.clip(image_array, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb6-14"></span>
-<span id="cb6-15">    <span class="co" style="color: #5E5E5E;"># Transpose the array to (28, 28, 3) shape</span></span>
-<span id="cb6-16">    image_array <span class="op" style="color: #5E5E5E;">=</span> image_array.transpose((<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>, <span class="dv" style="color: #AD0000;">0</span>))</span>
-<span id="cb6-17"></span>
-<span id="cb6-18">    <span class="co" style="color: #5E5E5E;"># Display the image using Matplotlib</span></span>
-<span id="cb6-19">    plt.imshow(image_array)</span>
-<span id="cb6-20">    plt.show()</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="co" style="color: #5E5E5E;"># we generate a 3x28x28 tensor with random values assigned</span></span>
+<span id="cb7-2"><span class="co" style="color: #5E5E5E;"># we ensure that we can use PyTorch's autograd on the values</span></span>
+<span id="cb7-3"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_tensor() <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
+<span id="cb7-4">    <span class="cf" style="color: #003B4F;">return</span> torch.randn(<span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>, requires_grad<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb7-5"></span>
+<span id="cb7-6"></span>
+<span id="cb7-7"><span class="co" style="color: #5E5E5E;"># this will allow us to display the tensor as an image</span></span>
+<span id="cb7-8"><span class="kw" style="color: #003B4F;">def</span> display_tensor(tns: torch.Tensor):</span>
+<span id="cb7-9">    <span class="co" style="color: #5E5E5E;"># Convert the tensor to a NumPy array</span></span>
+<span id="cb7-10">    image_array <span class="op" style="color: #5E5E5E;">=</span> tns.detach().numpy()</span>
+<span id="cb7-11"></span>
+<span id="cb7-12">    <span class="co" style="color: #5E5E5E;"># Clip the pixel values between 0 and 1</span></span>
+<span id="cb7-13">    image_array <span class="op" style="color: #5E5E5E;">=</span> np.clip(image_array, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb7-14"></span>
+<span id="cb7-15">    <span class="co" style="color: #5E5E5E;"># Transpose the array to (28, 28, 3) shape</span></span>
+<span id="cb7-16">    image_array <span class="op" style="color: #5E5E5E;">=</span> image_array.transpose((<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>, <span class="dv" style="color: #AD0000;">0</span>))</span>
+<span id="cb7-17"></span>
+<span id="cb7-18">    <span class="co" style="color: #5E5E5E;"># Display the image using Matplotlib</span></span>
+<span id="cb7-19">    plt.imshow(image_array)</span>
+<span id="cb7-20">    plt.show()</span></code></pre></div>
 </div>
 </section>
 <section id="using-perceptual-loss" class="level1">
@@ -149,55 +153,6 @@ ERROR: Operation cancelled by user</code></pre>
 <p>The main advantage of perceptual loss is that it is less sensitive to small, local changes in pixel values and focuses more on the overall content of the images. This makes it well-suited for tasks like style transfer, where the objective is to preserve the content of the input image while applying the style of another image. By using a pre-trained feature extractor like VGG-19 the loss function can leverage the knowledge learned from a vast amount of image data to better capture and compare the perceptual content of the images.</p>
 <p>The code below includes my implementation of the perceptual loss function as well as an <code>vgg__iterate_image</code> function that I used to iterate over the image we’re generating.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
-<span id="cb7-2">    gen_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(generated_image)</span>
-<span id="cb7-3">    target_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(target_image)</span>
-<span id="cb7-4">    loss <span class="op" style="color: #5E5E5E;">=</span> nn.functional.l1_loss(gen_features, target_features)</span>
-<span id="cb7-5">    <span class="cf" style="color: #003B4F;">return</span> loss</span>
-<span id="cb7-6"></span>
-<span id="cb7-7"></span>
-<span id="cb7-8"><span class="kw" style="color: #003B4F;">def</span> vgg_iterate_image(</span>
-<span id="cb7-9">    image: torch.Tensor,</span>
-<span id="cb7-10">    target_image: torch.Tensor,</span>
-<span id="cb7-11">    iota: <span class="bu" style="color: null;">int</span>,</span>
-<span id="cb7-12">    update_rate: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.1</span>,</span>
-<span id="cb7-13">    update_printout: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>,</span>
-<span id="cb7-14">    no_image: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb7-15">):</span>
-<span id="cb7-16">    <span class="co" style="color: #5E5E5E;"># Load the pre-trained VGG model</span></span>
-<span id="cb7-17">    vgg <span class="op" style="color: #5E5E5E;">=</span> vgg19(pretrained<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>).features.<span class="bu" style="color: null;">eval</span>()</span>
-<span id="cb7-18">    <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> vgg.parameters():</span>
-<span id="cb7-19">        param.requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span></span>
-<span id="cb7-20"></span>
-<span id="cb7-21">    <span class="co" style="color: #5E5E5E;"># Choose a specific layer for the perceptual loss (e.g., 8th layer)</span></span>
-<span id="cb7-22">    feature_extractor <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(<span class="op" style="color: #5E5E5E;">*</span><span class="bu" style="color: null;">list</span>(vgg.children())[:<span class="dv" style="color: #AD0000;">9</span>])</span>
-<span id="cb7-23"></span>
-<span id="cb7-24">    image.requires_grad_()</span>
-<span id="cb7-25"></span>
-<span id="cb7-26">    <span class="co" style="color: #5E5E5E;"># Calculate perceptual loss</span></span>
-<span id="cb7-27">    loss <span class="op" style="color: #5E5E5E;">=</span> perceptual_loss(feature_extractor, image[<span class="va" style="color: #111111;">None</span>], target_image[<span class="va" style="color: #111111;">None</span>])</span>
-<span id="cb7-28">    loss.backward()</span>
-<span id="cb7-29"></span>
-<span id="cb7-30">    <span class="cf" style="color: #003B4F;">if</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
-<span id="cb7-31">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"iter </span><span class="sc" style="color: #5E5E5E;">{</span>iota<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
-<span id="cb7-32"></span>
-<span id="cb7-33">    image.data <span class="op" style="color: #5E5E5E;">-=</span> update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data</span>
-<span id="cb7-34">    image.grad.zero_()</span>
-<span id="cb7-35"></span>
-<span id="cb7-36">    <span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> no_image <span class="kw" style="color: #003B4F;">and</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
-<span id="cb7-37">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
-<span id="cb7-38"></span>
-<span id="cb7-39">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
-<span id="cb7-40">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
-<span id="cb7-41">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
-<span id="cb7-42"></span>
-<span id="cb7-43">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
-<span id="cb7-44">        display_tensor(image)</span></code></pre></div>
-</div>
-<p>I also implemented a version for <code>resnet</code> but that didn’t work as well or converge as quickly as <code>vgg19</code> so I’m just including the code for posterity here.</p>
-<div class="cell" data-execution_count="52">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
 <span id="cb8-2">    gen_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(generated_image)</span>
 <span id="cb8-3">    target_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(target_image)</span>
@@ -205,7 +160,7 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb8-5">    <span class="cf" style="color: #003B4F;">return</span> loss</span>
 <span id="cb8-6"></span>
 <span id="cb8-7"></span>
-<span id="cb8-8"><span class="kw" style="color: #003B4F;">def</span> resnet_iterate_image(</span>
+<span id="cb8-8"><span class="kw" style="color: #003B4F;">def</span> vgg_iterate_image(</span>
 <span id="cb8-9">    image: torch.Tensor,</span>
 <span id="cb8-10">    target_image: torch.Tensor,</span>
 <span id="cb8-11">    iota: <span class="bu" style="color: null;">int</span>,</span>
@@ -213,109 +168,164 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb8-13">    update_printout: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>,</span>
 <span id="cb8-14">    no_image: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span>,</span>
 <span id="cb8-15">):</span>
-<span id="cb8-16">    <span class="co" style="color: #5E5E5E;"># Load the pre-trained ResNet model</span></span>
-<span id="cb8-17">    resnet <span class="op" style="color: #5E5E5E;">=</span> resnet18(pretrained<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)  <span class="co" style="color: #5E5E5E;"># Load the pre-trained ResNet-18 model</span></span>
-<span id="cb8-18">    resnet <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(</span>
-<span id="cb8-19">        <span class="op" style="color: #5E5E5E;">*</span><span class="bu" style="color: null;">list</span>(resnet.children())[:<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>]</span>
-<span id="cb8-20">    )  <span class="co" style="color: #5E5E5E;"># Remove the last fully connected layer</span></span>
-<span id="cb8-21">    resnet.<span class="bu" style="color: null;">eval</span>()  <span class="co" style="color: #5E5E5E;"># Set the ResNet model to evaluation mode</span></span>
-<span id="cb8-22">    <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> resnet.parameters():</span>
-<span id="cb8-23">        param.requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span></span>
-<span id="cb8-24"></span>
-<span id="cb8-25">    <span class="co" style="color: #5E5E5E;"># Choose a specific layer for the perceptual loss (e.g., layer before the last fully connected layer)</span></span>
-<span id="cb8-26">    feature_extractor <span class="op" style="color: #5E5E5E;">=</span> resnet</span>
-<span id="cb8-27"></span>
-<span id="cb8-28">    image.requires_grad_()</span>
-<span id="cb8-29">    preds <span class="op" style="color: #5E5E5E;">=</span> torch.softmax(learn.model(image[<span class="va" style="color: #111111;">None</span>]), dim<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb8-30">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
-<span id="cb8-31"></span>
-<span id="cb8-32">    <span class="co" style="color: #5E5E5E;"># Calculate perceptual loss</span></span>
-<span id="cb8-33">    loss <span class="op" style="color: #5E5E5E;">=</span> perceptual_loss(feature_extractor, image[<span class="va" style="color: #111111;">None</span>], target_image[<span class="va" style="color: #111111;">None</span>])</span>
-<span id="cb8-34">    loss.backward()</span>
+<span id="cb8-16">    <span class="co" style="color: #5E5E5E;"># Load the pre-trained VGG model</span></span>
+<span id="cb8-17">    vgg <span class="op" style="color: #5E5E5E;">=</span> vgg19(pretrained<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>).features.<span class="bu" style="color: null;">eval</span>()</span>
+<span id="cb8-18">    <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> vgg.parameters():</span>
+<span id="cb8-19">        param.requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span></span>
+<span id="cb8-20"></span>
+<span id="cb8-21">    <span class="co" style="color: #5E5E5E;"># Choose a specific layer for the perceptual loss (e.g., 8th layer)</span></span>
+<span id="cb8-22">    feature_extractor <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(<span class="op" style="color: #5E5E5E;">*</span><span class="bu" style="color: null;">list</span>(vgg.children())[:<span class="dv" style="color: #AD0000;">9</span>])</span>
+<span id="cb8-23"></span>
+<span id="cb8-24">    image.requires_grad_()</span>
+<span id="cb8-25"></span>
+<span id="cb8-26">    <span class="co" style="color: #5E5E5E;"># Calculate perceptual loss</span></span>
+<span id="cb8-27">    loss <span class="op" style="color: #5E5E5E;">=</span> perceptual_loss(feature_extractor, image[<span class="va" style="color: #111111;">None</span>], target_image[<span class="va" style="color: #111111;">None</span>])</span>
+<span id="cb8-28">    loss.backward()</span>
+<span id="cb8-29"></span>
+<span id="cb8-30">    <span class="cf" style="color: #003B4F;">if</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb8-31">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"iter </span><span class="sc" style="color: #5E5E5E;">{</span>iota<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb8-32"></span>
+<span id="cb8-33">    image.data <span class="op" style="color: #5E5E5E;">-=</span> update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data</span>
+<span id="cb8-34">    image.grad.zero_()</span>
 <span id="cb8-35"></span>
-<span id="cb8-36">    <span class="cf" style="color: #003B4F;">if</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
-<span id="cb8-37">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"iter </span><span class="sc" style="color: #5E5E5E;">{</span>iota<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb8-36">    <span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> no_image <span class="kw" style="color: #003B4F;">and</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb8-37">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
 <span id="cb8-38"></span>
-<span id="cb8-39">    image.data <span class="op" style="color: #5E5E5E;">-=</span> update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data</span>
-<span id="cb8-40">    image.grad.zero_()</span>
-<span id="cb8-41"></span>
-<span id="cb8-42">    <span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> no_image <span class="kw" style="color: #003B4F;">and</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
-<span id="cb8-43">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
-<span id="cb8-44"></span>
-<span id="cb8-45">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
-<span id="cb8-46">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
-<span id="cb8-47">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
-<span id="cb8-48"></span>
-<span id="cb8-49">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
-<span id="cb8-50">        display_tensor(image)</span></code></pre></div>
+<span id="cb8-39">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
+<span id="cb8-40">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
+<span id="cb8-41">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
+<span id="cb8-42"></span>
+<span id="cb8-43">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
+<span id="cb8-44">        display_tensor(image)</span></code></pre></div>
+</div>
+<p>I also implemented a version for <code>resnet</code> but that didn’t work as well or converge as quickly as <code>vgg19</code> so I’m just including the code for posterity here.</p>
+<div class="cell" data-execution_count="52">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
+<span id="cb9-2">    gen_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(generated_image)</span>
+<span id="cb9-3">    target_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(target_image)</span>
+<span id="cb9-4">    loss <span class="op" style="color: #5E5E5E;">=</span> nn.functional.l1_loss(gen_features, target_features)</span>
+<span id="cb9-5">    <span class="cf" style="color: #003B4F;">return</span> loss</span>
+<span id="cb9-6"></span>
+<span id="cb9-7"></span>
+<span id="cb9-8"><span class="kw" style="color: #003B4F;">def</span> resnet_iterate_image(</span>
+<span id="cb9-9">    image: torch.Tensor,</span>
+<span id="cb9-10">    target_image: torch.Tensor,</span>
+<span id="cb9-11">    iota: <span class="bu" style="color: null;">int</span>,</span>
+<span id="cb9-12">    update_rate: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.1</span>,</span>
+<span id="cb9-13">    update_printout: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>,</span>
+<span id="cb9-14">    no_image: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb9-15">):</span>
+<span id="cb9-16">    <span class="co" style="color: #5E5E5E;"># Load the pre-trained ResNet model</span></span>
+<span id="cb9-17">    resnet <span class="op" style="color: #5E5E5E;">=</span> resnet18(pretrained<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)  <span class="co" style="color: #5E5E5E;"># Load the pre-trained ResNet-18 model</span></span>
+<span id="cb9-18">    resnet <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(</span>
+<span id="cb9-19">        <span class="op" style="color: #5E5E5E;">*</span><span class="bu" style="color: null;">list</span>(resnet.children())[:<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>]</span>
+<span id="cb9-20">    )  <span class="co" style="color: #5E5E5E;"># Remove the last fully connected layer</span></span>
+<span id="cb9-21">    resnet.<span class="bu" style="color: null;">eval</span>()  <span class="co" style="color: #5E5E5E;"># Set the ResNet model to evaluation mode</span></span>
+<span id="cb9-22">    <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> resnet.parameters():</span>
+<span id="cb9-23">        param.requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">False</span></span>
+<span id="cb9-24"></span>
+<span id="cb9-25">    <span class="co" style="color: #5E5E5E;"># Choose a specific layer for the perceptual loss (e.g., layer before the last fully connected layer)</span></span>
+<span id="cb9-26">    feature_extractor <span class="op" style="color: #5E5E5E;">=</span> resnet</span>
+<span id="cb9-27"></span>
+<span id="cb9-28">    image.requires_grad_()</span>
+<span id="cb9-29">    preds <span class="op" style="color: #5E5E5E;">=</span> torch.softmax(learn.model(image[<span class="va" style="color: #111111;">None</span>]), dim<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb9-30">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
+<span id="cb9-31"></span>
+<span id="cb9-32">    <span class="co" style="color: #5E5E5E;"># Calculate perceptual loss</span></span>
+<span id="cb9-33">    loss <span class="op" style="color: #5E5E5E;">=</span> perceptual_loss(feature_extractor, image[<span class="va" style="color: #111111;">None</span>], target_image[<span class="va" style="color: #111111;">None</span>])</span>
+<span id="cb9-34">    loss.backward()</span>
+<span id="cb9-35"></span>
+<span id="cb9-36">    <span class="cf" style="color: #003B4F;">if</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb9-37">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"iter </span><span class="sc" style="color: #5E5E5E;">{</span>iota<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb9-38"></span>
+<span id="cb9-39">    image.data <span class="op" style="color: #5E5E5E;">-=</span> update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data</span>
+<span id="cb9-40">    image.grad.zero_()</span>
+<span id="cb9-41"></span>
+<span id="cb9-42">    <span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> no_image <span class="kw" style="color: #003B4F;">and</span> iota <span class="op" style="color: #5E5E5E;">%</span> update_printout <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb9-43">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
+<span id="cb9-44"></span>
+<span id="cb9-45">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
+<span id="cb9-46">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
+<span id="cb9-47">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
+<span id="cb9-48"></span>
+<span id="cb9-49">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
+<span id="cb9-50">        display_tensor(image)</span></code></pre></div>
 </details>
 </div>
 <p>Here we get our target image (a random one of our ‘eight’ digits from the training set) and apply the same transforms to get it in the same size and format as our random noise image.</p>
 <p>I reversed the values of the target image so that instead of being white squiggles on a black background, we now have black squiggles on a white background.</p>
-<div class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">target_image_pil <span class="op" style="color: #5E5E5E;">=</span> Image.<span class="bu" style="color: null;">open</span>(an_eight).convert(<span class="st" style="color: #20794D;">'RGB'</span>)</span>
-<span id="cb9-2"></span>
-<span id="cb9-3">preprocess <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
-<span id="cb9-4">    transforms.Resize((<span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)),  <span class="co" style="color: #5E5E5E;"># Resize the image to match the input dimensions (3, 28, 28)</span></span>
-<span id="cb9-5">    transforms.ToTensor(),  <span class="co" style="color: #5E5E5E;"># Convert the image to a PyTorch tensor</span></span>
-<span id="cb9-6">    <span class="co" style="color: #5E5E5E;"># Normalize the image with mean and std (use the same mean and std as your input image preprocessing)</span></span>
-<span id="cb9-7">    transforms.Normalize(mean<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.485</span>, <span class="fl" style="color: #AD0000;">0.456</span>, <span class="fl" style="color: #AD0000;">0.406</span>], std<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.229</span>, <span class="fl" style="color: #AD0000;">0.224</span>, <span class="fl" style="color: #AD0000;">0.225</span>])</span>
-<span id="cb9-8">])</span>
-<span id="cb9-9"></span>
-<span id="cb9-10"><span class="co" style="color: #5E5E5E;"># Apply preprocessing</span></span>
-<span id="cb9-11">target_image <span class="op" style="color: #5E5E5E;">=</span> preprocess(target_image_pil)</span>
-<span id="cb9-12"></span>
-<span id="cb9-13">max_value <span class="op" style="color: #5E5E5E;">=</span> target_image.<span class="bu" style="color: null;">max</span>()</span>
-<span id="cb9-14">reversed_target_image <span class="op" style="color: #5E5E5E;">=</span> max_value <span class="op" style="color: #5E5E5E;">-</span> target_image</span></code></pre></div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">target_image_pil <span class="op" style="color: #5E5E5E;">=</span> Image.<span class="bu" style="color: null;">open</span>(an_eight).convert(<span class="st" style="color: #20794D;">'RGB'</span>)</span>
+<span id="cb10-2"></span>
+<span id="cb10-3">preprocess <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
+<span id="cb10-4">    transforms.Resize((<span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)),  <span class="co" style="color: #5E5E5E;"># Resize the image to match the input dimensions (3, 28, 28)</span></span>
+<span id="cb10-5">    transforms.ToTensor(),  <span class="co" style="color: #5E5E5E;"># Convert the image to a PyTorch tensor</span></span>
+<span id="cb10-6">    <span class="co" style="color: #5E5E5E;"># Normalize the image with mean and std (use the same mean and std as your input image preprocessing)</span></span>
+<span id="cb10-7">    transforms.Normalize(mean<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.485</span>, <span class="fl" style="color: #AD0000;">0.456</span>, <span class="fl" style="color: #AD0000;">0.406</span>], std<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.229</span>, <span class="fl" style="color: #AD0000;">0.224</span>, <span class="fl" style="color: #AD0000;">0.225</span>])</span>
+<span id="cb10-8">])</span>
+<span id="cb10-9"></span>
+<span id="cb10-10"><span class="co" style="color: #5E5E5E;"># Apply preprocessing</span></span>
+<span id="cb10-11">target_image <span class="op" style="color: #5E5E5E;">=</span> preprocess(target_image_pil)</span>
+<span id="cb10-12"></span>
+<span id="cb10-13">max_value <span class="op" style="color: #5E5E5E;">=</span> target_image.<span class="bu" style="color: null;">max</span>()</span>
+<span id="cb10-14">reversed_target_image <span class="op" style="color: #5E5E5E;">=</span> max_value <span class="op" style="color: #5E5E5E;">-</span> target_image</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">display_tensor(reversed_target_image)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <p>For the iteration process, it’s fairly similar to what I did in the last post, only the number of iterations is still quite high. It prints out the image every 200 iterations so you can see it slowly converging and improving.</p>
 <p>I had to experiment around quite a bit with the ‘update_rate’ (going from very low (i.e.&nbsp;0.1) all the way up to 1000 at one point). I also decided to create the <code>reversed_target_image</code> at some point during this process because I suspected it might give better results. Here you can see the number 8 slowly emerging from the noise.</p>
 <div class="cell" data-execution_count="55">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">random_sample <span class="op" style="color: #5E5E5E;">=</span> get_noisy_starter_tensor()</span>
-<span id="cb10-2"></span>
-<span id="cb10-3"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">1200</span>):</span>
-<span id="cb10-4">    vgg_iterate_image(</span>
-<span id="cb10-5">        random_sample,</span>
-<span id="cb10-6">        reversed_target_image,</span>
-<span id="cb10-7">        i,</span>
-<span id="cb10-8">        update_rate<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">8.0</span>,</span>
-<span id="cb10-9">        update_printout<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">200</span>,</span>
-<span id="cb10-10">    )</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">random_sample <span class="op" style="color: #5E5E5E;">=</span> get_noisy_starter_tensor()</span>
+<span id="cb12-2"></span>
+<span id="cb12-3"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">1200</span>):</span>
+<span id="cb12-4">    vgg_iterate_image(</span>
+<span id="cb12-5">        random_sample,</span>
+<span id="cb12-6">        reversed_target_image,</span>
+<span id="cb12-7">        i,</span>
+<span id="cb12-8">        update_rate<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">8.0</span>,</span>
+<span id="cb12-9">        update_printout<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">200</span>,</span>
+<span id="cb12-10">    )</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>iter 0 / grad_sum: -0.11695463210344315, loss: 3.349287986755371</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>iter 200 / grad_sum: -0.05261861905455589, loss: 1.8285313844680786</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-4.png" class="img-fluid"></p>
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-9-output-4.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>iter 400 / grad_sum: -0.05507233738899231, loss: 1.559353232383728</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-6.png" class="img-fluid"></p>
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-9-output-6.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>iter 600 / grad_sum: -0.08732452243566513, loss: 1.4069606065750122</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-8.png" class="img-fluid"></p>
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-9-output-8.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>iter 800 / grad_sum: -0.11042110621929169, loss: 1.3145689964294434</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-10.png" class="img-fluid"></p>
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-9-output-10.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>iter 1000 / grad_sum: -0.14137724041938782, loss: 1.2493029832839966</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-12.png" class="img-fluid"></p>
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-9-output-12.png" class="img-fluid"></p>
 </div>
 </div>
 <p>It took me a couple of hours to get to this point, and the inference and time to update each iteration was pretty slow. I suspect that it might be faster on a GPU, but I didn’t have one available to me at the time.</p>
