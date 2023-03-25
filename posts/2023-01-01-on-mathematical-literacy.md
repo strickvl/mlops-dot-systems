@@ -9,6 +9,7 @@ description: Thinking aloud about how to tie a collection of mathematical ‘tri
 layout: post
 title: On mathematical literacy
 toc: false
+image: images/mathematical_literacy.png
 include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
     utterances:
