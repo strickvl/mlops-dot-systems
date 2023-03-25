@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Alex Strick van Linschoten">
-<meta name="dcterms.date" content="2023-01-01">
-<meta name="description" content="Thinking aloud about how to tie a collection of mathematical ‘tricks’ and operations together in some sort of logical and rounded whole.">
+<meta name="dcterms.date" content="2023-03-25">
+<meta name="description" content="I’ve enjoyed learning about quadratic equations and trigonometry for my Maths degree, and am struck by how many incremental steps along the way contributed to the total edifice of understanding.">
 
-<title>Alex Strick van Linschoten - On mathematical literacy</title>
+<title>Alex Strick van Linschoten - The Trick Is The Thing, Part II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,18 +65,18 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Alex Strick van Linschoten - On mathematical literacy">
-<meta property="og:description" content="Thinking aloud about how to tie a collection of mathematical ‘tricks’ and operations together in some sort of logical and rounded whole.">
-<meta property="og:image" content="https://mlops.systems/posts/images/mathematical_literacy.png">
+<meta property="og:title" content="Alex Strick van Linschoten - The Trick Is The Thing, Part II">
+<meta property="og:description" content="I've enjoyed learning about quadratic equations and trigonometry for my Maths degree, and am struck by how many incremental steps along the way contributed to the total edifice of understanding.">
+<meta property="og:image" content="https://mlops.systems/posts/images/trickster.png">
 <meta property="og:site-name" content="Alex Strick van Linschoten">
-<meta property="og:image:height" content="503">
-<meta property="og:image:width" content="505">
-<meta name="twitter:title" content="Alex Strick van Linschoten - On mathematical literacy">
-<meta name="twitter:description" content="Thinking aloud about how to tie a collection of mathematical ‘tricks’ and operations together in some sort of logical and rounded whole.">
-<meta name="twitter:image" content="https://mlops.systems/posts/images/mathematical_literacy.png">
+<meta property="og:image:height" content="506">
+<meta property="og:image:width" content="509">
+<meta name="twitter:title" content="Alex Strick van Linschoten - The Trick Is The Thing, Part II">
+<meta name="twitter:description" content="I've enjoyed learning about quadratic equations and trigonometry for my Maths degree, and am struck by how many incremental steps along the way contributed to the total edifice of understanding.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/trickster.png">
 <meta name="twitter:creator" content="@strickvl">
-<meta name="twitter:image-height" content="503">
-<meta name="twitter:image-width" content="505">
+<meta name="twitter:image-height" content="506">
+<meta name="twitter:image-width" content="509">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -130,16 +130,17 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">On mathematical literacy</h1>
+      <h1 class="title">The Trick Is The Thing, Part II</h1>
                   <div>
         <div class="description">
-          Thinking aloud about how to tie a collection of mathematical ‘tricks’ and operations together in some sort of logical and rounded whole.
+          I’ve enjoyed learning about quadratic equations and trigonometry for my Maths degree, and am struck by how many incremental steps along the way contributed to the total edifice of understanding.
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">mathematics</div>
                 <div class="quarto-category">mu123</div>
                 <div class="quarto-category">q31</div>
+                <div class="quarto-category">deeplearning</div>
               </div>
                   </div>
   </div>
@@ -157,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 1, 2023</p>
+        <p class="date">March 25, 2023</p>
       </div>
     </div>
     
@@ -175,12 +176,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>I’m at the half-way point in <a href="https://www.open.ac.uk/courses/modules/mu123">MU123</a>, the first module in the mathematics degree I’m currently working towards. So far we’ve covered models, properties of numbers, some basic statistics, basic algebra and a starter kit on how to think about graphs.</p>
-<p>As the first thing you do in the BSc Mathematics (<a href="https://www.open.ac.uk/courses/maths/degrees/bsc-mathematics-q31">Q31</a>) The module is intended as a way for people who haven’t thought about or used mathematics for many years to re-engage. It gives a common vocabulary and shared understanding of several topics from different areas, such that eventually those with more (recent) experience can join classes with the late-starters (like myself).</p>
-<p>All of the above preamble is a way of saying that I understand why MU123 exists and have some sense of why it’s structured and programmed the way it is, but as a student, it can feel a little scattered. Specifically, it feels like we are being armed with a large bag of tricks. If you show me a graph, I can find the gradient and the y-intercept. If you give me <a href="https://www.mathsisfun.com/surds.html">a surd</a> to simplify, I know what to do. Asked to interpret the standard deviation summary for a data set, I have an intuition for what those numbers mean.</p>
-<p>All that is good and well, and there’s something satisfying to mastering the individual techniques, much like the early days of learning a new programming language. Some context to the use of the technique is given, but for the most part you are using the techniques to solve specific questions and problems.</p>
-<p>The missing piece is the sense of how all the various parts, all the tricks, connect together into the whole game of mathematics. For now, I’m writing this post to acknowledge the sense of there being a ‘lack’ in the programme but with the hope and anticipation that this will improve the further down the road we go.</p>
-<p>I should also probably take some responsibility for my own education. In particular, there are probably things I can be doing to make the connections and links myself based on how I’m understanding things as we go. The Open University programme for Maths very much seems to take an ‘a la carte’ approach which means that the onus is more on the student to fill in the gaps. This blog should probably serve as a record of my efforts to make those connections and fill in those gaps.</p>
+<p>I’m approaching the end of the <a href="https://www.open.ac.uk/courses/modules/mu123">MU123 ‘Discovering Mathematics’ module</a> and have really been enjoying some of the recent areas we’ve studied. In particular, quadratic equations really captured my attention and imagination. I’m starting to work on the trigonometry unit and it looks set to be equally amazing. What’s even better is that I think I’m starting to see (the beginnings of) some of the connections between concepts and units <a href="https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html">that I previous wrote about</a> which makes everything that much more compelling.</p>
+<p>To broaden those connections even further, in the FastAI course we often are reminded of how lots of parts of deep learning are <a href="https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">(just) clever tricks</a>. Those tricks might take the form of how you process the data, or how one thing is combined with another, but together these things combine together to form a more meaningful whole. So it is, I am discovering, with mathematics.</p>
+<p>In a degree format like the one I’m working my way through, you often don’t encounter the insights and ‘tricks’ in a similar context to when and how they were first discovered. Instead of encountering problems that require solutions, you first cover the solutions and then apply those to some problems. I was struck today, though, at the cumulative weight of these incremental improvements.</p>
+<p>To take one example, we have trigonometry which is — as I currently understand it, one day of study into the unit (please don’t email me) — the study of how angles and lengths relate to one another. We learn how we can use <em>sin</em> and <em>cos</em> and <em>tan</em> to calculate lengths and angles when we don’t have all the information about a particular geometric shape. When we start off, we’re only talking about right-angled triangles, but then later on we start thinking about all kinds of triangles and the trick is to drop a perpendicular so that we are <em>still</em> actually talking about right-angled triangles. So we’ve made this mental leap which allows us to solve more interesting problems.</p>
+<p>There are many other examples of this from how we work with quadratic equations, to how something like the VAE (variational autoencoder) <a href="https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">helps us train faster</a> in the world of deep learning and Stable Diffusion.</p>
+<p>As someone watching the breathtaking pace of developments in generative AI, I’m struck by how we can observe the same thing there, but at an accelerated pace compared to the world where many of these mathematical techniques were discovered. The internet combined with a number of smart people thinking about this problem space are proving fertile ground.</p>
+<p>From trigonometry to quadratic equations to deep learning, the insights and tricks developed along the way build upon each other to form a more meaningful whole. This idea of clever tricks is not unique to mathematics or deep learning, but it is a universal concept that applies to many areas of human knowledge and understanding. These tricks may take the form of new methods or approaches that allow us to solve problems more efficiently or effectively.</p>
 
 
 

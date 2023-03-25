@@ -10,7 +10,35 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Fri, 17 Mar 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 24 Mar 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>The Trick Is The Thing, Part II</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-03-25-tricks-are-the-thing.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m approaching the end of the <a href="https://www.open.ac.uk/courses/modules/mu123">MU123 ‘Discovering Mathematics’ module</a> and have really been enjoying some of the recent areas we’ve studied. In particular, quadratic equations really captured my attention and imagination. I’m starting to work on the trigonometry unit and it looks set to be equally amazing. What’s even better is that I think I’m starting to see (the beginnings of) some of the connections between concepts and units <a href="https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html">that I previous wrote about</a> which makes everything that much more compelling.</p>
+<p>To broaden those connections even further, in the FastAI course we often are reminded of how lots of parts of deep learning are <a href="https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">(just) clever tricks</a>. Those tricks might take the form of how you process the data, or how one thing is combined with another, but together these things combine together to form a more meaningful whole. So it is, I am discovering, with mathematics.</p>
+<p>In a degree format like the one I’m working my way through, you often don’t encounter the insights and ‘tricks’ in a similar context to when and how they were first discovered. Instead of encountering problems that require solutions, you first cover the solutions and then apply those to some problems. I was struck today, though, at the cumulative weight of these incremental improvements.</p>
+<p>To take one example, we have trigonometry which is — as I currently understand it, one day of study into the unit (please don’t email me) — the study of how angles and lengths relate to one another. We learn how we can use <em>sin</em> and <em>cos</em> and <em>tan</em> to calculate lengths and angles when we don’t have all the information about a particular geometric shape. When we start off, we’re only talking about right-angled triangles, but then later on we start thinking about all kinds of triangles and the trick is to drop a perpendicular so that we are <em>still</em> actually talking about right-angled triangles. So we’ve made this mental leap which allows us to solve more interesting problems.</p>
+<p>There are many other examples of this from how we work with quadratic equations, to how something like the VAE (variational autoencoder) <a href="https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">helps us train faster</a> in the world of deep learning and Stable Diffusion.</p>
+<p>As someone watching the breathtaking pace of developments in generative AI, I’m struck by how we can observe the same thing there, but at an accelerated pace compared to the world where many of these mathematical techniques were discovered. The internet combined with a number of smart people thinking about this problem space are proving fertile ground.</p>
+<p>From trigonometry to quadratic equations to deep learning, the insights and tricks developed along the way build upon each other to form a more meaningful whole. This idea of clever tricks is not unique to mathematics or deep learning, but it is a universal concept that applies to many areas of human knowledge and understanding. These tricks may take the form of new methods or approaches that allow us to solve problems more efficiently or effectively.</p>
+
+
+
+ ]]></description>
+  <category>mathematics</category>
+  <category>mu123</category>
+  <category>q31</category>
+  <category>deeplearning</category>
+  <guid>https://mlops.systems/posts/2023-03-25-tricks-are-the-thing.html</guid>
+  <pubDate>Fri, 24 Mar 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/trickster.png" medium="image" type="image/png" height="143" width="144"/>
+</item>
 <item>
   <title>Building Blocks For Better Stable Eights</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -152,7 +180,7 @@ ERROR: Operation cancelled by user</code></pre>
 <p>Once the features are extracted, we compute the loss as the difference between the features of the generated image and the features of the target image. This difference can be calculated using various metrics, such as the mean squared error (MSE) or the L1-norm.</p>
 <p>The main advantage of perceptual loss is that it is less sensitive to small, local changes in pixel values and focuses more on the overall content of the images. This makes it well-suited for tasks like style transfer, where the objective is to preserve the content of the input image while applying the style of another image. By using a pre-trained feature extractor like VGG-19 the loss function can leverage the knowledge learned from a vast amount of image data to better capture and compare the perceptual content of the images.</p>
 <p>The code below includes my implementation of the perceptual loss function as well as an <code>vgg__iterate_image</code> function that I used to iterate over the image we’re generating.</p>
-<div class="cell">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
 <span id="cb8-2">    gen_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(generated_image)</span>
 <span id="cb8-3">    target_features <span class="op" style="color: #5E5E5E;">=</span> feature_extractor(target_image)</span>
@@ -199,7 +227,7 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb8-44">        display_tensor(image)</span></code></pre></div>
 </div>
 <p>I also implemented a version for <code>resnet</code> but that didn’t work as well or converge as quickly as <code>vgg19</code> so I’m just including the code for posterity here.</p>
-<div class="cell" data-execution_count="52">
+<div class="cell" data-execution_count="4">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="kw" style="color: #003B4F;">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
@@ -256,7 +284,7 @@ ERROR: Operation cancelled by user</code></pre>
 </div>
 <p>Here we get our target image (a random one of our ‘eight’ digits from the training set) and apply the same transforms to get it in the same size and format as our random noise image.</p>
 <p>I reversed the values of the target image so that instead of being white squiggles on a black background, we now have black squiggles on a white background.</p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">target_image_pil <span class="op" style="color: #5E5E5E;">=</span> Image.<span class="bu" style="color: null;">open</span>(an_eight).convert(<span class="st" style="color: #20794D;">'RGB'</span>)</span>
 <span id="cb10-2"></span>
 <span id="cb10-3">preprocess <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
@@ -272,7 +300,7 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb10-13">max_value <span class="op" style="color: #5E5E5E;">=</span> target_image.<span class="bu" style="color: null;">max</span>()</span>
 <span id="cb10-14">reversed_target_image <span class="op" style="color: #5E5E5E;">=</span> max_value <span class="op" style="color: #5E5E5E;">-</span> target_image</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">display_tensor(reversed_target_image)</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
@@ -330,6 +358,382 @@ ERROR: Operation cancelled by user</code></pre>
 </div>
 <p>It took me a couple of hours to get to this point, and the inference and time to update each iteration was pretty slow. I suspect that it might be faster on a GPU, but I didn’t have one available to me at the time.</p>
 <p>Next time, I’ll try to implement a Siamese network and see if that gives me better results. (First will have to figure out what exactly that is and how it works!)</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">random_sample <span class="op" style="color: #5E5E5E;">=</span> get_noisy_starter_tensor()</span>
+<span id="cb19-2"></span>
+<span id="cb19-3"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">12000</span>):</span>
+<span id="cb19-4">    vgg_iterate_image(</span>
+<span id="cb19-5">        random_sample,</span>
+<span id="cb19-6">        reversed_target_image,</span>
+<span id="cb19-7">        i,</span>
+<span id="cb19-8">        update_rate<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">8.0</span>,</span>
+<span id="cb19-9">        update_printout<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">200</span>,</span>
+<span id="cb19-10">    )</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/strickvl/.pyenv/versions/3.10.4/envs/mlops-blog/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG19_Weights.IMAGENET1K_V1`. You can also use `weights=VGG19_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 0 / grad_sum: -0.10067621618509293, loss: 3.2533576488494873</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 200 / grad_sum: -0.05489164963364601, loss: 1.8312240839004517</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 400 / grad_sum: -0.054107874631881714, loss: 1.5468450784683228</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-7.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 600 / grad_sum: -0.07920947670936584, loss: 1.4032789468765259</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-9.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 800 / grad_sum: -0.11411219835281372, loss: 1.2947640419006348</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-11.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1000 / grad_sum: -0.14544689655303955, loss: 1.2132982015609741</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-13.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1200 / grad_sum: -0.16940060257911682, loss: 1.1574007272720337</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-15.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1400 / grad_sum: -0.18719588220119476, loss: 1.108056664466858</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-17.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1600 / grad_sum: -0.2136225700378418, loss: 1.0530391931533813</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-19.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1800 / grad_sum: -0.2254064530134201, loss: 0.9971842169761658</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-21.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2000 / grad_sum: -0.2527287006378174, loss: 0.9344728589057922</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-23.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2200 / grad_sum: -0.26381513476371765, loss: 0.8655626177787781</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-25.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2400 / grad_sum: -0.26774412393569946, loss: 0.7914406657218933</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-27.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2600 / grad_sum: -0.2612324655056, loss: 0.726896345615387</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-29.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2800 / grad_sum: -0.2553003430366516, loss: 0.6689462661743164</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-31.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3000 / grad_sum: -0.2531996965408325, loss: 0.6113003492355347</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-33.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3200 / grad_sum: -0.25401824712753296, loss: 0.5582084655761719</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-35.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3400 / grad_sum: -0.2472103387117386, loss: 0.5116526484489441</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-37.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3600 / grad_sum: -0.23793253302574158, loss: 0.4699331820011139</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-39.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3800 / grad_sum: -0.22248002886772156, loss: 0.4433839023113251</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-41.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4000 / grad_sum: -0.20998376607894897, loss: 0.3811723291873932</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-43.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4200 / grad_sum: -0.19712524116039276, loss: 0.37239381670951843</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-45.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4400 / grad_sum: -0.16977882385253906, loss: 0.34740307927131653</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-47.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4600 / grad_sum: -0.16369280219078064, loss: 0.3144417703151703</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-49.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4800 / grad_sum: -0.12760969996452332, loss: 0.32315561175346375</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-51.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5000 / grad_sum: -0.1290731281042099, loss: 0.2868266999721527</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-53.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5200 / grad_sum: -0.09261088073253632, loss: 0.26794564723968506</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-55.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5400 / grad_sum: -0.08580854535102844, loss: 0.26148849725723267</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-57.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5600 / grad_sum: -0.06559965014457703, loss: 0.26385462284088135</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-59.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5800 / grad_sum: -0.025712519884109497, loss: 0.273421049118042</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-61.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6000 / grad_sum: -0.04072136431932449, loss: 0.22964514791965485</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-63.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6200 / grad_sum: -0.030087554827332497, loss: 0.25004929304122925</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-65.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6400 / grad_sum: -0.032913655042648315, loss: 0.25699320435523987</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-67.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6600 / grad_sum: -0.021285470575094223, loss: 0.23544834554195404</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-69.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6800 / grad_sum: -0.015309110283851624, loss: 0.22240281105041504</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-71.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7000 / grad_sum: -0.002907566726207733, loss: 0.256386399269104</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-73.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7200 / grad_sum: -0.013432338833808899, loss: 0.24497221410274506</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-75.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7400 / grad_sum: 0.002584397792816162, loss: 0.24868912994861603</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-77.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7600 / grad_sum: -0.009248964488506317, loss: 0.2450336366891861</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-79.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7800 / grad_sum: -0.0018646717071533203, loss: 0.25336411595344543</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-81.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8000 / grad_sum: -0.013653086498379707, loss: 0.24088498950004578</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-83.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8200 / grad_sum: -0.01744297333061695, loss: 0.20649825036525726</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-85.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8400 / grad_sum: -0.00710982084274292, loss: 0.2272096574306488</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-87.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8600 / grad_sum: 0.004392959177494049, loss: 0.22836482524871826</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-89.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8800 / grad_sum: -0.005208563059568405, loss: 0.2397071272134781</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-91.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9000 / grad_sum: -0.004147965461015701, loss: 0.23213578760623932</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-93.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9200 / grad_sum: -0.011317238211631775, loss: 0.23897279798984528</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-95.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9400 / grad_sum: 0.0013678669929504395, loss: 0.21524861454963684</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-97.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9600 / grad_sum: -0.0031454861164093018, loss: 0.24317485094070435</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-99.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9800 / grad_sum: 0.0048993900418281555, loss: 0.22074298560619354</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-101.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10000 / grad_sum: 0.000981885939836502, loss: 0.20930485427379608</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-103.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10200 / grad_sum: -0.010918810963630676, loss: 0.2221449315547943</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-105.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10400 / grad_sum: -0.009839233011007309, loss: 0.2183818370103836</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-107.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10600 / grad_sum: 0.007621109485626221, loss: 0.21323300898075104</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-109.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10800 / grad_sum: 0.004075892269611359, loss: 0.2392408847808838</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-111.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11000 / grad_sum: 0.0029926151037216187, loss: 0.22209693491458893</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-113.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11200 / grad_sum: -0.00012520700693130493, loss: 0.2071794718503952</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-115.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11400 / grad_sum: -0.008496522903442383, loss: 0.22705934941768646</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-117.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11600 / grad_sum: -0.0059080421924591064, loss: 0.1998962163925171</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-119.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11800 / grad_sum: 0.006994262337684631, loss: 0.20933829247951508</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-121.png" class="img-fluid"></p>
+</div>
+</div>
 
 
 </section>
@@ -848,6 +1252,7 @@ ERROR: Operation cancelled by user</code></pre>
   <category>q31</category>
   <guid>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</guid>
   <pubDate>Sat, 31 Dec 2022 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/mathematical_literacy.png" medium="image" type="image/png" height="143" width="144"/>
 </item>
 <item>
   <title>From the foundation up: Fashion-MNIST basics from Lesson 10</title>
@@ -5277,113 +5682,6 @@ In this post you learned:
   <category>datavalidation</category>
   <guid>https://mlops.systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</guid>
   <pubDate>Mon, 25 Apr 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/great_expectations/g_e_logo.jpeg" medium="image" type="image/jpeg"/>
-</item>
-<item>
-  <title>How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/categories/#redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
-<p><strong>Data validation is a process of verifying that data is accurate and consistent. It plays a crucial role in end-to-end machine learning pipelines.</strong></p>
-<p><strong>There is a lack of validation tools in Computer Vision (CV) due the complexity of the data used by the domain.</strong></p>
-<p><strong>In this series of articles, I will show you how to leverage the <a href="https://greatexpectations.io">Great Expectations</a> open-source library to validate object detection data. This will help you to feed your model with data less prone to break your model performance.</strong></p>
-<p>When something goes wrong with a newly trained or newly deployed version of your model, where do you look first? Where does your gut tell you the bug or issue is likely to be found? For me, knee deep into my redaction model project, I immediately think of my data. For sure, I could probably have more in the way of testing to be sure my code is working how I expect it to work, but issues with the data are far more likely to be silent killers. Issues with data are unlikely to raise a loud exception and suddenly bring my training to a stop. Instead, my training will continue, but I’ll either get really unsatisfactory results or I’ll get results that are underperforming the real potential of the data I’m feeding into my model. That’s the scary part: I most likely won’t even know that my data is broken or faulty.</p>
-<iframe src="https://giphy.com/embed/YTJXDIivNMPuNSMgc0" width="442" height="480" frameborder="0" class="giphy-embed" allowfullscreen="">
-</iframe>
-<p>For software engineers, testing your code is a tried-and-tested way to find some confidence in what you’re trying to accomplish. (I am exploring some of these best practices in <a href="https://mlops.systems/categories/#robustpython">my review series</a> about Patrick Viafore’s excellent <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8"><em>Robust Python</em></a>book, which covers testing along with typing and various other patterns.) For critical systems, testing is one of the things that allows you to sleep soundly. For those living in the world of machine learning or data science, data validation is like writing tests for your data. You can be confident that your data looks and has the shape of what you feel it should when you address the data quality issue head-on.</p>
-<p>If you think of your model training workflow as a pipeline, there are certain places where it makes sense to do some kind of data validation:</p>
-<ul>
-<li>at the very beginning, when you’re seeing your data for the first time: a lot of exploration and basic analysis really helps at this point. It will help you build up intuition for the general patterns and boundaries of the data you’re going to use to train your model.</li>
-<li>any time you do some kind of conversion: perhaps you have to — as I do with my project — convert from one image annotation format into another and you’re juggling x and y coordinates constantly, or maybe you’re using different image formats at different points?</li>
-<li>prior to training your model: ‘garbage in, garbage out’ as the saying goes… You probably want to make sure that you only have high quality data passing through into your model training pipeline step.</li>
-<li>as part of a continuous training loop: perhaps you’ve trained and deployed a model, but now a few months have passed, you have more data and you want to retrain your model. Are you confident that the new data retains the same characteristics and qualities of your original data?</li>
-</ul>
-<p>As you can see, there are many different approaches that you might take. To discuss where you might want to validate your data is to discuss where your processes might be flawed in some way. For most projects of any size or significance, you probably will find that taking the care with your data inputs will pay dividends.</p>
-<section id="data-validation-and-computer-vision" class="level1">
-<h1>Data validation and computer vision</h1>
-<p>It often seems like computer vision exists in a world unto its own, particularly when it comes to the data used to train models. These idiosyncrasies amount to a strong case for some kind of data validation:</p>
-<ul>
-<li>image data isn’t always easily introspectable, especially on the aggregate level (i.e.&nbsp;what is the ‘average’ of a series of images, or how to think of the standard deviation of your images?)</li>
-<li>for something like object detection, the annotations are stored in a separate location from the images to which they correspond, leaving the door open for a creeping data drift between the original image locations and what is listed in the annotations.</li>
-<li>For massive data sets, the original data will likely not be stored in the environment where you’re doing some fine-tuning with new data.</li>
-<li>Different model architectures require different kinds of pre-processing for your data and sometimes annotations need converting into slightly different formats (perhaps for your evaluation metric)</li>
-<li>The pure images (or image-adjacent objects like medical scans) contain a lot of sub-surface metadata that isn’t easily accessed and isn’t automatically used as criteria for comparison or error detection.</li>
-</ul>
-<p>In short, there are lots of ways that training a computer vision model can go wrong, and implementing even basic safeguards against this can give you confidence in the data you’re using. Unfortunately, the landscape of tooling for data validation in the computer vision space feels like it’s lagging behind what exists for tabular data, for example, but that’s almost certainly because it’s just a harder problem. The big data validation libraries don’t really cater towards computer vision as a core domain, and (as you’ll see below) you’ll probably have to crowbar your data into the formats they expect.</p>
-</section>
-<section id="big-picture-what-might-this-look-like-for-my-project" class="level1">
-<h1>Big picture: what might this look like for my project?</h1>
-<p>As I outlined above, there are lots of different places where you might want to use some kind of data validation strategy. At the level of code, you might want to make your input and output validation a bit more solid by using type annotations and a type checker like <code>mypy</code>. You can add tests to ensure that edge cases are being handled, and that your assumptions about your code behaviour are proven. You also have your tests to ensure that changes in one function or area of your codebase don’t break something somewhere else.</p>
-<p>At the level of your data, you can of course use simple <code>assert</code> statements within the functional meat of your codebase. For example, at the point where you’re ingesting data pre-training you could assert that each image is of a certain format and size, and perhaps even that annotations associated with that image ‘make sense’ as per the context of whatever problem you’re solving. You can handle some of these assertions and checks with simple conditionals, perhaps, earlier on in the process when you are ingesting or pre-processing your data.</p>
-<p>A significant benefit of having these simple assertions inside your core functions is that you are handling the ways things can go wrong at the same time as you’re writing the functionality itself. A disadvantage is that your code can easily become cluttered with all this non-core behaviour. It feels a little like the validation can become an afterthought in this scenario. For this reason, it seems to make sense to me that you’d want to have one or more dedicated checkpoints where your data undergoes some kind of validation process. In the context of a pipeline, this means you probably will want one or more steps where this happens.</p>
-</section>
-<section id="tradeoffs" class="level1">
-<h1>Tradeoffs</h1>
-<p>For tiny throwaway projects, or for proof-of-concept experimentation, it might not make sense to start off by working up a massive data validation suite. A really rigorous validation process early on might slow you down more than is useful. Instead, simple <code>assert</code> statements coupled with type annotations on your functions might be the way to go for safeguards and will-this-be-readable-in-the-future sanity checks.</p>
-<p>Ideally, you’ll want to create some kind of end-to-end pipeline or workflow at the beginning of your process, since this will allow you to iterate faster in a manner that’s meaningful for whatever you’re trying to solve. With a basic pipeline in place, data validation can be added as a stage of its own without too much disruption once you have an initial working prototype. As with most things in life, investing for the longer term is going to take a bit more upfront effort but that shouldn’t be too much an issue as long as your project has that kind of a horizon to it.</p>
-</section>
-<section id="what-kind-of-validation-does-great-expectations-offer" class="level1">
-<h1>What kind of validation does Great Expectations offer?</h1>
-<p><a href="https://greatexpectations.io">Great Expectations</a> is an open-source data validation tool. It is somewhat agnostic as to what specific use case you have, but I don’t think it’d be wrong to say that it isn’t primarily developed for those working on computer vision problems; tabular data seems to be a much cosier fit.</p>
-<p>I stated above that Great Expectations could be used as if you were adding tests for your data. At a very high level, you can think of it as a fancier way of adding assertions about your data. The ‘expectations’ in the title are like those assertion statements, only in this case there are dozens of different pre-made ‘expectations’ you can choose from. For example, you could assert that you expect that the values of a particular column of a Pandas DataFrame be between 0 and 100, and that if they exceeded those boundaries then it would be only a very small proportion that did so.</p>
-<p>Your expectations make up a ‘suite’, and you run your suite of expectations against a batch or data asset. There are another 10 or 20 concepts or terms that I’d need to define and connect together in a mental map before we covered everything about how Great Expectations works. Unfortunately, this is one of the things I found most confusing about getting to know the library through its documentation. From the outside, it appears that they had one set of terminology, but now it’s partially changed to a different set of terms or abstractions. Presumably for reasons of backwards compatibility, some of the old abstractions remain in the documentation and explanations, which makes it not always clear to understand how the various pieces fit together.</p>
-<p><img src="https://mlops.systems/posts/great_expectations/great_expecations_abstractions.png" title="My initial attempt at understanding how all the abstractions of Great Expectations related to one another…" class="img-fluid"></p>
-<p>You can read <a href="https://docs.greatexpectations.io/docs/glossary">the glossary</a> over at their documentation site if you want to learn more, but for now everything I explained above should suffice.</p>
-<p>There seem to be two main ways of setting up and using Great Expectations. One is heavily interactive and driven by executing cells in a series of notebooks. The other is as you’d expect — code-based using a Python library, backed by some external configuration files and templates. I didn’t find the notebook-based configuration and setup very compelling, but it is the one emphasised in the documentation and in online materials, so I will give it due attention in the next part of this blog series. For now, it might suffice to show a very simple version of how the code-based use works:</p>
-</section>
-<section id="a-simple-example-of-using-great-expectations-for-data-validation" class="level1">
-<h1>A simple example of using Great Expectations for data validation</h1>
-<p>The first thing I did was to convert my annotations data into a Pandas DataFrame. You can use Pandas, SQL and Apache Spark as sources for your data to be validated through Great Expectations, and luckily my COCO annotations file was just a JSON file so it was easily converted. While doing the conversion, I made sure to add some extra metadata along the way: a column noting whether an image or a redaction was horizontal or vertical in its orientation, for example, or splitting the <code>bbox</code> array into its four constituent parts.</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> great_expectations <span class="im" style="color: #00769E;">as</span> ge</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">annotations_df <span class="op" style="color: #5E5E5E;">=</span> ge.from_pandas(pd.DataFrame(annotations))</span>
-<span id="cb1-4"></span>
-<span id="cb1-5">feature_columns <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">'area'</span>, <span class="st" style="color: #20794D;">'iscrowd'</span>, <span class="st" style="color: #20794D;">'image_id'</span>, <span class="st" style="color: #20794D;">'category_id'</span>, <span class="st" style="color: #20794D;">'id'</span>, <span class="st" style="color: #20794D;">'synthetically_generated'</span>, <span class="st" style="color: #20794D;">'category_name'</span>]</span>
-<span id="cb1-6"><span class="cf" style="color: #003B4F;">for</span> col <span class="kw" style="color: #003B4F;">in</span> feature_columns:</span>
-<span id="cb1-7">    annotations_df.expect_column_to_exist(col)</span>
-<span id="cb1-8">    </span>
-<span id="cb1-9">annotations_df.expect_column_values_to_be_in_set(</span>
-<span id="cb1-10">    <span class="st" style="color: #20794D;">"category_name"</span>,</span>
-<span id="cb1-11">    [<span class="st" style="color: #20794D;">"content"</span>, <span class="st" style="color: #20794D;">"redaction"</span>]</span>
-<span id="cb1-12">)</span></code></pre></div>
-<p>Great Expectations wraps the Pandas library, so importing the data was easy. Then adding the expectations (methods beginning with <code>expect…</code>) was trivial. Below you can see the result from the second of the expectations. All of the column values were in that set, so the test passed.</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><span class="fu" style="color: #4758AB;">{</span></span>
-<span id="cb2-2">  <span class="dt" style="color: #AD0000;">"success"</span><span class="fu" style="color: #4758AB;">:</span> <span class="kw" style="color: #003B4F;">true</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-3">  <span class="dt" style="color: #AD0000;">"result"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fu" style="color: #4758AB;">{</span></span>
-<span id="cb2-4">    <span class="dt" style="color: #AD0000;">"element_count"</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">6984</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-5">    <span class="dt" style="color: #AD0000;">"missing_count"</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-6">    <span class="dt" style="color: #AD0000;">"missing_percent"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fl" style="color: #AD0000;">0.0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-7">    <span class="dt" style="color: #AD0000;">"unexpected_count"</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-8">    <span class="dt" style="color: #AD0000;">"unexpected_percent"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fl" style="color: #AD0000;">0.0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-9">    <span class="dt" style="color: #AD0000;">"unexpected_percent_total"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fl" style="color: #AD0000;">0.0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-10">    <span class="dt" style="color: #AD0000;">"unexpected_percent_nonmissing"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fl" style="color: #AD0000;">0.0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-11">    <span class="dt" style="color: #AD0000;">"partial_unexpected_list"</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[]</span></span>
-<span id="cb2-12">  <span class="fu" style="color: #4758AB;">},</span></span>
-<span id="cb2-13">  <span class="dt" style="color: #AD0000;">"meta"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fu" style="color: #4758AB;">{},</span></span>
-<span id="cb2-14">  <span class="dt" style="color: #AD0000;">"exception_info"</span><span class="fu" style="color: #4758AB;">:</span> <span class="fu" style="color: #4758AB;">{</span></span>
-<span id="cb2-15">    <span class="dt" style="color: #AD0000;">"raised_exception"</span><span class="fu" style="color: #4758AB;">:</span> <span class="kw" style="color: #003B4F;">false</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-16">    <span class="dt" style="color: #AD0000;">"exception_traceback"</span><span class="fu" style="color: #4758AB;">:</span> <span class="kw" style="color: #003B4F;">null</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb2-17">    <span class="dt" style="color: #AD0000;">"exception_message"</span><span class="fu" style="color: #4758AB;">:</span> <span class="kw" style="color: #003B4F;">null</span></span>
-<span id="cb2-18">  <span class="fu" style="color: #4758AB;">}</span></span>
-<span id="cb2-19"><span class="fu" style="color: #4758AB;">}</span></span></code></pre></div>
-<p>In the second part of this series, I’ll explore how the interactive way of using Great Expectations works, and I’ll also show the web results interface for your expectations suite. It’s much fancier than the dictionary / object that was output above, and what’s even better is that you can have Great Expectations make some of its own guesses about what the right expectations for your particular dataset might be.</p>
-<p>I hope for now that I’ve made the case for why data validation is probably worth doing, and started you thinking about how that might apply to a computer vision use case.</p>
-
-
-</section>
-
- ]]></description>
-  <category>tools</category>
-  <category>redactionmodel</category>
-  <category>computervision</category>
-  <category>datavalidation</category>
-  <guid>https://mlops.systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</guid>
-  <pubDate>Mon, 18 Apr 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/great_expectations/g_e_logo.jpeg" medium="image" type="image/jpeg"/>
 </item>
 </channel>

@@ -379,7 +379,7 @@ ERROR: Operation cancelled by user</code></pre>
 <p>Once the features are extracted, we compute the loss as the difference between the features of the generated image and the features of the target image. This difference can be calculated using various metrics, such as the mean squared error (MSE) or the L1-norm.</p>
 <p>The main advantage of perceptual loss is that it is less sensitive to small, local changes in pixel values and focuses more on the overall content of the images. This makes it well-suited for tasks like style transfer, where the objective is to preserve the content of the input image while applying the style of another image. By using a pre-trained feature extractor like VGG-19 the loss function can leverage the knowledge learned from a vast amount of image data to better capture and compare the perceptual content of the images.</p>
 <p>The code below includes my implementation of the perceptual loss function as well as an <code>vgg__iterate_image</code> function that I used to iterate over the image we’re generating.</p>
-<div class="cell">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    gen_features <span class="op">=</span> feature_extractor(generated_image)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    target_features <span class="op">=</span> feature_extractor(target_image)</span>
@@ -426,7 +426,7 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>        display_tensor(image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I also implemented a version for <code>resnet</code> but that didn’t work as well or converge as quickly as <code>vgg19</code> so I’m just including the code for posterity here.</p>
-<div class="cell" data-execution_count="52">
+<div class="cell" data-execution_count="4">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> perceptual_loss(feature_extractor, generated_image, target_image):</span>
@@ -483,7 +483,7 @@ ERROR: Operation cancelled by user</code></pre>
 </div>
 <p>Here we get our target image (a random one of our ‘eight’ digits from the training set) and apply the same transforms to get it in the same size and format as our random noise image.</p>
 <p>I reversed the values of the target image so that instead of being white squiggles on a black background, we now have black squiggles on a white background.</p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>target_image_pil <span class="op">=</span> Image.<span class="bu">open</span>(an_eight).convert(<span class="st">'RGB'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>preprocess <span class="op">=</span> transforms.Compose([</span>
@@ -499,7 +499,7 @@ ERROR: Operation cancelled by user</code></pre>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>max_value <span class="op">=</span> target_image.<span class="bu">max</span>()</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>reversed_target_image <span class="op">=</span> max_value <span class="op">-</span> target_image</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>display_tensor(reversed_target_image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
@@ -557,6 +557,382 @@ ERROR: Operation cancelled by user</code></pre>
 </div>
 <p>It took me a couple of hours to get to this point, and the inference and time to update each iteration was pretty slow. I suspect that it might be faster on a GPU, but I didn’t have one available to me at the time.</p>
 <p>Next time, I’ll try to implement a Siamese network and see if that gives me better results. (First will have to figure out what exactly that is and how it works!)</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>random_sample <span class="op">=</span> get_noisy_starter_tensor()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">12000</span>):</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    vgg_iterate_image(</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        random_sample,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        reversed_target_image,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        i,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        update_rate<span class="op">=</span><span class="fl">8.0</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        update_printout<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/strickvl/.pyenv/versions/3.10.4/envs/mlops-blog/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG19_Weights.IMAGENET1K_V1`. You can also use `weights=VGG19_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 0 / grad_sum: -0.10067621618509293, loss: 3.2533576488494873</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 200 / grad_sum: -0.05489164963364601, loss: 1.8312240839004517</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 400 / grad_sum: -0.054107874631881714, loss: 1.5468450784683228</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-7.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 600 / grad_sum: -0.07920947670936584, loss: 1.4032789468765259</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-9.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 800 / grad_sum: -0.11411219835281372, loss: 1.2947640419006348</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-11.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1000 / grad_sum: -0.14544689655303955, loss: 1.2132982015609741</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-13.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1200 / grad_sum: -0.16940060257911682, loss: 1.1574007272720337</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-15.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1400 / grad_sum: -0.18719588220119476, loss: 1.108056664466858</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-17.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1600 / grad_sum: -0.2136225700378418, loss: 1.0530391931533813</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-19.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 1800 / grad_sum: -0.2254064530134201, loss: 0.9971842169761658</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-21.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2000 / grad_sum: -0.2527287006378174, loss: 0.9344728589057922</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-23.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2200 / grad_sum: -0.26381513476371765, loss: 0.8655626177787781</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-25.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2400 / grad_sum: -0.26774412393569946, loss: 0.7914406657218933</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-27.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2600 / grad_sum: -0.2612324655056, loss: 0.726896345615387</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-29.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 2800 / grad_sum: -0.2553003430366516, loss: 0.6689462661743164</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-31.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3000 / grad_sum: -0.2531996965408325, loss: 0.6113003492355347</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-33.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3200 / grad_sum: -0.25401824712753296, loss: 0.5582084655761719</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-35.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3400 / grad_sum: -0.2472103387117386, loss: 0.5116526484489441</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-37.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3600 / grad_sum: -0.23793253302574158, loss: 0.4699331820011139</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-39.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 3800 / grad_sum: -0.22248002886772156, loss: 0.4433839023113251</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-41.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4000 / grad_sum: -0.20998376607894897, loss: 0.3811723291873932</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-43.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4200 / grad_sum: -0.19712524116039276, loss: 0.37239381670951843</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-45.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4400 / grad_sum: -0.16977882385253906, loss: 0.34740307927131653</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-47.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4600 / grad_sum: -0.16369280219078064, loss: 0.3144417703151703</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-49.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 4800 / grad_sum: -0.12760969996452332, loss: 0.32315561175346375</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-51.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5000 / grad_sum: -0.1290731281042099, loss: 0.2868266999721527</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-53.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5200 / grad_sum: -0.09261088073253632, loss: 0.26794564723968506</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-55.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5400 / grad_sum: -0.08580854535102844, loss: 0.26148849725723267</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-57.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5600 / grad_sum: -0.06559965014457703, loss: 0.26385462284088135</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-59.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 5800 / grad_sum: -0.025712519884109497, loss: 0.273421049118042</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-61.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6000 / grad_sum: -0.04072136431932449, loss: 0.22964514791965485</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-63.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6200 / grad_sum: -0.030087554827332497, loss: 0.25004929304122925</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-65.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6400 / grad_sum: -0.032913655042648315, loss: 0.25699320435523987</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-67.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6600 / grad_sum: -0.021285470575094223, loss: 0.23544834554195404</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-69.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 6800 / grad_sum: -0.015309110283851624, loss: 0.22240281105041504</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-71.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7000 / grad_sum: -0.002907566726207733, loss: 0.256386399269104</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-73.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7200 / grad_sum: -0.013432338833808899, loss: 0.24497221410274506</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-75.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7400 / grad_sum: 0.002584397792816162, loss: 0.24868912994861603</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-77.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7600 / grad_sum: -0.009248964488506317, loss: 0.2450336366891861</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-79.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 7800 / grad_sum: -0.0018646717071533203, loss: 0.25336411595344543</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-81.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8000 / grad_sum: -0.013653086498379707, loss: 0.24088498950004578</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-83.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8200 / grad_sum: -0.01744297333061695, loss: 0.20649825036525726</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-85.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8400 / grad_sum: -0.00710982084274292, loss: 0.2272096574306488</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-87.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8600 / grad_sum: 0.004392959177494049, loss: 0.22836482524871826</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-89.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 8800 / grad_sum: -0.005208563059568405, loss: 0.2397071272134781</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-91.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9000 / grad_sum: -0.004147965461015701, loss: 0.23213578760623932</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-93.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9200 / grad_sum: -0.011317238211631775, loss: 0.23897279798984528</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-95.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9400 / grad_sum: 0.0013678669929504395, loss: 0.21524861454963684</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-97.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9600 / grad_sum: -0.0031454861164093018, loss: 0.24317485094070435</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-99.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 9800 / grad_sum: 0.0048993900418281555, loss: 0.22074298560619354</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-101.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10000 / grad_sum: 0.000981885939836502, loss: 0.20930485427379608</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-103.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10200 / grad_sum: -0.010918810963630676, loss: 0.2221449315547943</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-105.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10400 / grad_sum: -0.009839233011007309, loss: 0.2183818370103836</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-107.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10600 / grad_sum: 0.007621109485626221, loss: 0.21323300898075104</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-109.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 10800 / grad_sum: 0.004075892269611359, loss: 0.2392408847808838</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-111.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11000 / grad_sum: 0.0029926151037216187, loss: 0.22209693491458893</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-113.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11200 / grad_sum: -0.00012520700693130493, loss: 0.2071794718503952</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-115.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11400 / grad_sum: -0.008496522903442383, loss: 0.22705934941768646</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-117.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11600 / grad_sum: -0.0059080421924591064, loss: 0.1998962163925171</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-119.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iter 11800 / grad_sum: 0.006994262337684631, loss: 0.20933829247951508</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2023-03-18-stable-eights-part-two_files/figure-html/cell-10-output-121.png" class="img-fluid"></p>
+</div>
+</div>
 
 
 </section>
