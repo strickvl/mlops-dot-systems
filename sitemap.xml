@@ -2,258 +2,262 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mlops.systems/posts/2021-11-27-safety-vulnerability-checker.html</loc>
-    <lastmod>2023-03-25T19:54:58.464Z</lastmod>
+    <lastmod>2023-04-28T09:47:41.817Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-10-24-foundations-mnist-basics.html</loc>
-    <lastmod>2023-03-25T19:54:59.182Z</lastmod>
+    <lastmod>2023-04-28T09:47:43.101Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-06-redaction-classification-chapter-2.html</loc>
-    <lastmod>2023-03-25T19:54:59.609Z</lastmod>
+    <lastmod>2023-04-28T09:47:43.948Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-03-03-model-improvements.html</loc>
-    <lastmod>2023-03-25T19:54:59.914Z</lastmod>
+    <lastmod>2023-04-28T09:47:44.564Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-03-25-paperspace-docker-icevision.html</loc>
-    <lastmod>2023-03-25T19:55:00.235Z</lastmod>
+    <lastmod>2023-04-28T09:47:45.143Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2023-03-18-stable-eights-part-two.html</loc>
-    <lastmod>2023-03-25T19:55:00.867Z</lastmod>
+    <lastmod>2023-04-28T09:47:46.430Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-09-07-serialisation.html</loc>
-    <lastmod>2023-03-25T19:55:01.348Z</lastmod>
+    <lastmod>2023-04-28T09:47:47.322Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-11-27-pipeline-conversations.html</loc>
-    <lastmod>2023-03-25T19:55:01.619Z</lastmod>
+    <lastmod>2023-04-28T09:47:47.979Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-03-robust-python-3.html</loc>
-    <lastmod>2023-03-25T19:55:01.942Z</lastmod>
+    <lastmod>2023-04-28T09:47:48.532Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mlops.systems/posts/2023-04-28-removing-git-commits.html</loc>
+    <lastmod>2023-04-28T09:47:49.655Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-02-08-robust-python-10.html</loc>
-    <lastmod>2023-03-25T19:55:02.300Z</lastmod>
+    <lastmod>2023-04-28T09:47:50.455Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-08-baseline-mlops-understanding.html</loc>
-    <lastmod>2023-03-25T19:55:02.598Z</lastmod>
+    <lastmod>2023-04-28T09:47:50.978Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-10-25-debugging.html</loc>
-    <lastmod>2023-03-25T19:55:02.927Z</lastmod>
+    <lastmod>2023-04-28T09:47:51.569Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-18-writing-code.html</loc>
-    <lastmod>2023-03-25T19:55:03.209Z</lastmod>
+    <lastmod>2023-04-28T09:47:52.130Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-11-fashion-mnist-pixel-similarity.html</loc>
-    <lastmod>2023-03-25T19:55:03.764Z</lastmod>
+    <lastmod>2023-04-28T09:47:53.239Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-14-python-versioning-package-managers.html</loc>
-    <lastmod>2023-03-25T19:55:04.117Z</lastmod>
+    <lastmod>2023-04-28T09:47:53.980Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-12-29-robust-python-1.html</loc>
-    <lastmod>2023-03-25T19:55:04.408Z</lastmod>
+    <lastmod>2023-04-28T09:47:54.594Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-10-16-notational-precedence.html</loc>
-    <lastmod>2023-03-25T19:55:04.711Z</lastmod>
+    <lastmod>2023-04-28T09:47:55.351Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-30-robust-python-8.html</loc>
-    <lastmod>2023-03-25T19:55:05.288Z</lastmod>
+    <lastmod>2023-04-28T09:47:56.612Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</loc>
-    <lastmod>2023-03-25T19:55:05.682Z</lastmod>
+    <lastmod>2023-04-28T09:47:57.435Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/saba.html</loc>
-    <lastmod>2023-03-25T19:55:05.953Z</lastmod>
+    <lastmod>2023-04-28T09:47:58.014Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-11-21-on-failure.html</loc>
-    <lastmod>2023-03-25T19:55:06.235Z</lastmod>
+    <lastmod>2023-04-28T09:47:58.592Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</loc>
-    <lastmod>2023-03-25T19:55:06.533Z</lastmod>
+    <lastmod>2023-04-28T09:47:59.255Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</loc>
-    <lastmod>2023-03-25T19:55:06.904Z</lastmod>
+    <lastmod>2023-04-28T09:48:00.007Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-02-10-synthetic-image-data.html</loc>
-    <lastmod>2023-03-25T19:55:07.390Z</lastmod>
+    <lastmod>2023-04-28T09:48:00.960Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</loc>
-    <lastmod>2023-03-25T19:55:07.775Z</lastmod>
+    <lastmod>2023-04-28T09:48:01.777Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</loc>
-    <lastmod>2023-03-25T19:55:08.327Z</lastmod>
+    <lastmod>2023-04-28T09:48:02.767Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-12-30-robust-python-2.html</loc>
-    <lastmod>2023-03-25T19:55:08.654Z</lastmod>
+    <lastmod>2023-04-28T09:48:03.368Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-10-chapter1and2recall.html</loc>
-    <lastmod>2023-03-25T19:55:08.955Z</lastmod>
+    <lastmod>2023-04-28T09:48:03.918Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-12-11-redaction-progress-week-one.html</loc>
-    <lastmod>2023-03-25T19:55:09.284Z</lastmod>
+    <lastmod>2023-04-28T09:48:04.501Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-16-ch4-tensors.html</loc>
-    <lastmod>2023-03-25T19:55:09.764Z</lastmod>
+    <lastmod>2023-04-28T09:48:05.446Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</loc>
-    <lastmod>2023-03-25T19:55:10.071Z</lastmod>
+    <lastmod>2023-04-28T09:48:06.117Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-11-25-entr-reruns-tests.html</loc>
-    <lastmod>2023-03-25T19:55:10.378Z</lastmod>
+    <lastmod>2023-04-28T09:48:06.682Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</loc>
-    <lastmod>2023-03-25T19:55:10.635Z</lastmod>
+    <lastmod>2023-04-28T09:48:07.409Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-11-26-environment-variables.html</loc>
-    <lastmod>2023-03-25T19:55:10.934Z</lastmod>
+    <lastmod>2023-04-28T09:48:07.967Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-06-nbdev-early-impressions.html</loc>
-    <lastmod>2023-03-25T19:55:11.276Z</lastmod>
+    <lastmod>2023-04-28T09:48:08.663Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-02-05-robust-python-9.html</loc>
-    <lastmod>2023-03-25T19:55:11.608Z</lastmod>
+    <lastmod>2023-04-28T09:48:09.240Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-18-reading-python.html</loc>
-    <lastmod>2023-03-25T19:55:11.931Z</lastmod>
+    <lastmod>2023-04-28T09:48:09.800Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-12-15-redaction-taxonomy.html</loc>
-    <lastmod>2023-03-25T19:55:12.232Z</lastmod>
+    <lastmod>2023-04-28T09:48:10.507Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-31-redaction-production-introduction.html</loc>
-    <lastmod>2023-03-25T19:55:12.720Z</lastmod>
+    <lastmod>2023-04-28T09:48:11.603Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-08-robust-python-4.html</loc>
-    <lastmod>2023-03-25T19:55:13.046Z</lastmod>
+    <lastmod>2023-04-28T09:48:12.225Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</loc>
-    <lastmod>2023-03-25T19:55:13.527Z</lastmod>
+    <lastmod>2023-04-28T09:48:13.052Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-07-redaction-mvp-huggingface.html</loc>
-    <lastmod>2023-03-25T19:55:13.983Z</lastmod>
+    <lastmod>2023-04-28T09:48:13.793Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-18-robust-python-5.html</loc>
-    <lastmod>2023-03-25T19:55:14.356Z</lastmod>
+    <lastmod>2023-04-28T09:48:14.522Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2023-03-25-tricks-are-the-thing.html</loc>
-    <lastmod>2023-03-25T19:55:14.676Z</lastmod>
+    <lastmod>2023-04-28T09:48:15.069Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-11-30-vfnet-basics.html</loc>
-    <lastmod>2023-03-25T19:55:14.979Z</lastmod>
+    <lastmod>2023-04-28T09:48:15.624Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-24-data-versioning-dvc.html</loc>
-    <lastmod>2023-03-25T19:55:15.709Z</lastmod>
+    <lastmod>2023-04-28T09:48:17.002Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-16-midway-report-redaction-project.html</loc>
-    <lastmod>2023-03-25T19:55:16.035Z</lastmod>
+    <lastmod>2023-04-28T09:48:17.573Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</loc>
-    <lastmod>2023-03-25T19:55:16.475Z</lastmod>
+    <lastmod>2023-04-28T09:48:18.322Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-09-auto-reload-external-libraries.html</loc>
-    <lastmod>2023-03-25T19:55:16.759Z</lastmod>
+    <lastmod>2023-04-28T09:48:18.976Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-03-21-docker-in-a-month.html</loc>
-    <lastmod>2023-03-25T19:55:17.305Z</lastmod>
+    <lastmod>2023-04-28T09:48:19.980Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-22-robust-python-6.html</loc>
-    <lastmod>2023-03-25T19:55:17.903Z</lastmod>
+    <lastmod>2023-04-28T09:48:21.085Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-11-29-prodigy-object-detection-training.html</loc>
-    <lastmod>2023-03-25T19:55:18.726Z</lastmod>
+    <lastmod>2023-04-28T09:48:22.419Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-01-01-counter.html</loc>
-    <lastmod>2023-03-25T19:55:19.933Z</lastmod>
+    <lastmod>2023-04-28T09:48:24.687Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-12-seven-steps-gradient-calculations.html</loc>
-    <lastmod>2023-03-25T19:55:20.321Z</lastmod>
+    <lastmod>2023-04-28T09:48:25.544Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-09-11-tfx-paper.html</loc>
-    <lastmod>2023-03-25T19:55:20.693Z</lastmod>
+    <lastmod>2023-04-28T09:48:26.567Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2021-12-29-j-language.html</loc>
-    <lastmod>2023-03-25T19:55:21.006Z</lastmod>
+    <lastmod>2023-04-28T09:48:27.263Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-05-21-nlp-redaction-classifier.html</loc>
-    <lastmod>2023-03-25T19:55:21.440Z</lastmod>
+    <lastmod>2023-04-28T09:48:28.238Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</loc>
-    <lastmod>2023-03-25T19:55:21.872Z</lastmod>
+    <lastmod>2023-04-28T09:48:29.412Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-02-27-python-parsers.html</loc>
-    <lastmod>2023-03-25T19:55:22.158Z</lastmod>
+    <lastmod>2023-04-28T09:48:30.157Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-03-12-fiftyone-computervision.html</loc>
-    <lastmod>2023-03-25T19:55:22.568Z</lastmod>
+    <lastmod>2023-04-28T09:48:31.111Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</loc>
-    <lastmod>2023-03-25T19:55:22.978Z</lastmod>
+    <lastmod>2023-04-28T09:48:32.596Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</loc>
-    <lastmod>2023-03-25T19:55:23.481Z</lastmod>
+    <lastmod>2023-04-28T09:48:34.033Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/index.html</loc>
-    <lastmod>2023-03-25T19:55:24.822Z</lastmod>
+    <lastmod>2023-04-28T09:48:37.506Z</lastmod>
   </url>
   <url>
     <loc>https://mlops.systems/about.html</loc>
-    <lastmod>2023-03-25T19:55:25.086Z</lastmod>
+    <lastmod>2023-04-28T09:48:38.019Z</lastmod>
   </url>
 </urlset>

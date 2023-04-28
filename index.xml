@@ -10,7 +10,41 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Fri, 24 Mar 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 27 Apr 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>How to remove a commit (or two) from your git branch</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-04-28-removing-git-commits.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I ran into a problem where a tool I was using auto-updated my git branch, forcing dozens of changes. The changes were relatively innocuous, but they were irrelevant to the work I was doing which would make reviewing the Pull Request pretty hard going.</p>
+<p>This is what I did to remove the traces of that commit from my git branch logs:</p>
+<p>First, make sure you are on the branch where the commit you want to remove exists. If not, switch to that branch using:</p>
+<pre class="shell"><code>git checkout &lt;branch_name&gt;</code></pre>
+<p>Use <code>git log</code> to find the commit hash (the unique identifier) of the commit you want to remove. The commit hash will be a long string of characters and numbers, e.g., <code>ab12cd34ef56gh78ij90kl12mn34op56qr78st90</code>.</p>
+<p>Use <code>git rebase -i</code> (interactive rebase) to remove the commit. This command will open an editor where you can manipulate the commit history. Use the commit hash that’s one before the one you want to remove:</p>
+<pre class="shell"><code>git rebase -i &lt;parent_commit_hash&gt;</code></pre>
+<p>In the editor that opens, you will see a list of commits starting from the parent commit hash you provided. Find the line with the commit you want to remove. Change the word pick at the beginning of that line to drop or simply delete the entire line. Save and close the editor. (Alternatively, if you’re using VS Code, a sort of UI interface will open which will allow you to select from drop-down pickers which options you want for each of the downstream commits. There is a button at the bottom to switch to the pure text interface if you prefer.)</p>
+<p>Git will perform the rebase, removing the specified commit from the commit tree.</p>
+<p>If you’re satisfied with the changes, push your branch to the remote repository:</p>
+<pre class="shell"><code>git push -f origin &lt;branch_name&gt;</code></pre>
+<p><strong>Important Note:</strong> Using <code>git push -f</code> (force push) can be dangerous, as it overwrites the remote branch with your local one. Make sure you are confident about your changes before using this command. If you’re working on a shared branch with others it’s important to communicate with your team to ensure that no one else is working on the same branch to avoid losing any work.</p>
+<p>The commits I’d made after the one I wanted to remove didn’t overlap or relate to each other, so I didn’t face any conflicts during the rebase process. However, if you do encounter conflicts, you’ll need to resolve them manually and continue with the rebase using <code>git rebase --continue</code>.</p>
+<p>Remember that rebasing and force pushing can rewrite the commit history, so always be cautious when performing these operations.</p>
+
+
+
+ ]]></description>
+  <category>git</category>
+  <category>softwareengineering</category>
+  <category>versioncontrol</category>
+  <guid>https://mlops.systems/posts/2023-04-28-removing-git-commits.html</guid>
+  <pubDate>Thu, 27 Apr 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/tree-picking.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>The Trick Is The Thing, Part II</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -5555,134 +5589,6 @@ In this post you learned:
   <guid>https://mlops.systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</guid>
   <pubDate>Wed, 27 Apr 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/great_expectations/evidently_ai_logo_fi.png" medium="image" type="image/png" height="77" width="144"/>
-</item>
-<item>
-  <title>How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 2)</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/categories/#redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
-<p>In <a href="https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/19/data-validation-great-expectations-part-1.html">the first part</a> of this series, I made the case for why you might want to include some kind of data validation if you’re working on training a model in general, and if your working on object detection in specific. There are many things that can go wrong with your data inputs and you ought to have some kind of safeguards in place to prevent some tricky failures and bugs.</p>
-<section id="tldr-for-data-validation-with-great-expectations" class="level2">
-<h2 class="anchored" data-anchor-id="tldr-for-data-validation-with-great-expectations">TL;DR for data validation with Great Expectations</h2>
-<ul>
-<li><p>👀 Data validation helps give you confidence in the raw ingredients that feed into your models, especially in scenarios where you retrain or fine-tune regularly.</p></li>
-<li><p>✅ For object detection problems, there are many ways your data can fail in some silent way. You should want to be aware of when your training data isn’t meeting your assumptions of what it should look like.</p></li>
-<li><p>🛠 Great Expectations is a general purpose data validation tool that goes a long way to restoring trust in your data, and their automatic profiling feature is really useful when getting started.</p></li>
-<li><p>💪 In this second post on data validation for the computer vision context, I show how you can use the automatic profiling feature of Great Expectations to get you started with increasing your confidence in your object detection annotations. I will show you a concrete example where I created some validation rules for my manually-annotated dataset. I then applied those rules to my synthetic dataset in order to validate it.</p></li>
-</ul>
-</section>
-<section id="initial-notebook-based-setup" class="level2">
-<h2 class="anchored" data-anchor-id="initial-notebook-based-setup">Initial notebook-based setup</h2>
-<p>In <a href="https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/19/data-validation-great-expectations-part-1.html">the last post</a> I showed how you can easily use the Great Expectations library directly on a Pandas <code>DataFrame</code>, manually specifying values you expect to be the case for your data. For example, perhaps your data should always have certain columns, or the values of a certain column should always be a certain type or mostly range between certain values. You can <a href="https://docs.greatexpectations.io/docs/guides/expectations/how_to_create_and_edit_expectations_based_on_domain_knowledge_without_inspecting_data_directly">define all these fairly easily</a>, leveraging your domain knowledge of the data.</p>
-<p>If you know you’re going to want to use Great Expectations as a more fully-fledged part of your pipeline or workflow, you’ll probably want to go through the more extensive setup stages and create a dedicated ‘context’ which can be longer-lasting than just length of your script runtime. Think of the ‘context’ as somewhere all your expectations and configuration of how to access your data is stored.</p>
-<p>Full instructions on how to set all this up can be found <a href="https://docs.greatexpectations.io/docs/guides/setup/setup_overview/">in the docs</a>, but for the most part it’s a matter of <code>pip</code> installing Great Expectations, running <code>great_expectations init</code> , and then <code>great_expectations datasource new</code>.</p>
-<p>That final command will take you through an interactive setup that has you fill in and amend Jupyter notebooks. (I’m not fully sold on the prominence of this workflow that has you spinning up a Jupyter runtime, dynamically editing notebooks and so on, but I found doing it for my project wasn’t as inconvenient as I’d expected. Plus, there are non-interactive and pure Pythonic ways to get everything configured if you need or prefer that.)</p>
-<p>Once you have your context created and your data sources connected, you can move on to the main course: using <a href="https://docs.greatexpectations.io/docs/terms/profiler">the Profiler</a>.</p>
-</section>
-<section id="using-the-great-expectations-profiler" class="level2">
-<h2 class="anchored" data-anchor-id="using-the-great-expectations-profiler">Using the Great Expectations Profiler</h2>
-<p>Setting up your validations (i.e.&nbsp;your ‘expectations’) for your data can be done in a number of different ways. We saw <a href="https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/19/data-validation-great-expectations-part-1.html">last time</a> how you can define these manually, but in this post I want to show how you can follow another recommended workflow by allowing the profiler to review your data and to make an initial set of assumptions about the boundaries and patterns embedded in those values.</p>
-<p>Note, <a href="https://docs.greatexpectations.io/docs/guides/expectations/how_to_create_and_edit_expectations_with_a_profiler/">as the docs mention</a>, the expectations that are automatically generated from your dataset are “deliberately over-fitted on your data”. This means that if your <code>DataFrame</code> has 10,321 rows, one of the expectations generated will be that datasets due for validation with this suite of expectations will also have exactly 10,321 rows:</p>
-<blockquote class="blockquote">
-<p>“The intention is for this Expectation Suite to be edited and updated to better suit your specific use case - it is not specifically intended to be used as is.” (<a href="https://docs.greatexpectations.io/docs/guides/expectations/how_to_create_and_edit_expectations_with_a_profiler/">source</a>)</p>
-</blockquote>
-<p>You’ll want and have to do a decent amount of manual checking through, amending and updating any expectations that get created during this process. That said, I am finding that it makes a lot of sense to start with some kind of initial baseline of assumptions that can be corrected versus starting from complete zero and building things up purely based on your domain knowledge of the data.</p>
-<p>Needless to say, this whole process assumes you have a decent grasp on the domain context and have explored your data already. You probably wouldn’t go to the trouble of setting up Great Expectations if you were doing something that required only a quick solution, but it bears repeating that the expectations you define are only as good as your understanding of the limits and underlying realities of your data. This is probably why something like Great Expectations lends itself quite well to a data-centric approach.</p>
-<p>Getting the profiler to work requires a few interlocking abstractions to be created or instantiated:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">expectation_suite_name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"redaction_annotations_suite"</span></span>
-<span id="cb1-2"></span>
-<span id="cb1-3">main_batch_request <span class="op" style="color: #5E5E5E;">=</span> RuntimeBatchRequest(</span>
-<span id="cb1-4">    datasource_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"redaction_data"</span>,</span>
-<span id="cb1-5">    data_connector_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"default_runtime_data_connector_name"</span>,</span>
-<span id="cb1-6">    data_asset_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"main_annotations_df"</span>,  <span class="co" style="color: #5E5E5E;"># This can be anything that identifies this data_asset for you</span></span>
-<span id="cb1-7">    runtime_parameters<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"batch_data"</span>: main_annotations_df},  <span class="co" style="color: #5E5E5E;"># df is your dataframe</span></span>
-<span id="cb1-8">    batch_identifiers<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"default_identifier_name"</span>: <span class="st" style="color: #20794D;">"default_identifier"</span>},</span>
-<span id="cb1-9">)</span>
-<span id="cb1-10"></span>
-<span id="cb1-11">context.create_expectation_suite(</span>
-<span id="cb1-12">    expectation_suite_name<span class="op" style="color: #5E5E5E;">=</span>expectation_suite_name, overwrite_existing<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span> <span class="co" style="color: #5E5E5E;"># toggle this as appropriate</span></span>
-<span id="cb1-13">)</span>
-<span id="cb1-14">validator <span class="op" style="color: #5E5E5E;">=</span> context.get_validator(</span>
-<span id="cb1-15">    batch_request<span class="op" style="color: #5E5E5E;">=</span>main_batch_request, expectation_suite_name<span class="op" style="color: #5E5E5E;">=</span>expectation_suite_name</span>
-<span id="cb1-16">)</span>
-<span id="cb1-17"></span>
-<span id="cb1-18">profiler <span class="op" style="color: #5E5E5E;">=</span> UserConfigurableProfiler(profile_dataset<span class="op" style="color: #5E5E5E;">=</span>validator)</span>
-<span id="cb1-19">suite <span class="op" style="color: #5E5E5E;">=</span> profiler.build_suite()</span>
-<span id="cb1-20">context.save_expectation_suite(suite) <span class="co" style="color: #5E5E5E;"># use this to save your suite in the context for reuse</span></span></code></pre></div>
-<p>The above code perhaps seems like a lot, but really all you’re doing is getting your data, making the relevant connections between Great Expectations and your context, and then running the profiler so it can work its magic.</p>
-<p><img src="https://mlops.systems/posts/great_expectations/profiler.jpg" title="You'll see output from the final `build_suite()` call that looks something like this." class="img-fluid"></p>
-<p>You can’t yet see the specific values that were imputed from your data, but even this high-level output shows you some of the expectations that it’s thinking would be useful to create.</p>
-<p>At this stage, you’ll want to take some time to review the specific expectations. You’ll want to:</p>
-<ul>
-<li>ensure that they make sense for your dataset</li>
-<li>remove any of the really rigid expectations (e.g.&nbsp;that any dataset must have exactly the same number of rows)</li>
-<li>use the inputed expectations as a springboard for any other ideas that might come to mind</li>
-</ul>
-<p>Note that this is an essential step to complete before moving forward. You could use the unedited auto-generated expectations suite as your data validation, but it would almost certainly have little use or value for you. <em>The auto-generated suite is a starting place that you need to amend and tailor to your specific situation.</em></p>
-<p>In my case, I was able to amend some of the <code>min</code> / <code>max</code> values to more suitable defaults. (You amend these expectations in the <code>.json</code> file that was created inside the <code>expectations</code> subfolder within your context.) I also included some other domain-driven expectations that the profiler couldn’t have known to include. For example, I know from having immersed myself in this data for several months now that most annotations should have a ‘horizontal’ or ‘square’ orientation. Great Expectations doesn’t create this expectation automatically, so I add it to the list of basic assumptions already generated.</p>
-</section>
-<section id="viewing-data-docs-reports-on-validated-data" class="level2">
-<h2 class="anchored" data-anchor-id="viewing-data-docs-reports-on-validated-data">Viewing Data Docs reports on validated data</h2>
-<p>Once you have a suite of expectations set up to your liking, you can run a checkpoint against your original data just to make sure you haven’t introduced or amended something that doesn’t match up with the original data. You should get no errors at this point.</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">checkpoint_config <span class="op" style="color: #5E5E5E;">=</span> {</span>
-<span id="cb2-2">    <span class="st" style="color: #20794D;">"name"</span>: <span class="st" style="color: #20794D;">"my_checkpoint"</span>,</span>
-<span id="cb2-3">    <span class="st" style="color: #20794D;">"config_version"</span>: <span class="dv" style="color: #AD0000;">1</span>,</span>
-<span id="cb2-4">    <span class="st" style="color: #20794D;">"class_name"</span>: <span class="st" style="color: #20794D;">"SimpleCheckpoint"</span>,</span>
-<span id="cb2-5">    <span class="st" style="color: #20794D;">"validations"</span>: [</span>
-<span id="cb2-6">        {</span>
-<span id="cb2-7">            <span class="st" style="color: #20794D;">"batch_request"</span>: {</span>
-<span id="cb2-8">                <span class="st" style="color: #20794D;">"datasource_name"</span>: <span class="st" style="color: #20794D;">"redaction_data"</span>,</span>
-<span id="cb2-9">                <span class="st" style="color: #20794D;">"data_connector_name"</span>: <span class="st" style="color: #20794D;">"default_runtime_data_connector_name"</span>,</span>
-<span id="cb2-10">                <span class="st" style="color: #20794D;">"data_asset_name"</span>: <span class="st" style="color: #20794D;">"main_annotations_df"</span>,</span>
-<span id="cb2-11">            },</span>
-<span id="cb2-12">            <span class="st" style="color: #20794D;">"expectation_suite_name"</span>: expectation_suite_name,</span>
-<span id="cb2-13">        }</span>
-<span id="cb2-14">    ],</span>
-<span id="cb2-15">}</span>
-<span id="cb2-16">context.add_checkpoint(<span class="op" style="color: #5E5E5E;">**</span>checkpoint_config)</span>
-<span id="cb2-17"></span>
-<span id="cb2-18">results <span class="op" style="color: #5E5E5E;">=</span> context.run_checkpoint(</span>
-<span id="cb2-19">    checkpoint_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"my_checkpoint"</span>,</span>
-<span id="cb2-20">    batch_request<span class="op" style="color: #5E5E5E;">=</span>{</span>
-<span id="cb2-21">        <span class="st" style="color: #20794D;">"runtime_parameters"</span>: {<span class="st" style="color: #20794D;">"batch_data"</span>: main_annotations_df},</span>
-<span id="cb2-22">        <span class="st" style="color: #20794D;">"batch_identifiers"</span>: {</span>
-<span id="cb2-23">            <span class="st" style="color: #20794D;">"default_identifier_name"</span>: <span class="st" style="color: #20794D;">"default_identifier"</span></span>
-<span id="cb2-24">        },</span>
-<span id="cb2-25">    },</span>
-<span id="cb2-26">)</span>
-<span id="cb2-27"></span>
-<span id="cb2-28">context.build_data_docs() <span class="co" style="color: #5E5E5E;"># builds data docs to inspect the results</span></span></code></pre></div>
-<p>What you really want, however, is to run your expectations suite against <em>new</em> data. That’s the real value of what Great Expectations brings, i.e.&nbsp;to check that incoming data due to be added to your larger base dataset conforms to the broad realities of that base dataset.</p>
-<p>In my case, the first thing I was interested to check was whether <a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">the synthetic images</a> <a href="https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html">I created</a> would match the expectations suite I’d created based off my core hand-annotated data. (Quick context if you haven’t been following the project so far: I have a core dataset which is manually annotated for the objects inside images. I also created two sets of synthetic data to supplement the manual annotations, which <a href="https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html">boosted my model performance</a> considerably.)</p>
-<p><img src="https://mlops.systems/posts/great_expectations/ge_ui_validation.png" title="The web validation UI looks like this once you generate and open it." class="img-fluid"></p>
-<p>The web UI is where you can go to get a visual overview of where your data is passing and failing to meet your (great) expectations. You will want (and I will need) to configure your expectations suite to meet the core assumptions you make about your data derived from your particular domain.</p>
-<p>For my case, some expectations I will add that are specific to my use case:</p>
-<ul>
-<li>redaction annotations should mostly be of horizontal orientation</li>
-<li>content annotations should mostly be of portrait orientation</li>
-<li>most images should have only one content annotation</li>
-<li>annotations shouldn’t be larger than the associated image, or positioned outside the boundaries of that image. (Because of how you define them, in reality this is several expectations, but conceptually it’s just one or two).</li>
-<li>the area taken up by most annotations should be less than half that taken up by the total image</li>
-</ul>
-<p>…and so on. I hope it’s clear now how Great Expectations can be a tremendous asset that can give you confidence in your data.</p>
-<p>In the next and final post of the series, I will explore some other tools that you can consider when performing these kinds of validation. I will also offer my take on when each tool would be appropriate, as well as where they would be appropriate to use within the machine learning workflow and lifecycle.</p>
-
-
-</section>
-
- ]]></description>
-  <category>tools</category>
-  <category>redactionmodel</category>
-  <category>computervision</category>
-  <category>datavalidation</category>
-  <guid>https://mlops.systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</guid>
-  <pubDate>Mon, 25 Apr 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/great_expectations/g_e_logo.jpeg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>
