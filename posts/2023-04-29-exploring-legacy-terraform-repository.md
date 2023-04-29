@@ -7,7 +7,7 @@ categories:
 date: "2023-04-29"
 description: "Learn the essentials of working with Terraform as a beginner, including basic commands like init, plan, apply, and destroy. Gain insights into code structure, variables, outputs, and providers while exploring a new codebase."
 layout: post
-title: Terraform for the Uninitiated: Demystifying Your First Codebase
+title: "Terraform for the Uninitiated: Demystifying Your First Codebase"
 toc: true
 image: images/terraform-blog.png
 include-before-body:
