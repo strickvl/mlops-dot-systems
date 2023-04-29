@@ -10,7 +10,144 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Thu, 27 Apr 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 28 Apr 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Terraform for the Uninitiated: Demystifying Your First Codebase</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-04-29-exploring-legacy-terraform-repository.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’ve taken on some different responsibilities at work and part of this involves me diving into a repository filled with Terraform HCL code. I have some idea of how Terraform work, how the declarative paradigm is different and how things connect to one another, but getting up to speed and effective in a somewhat complex codebase is the goal here so I’ll need more than just high-level talking points.</p>
+<p>In this post, I share my journey of understanding and working with an existing Terraform codebase, focusing on initial exploration, key concepts, and useful commands. I start with an introduction to basic Terraform commands like init, plan, apply, and destroy. Then, I dive into the structure of a Terraform codebase, discussing root modules, entry points, providers, variables, outputs, and data blocks. I also cover validation and formatting commands, as well as tools to help visualize and document your infrastructure. This guide is ideal for those who, like me, are new to Terraform or tasked with diving into a complex codebase, providing a roadmap for learning and making changes effectively.</p>
+<section id="getting-started" class="level1">
+<h1>🏁 Getting started</h1>
+<p>At its most basic, Terraform is easy to use. A few commands will get you started in a practical sense with the new codebase.</p>
+<ul>
+<li><code>terraform init</code> — do this first. It downloads any information it needs about the providers (i.e.&nbsp;AWS or GCP or whatever) it needs to use for deploying infrastructure. This command doesn’t deploy anything. It will also check whether the code all checks out and is ‘sound’.</li>
+<li><code>terraform plan</code> — this is one way to see what infrastructure will be spun up as a consequence of running <code>terraform apply</code> (see below). It will come up with its plan for what will be deployed (by resolving or reading through all the code). There are options to export this plan as JSON and more, but to start with just the basic command will serve you well.</li>
+<li><code>terraform apply</code> — This is the bread and butter of deploying infrastructure with Terraform. It will run <code>terraform plan</code> first, and then query you if you really want it to make whatever deployments and changes it says that are set to take place. The first time you run this command it might just be deploying infrastructure (if it’s not relating to pre-existing infrastructure), but for other contexts it may not actually do anything since the infrastructure is already deployed. More on this later.</li>
+<li><code>terraform destroy</code> — This is how you delete and destroy code deployed previously with terraform. Just like with <code>apply</code>, you’ll get the <code>plan</code> output and a confirmation message to check that you actually want to remove this infrastructure. Remember that destroying your infrastructure will likely delete data as well, so <em>be careful</em> with this one.</li>
+</ul>
+<p>Armed with these basic commands, a good first place to start with a new codebase might just be <code>terraform plan</code>. It does nothing in terms of actually changing or deploying infrastructure and might give you a sense of whether things are already deployed or what would be deployed if nothing was already deployed.</p>
+<p>In my case, the codebase involves several separate modules, none of which are deployed, so running <code>terraform plan</code> in one of these base folders tells me that 70 resources would be spun up and gives me specific details of those. This is somewhat useful, but it’s still a bit high-level and doesn’t help me really understand the codebase.</p>
+<p>If you have the option, now might actually be the time to deploy that infrastructure. Potentially you could inspect some of it in the AWS console (or wherever it’s deployed), comparing notes between the output of <code>terraform plan</code> or <code>apply</code> and what you see on the screen in front of you.</p>
+<p>Note, too, that terraform CLI commands don’t use double hyphens (<code>--</code>) but just single hyphens (<code>-</code>) which can be a bit confusing at first.</p>
+</section>
+<section id="places-to-look-first" class="level1">
+<h1>👀 Places to look first</h1>
+<p>These are some things to consider as you look through your code. It’s structured sequentially for the most part, i.e.&nbsp;you’ll probably want to start at the entrypoint before you look at outputs.</p>
+<section id="start-at-the-root-modules" class="level2">
+<h2 class="anchored" data-anchor-id="start-at-the-root-modules">🎬 Start at the root &amp; Modules</h2>
+<p>Most Terraform code is structured into modules, which are simply groups of multiple <code>.tf</code> and/or <code>.tf.json</code> files in the same directory. The root module is where you’ll want to start, as specified <a href="https://developer.hashicorp.com/terraform/language/modules">in the docs</a>:</p>
+<blockquote class="blockquote">
+<p>“Every Terraform configuration has at least one module, known as its root module, which consists of the resources defined in the .tf files in the main working directory.”</p>
+</blockquote>
+<p>You can have child modules within that root module (i.e.&nbsp;local files that define other separate modules) or you can load modules from a registry (like the <a href="https://registry.terraform.io/browse/modules">Terraform Registry</a>).</p>
+</section>
+<section id="finding-our-entrypoint" class="level2">
+<h2 class="anchored" data-anchor-id="finding-our-entrypoint">🚪 Finding our entrypoint</h2>
+<p>Most root modules will have a <code>main.tf</code> which we can think of as the main entrypoint for the logic of the code. (Child modules can and will likely have their own set of <code>main.tf</code> as well as variable definitions (see below).)</p>
+<p>I found it hard to reason about declarative code of the kind that you find in terraform codebases, because it’s not simply a question of procedurally running through a series of steps one by one. The work that terraform is actually doing is resolving all the interconnections, dependencies and diffs between the entirety of the code all at once, so it’s counterproductive to try to think of it as happening sequentially.</p>
+</section>
+<section id="providers" class="level2">
+<h2 class="anchored" data-anchor-id="providers">🏥 Providers</h2>
+<p>You’ll likely see some providers being defined in your <code>main.tf</code> file. These are the infrastructure providers that you’re interfacing with when you run <code>apply</code> for your terraform code. The specific logic and definitions for those providers are what gets loaded when you initialise your repository with <code>terraform init</code>. These will look something like this:</p>
+<pre class="hcl"><code>provider "kubernetes" {
+        ...details go here...
+}</code></pre>
+</section>
+<section id="variables" class="level2">
+<h2 class="anchored" data-anchor-id="variables">✏️ Variables</h2>
+<p>Input variables are usually defined in a <code>variables.tf</code> file, which can specify their type, any tags needed to be applied as well as optional defaults. If you define them without any defaults, then running <code>terraform apply</code> will see you being queried about what the values for those variables should be.</p>
+<p>You can pass them in via the command line, for example:</p>
+<pre class="shell"><code>terraform apply -var "server_port=8080"</code></pre>
+<p>With more than a few variables it’s unwise to have that be the way you pass those values in, so you can also optionally set those variables using a <code>terraform.tfvars</code> file. This file is where you’d set specific assignments and you can then pass that in via the command line explicitly or (if it’s named <code>terraform.tfvars</code>) these will just get automatically loaded and applied.</p>
+<pre class="shell"><code>terraform apply -var-file="testing.tfvars"</code></pre>
+<p>To use these variables elsewhere in the code, simply reference the variable name after <code>var.</code>. For example, if your variable is called <code>server_port</code> as mentioned earlier, you would reference <code>var.server_port</code> when you wanted to access the value for that variable.</p>
+<p>You can also specify and declare local variables (accessed through the <code>local.</code> prefix) by declaring a <code>locals</code> block within a specific file. For example:</p>
+<pre class="hcl"><code>locals {
+  service_name = "forum"
+  owner        = "Community Team"
+}</code></pre>
+</section>
+<section id="finding-our-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="finding-our-outputs">📤 Finding our outputs</h2>
+<p>Outputs are values that will be printed in the console output at the end of whatever happens as part of <code>terraform apply</code>. They will also be accessible and available to you later on to query. For example, let’s say you spin up an instance of a Linux machine somewhere. You’ll want to have the IP address of that machine if you want to SSH into it, so you could set that as one of the outputs. Most likely your terraform codebase will have some outputs, usually stored in an <code>outputs.tf</code> file that is pretty straightforward to read.</p>
+</section>
+<section id="data-blocks" class="level2">
+<h2 class="anchored" data-anchor-id="data-blocks">🧱 Data blocks</h2>
+<p>Data blocks are special kinds of resource that allow you to access (read-only) information from some source. It is a way to query a provider’s API for some data. Most providers expose various pieces of data, and these can range from simple things to IP address ranges or AMI IDs and so on. Even the current user’s identity can be accessed through <code>data</code> blocks.</p>
+<p>These are defined inside a <code>data</code> block. For example, if you’re using the <code>aws</code> provider you could get the data for your default VPC with the following:</p>
+<pre class="hcl"><code>data "aws_vpc" "default" {
+    default = true
+}</code></pre>
+<p>Then to use that data elsewhere, you can just reference it using the <code>data.</code> prefix.</p>
+</section>
+</section>
+<section id="checks-and-balances" class="level1">
+<h1>🧐 Checks and balances</h1>
+<p>The above pointers should give you most of what you need to dive into your actual codebase. Specifics will vary based on the specific providers used and the infrastructure types being defined, but that will relate to your specific use case or application. Hopefully you’ll have a sense of that prior to approaching the codebase and those two things together will allow you to do a bit of detective work as to what’s going on.</p>
+<p>At a certain point you’ll maybe start changing things. At that point it’s worth learning two extra commands that will check that what you’re writing is proper HCL.</p>
+<ul>
+<li><code>terraform fmt</code> — This is the same command as is used in Golang to format the files and ensure that everything follows the same canonical format and style. Running the command will auto-format the spacing and potentially make many other minor tweaks. Get into the habit of running this before you commit any updates to your repository.</li>
+<li><code>terraform validate</code> — This checks that your local files are all valid and don’t violate any syntax or consistency rules. It’s something that will also happen when you run <code>terraform apply</code> or <code>terraform plan</code> but sometimes you might just want to validate your local code.</li>
+</ul>
+</section>
+<section id="overview-tricks" class="level1">
+<h1>🗺️ Overview tricks</h1>
+<p>There are some other commands and tools that can help you if you’re dealing with a particularly unwieldy codebase, listed in no particular order.</p>
+<section id="listing-state" class="level2">
+<h2 class="anchored" data-anchor-id="listing-state">📦 Listing State</h2>
+<p>The <a href="https://developer.hashicorp.com/terraform/cli/commands/state/list"><code>terraform state list</code></a> command shows the resource addresses for every resource Terraform knows about in a configuration, optionally filtered by partial resource address.</p>
+<p>These values are managed and stored in a <code>terraform.tfstate</code> file which is either stored locally or in a shared location (perhaps inside an S3 bucket that your team all have configured to connect to). I won’t get into all the details that surround how to handle state (shared or otherwise); for that, see chapter 3 of Brikman’s excellent <em><a href="https://www.terraformupandrunning.com">Terraform Up &amp; Running</a></em>.</p>
+<p>The CLI command is your way to access information about resources without needing to wade through the raw state file itself, and might be interesting to inspect at some point once you have something deployed.</p>
+</section>
+<section id="graphing-your-infrastructure" class="level2">
+<h2 class="anchored" data-anchor-id="graphing-your-infrastructure">📈 Graphing your infrastructure</h2>
+<p>To view a diagram of the infrastructure defined in your code, run the following:</p>
+<pre class="shell"><code>terraform graph -draw-cycles | dot -Tpng &gt; graph.png</code></pre>
+<p>You’ll probably also need <a href="https://graphviz.org/download/">Graphviz</a> to be installed for this to work.</p>
+<p>This will create a PNG file which allows you to visualise the infrastructure defined in all your terraform code. For simple deployments this can be useful, but in my case this was less useful, as you can see from the following section of the image:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/partial-terraform-graph.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Part of a terraform graph output</figcaption><p></p>
+</figure>
+</div>
+<p>As with all these things, try it out and see if it works for you. You can also just export the data in other formats and manipulate them using your preferred graph data structure visualisation tools.</p>
+</section>
+<section id="auto-generated-deployment-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="auto-generated-deployment-documentation">📄 Auto-generated deployment documentation</h2>
+<p>If you’re lucky and whoever wrote the terraform code has taken care to write descriptions for variables and the various modules being used, the next tool might prove quite useful. <a href="https://terraform-docs.io"><code>terraform-docs</code></a> is a way to generate module documentation via a CLI command. Once you’ve installed it, running the following will give you a markdown file that you can preview to learn more about your codebase:</p>
+<pre class="shell"><code>terraform-docs markdown . --output-file docs.md</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/terraform-docs-output.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">An example of output from terraform-docs</figcaption><p></p>
+</figure>
+</div>
+<p>The file that gets output links to the code and underlying files, so it’s a handy way to sort through exactly what is defined from your root module. I’ve personally found this to be really useful and it’s even more so if the <code>description</code> parameters are defined.</p>
+</section>
+</section>
+<section id="onwards" class="level1">
+<h1>Onwards!</h1>
+<p>I wrote this mostly as a reference and an excuse to learn about the topic myself. I hope it might be useful for someone else who is diving into a new codebase without much terraform experience. If you have any other tips or experience with this, please do use the comments below to make those suggestions!</p>
+<p>[Many thanks to <a href="https://www.linkedin.com/in/suvash/">Suvash</a>, <a href="https://www.linkedin.com/in/wjayesh/">Jayesh</a>, and the commenters over on <a href="https://www.reddit.com/r/Terraform/comments/115jonp/how_to_understand_existing_code/">this reddit thread</a> for ideas and guidance.]</p>
+
+
+</section>
+
+ ]]></description>
+  <category>terraform</category>
+  <category>softwareengineering</category>
+  <category>devops</category>
+  <guid>https://mlops.systems/posts/2023-04-29-exploring-legacy-terraform-repository.html</guid>
+  <pubDate>Fri, 28 Apr 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/terraform-blog.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>How to remove a commit (or two) from your git branch</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -5465,130 +5602,6 @@ In this post you learned:
   <guid>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</guid>
   <pubDate>Sun, 01 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/blupus_detection/blupus-training.png" medium="image" type="image/png" height="161" width="144"/>
-</item>
-<item>
-  <title>How to trust the data you feed your model: alternative data validation solutions in a computer vision context (part 3)</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/categories/#redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
-<p>The <a href="https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/19/data-validation-great-expectations-part-1.html">previous</a> <a href="https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/26/data-validation-great-expectations-part-2.html">two</a> posts in this series have made the case for why you might want to consider adding a Great Expectations step or stage to your computer vision project, particularly once it becomes something you’re going to want to iterate on a few times.</p>
-<p>This post begins by showcasing how you can use Evidently’s open-source library to calculate and visualise comparisons between your data. I list some of the lighter alternatives to Great Expectations and Evidently, concluding with some thoughts on when you might use it as part of your computer vision pipeline.</p>
-<section id="tldr-alternatives-for-data-validation-using-python" class="level2">
-<h2 class="anchored" data-anchor-id="tldr-alternatives-for-data-validation-using-python">TL;DR: Alternatives for data validation using Python</h2>
-<ul>
-<li><p>🛠 Data validation tools come in many flavours, from full-featured libraries like Great Expectations down to the humble <code>assert</code> statement in Python.</p></li>
-<li><p>⚠️ The tool you choose should be appropriate to your particular use case and situation. You might not need or want to add a large dependency or take on extra code / project complexity, in which case there are alternative options available to you.</p></li>
-<li><p>⏰ You’ll also want to think about <em>when</em> you’re doing your validation. Two key moments stand out for machine learning projects: when you’re ingesting data prior to training or fine-tuning a model, and at the moment where you’re doing inference on a trained model.</p></li>
-<li><p>📃 For my project, I’m using a variety of tools as part of my process because I’ve found it gives me confidence in the predictions my model is making and it gives me freedom to experiment and iterate, without needing to also worry that I’m silently breaking something with downstream effects on my model performance.</p></li>
-</ul>
-</section>
-<section id="alternatives-using-evidently-for-drift-detection" class="level2">
-<h2 class="anchored" data-anchor-id="alternatives-using-evidently-for-drift-detection">Alternatives: Using Evidently for drift detection</h2>
-<p>I’ve <a href="https://blog.zenml.io/zenml-loves-evidently/">previously written</a> about why <a href="https://evidentlyai.com">Evidently</a> is a great tool to use for drift detection and data monitoring over <a href="https://blog.zenml.io/zenml-loves-evidently/">on the ZenML blog</a>. At its core, Evidently takes two chunks of data and compares them. The statistical comparisons going on under the hood are quite sophisticated, but as an interface to be used it is extremely trivial to get going.</p>
-<p>In the case of my redaction project data, I did the work of transforming my annotation and image metadata into Pandas DataFrames for Great Expectations already, so using it with Evidently at this point is trivial:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">from</span> evidently.dashboard <span class="im" style="color: #00769E;">import</span> Dashboard</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;">from</span> evidently.dashboard.tabs <span class="im" style="color: #00769E;">import</span> DataDriftTab</span>
-<span id="cb1-3"><span class="im" style="color: #00769E;">from</span> evidently.pipeline.column_mapping <span class="im" style="color: #00769E;">import</span> ColumnMapping</span>
-<span id="cb1-4"></span>
-<span id="cb1-5">real_annotations <span class="op" style="color: #5E5E5E;">=</span> main_annotations_df[[<span class="st" style="color: #20794D;">'area'</span>, <span class="st" style="color: #20794D;">'category_name'</span>, <span class="st" style="color: #20794D;">'top_left_x'</span>, <span class="st" style="color: #20794D;">'top_left_y'</span>, <span class="st" style="color: #20794D;">'width'</span>, <span class="st" style="color: #20794D;">'height'</span>, <span class="st" style="color: #20794D;">'orientation'</span>]]</span>
-<span id="cb1-6">easy_synth_annotations <span class="op" style="color: #5E5E5E;">=</span> easy_synth_annotations_df[[<span class="st" style="color: #20794D;">'area'</span>, <span class="st" style="color: #20794D;">'category_name'</span>, <span class="st" style="color: #20794D;">'top_left_x'</span>, <span class="st" style="color: #20794D;">'top_left_y'</span>, <span class="st" style="color: #20794D;">'width'</span>, <span class="st" style="color: #20794D;">'height'</span>, <span class="st" style="color: #20794D;">'orientation'</span>]]</span>
-<span id="cb1-7">hard_synth_annotations <span class="op" style="color: #5E5E5E;">=</span> hard_synth_annotations_df[[<span class="st" style="color: #20794D;">'area'</span>, <span class="st" style="color: #20794D;">'category_name'</span>, <span class="st" style="color: #20794D;">'top_left_x'</span>, <span class="st" style="color: #20794D;">'top_left_y'</span>, <span class="st" style="color: #20794D;">'width'</span>, <span class="st" style="color: #20794D;">'height'</span>, <span class="st" style="color: #20794D;">'orientation'</span>]]</span>
-<span id="cb1-8"></span>
-<span id="cb1-9">column_mapping <span class="op" style="color: #5E5E5E;">=</span> ColumnMapping(</span>
-<span id="cb1-10">    numerical_features<span class="op" style="color: #5E5E5E;">=</span>[<span class="st" style="color: #20794D;">"area"</span>, <span class="st" style="color: #20794D;">"width"</span>, <span class="st" style="color: #20794D;">"height"</span>, <span class="st" style="color: #20794D;">'top_left_x'</span>, <span class="st" style="color: #20794D;">'top_left_y'</span>],</span>
-<span id="cb1-11">    categorical_features<span class="op" style="color: #5E5E5E;">=</span>[<span class="st" style="color: #20794D;">"category_name"</span>, <span class="st" style="color: #20794D;">'orientation'</span>],</span>
-<span id="cb1-12">)</span>
-<span id="cb1-13"></span>
-<span id="cb1-14">drift_report <span class="op" style="color: #5E5E5E;">=</span> Dashboard(tabs<span class="op" style="color: #5E5E5E;">=</span>[DataDriftTab()])</span>
-<span id="cb1-15">drift_report.calculate(real_annotations, hard_synth_annotations, column_mapping<span class="op" style="color: #5E5E5E;">=</span>column_mapping)</span>
-<span id="cb1-16">drift_report.save(<span class="st" style="color: #20794D;">"reports/my_report.html"</span>)</span></code></pre></div>
-<p>In this code, I’m comparing between the real (i.e.&nbsp;manually annotated) annotations and the ‘hard’ synthetic annotations that I created (and <a href="https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html">blogged about recently</a>). I choose the columns I care about, tell Evidently which columns are numerical vs categorical features and save the report. (I can also display the report directly within a Jupyter notebook.) When I open the report, I see this:</p>
-<p><img src="https://mlops.systems/posts/great_expectations/evidently-drift-comparison.png" title="The drift detection report produced by Evidently." class="img-fluid"></p>
-<p>You can unfold the graphs to dive into the details for specific features, as in the following example where I take a look at the orientation of my annotations and see the difference between my manual annotations and the synthetically generated ‘hard’ batch:</p>
-<p><img src="https://mlops.systems/posts/great_expectations/comparing-orientation.png" title="Comparing landscape vs portrait orientation of my redaction annotations using Evidently." class="img-fluid"></p>
-<p>It doesn’t surprise me too much that we have this disparity, since the only annotations that are portrait in the synthetically-generated set are those for the content box around the whole page. All the rest are landscape, and that’s by design. (Note: you can make the comparisons using different statistical tests depending on your use case. I’m told that the next Evidently release will increase the number of available options for this.)</p>
-<p>I can repeat the same test for the image DataFrame. I’ve included some metadata for each image such as how many annotations are associated with the image, or how many redaction vs content annotations are associated and so on. The code is basically the same, except now taking into account the different columns and their types:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;"># comparing between real images and hard_synth images</span></span>
-<span id="cb2-2"></span>
-<span id="cb2-3">column_mapping <span class="op" style="color: #5E5E5E;">=</span> ColumnMapping(</span>
-<span id="cb2-4">    numerical_features<span class="op" style="color: #5E5E5E;">=</span>[<span class="st" style="color: #20794D;">"area"</span>, <span class="st" style="color: #20794D;">"width"</span>, <span class="st" style="color: #20794D;">"height"</span>, <span class="st" style="color: #20794D;">'annotation_count'</span>, <span class="st" style="color: #20794D;">'content_annotation_count'</span>, <span class="st" style="color: #20794D;">'redaction_annotation_count'</span>, <span class="st" style="color: #20794D;">'area'</span>, <span class="st" style="color: #20794D;">'file_size_bytes'</span>],</span>
-<span id="cb2-5">    categorical_features<span class="op" style="color: #5E5E5E;">=</span>[<span class="st" style="color: #20794D;">'orientation'</span>, <span class="st" style="color: #20794D;">'format'</span>, <span class="st" style="color: #20794D;">'mode'</span>],</span>
-<span id="cb2-6">)</span>
-<span id="cb2-7"></span>
-<span id="cb2-8">drift_report <span class="op" style="color: #5E5E5E;">=</span> Dashboard(tabs<span class="op" style="color: #5E5E5E;">=</span>[DataDriftTab()])</span>
-<span id="cb2-9">drift_report.calculate(main_images, hard_synth_images, column_mapping<span class="op" style="color: #5E5E5E;">=</span>column_mapping)</span>
-<span id="cb2-10">drift_report.save(<span class="st" style="color: #20794D;">"reports/my_report-real-vs-hard-images.html"</span>)</span></code></pre></div>
-<p>And we get this report:</p>
-<p><img src="https://mlops.systems/posts/great_expectations/images-drift.png" title="Viewing a drift report comparing the core image data with my synthetically-created images." class="img-fluid"></p>
-<p>You can immediately see how certain things like the number of annotations and the number of redactions in an image was a bit different when comparing the two. We also seem to have a far more even distribution of file sizes in the synthetically generated images and that makes sense since that was essentially randomly determined.</p>
-<p>Note that all the data that goes into making these reports can be accessed programatically as a Python object or <code>JSON</code> through <a href="https://docs.evidentlyai.com/features/profiling">Evidently’s <code>Profile</code> feature</a>, which is probably what you’re going to want when assessing for drift as part of a continuous training / continuous deployment cycle.</p>
-<p>If you change just a few things once more, you get a really useful <a href="https://docs.evidentlyai.com/reports/data-quality">data quality report</a> showing distributions, correlations, and various other features of your data at a single glance:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># profiling data quality</span></span>
-<span id="cb3-2"></span>
-<span id="cb3-3"><span class="im" style="color: #00769E;">from</span> evidently.dashboard.tabs <span class="im" style="color: #00769E;">import</span> DataQualityTab</span>
-<span id="cb3-4"></span>
-<span id="cb3-5">quality_dashboard <span class="op" style="color: #5E5E5E;">=</span> Dashboard(tabs<span class="op" style="color: #5E5E5E;">=</span>[DataQualityTab()])</span>
-<span id="cb3-6">quality_dashboard.calculate(main_images, hard_synth_images, column_mapping<span class="op" style="color: #5E5E5E;">=</span>images_column_mapping)</span>
-<span id="cb3-7">quality_dashboard.save(<span class="st" style="color: #20794D;">"reports/quality-report.html"</span>)</span></code></pre></div>
-<p>You can get an idea of the report that it produces in the following screen recording from my browser:</p>
-<p><img src="https://mlops.systems/posts/great_expectations/evidently-data-quality.gif" title="The Evidently data quality report when comparing my real image data with what was synthetically created." class="img-fluid"></p>
-<p>As a place to get started with understanding a dataset, this is a pretty nice visualisation and report to have in your toolkit, but even after immersion in your data it can be useful to take a step back with something like this data quality overview. For instance, it reveals quite clearly how the average number of annotations in my manually annotated dataset is quite a bit lower than that of my synthetically generated examples. Of course, that was by intention, but it is nice to see that confirmed in the data.</p>
-<p>Once you have your model ready, there are other reports that Evidently offers which perhaps I’ll return to in a subsequent blogpost but for now I hope this has given you a flavour of the tool and how easy it is to get going with it.</p>
-<p>(As a side-note, <a href="https://evidentlyai.com/community">Evidently’s community</a> is friendly, welcoming and filled with interesting people thinking about these issues. I find it a welcome breath of fresh air when compared with some other tools’ forums or chat platforms, so it also has that going for it!)</p>
-</section>
-<section id="alternatives-some-other-options" class="level2">
-<h2 class="anchored" data-anchor-id="alternatives-some-other-options">Alternatives: some other options</h2>
-<p>With Evidently, we drifted a little into the ‘visualise your data’ territory which wasn’t really the point of this post, but you can see how they combined clear visualisation with the statistical validation working underneath to calculate whether data was drifting. The following are some other tools I’ve come across that might help you in validating data in a computer vision context. I haven’t found a use for them in my project, but it’s possible that they might gel with what you’re doing:</p>
-<ul>
-<li><a href="https://github.com/tensorflow/data-validation">TensorFlow Data Validation (TFDV)</a> — This is a part of TensorFlow and <code>tfx</code> which uses schemas to validate your data. If you’re using TensorFlow, you might have heard of this and might even be using it already, but I don’t get the sense that this is often much recommended. I include it as it is a prominent option available to you.</li>
-<li><a href="https://deepchecks.com">Deepchecks</a> — Deepchecks is adjacent to what Great Expectations offers, albeit with an emphasis on the kinds of tests you might want to do for ML model training code. It has some features and documented use cases for computer vision (object detection and classification) but I haven’t used it myself. Feels like a tool worth keeping your eye on, however. (Works on Pandas dataframes and numpy arrays.)</li>
-<li><a href="https://pandera.readthedocs.io/en/latest/index.html">pandera</a> — This is a statistical tool for validating data inside dataframes, and it overlaps quite a bit in its functionality with Great Expectations, particularly with the <a href="https://pandera.readthedocs.io/en/latest/hypothesis.html#hypothesis">hypothesis testing</a> functionality. Worth checking out.</li>
-<li><a href="https://docs.python-cerberus.org/en/stable/index.html">Cerberus</a> — Offers a lightweight schema-based validation functionality for Python objects.</li>
-<li><a href="https://python-jsonschema.readthedocs.io/en/latest/">jsonschema</a> — similar in approach to Cerberus, above, this is a lightweight way to test your JSON files based on how they conform to a defined schema. Useful in the case of annotations files, perhaps, if you really want something minimal.</li>
-<li><a href="https://github.com/keleshev/schema">schema</a> — More of the same: a Pythonic way to validate JSON or YAML files based on schema.</li>
-<li><code>assert</code> — We shouldn’t forget <a href="https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement">the humble assert statement</a>, which I have sprinkled in various places within my code where it makes sense to make sure that data flowing through conforms to whatever implicit or explicit contracts exist.</li>
-</ul>
-<p>I mention these various options not to suggest that you should use them all, but rather to state that you have options ranging the whole spectrum of complexity and dependency.</p>
-</section>
-<section id="when-to-do-data-validation-in-your-project" class="level2">
-<h2 class="anchored" data-anchor-id="when-to-do-data-validation-in-your-project">When to do data validation in your project</h2>
-<p>Regularly! I’ve written previously about how you can think about data validation as testing for your data. Just like many (most?) engineering teams run their tests every time you add a new commit to the codebase, it’s worth thinking of these kinds of tests as something that get run at any point where the underlying data gets updated.</p>
-<p>There are three points where it might make sense to do some data validation:</p>
-<ul>
-<li>at the point of data ingestion</li>
-<li>at the point just prior to training a model, i.e.&nbsp;after your data has been split into training and validation sets</li>
-<li>at the point of inference (i.e.&nbsp;using the data being passed into the trained model)</li>
-</ul>
-<p><img src="https://mlops.systems/posts/great_expectations/validation-when.png" title="The times it might make sense to do some validation." class="img-fluid"></p>
-<p>The first (at data ingestion) is essential, especially if you have any kind of continuous training or continuous deployment loop going on. You don’t want to be training on data that clearly is unsuitable for training, or where the distribution has shifted so much that it’s going to cause hidden problems down the line.</p>
-<p>The second (at training-validation split time) may or may not be important depending on your use case. For my redaction project I don’t think there is a great deal of benefit from this and so haven’t incorporated it as such.</p>
-<p>The third (at inference time) is quite important to have, even though the behaviour when an anomaly is detected might be different from if you were to detect issues earlier on in the process. You might choose to just log the result of your validation check internally, or you could potentially also feed the result back to a user in the terms of some sort of warning (i.e.&nbsp;if the image that they were uploading was a very different kind of image from the data that had been used to train the model).</p>
-</section>
-<section id="what-im-using-for-my-redaction-project" class="level2">
-<h2 class="anchored" data-anchor-id="what-im-using-for-my-redaction-project">What I’m using for my redaction project</h2>
-<p>I don’t have any general advice as to which tool you should use as part of your computer vision model training pipeline. It’s likely to be heavily context-dependent and will differ based on the particular use case or problem you’re trying to solve. For my own project, however, I can be more specific.</p>
-<p>I’m using plain <code>assert</code> statements liberally scattered through my code, in part leftover from when writing the code but also as a failsafe should strange or anomalous data make its way into my functions. I’m not sure if this is a best practice or not — I could imagine someone telling me that it’s not advised — but for now it’s helpful, especially as I continue to change things in the innards of various parts of the process.</p>
-<p>I’m using <a href="https://greatexpectations.io/">Great Expectations</a> as a general-purpose validation tool to lay out my ‘expectations’ of my data in a assertive and declarative way, and even though it took a little longer to wrap my head round how it worked, I’m glad I made the effort as it seems really helpful.</p>
-<p>I’m using <a href="https://evidentlyai.com/">Evidently</a> to do similar things as Great Expectations, but I find they have different strengths and benefits even as they serve the same purpose. Evidently is a bit more of a lighter piece in the process, I feel, and as such it’s a bit more flexible and you can iterate faster with it. I am not quite at the point where I’m serving my model to accept inference requests from outside, but Evidently will be part of that process when I do, for sure.</p>
-<p>Finally, <a href="https://voxel51.com/docs/fiftyone/">FiftyOne</a> is also somehow part of the validation process. (I’ve <a href="https://mlops.systems/redactionmodel/computervision/tools/debugging/jupyter/2022/03/12/fiftyone-computervision.html">written about that previously</a>.) Having visual tools that allow you to quickly test out a hypothesis or debug something unexpected in your training results is an essential part of the work of developing computer vision models.</p>
-<p>This brings my short series on data validation for computer vision to a close. I’m fully conscious that I might have missed some obvious opportunities, tricks or workflows that may be widely used in this field, so I welcome any comments and feedback that you might have.</p>
-
-
-</section>
-
- ]]></description>
-  <category>tools</category>
-  <category>redactionmodel</category>
-  <category>computervision</category>
-  <category>datavalidation</category>
-  <guid>https://mlops.systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</guid>
-  <pubDate>Wed, 27 Apr 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/great_expectations/evidently_ai_logo_fi.png" medium="image" type="image/png" height="77" width="144"/>
 </item>
 </channel>
 </rss>
