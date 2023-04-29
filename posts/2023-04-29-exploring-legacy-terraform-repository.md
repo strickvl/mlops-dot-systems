@@ -149,6 +149,8 @@ This will create a PNG file which allows you to visualise the infrastructure def
 
 As with all these things, try it out and see if it works for you. You can also just export the data in other formats and manipulate them using your preferred graph data structure visualisation tools.
 
+You can also use something like the [terraform graph beautifier](https://github.com/pcasteran/terraform-graph-beautifier) to make it more comprehensible.
+
 ## 📄 Auto-generated deployment documentation
 
 If you're lucky and whoever wrote the terraform code has taken care to write descriptions for variables and the various modules being used, the next tool might prove quite useful. [`terraform-docs`](https://terraform-docs.io) is a way to generate module documentation via a CLI command. Once you've installed it, running the following will give you a markdown file that you can preview to learn more about your codebase:
@@ -165,4 +167,4 @@ The file that gets output links to the code and underlying files, so it's a hand
 
 I wrote this mostly as a reference and an excuse to learn about the topic myself. I hope it might be useful for someone else who is diving into a new codebase without much terraform experience. If you have any other tips or experience with this, please do use the comments below to make those suggestions!
 
-[Many thanks to [Suvash](https://www.linkedin.com/in/suvash/), [Jayesh](https://www.linkedin.com/in/wjayesh/), and the commenters over on [this reddit thread](https://www.reddit.com/r/Terraform/comments/115jonp/how_to_understand_existing_code/) for ideas and guidance.]
+[Many thanks to [Suvash](https://www.linkedin.com/in/suvash/), [Jayesh](https://www.linkedin.com/in/wjayesh/), and the commenters over on [this invaluable reddit thread](https://www.reddit.com/r/Terraform/comments/115jonp/how_to_understand_existing_code/) for ideas and guidance.]
