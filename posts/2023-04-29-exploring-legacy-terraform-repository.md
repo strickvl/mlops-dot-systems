@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-I've taken on some different responsibilities at work and part of this involves me diving into a repository filled with Terraform HCL code. I have some idea of how Terraform work, how the declarative paradigm is different and how things connect to one another, but getting up to speed and effective in a somewhat complex codebase is the goal here so I'll need more than just high-level talking points.
+I've taken on some different responsibilities at work and part of this involves me diving into a repository filled with Terraform HCL code. I have some idea of how Terraform works, how the declarative paradigm is different and how things connect to one another, but getting up to speed and effective in a somewhat complex codebase is the goal here so I'll need more than just high-level talking points.
 
 In this post, I share my journey of understanding and working with an existing Terraform codebase, focusing on initial exploration, key concepts, and useful commands. I start with an introduction to basic Terraform commands like init, plan, apply, and destroy. Then, I dive into the structure of a Terraform codebase, discussing root modules, entry points, providers, variables, outputs, and data blocks. I also cover validation and formatting commands, as well as tools to help visualize and document your infrastructure. This guide is ideal for those who, like me, are new to Terraform or tasked with diving into a complex codebase, providing a roadmap for learning and making changes effectively.
 
@@ -167,4 +167,8 @@ The file that gets output links to the code and underlying files, so it's a hand
 
 I wrote this mostly as a reference and an excuse to learn about the topic myself. I hope it might be useful for someone else who is diving into a new codebase without much terraform experience. If you have any other tips or experience with this, please do use the comments below to make those suggestions!
 
-[Many thanks to [Suvash](https://www.linkedin.com/in/suvash/), [Jayesh](https://www.linkedin.com/in/wjayesh/), and the commenters over on [this invaluable reddit thread](https://www.reddit.com/r/Terraform/comments/115jonp/how_to_understand_existing_code/) for ideas and guidance.]
+[Many thanks to [Suvash](https://www.linkedin.com/in/suvash/),
+[Jayesh](https://www.linkedin.com/in/wjayesh/), and the commenters over on [this
+invaluable reddit
+thread](https://www.reddit.com/r/Terraform/comments/115jonp/how_to_understand_existing_code/)
+for ideas and guidance.]
