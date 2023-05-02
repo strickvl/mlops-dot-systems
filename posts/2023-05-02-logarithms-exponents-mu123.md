@@ -5,9 +5,9 @@ categories:
   - mu123
   - q31
 date: "2023-05-02"
-description: ""
+description: "I delved into exponents and logarithms in my Open University Maths degree, discovering their practical applications and connections to concepts like Euler's number. Gaining a deeper understanding, I enjoyed manipulating symbols and working with these fascinating mathematical tools."
 layout: post
-title: ""
+title: "Exponents and Logarithms: a MU123 review"
 toc: false
 image: images/dancing-symbols.png
 include-before-body:
