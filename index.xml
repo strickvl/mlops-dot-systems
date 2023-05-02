@@ -10,7 +10,38 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Fri, 28 Apr 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 01 May 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Exponents and Logarithms: a MU123 review</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-05-02-logarithms-exponents-mu123.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I just finished a unit of my Open University Maths degree that’s all about exponents and logarithms (unit 13 of MU123). This is the penultimate unit and these final units are where the difficulty has started to stack up for me.</p>
+<p>The 2020 COVID pandemic was when all of us had lots of exposure to the idea and reality of exponential curves. In fact, it seemed early on like the people who really understood what exponential growth can do were the most worried. Cancer’s another thing where something that keeps on doubling or increasing can cause real havoc when it compounds. The book talks a bit about Moore’s law, though I recall watching <a href="https://youtu.be/zX4ZNfvw1cw">a talk at JuliaCon in 2018 where Sophie Wilson spoke</a> about all the ways where we may be edging up at various physical realities these days that might slow things down.</p>
+<p>Logarithms were the other big part of the module, and these were fascinating to work with. I had familiarity with the idea of them, mainly just as a button on a calculator, but it was really interesting to start to play around with all the ways they could be useful. Prior to the widespread availability of calculators they were the de facto way of doing big calculations, since using something like logarithm tables or a slide rule would give you a practically useful approximation of your answer in a way that didn’t require you to do complicated calculations in your head.</p>
+<p>I got hold of both an old copy of a book of logarithm tables as well as a slide rule — old tech ftw — and look forward to becoming more familiar with them once the unit has come to an end in a few weeks.</p>
+<p>The previous unit (trigonometry) touched on working with radians and (doing some exercises) it was immediately clear why someone would want to use radians instead of degrees as the unit when working with a certain kind of problem. Similarly, for this exponents &amp; logarithms unit, we came across <em>e</em>, Euler’s number, and had some exposure to how there were quite a few places where it made sense to work with <em>e</em> as the base of our logarithms instead of base 10. I really enjoy these parts of mathematics, where abstract concepts or things that people come up with allow us to manipulate ideas and symbols and objects that in turn allow us to solve problems, or think about things in new ways. In many ways these are the things I enjoy the most while studying the course materials.</p>
+<p>We came up on a few places where we were asked to prove something using various identities that we’d previously explored. For example, we prove that for any base <em>b</em> and any positive numbers <em>x</em> and <em>y</em>, that:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Clog_b%20x%20-%20%5Clog_b%20y%20=%20%5Clog_b(%5Cfrac%7Bx%7D%7By%7D)"></p>
+<p>We’re not given a great deal of guidance on this task aside from an analogous example. I know the idea of ‘proof’ is a big thing in higher-level mathematics so I’m looking forward to getting a bit more experience with this.</p>
+<p>As with most of the previous units, the bigger picture is somewhat elusive. I know a lot more about exponents and logarithms than I knew a few weeks ago, but I’m still unsure of how it connects to everything else around it. I’m hoping that comes with time, but in the meanwhile I’m trying to write these blogposts to at least take a step back and think through those bigger connections.</p>
+<p>In the end, logarithms and exponents are another trick, another tool in the box, and another example of how mental models or abstractions can allow for other new thoughts to be had. We end up using some of the index laws that we learned a few months back to allow us to manipulate these new symbols. Manipulating symbols allows us to either simplify things (so we can think at a different level) or move further into something more complex (so we can see what’s going on, through whatever lens we’ve brought to look through).</p>
+<p>As a project and as a path to be explored, it’s exciting to take these steps even if sometimes you just have to trust that everything will come together in the end. Next up: “Mathematics Everywhere”, the final unit which is all about practical applications using the things we’ve learned earlier in the module, with a serving of abstract mathematics thrown in for good measure!</p>
+
+
+
+ ]]></description>
+  <category>mathematics</category>
+  <category>mu123</category>
+  <category>q31</category>
+  <guid>https://mlops.systems/posts/2023-05-02-logarithms-exponents-mu123.html</guid>
+  <pubDate>Mon, 01 May 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/dancing-symbols.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>Terraform for the Uninitiated: Demystifying Your First Codebase</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -5521,88 +5552,6 @@ In this post you learned:
   <guid>https://mlops.systems/posts/2022-05-07-redaction-mvp-huggingface.html</guid>
   <pubDate>Fri, 06 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/redaction-mvp-huggingface/demo-screenshot.png" medium="image" type="image/png" height="116" width="144"/>
-</item>
-<item>
-  <title>How my pet cat taught me a lesson about validation data for image classification</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I’m participating in <a href="https://itee.uq.edu.au/event/2022/practical-deep-learning-coders-uq-fastai">the latest iteration</a> of <a href="https://www.fast.ai">the fastai course</a> as taught by Jeremy Howard. This past week we got a very high-level overview of some of the ways deep learning is proving very powerful in solving problems as well as how we can use its techniques to fairly quickly get great results on image classification problems.</p>
-<p>I’ve done the earlier parts of the course before, so some of these demonstrations were less mind-blowing than the first time I saw them. For this iteration of the course, Jeremy showcased <a href="https://www.kaggle.com/code/jhoward/is-it-a-bird-creating-a-model-from-your-own-data">a Kaggle notebook</a> which trains a model to distinguish whether an image is of a bird or not.</p>
-<p>Last time I did the course, I <a href="https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html#fn:3">trained an image classifier model</a> to distinguish whether an image was redacted or not to around 95% accuracy. (This actually was the genesis of <a href="https://mlops.systems/categories/#redactionmodel">my larger redaction object detection project</a> that I’ve been blogging about for the past few months.)</p>
-<section id="the-key-ingredients-what-goes-into-a-model" class="level1">
-<h1>The key ingredients: what goes into a model?</h1>
-<p>The course teaches things top-down, so we start off with both the practical experience of training state-of-the-art models as well as the overall context to what goes into these high-level functions. These pieces include:</p>
-<ul>
-<li>your input data — this style of programming differs from traditional software engineering where your functions take data in order to ‘learn’ how to make their predictions</li>
-<li>the ‘weights’ — when we’re using pre-trained models, you can think of these as an initial set of variables that are already pretty useful in that configuration and can do a lot of things.</li>
-<li>your model — this is what you’re training and, once trained, you can think of it as a function in and of itself that takes in inputs and outputs predictions.</li>
-<li>the predictions — these are the guesses that your model makes, based on whatever you pass in as inputs. So if you pass in an image of a cat to a model (see below), the prediction could be whether that cat is one particular kind or another.</li>
-<li>your ‘loss’ — this is a measure of checking how well your model is doing as it trains.</li>
-<li>a means of updating your weights — depending on how well (or badly) the training goes, you’ll want a way of updating the weights so that each time it gets a bit better at optimising for whatever you’ve set up your model to do. In lesson one we learn about <em>stochastic gradient descent</em>, a way of optimising and updating these weights automatically.</li>
-<li>your labels — these are the ground truth assertions that get used to determine how well the model is doing as it trains.</li>
-<li>transformations &amp; augmentations — more on this will come in lesson two, but these allow you to squeeze more value out of your data. This is especially valuable when you’re fine-tuning a model and don’t have massive amounts of data to use for training.</li>
-</ul>
-<p>Represented in code, the classic fastai example where you train a model to distinguish between cats and dogs is as follows:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-2">path <span class="op" style="color: #5E5E5E;">=</span> untar_data(URLs.PETS)<span class="op" style="color: #5E5E5E;">/</span><span class="st" style="color: #20794D;">'images'</span></span>
-<span id="cb1-3"></span>
-<span id="cb1-4"><span class="kw" style="color: #003B4F;">def</span> is_cat(x): <span class="cf" style="color: #003B4F;">return</span> x[<span class="dv" style="color: #AD0000;">0</span>].isupper()</span>
-<span id="cb1-5">dls <span class="op" style="color: #5E5E5E;">=</span> ImageDataLoaders.from_name_func(</span>
-<span id="cb1-6">    path, get_image_files(path), valid_pct<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">0.2</span>, seed<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">42</span>,</span>
-<span id="cb1-7">    label_func<span class="op" style="color: #5E5E5E;">=</span>is_cat, item_tfms<span class="op" style="color: #5E5E5E;">=</span>Resize(<span class="dv" style="color: #AD0000;">224</span>))</span>
-<span id="cb1-8"></span>
-<span id="cb1-9">learn <span class="op" style="color: #5E5E5E;">=</span> vision_learner(dls, resnet34, metrics<span class="op" style="color: #5E5E5E;">=</span>error_rate)</span>
-<span id="cb1-10">learn.fine_tune(<span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
-<p>This small code snippet contains all the various parts just mentioned. The high-level API and abstractions that fastai provides allows you to work with these concepts in a way that is fast and flexible, though if you need to dive into the details you can do so as well.</p>
-</section>
-<section id="image-classification-isnt-just-about-images" class="level1">
-<h1>Image classification isn’t just about images</h1>
-<p>One of the parts of the first chapter I enjoy the most is the examples of projects where image classification was applied to problems or scenarios where it doesn’t first appear that the problem has anything to do with computer vision.</p>
-<p>We see <a href="https://ieeexplore.ieee.org/abstract/document/8328749">malware converted into images</a> and distinguished using classification. We see <a href="https://medium.com/@etown/great-results-on-audio-classification-with-fastai-library-ccaf906c5f52">sounds in an urban environment</a> converted into images and classified with fastai. In <a href="https://www.meetup.com/delft-fast-ai-study-group/">the study group</a> I host for some student on the course, one of our members presented <a href="https://kurianbenoy.com/ml-blog/fastai/fastbook/2022/05/01/AudioCNNDemo.html">an initial proof of concept</a> of using images of music to distinguish genre:</p>
-<p>{% twitter https://twitter.com/kurianbenoy2/status/1520470393760272384?cxt=HHwWgMCi-Y3x5ZkqAAAA %}</p>
-<p>I like the creativity needed to think of how to turn problems and data into a form such that they can become computer vision problems.</p>
-</section>
-<section id="my-own-efforts-classifying-my-cat" class="level1">
-<h1>My own efforts: classifying my cat</h1>
-<p>True story: a few years ago my cat escaped from the vet and a reward was mentioned for anyone who found our cute ginger cat. Throughout the course of the day, the vets were perplexed to see people coming in with random ginger cats that they’d found in the neighborhood, but none of them were ours! With this iteration of the course, therefore, I was curious to try out this simple but slightly silly example and see how well a deep learning model could do at recognising distinguishing Mr Blupus — don’t ask! — from other random photos of ginger cats.</p>
-<p>Training the model was pretty easy. Like any cat owner, I have thousands of photos of our cat so an initial dataset to use was quick to assemble. I downloaded a few hundred random ginger cat photos via DuckDuckGo using some code Jeremy had used in <a href="https://www.kaggle.com/code/jhoward/is-it-a-bird-creating-a-model-from-your-own-data">his bird vs forest Kaggle notebook</a>. A few minutes and ten epochs later, I had achieved 96.5% accuracy on my validation data after fine-tuning <code>resnet50</code>!</p>
-<p>{% twitter https://twitter.com/strickvl/status/1520405802091175936 %}</p>
-<p>After the initial excitement died down, I realised that the result was probably an illusion. Our cat is an indoor cat and we have a relatively small house. Couple that with the fact that the backdrops to the photos of Mr Blupus are relatively distinctive (particular kinds of sheets or carpets) and it seems pretty clear that the model wasn’t learning how to identify our cat, but rather it was learning how to distinguish photos of our house or our carpets.</p>
-<p>☹️</p>
-<p>Luckily, chapter one gets into exactly this problem, showing an example of how exactly this validation issue can give you a false sense of confidence in your model. When I evaluated my model on the validation data it wasn’t a fair test, since in all likeliness may model had already seen a similar backdrop to whatever was found inside the validation set.</p>
-<p>I discussed this when I presented this to those at the study group / meetup yesterday and we agreed that it’d be best if I held out some settings or locations from the training entirely. I took 30 minutes to do that in the evening and had a third ‘test’ dataset which consisted of 118 images of our cat in certain locations that the model wasn’t trained on and thus couldn’t use to cheat. I added a few more photos to the training data so that there were enough examples from which to learn.</p>
-<p><img src="https://mlops.systems/posts/blupus_detection/training-data.png" title="Input data for the new model." class="img-fluid"></p>
-<p>I was supposedly getting 98% accuracy now, but I knew that number to be false. I then needed to figure out how to get the accuracy for my held-out test set. With a lot of help from <a href="https://twitter.com/Fra_Pochetti">Francesco</a> and <a href="https://benjaminwarner.dev/2021/10/01/inference-with-fastai#batch-prediction">a really useful blogpost</a> on doing batch inference with fastai, I first got the predictions for my test data:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">test_files <span class="op" style="color: #5E5E5E;">=</span> [fn <span class="cf" style="color: #003B4F;">for</span> fn <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">sorted</span>((Path(<span class="st" style="color: #20794D;">"/path/to/test_set_blupus_photos"</span>)).glob(<span class="st" style="color: #20794D;">'**/*'</span>)) <span class="cf" style="color: #003B4F;">if</span> fn.is_file()]</span>
-<span id="cb2-2">test_dl <span class="op" style="color: #5E5E5E;">=</span> learn.dls.test_dl(test_files)</span>
-<span id="cb2-3">preds, _ <span class="op" style="color: #5E5E5E;">=</span> learn.get_preds(dl<span class="op" style="color: #5E5E5E;">=</span>test_dl)</span></code></pre></div>
-<p>I then created a tensor with the ground truth predictions for my test set and compared them with what my model had predicted:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">gts <span class="op" style="color: #5E5E5E;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;">0</span> <span class="cf" style="color: #003B4F;">for</span> _ <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">118</span>)])</span>
-<span id="cb3-2">accuracy <span class="op" style="color: #5E5E5E;">=</span> (gts <span class="op" style="color: #5E5E5E;">==</span> preds.argmax(dim<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>))</span></code></pre></div>
-<p>At this point, getting the final accuracy was as simple as getting the proportion of correct guesses:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="bu" style="color: null;">sum</span>([<span class="dv" style="color: #AD0000;">1</span> <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> accuracy <span class="cf" style="color: #003B4F;">if</span> item]) <span class="op" style="color: #5E5E5E;">/</span> <span class="bu" style="color: null;">len</span>(preds)</span></code></pre></div>
-<p>This gave me an accuracy on my held-out test set of 93.2% which was surprisingly good.</p>
-<p>I half wonder whether there is still some cheating going on somehow, some quality of the photos or the iPhone camera I used to take them that is being used to distinguish the photos of my cat vs other ginger cats.</p>
-<p>Nevertheless, this was a useful lesson for me to learn. I realised while working with the tensors in the final step above that I’m not at all comfortable manipulating data with PyTorch so luckily that’ll get covered in future lessons.</p>
-<p><strong>UPDATE:</strong></p>
-<p>Following some discussion in the fastai forums, it was suggested that I take a look at <a href="http://gradcam.cloudcv.org">Grad-CAM</a> in chapter 18. This is a technique to visualise the activations which allows you to see which parts of the image it is paying the most attention to (sort of). I ran the code using a sample Blupus image and this was the result. I don’t understand how most (any?) of this works, but it was really cool to have a working result of sorts nonetheless!</p>
-<p><img src="https://mlops.systems/posts/blupus_detection/gradcam.png" title="Mr Blupus activating the model." class="img-fluid"></p>
-
-
-</section>
-
- ]]></description>
-  <category>fastai</category>
-  <category>computervision</category>
-  <category>partone</category>
-  <guid>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</guid>
-  <pubDate>Sun, 01 May 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/blupus_detection/blupus-training.png" medium="image" type="image/png" height="161" width="144"/>
 </item>
 </channel>
 </rss>
