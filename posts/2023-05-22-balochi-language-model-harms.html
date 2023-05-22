@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Alex Strick van Linschoten">
-<meta name="dcterms.date" content="2023-05-21">
-<meta name="description" content="The Balochi language is underrepresented in NLP. I’m interested in contributing to the field by building a language model for Balochi from scratch and contributing training resources and datasets along the way.">
+<meta name="dcterms.date" content="2023-05-22">
+<meta name="description" content="The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks such as misuse by state actors for surveillance and power consolidation, and the unintentional promotion of linguistic monoculture.">
 
-<title>Alex Strick van Linschoten - Low-resource language models: making a start with Balochi</title>
+<title>Alex Strick van Linschoten - The Risks of Language Models in Minority Languages</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,15 +65,15 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Alex Strick van Linschoten - Low-resource language models: making a start with Balochi">
-<meta property="og:description" content="The Balochi language is underrepresented in NLP.">
-<meta property="og:image" content="https://mlops.systems/posts/images/starting-balochi-llm.png">
+<meta property="og:title" content="Alex Strick van Linschoten - The Risks of Language Models in Minority Languages">
+<meta property="og:description" content="The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks…">
+<meta property="og:image" content="https://mlops.systems/posts/images/balochi-llm-harms.png">
 <meta property="og:site-name" content="Alex Strick van Linschoten">
 <meta property="og:image:height" content="450">
 <meta property="og:image:width" content="450">
-<meta name="twitter:title" content="Alex Strick van Linschoten - Low-resource language models: making a start with Balochi">
-<meta name="twitter:description" content="The Balochi language is underrepresented in NLP.">
-<meta name="twitter:image" content="https://mlops.systems/posts/images/starting-balochi-llm.png">
+<meta name="twitter:title" content="Alex Strick van Linschoten - The Risks of Language Models in Minority Languages">
+<meta name="twitter:description" content="The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks…">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/balochi-llm-harms.png">
 <meta name="twitter:creator" content="@strickvl">
 <meta name="twitter:image-height" content="450">
 <meta name="twitter:image-width" content="450">
@@ -130,10 +130,10 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Low-resource language models: making a start with Balochi</h1>
+      <h1 class="title">The Risks of Language Models in Minority Languages</h1>
                   <div>
         <div class="description">
-          The Balochi language is underrepresented in NLP. I’m interested in contributing to the field by building a language model for Balochi from scratch and contributing training resources and datasets along the way.
+          The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks such as misuse by state actors for surveillance and power consolidation, and the unintentional promotion of linguistic monoculture.
         </div>
       </div>
                           <div class="quarto-categories">
@@ -141,6 +141,7 @@ ul.task-list li input[type="checkbox"] {
                 <div class="quarto-category">nlp</div>
                 <div class="quarto-category">balochi-language-model</div>
                 <div class="quarto-category">deep-learning</div>
+                <div class="quarto-category">ethics</div>
               </div>
                   </div>
   </div>
@@ -158,7 +159,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 21, 2023</p>
+        <p class="date">May 22, 2023</p>
       </div>
     </div>
     
@@ -176,13 +177,28 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>Large Language Models are all the rage, but what do you do when the language you want to model is essentially unrepresented in the public datasets used for training? I have a few months before the start of my next maths module and I’d like to use the time in part to dive into the ins and outs of training your own language models from scratch.</p>
-<p>The language I’m working with is Balochi, in particular the dialect or subset of Balochi that is spoken in southeastern Iran. The parent subgroup of ‘Balochi’ is spoken by 8-10 million people, but those break down into a few varieties which is in turn driven to a large extent by geography. The kind of Balochi used in Pakistan is subject to different linguistic influences than the one I’m interested in, for example.</p>
-<p>Despite the existence of millions of people speaking this language (family), it is more or less unrepresented in benchmarks and so-called breakthroughs in language modelling. Even the raw data to represent the language is absent. Common Crawl, one popular source of data for training language models, <a href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages">doesn’t even include Balochi</a> as one of the languages represented in its corpus. Moreover, there’s no Balochi Wikipedia or anything really like it, so anyone hoping to work on language models in Balochi is first going to have to put together a corpus of data.</p>
-<p>There’s nothing particularly novel about this problem. Languages with very few resources are known as low-resource languages and there’s a whole field of research (and some practice) busy trying to find ways to better serve these smaller language communities. I view the work as valuable, not only in that it seeks to preserve what might otherwise be lost, but also in terms of the disproportionately large (potential) impact it can have.</p>
-<p>I have personally experienced this issue at a distance, for the most part, having studied and worked with languages for which there are few study materials. The two languages I was passed down by my parents — English and, to a lesser extent, Dutch — are well-represented in the work and time spent by researchers and practitioners thus far. I have learned languages from neighbouring families, both geographically and linguistically, and always wanted to study Balochi myself. My hope is that it will be a gateway for me into the language and its community of speakers.</p>
-<p>I’m quite conscious of wanting to go about this project in a way that is ethical. Work of this kind is too often predicated on a principle of ‘take now, ask later’ so I’ll be writing more about this as I go as well as (hopefully) working with Balochi speakers and researchers to augment the work that is already being done. My initial survey of what has been done so far leads me to think that there is much remaining in the way of low-hanging fruit. I haven’t yet come across a Balochi tokenizer, for example, or embeddings or many other things that you would take for granted if you were working with the English language.</p>
-<p>My somewhat distant goal — one for which I’m unsure how unrealistic I’m being — for all of this would be develop models and materials that can aid non-native speakers of Balochi to learn the language through what is known as <a href="https://www.cambridge.org/core/journals/journal-of-classics-teaching/article/comprehensible-input-and-krashens-theory/2308987050E8D31E3986B530D4B02F6F">comprehensible input</a>. All of which is to say: I don’t know much Balochi as I start this work, but I hope to develop my fluency over time.</p>
+<p>In thinking about my work to put together a language model or some utilities relating to the Balochi language, I thought a fair bit about whether I should even start. At a very high level, we can look at general risks that comes from language models, as highlighted in <a href="https://dl.acm.org/doi/pdf/10.1145/3531146.3533088">the 2022 Deepmind paper</a> entitled “Taxonomy of Risks posed by Language Models” which covers</p>
+<blockquote class="blockquote">
+<p>“six risk areas: I. Discrimination, Hate speech and Exclusion, II. Information Hazards, III. Misinformation Harms, IV. Malicious Uses, V. Human-Computer Interaction Harms, and VI. Environmental and Socioeconomic harms” (p.214)</p>
+</blockquote>
+<p>I’ll leave you to check out the paper if you wish. I can think of a number of specific risks and harms that could be connected to developing a language model for the Balochi language, most of which relate to state actors and their desire for more power and better surveillance capabilities.</p>
+<p>The communities speaking Balochi have historically and currently been subject to more monitoring than many, either from central governments in Iran and Pakistan or from European and American intelligence agencies, for a variety of reasons. In this context, language models can potentially fit into a system which is geared towards maximising power and influence among the powerful, enhancing state control and surveillance. In the longer term — and I haven’t seen to much by the way of research on this, but I’m going to take a leap — I can imagine that language models could well have the effect of creating a kind of linguistic monoculture. (Just think about the kind(s) of language that you read in default responses from ChatGPT and extrapolate from there.)</p>
+<p>My assumption is that large, well-funded intelligence agencies already have strong capabilities for Balochi. Indeed, Balochi is <a href="https://www.cia.gov/careers/language-opportunities/foreign-language-incentive-program/">one of the language specified as qualifying</a> for the CIA’s ‘Foreign Language Incentive Program’ that offers cash bonuses for new and current employees with foreign language skills in Balochi. There is almost certainly a team working on — among other things — language models that allows for the better monitoring of communications in the Balochi language. (To get more of a sense of what such models and capabilities might be used for, check out <a href="https://consciousdigital.org/the-nsas-large-language-models/">this article</a>.)</p>
+<p>What, then, are the positive uses of such technology? In no particular order, some things I thought of in the context of Balochi:</p>
+<ul>
+<li>disaster monitoring and outreach following natural disasters (NGOs and aid organisations (or even governments) are sometimes blocked by their inability to effectively communicate with those they are trying to help)</li>
+<li>translation and accessibility (heavily caveated, but there is the potential for positive action here as long as technology is responsibly deployed)</li>
+<li>equal access to technologies</li>
+<li>aggregation and summarisation tools</li>
+<li>language models as cultural artifacts (in a context of an incremental cultural erasure)</li>
+<li>enhancing the state of the art when it comes to training language models for low resource languages has the potential to support efforts being undertaken for many other languages</li>
+<li>work done to enhance datasets and the raw materials for language models might potentially be incorporated in bigger efforts by larger organisations (who generally would never think or make the effort to cover a language like Balochi)</li>
+<li>local and/or community ownership of the models (vs that of corporations)</li>
+<li>a way to reverse linguistic monoculture</li>
+<li>probably better results and performance for their specialised tasks than generalised mega-large language models</li>
+<li>(and finally, a cause close to my heart) language models can facilitate language learning by those learning it as a second language.</li>
+</ul>
+<p>I don’t believe that there’s a simple calculation than can be made, putting potential harm on one side and potential benefits on the other. Given that these models surely do already exist or are being developed by state actors, I also don’t think it’s a matter of staying away from the area entirely. That said, I do think it’s important to have these questions present when doing this kind of work as well as to involve and work within the context of pre-existing community efforts. I’ll turn to other resources and previous work in my next post to give a sense of what low-hanging fruit remains for the Balochi language.</p>
 
 
 

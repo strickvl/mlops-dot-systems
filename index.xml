@@ -10,7 +10,51 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 20 May 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 21 May 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>The Risks of Language Models in Minority Languages</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-05-22-balochi-language-model-harms.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>In thinking about my work to put together a language model or some utilities relating to the Balochi language, I thought a fair bit about whether I should even start. At a very high level, we can look at general risks that comes from language models, as highlighted in <a href="https://dl.acm.org/doi/pdf/10.1145/3531146.3533088">the 2022 Deepmind paper</a> entitled “Taxonomy of Risks posed by Language Models” which covers</p>
+<blockquote class="blockquote">
+<p>“six risk areas: I. Discrimination, Hate speech and Exclusion, II. Information Hazards, III. Misinformation Harms, IV. Malicious Uses, V. Human-Computer Interaction Harms, and VI. Environmental and Socioeconomic harms” (p.214)</p>
+</blockquote>
+<p>I’ll leave you to check out the paper if you wish. I can think of a number of specific risks and harms that could be connected to developing a language model for the Balochi language, most of which relate to state actors and their desire for more power and better surveillance capabilities.</p>
+<p>The communities speaking Balochi have historically and currently been subject to more monitoring than many, either from central governments in Iran and Pakistan or from European and American intelligence agencies, for a variety of reasons. In this context, language models can potentially fit into a system which is geared towards maximising power and influence among the powerful, enhancing state control and surveillance. In the longer term — and I haven’t seen to much by the way of research on this, but I’m going to take a leap — I can imagine that language models could well have the effect of creating a kind of linguistic monoculture. (Just think about the kind(s) of language that you read in default responses from ChatGPT and extrapolate from there.)</p>
+<p>My assumption is that large, well-funded intelligence agencies already have strong capabilities for Balochi. Indeed, Balochi is <a href="https://www.cia.gov/careers/language-opportunities/foreign-language-incentive-program/">one of the language specified as qualifying</a> for the CIA’s ‘Foreign Language Incentive Program’ that offers cash bonuses for new and current employees with foreign language skills in Balochi. There is almost certainly a team working on — among other things — language models that allows for the better monitoring of communications in the Balochi language. (To get more of a sense of what such models and capabilities might be used for, check out <a href="https://consciousdigital.org/the-nsas-large-language-models/">this article</a>.)</p>
+<p>What, then, are the positive uses of such technology? In no particular order, some things I thought of in the context of Balochi:</p>
+<ul>
+<li>disaster monitoring and outreach following natural disasters (NGOs and aid organisations (or even governments) are sometimes blocked by their inability to effectively communicate with those they are trying to help)</li>
+<li>translation and accessibility (heavily caveated, but there is the potential for positive action here as long as technology is responsibly deployed)</li>
+<li>equal access to technologies</li>
+<li>aggregation and summarisation tools</li>
+<li>language models as cultural artifacts (in a context of an incremental cultural erasure)</li>
+<li>enhancing the state of the art when it comes to training language models for low resource languages has the potential to support efforts being undertaken for many other languages</li>
+<li>work done to enhance datasets and the raw materials for language models might potentially be incorporated in bigger efforts by larger organisations (who generally would never think or make the effort to cover a language like Balochi)</li>
+<li>local and/or community ownership of the models (vs that of corporations)</li>
+<li>a way to reverse linguistic monoculture</li>
+<li>probably better results and performance for their specialised tasks than generalised mega-large language models</li>
+<li>(and finally, a cause close to my heart) language models can facilitate language learning by those learning it as a second language.</li>
+</ul>
+<p>I don’t believe that there’s a simple calculation than can be made, putting potential harm on one side and potential benefits on the other. Given that these models surely do already exist or are being developed by state actors, I also don’t think it’s a matter of staying away from the area entirely. That said, I do think it’s important to have these questions present when doing this kind of work as well as to involve and work within the context of pre-existing community efforts. I’ll turn to other resources and previous work in my next post to give a sense of what low-hanging fruit remains for the Balochi language.</p>
+
+
+
+ ]]></description>
+  <category>balochi</category>
+  <category>nlp</category>
+  <category>balochi-language-model</category>
+  <category>deep-learning</category>
+  <category>ethics</category>
+  <guid>https://mlops.systems/posts/2023-05-22-balochi-language-model-harms.html</guid>
+  <pubDate>Sun, 21 May 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/balochi-llm-harms.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>Low-resource language models: making a start with Balochi</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4273,146 +4317,6 @@ Training completed. Do not forget to share your model on huggingface.co/models =
   <guid>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</guid>
   <pubDate>Thu, 12 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/ml-training-big-picture/sgd-mini.png" medium="image" type="image/png" height="93" width="144"/>
-</item>
-<item>
-  <title>Some foundations for machine learning with PyTorch</title>
-  <link>https://mlops.systems/posts/2022-05-12-seven-steps-gradient-calculations.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="cell" data-execution_count="1">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq fastbook nbdev torch</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> fastbook</span>
-<span id="cb1-3">fastbook.setup_book()</span>
-<span id="cb1-4"></span>
-<span id="cb1-5"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-6"><span class="im" style="color: #00769E;">from</span> fastbook <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-7"><span class="im" style="color: #00769E;">import</span> torch</span>
-<span id="cb1-8"><span class="im" style="color: #00769E;">from</span> torch.utils.data <span class="im" style="color: #00769E;">import</span> Dataset</span>
-<span id="cb1-9"><span class="im" style="color: #00769E;">from</span> torchvision <span class="im" style="color: #00769E;">import</span> datasets</span>
-<span id="cb1-10"><span class="im" style="color: #00769E;">from</span> torchvision.transforms <span class="im" style="color: #00769E;">import</span> ToTensor</span>
-<span id="cb1-11"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span></code></pre></div>
-</details>
-</div>
-<p>In the <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/fashion-mnist-pixel-similarity.html">previous post</a> I showed a naive approach to calculating the similarity or difference between images, and how that could be used to create a function that did pretty well at estimating whether any particular image was a pullover or a dress.</p>
-<p><a href="https://github.com/fastai/fastbook/blob/master/04_mnist_basics.ipynb">Chapter 4 of the fastbook</a> then takes us on a journey showing a smarter approach where the computer can make even better estimations and predictions. The broad strokes of this approach are simple to grasp, but of course the individual details are where the nuances of machine learning are to be found.</p>
-<section id="seven-steps-for-a-machine-to-learn" class="level1">
-<h1>Seven steps for a machine to learn</h1>
-<p><img src="https://mlops.systems/posts/nb_images/ml-training-big-picture/seven-steps.png" class="img-fluid"></p>
-<p><strong>1. Initialise a set of weights</strong></p>
-<p>We use random values start with. There could potentially be more elaborate / fancy ways to calculate some starting values that are closer to our end goal, but in practice it is unnecessary because we have a process that we are going to use to update our values.</p>
-<p><strong>2. Use the weights to make a prediction</strong></p>
-<p>We check whether the sets of weights we have currently set as part of our function are the right ones. We check the prediction (i.e.&nbsp;what came out the other end of our model / function) and get a sense of how well our model did.</p>
-<p><strong>3. Loss: see how well we did with our predictions</strong></p>
-<p>We calculate the loss for our data. How well did we do at predicting what we were trying to predict? We use a number that will be small if our function is doing well. (Note: this is just a convention and otherwise there’s no special reason for this.)</p>
-<p><strong>4. Calculate the gradients across all the weights</strong></p>
-<p>We are calculating the gradient for lots of numbers, not just a single value. For every stage, we get back the gradient for all of the numbers. This is done sequentially, where we calculate the gradient for one weight / number, keeping all the other numbers constant, and then we repeat this for all the other weights.</p>
-<p>Gradient calculation relates to calculating derivatives and with this we are stepping firmly into the space of calculus. I don’t fully understand how all this works, but intuitively, the important thing to know is this: we are calculating the change of the value, not the value itself. I.e. we want to know how things will change (by how much, and in what direction) if we shift this value slightly.</p>
-<p>Note that the process of calculating the gradients is a performance optimisation. We could just as well have done this with a (slower) manual process where we adjust a little bit each time. With the gradient calculations we can take bigger steps in the direction we want, with more precision guiding our guesses about the direction and distance we want to go.</p>
-<p><strong>5. ‘Step’: Update the weights</strong></p>
-<p>This is where we increase or decrease our own weights by a small amount and see whether the loss goes up or down. As hinted in step 4, we use calculus to figure out:</p>
-<ul>
-<li>which direction to go in</li>
-<li>how much we should increase or decrease our own weights</li>
-</ul>
-<p><strong>6. Repeat starting at step 2</strong></p>
-<p>This is an iterative process.</p>
-<p><strong>7. Iterate until we decide to stop</strong></p>
-<p>There are various criteria determining when we should stop. Some possible stopping points might include:</p>
-<ul>
-<li>when the model is ‘good enough’ for our use case</li>
-<li>when we have run out of time (or money!)</li>
-<li>when the accuracy starts getting worse (i.e.&nbsp;the model isn’t performing as well)</li>
-</ul>
-</section>
-<section id="calculating-gradients-with-pytorch" class="level1">
-<h1>Calculating gradients with PyTorch</h1>
-<p>For those of us who don’t bring a strong mathematics foundation into this space, the mention of calculus, derivatives and gradients isn’t especially reassuring, but rest assured that PyTorch can help us out during this process.</p>
-<p>There are three main parts to using PyTorch to calculate gradients (i.e.&nbsp;step four of the seven steps listed above.)</p>
-<section id="setup-add-.requires_grad_-to-a-tensor" class="level2">
-<h2 class="anchored" data-anchor-id="setup-add-.requires_grad_-to-a-tensor">1. Setup: add <code>.requires_grad_()</code> to a tensor</h2>
-<p>For any Tensor where we know we’re going to want to calculate the gradients of values, we call <code>.require_grad()</code> on that Tensor.</p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;"># we define a simple function</span></span>
-<span id="cb2-2"><span class="kw" style="color: #003B4F;">def</span> f(x):</span>
-<span id="cb2-3">    <span class="cf" style="color: #003B4F;">return</span> x<span class="op" style="color: #5E5E5E;">**</span><span class="dv" style="color: #AD0000;">2</span></span>
-<span id="cb2-4"></span>
-<span id="cb2-5">x_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.tensor(<span class="fl" style="color: #AD0000;">3.</span>).requires_grad_()</span>
-<span id="cb2-6"></span>
-<span id="cb2-7">y_tensor <span class="op" style="color: #5E5E5E;">=</span> f(x_tensor)</span>
-<span id="cb2-8"></span>
-<span id="cb2-9">y_tensor</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>tensor(9., grad_fn=&lt;PowBackward0&gt;)</code></pre>
-</div>
-</div>
-<p>Here we can see that 3 squared is indeed 9, and we can see the <code>grad_fn</code> as part of the Tensor.</p>
-</section>
-<section id="use-.backward-to-calculate-the-gradient" class="level2">
-<h2 class="anchored" data-anchor-id="use-.backward-to-calculate-the-gradient">2. Use <code>.backward()</code> to calculate the gradient</h2>
-<p>This actually refers to backpropagation, something which is explained much later in the book. This step is also known as the ‘backward pass’. Note, that this is again another piece of jargon that we just have to learn. In reality this method might as well have been called <code>.calculate_gradients()</code>.</p>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">y_tensor.backward()</span></code></pre></div>
-</div>
-</section>
-<section id="access-the-gradient-via-the-.grad-attribute" class="level2">
-<h2 class="anchored" data-anchor-id="access-the-gradient-via-the-.grad-attribute">3. Access the gradient via the <code>.grad</code> attribute</h2>
-<p>We view the gradient by checking this <code>.grad</code> attribute.</p>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">x_tensor.grad</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>tensor(6.)</code></pre>
-</div>
-</div>
-<p>I can’t explain why this is the case, since I’ve never learned how to calculate gradients or derivatives (or anything about calculus, for that matter!) but in any case it’s not really important.</p>
-<p>Note that we can do this whole process over Tensors that are more complex than illustrated in the above simple example:</p>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">complex_x <span class="op" style="color: #5E5E5E;">=</span> tensor([<span class="fl" style="color: #AD0000;">3.</span>, <span class="fl" style="color: #AD0000;">5.</span>, <span class="fl" style="color: #AD0000;">12.</span>]).requires_grad_()</span>
-<span id="cb7-2"></span>
-<span id="cb7-3"><span class="kw" style="color: #003B4F;">def</span> f(x):</span>
-<span id="cb7-4">    <span class="cf" style="color: #003B4F;">return</span> (x<span class="op" style="color: #5E5E5E;">**</span><span class="dv" style="color: #AD0000;">2</span>).<span class="bu" style="color: null;">sum</span>()</span>
-<span id="cb7-5"></span>
-<span id="cb7-6">complex_y <span class="op" style="color: #5E5E5E;">=</span> f(complex_x)</span>
-<span id="cb7-7">complex_y.backward()</span>
-<span id="cb7-8">complex_x.grad</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>tensor([ 6., 10., 24.])</code></pre>
-</div>
-</div>
-<p>Something else I discovered while doing this was that gradients can only be calculated on floating point values, so this is why when we create <code>x_tensor</code> and <code>complex_x</code> we create them with floating point values (<code>3.</code> etc) instead of just integers. In reality, I think there will be some kind of normalisation of our values as part of the process, so they would probably <em>already</em> be floats, but it’s worth noting.</p>
-</section>
-</section>
-<section id="stepping-using-learning-rates-to-figure-out-how-much-to-step" class="level1">
-<h1>‘Stepping’: using learning rates to figure out how much to step</h1>
-<p>Now that we know how to calculate gradients, the key question for the fifth step in our seven-step process is the following:</p>
-<blockquote class="blockquote">
-<p>“How much should we shift our values based on what we get back from our gradient calculations?</p>
-</blockquote>
-<p>We call this amount the ‘learning rate’, and it is usually a value between 0.001 and 0.1. Very small, in other words :)</p>
-<p>We adjust our weights / parameters by this basic equation:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">weights <span class="op" style="color: #5E5E5E;">-=</span> weights.grad <span class="op" style="color: #5E5E5E;">*</span> learning_rate</span></code></pre></div>
-<p>This process is called “stepping the parameters” and it uses an optimisation step.</p>
-<p>The learning rate shouldn’t be too high, else our loss can get higher / worse or otherwise we can just bounce around within the boundaries of our function without ever reaching the optimum (== lowest) loss.</p>
-<p>At the same time, we shouldn’t use a very tiny learning rate (i.e.&nbsp;even tinier than the 0.001-0.1 mentioned above) since then the process will take a really long time and while we might reach the optimum loss at some point, it might not be the fastest way to get there.</p>
-</section>
-<section id="takeaways-from-the-seven-step-process" class="level1">
-<h1>Takeaways from the seven-step process</h1>
-<p>Most of this makes a lot of intuitive sense to me. The parts that don’t are what is going on with the gradient calculations and finding of derivatives and so on. For now, it appears that I can get away without understanding precisely how that works. It is enough to appreciate that we have a way to make these calculations, and those calculations are optimised for us</p>
-
-
-</section>
-
- ]]></description>
-  <category>fastai</category>
-  <category>computervision</category>
-  <category>partone</category>
-  <guid>https://mlops.systems/posts/2022-05-12-seven-steps-gradient-calculations.html</guid>
-  <pubDate>Wed, 11 May 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/ml-training-big-picture/seven-steps.png" medium="image" type="image/png" height="55" width="144"/>
 </item>
 </channel>
 </rss>
