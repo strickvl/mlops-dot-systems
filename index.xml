@@ -10,7 +10,42 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 21 May 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 28 May 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Building a Balochi Language Dataset for NLP Applications</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m working on building out some language models and utilities for the Balochi language. (Read <a href="https://mlops.systems/#category=balochi">previous posts</a> in this series for the full context.) Even though there are some 8-10 million estimated speakers, it certainly falls into the category of being a ‘low-resource’ language. Many (most?) things that you’d take for granted when working with English-language models are either non-existent or bare bones for Balochi.</p>
+<p>The experimentation phase of a project like this rewards a fast iteration speed, so I’m looking for ways to keep moving forward. I don’t need to spend days running a single experiment to validate my ideas; I’m sufficiently green that small datasets and these frequent tweaks to what I’m doing will hopefully reward me.</p>
+<p>I did an initial survey of materials and resources that already exist, collecting a mix of more general language materials alongside some prior work that exists in the NLP space for Balochi. In particular, there are some small datasets on GitHub as well as some more targeted projects for Named Entity Recognition (NER). Since it’s my repository, I also threw in some blog posts that inspired me to get started in the first place (from <a href="https://ljvmiranda921.github.io">Lj Miranda</a> and <a href="https://kurianbenoy.com/blog.html#category=malayalamtextmodels">Kurian Benoy</a>, among others).</p>
+<p><img src="https://mlops.systems/posts/images/awesome-balochi.png" title="A screenshot of the `awesome-balochi-nlp` repository I put together." class="img-fluid"></p>
+<p><a href="https://github.com/strickvl/awesome-balochi-nlp">The <code>awesome-balochi-nlp</code> repository</a> is my first effort at gathering a list of resources. I’ll be keeping it up to date as I continue.</p>
+<p>For my work gathering the dataset together, I had my eyes on three potential sources of authentic Balochi texts:</p>
+<ul>
+<li>Sina Ahmadi’s <a href="https://github.com/sinaahmadi/PersoArabicLID">PersoArabicLID project</a> (language classification for a series of low-resource languages that share a common script) includes (labelled) datasets as part of the repository</li>
+<li>Baask.com — a website that’s been posting Balochi content for around a decade and that I had come across in the past</li>
+<li>Kissah.org — a project by Junaid Qadir that collates Balochi stories</li>
+</ul>
+<p>The mechanics of gathering the texts from these sources was straightforward (a few scripts using <code>beautifulsoup</code> and the <code>requests</code> module), but I’ll admit that the experience felt a little uncomfortable. The content from these sources may technically be ‘fair game’ but I’ll admit to a certain queasiness about how easy it was to put together my promo-dataset of Balochi language in an evening. (For that reason, I’m probably not going to open up the dataset until I’ve figured out a way to do that properly; the ideal end-goal is to have datasets like this available publicly on the Huggingface Hub and so on.)</p>
+<p>So now I have a dataset containing some 2.6 million words of Balochi text. This feels like it’s enough to do some experiments at least, and we’ll see how far I get with it. The first order of business is to look into tokenisation or the process of splitting those texts up into pieces that can be used and processed by the machine learning machinery. Surprise surprise: there aren’t any pre-existing tokenisers for Balochi and while there are language-agnostic tokenisation processes I want to understand the tradeoffs around the different algorithms and approaches they take.</p>
+
+
+
+ ]]></description>
+  <category>balochi</category>
+  <category>nlp</category>
+  <category>balochi-language-model</category>
+  <category>ethics</category>
+  <category>datasets</category>
+  <guid>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</guid>
+  <pubDate>Sun, 28 May 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/awesome-balochi.png " medium="image"/>
+</item>
 <item>
   <title>The Risks of Language Models in Minority Languages</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4115,208 +4150,6 @@ Training completed. Do not forget to share your model on huggingface.co/models =
   <guid>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</guid>
   <pubDate>Fri, 13 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/fashion-mnist/fashion-mnist-small.png" medium="image" type="image/png" height="142" width="144"/>
-</item>
-<item>
-  <title>Stochastic Gradient Descent: a mini-example of the whole game</title>
-  <link>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="cell" data-execution_count="1">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq fastbook nbdev</span>
-<span id="cb1-2"></span>
-<span id="cb1-3"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span></code></pre></div>
-</details>
-</div>
-<section id="an-end-to-end-example-of-sgd" class="level1">
-<h1>An End-To-End Example of SGD</h1>
-<p>In <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/seven-steps-gradient-calculations.html">the previous post</a> we learned about the high-level seven-step process that we can use to update the weights of our function or model. We can now replicate that process and try it out on a very simple function to show how it works from start to finish. We will iterate a few times so that the gradual improvement is visible and clear.</p>
-<p>Note this example is pretty closely taken from chapter 4 of the fastai fastbook, available for free <a href="https://github.com/fastai/fastbook/blob/master/04_mnist_basics.ipynb">here</a>.</p>
-<p>Let’s assume that we’re plotting out the speed a rollercoaster is running at as it climbs up to one of its peaks, slowing as it reaches the top but then accelerating as it passes over the peak.</p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"></span>
-<span id="cb2-2"><span class="co" style="color: #5E5E5E;"># setup twenty values to represent time passing</span></span>
-<span id="cb2-3">time <span class="op" style="color: #5E5E5E;">=</span> torch.arange(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">20</span>).<span class="bu" style="color: null;">float</span>()</span>
-<span id="cb2-4">time</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>tensor([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10., 11., 12., 13.,
-        14., 15., 16., 17., 18., 19.])</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;"># calculate some noisy values that represent our speed</span></span>
-<span id="cb4-2">speed <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">20</span>)<span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">3</span> <span class="op" style="color: #5E5E5E;">+</span> <span class="fl" style="color: #AD0000;">0.75</span><span class="op" style="color: #5E5E5E;">*</span>(time<span class="op" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">9.5</span>)<span class="op" style="color: #5E5E5E;">**</span><span class="dv" style="color: #AD0000;">2</span> <span class="op" style="color: #5E5E5E;">+</span> <span class="dv" style="color: #AD0000;">1</span></span>
-<span id="cb4-3">plt.scatter(time, speed)<span class="op" style="color: #5E5E5E;">;</span></span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2022-05-13-sgd-whole-game_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>The curve is overall distinguishable, but the noise makes it non-trivial to just make a prediction.</p>
-<p>If we think of this function as a quadratic equation of the form <code>a * (time ** 2) + (b * time) + c</code>, we can boil our problem down to the following:</p>
-<ul>
-<li>for any value <code>time</code>, we want to be able to find the <code>speed</code> value</li>
-<li>given that we’ve stated that the equation is a quadratic equation of the form stated above, we basically just have to find the three values <code>a</code>, <code>b</code> and <code>c</code>.</li>
-</ul>
-<p>If we were doing this manually, we could manipulate each value and find the perfect combination such that we had the best possible prediction. (If we throw in loss calculation as part of this process, then we could say that we’d know that we have the right values for <code>a</code>, <code>b</code> and <code>c</code> when we have the lowest loss.)</p>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;"># define our function</span></span>
-<span id="cb5-2"><span class="kw" style="color: #003B4F;">def</span> f(t, params):</span>
-<span id="cb5-3">    a, b, c <span class="op" style="color: #5E5E5E;">=</span> params</span>
-<span id="cb5-4">    <span class="cf" style="color: #003B4F;">return</span> a<span class="op" style="color: #5E5E5E;">*</span>(t<span class="op" style="color: #5E5E5E;">**</span><span class="dv" style="color: #AD0000;">2</span>) <span class="op" style="color: #5E5E5E;">+</span> (b<span class="op" style="color: #5E5E5E;">*</span>t) <span class="op" style="color: #5E5E5E;">+</span> c</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;"># define our loss function</span></span>
-<span id="cb6-2"><span class="co" style="color: #5E5E5E;"># for continuous values, the mean squared error is a good choice</span></span>
-<span id="cb6-3"><span class="kw" style="color: #003B4F;">def</span> mse(predictions, targets):</span>
-<span id="cb6-4">    <span class="cf" style="color: #003B4F;">return</span> ((predictions <span class="op" style="color: #5E5E5E;">-</span> targets)<span class="op" style="color: #5E5E5E;">**</span><span class="dv" style="color: #AD0000;">2</span>).mean().sqrt()</span></code></pre></div>
-</div>
-<p>Now we can go through the seven-step process applying what we already know we need to do.</p>
-<section id="initialise-the-parameters" class="level2">
-<h2 class="anchored" data-anchor-id="initialise-the-parameters">1. Initialise the parameters</h2>
-<p>We begin with random values. We also make sure to set up our Tensor so that we’re able to calculate the gradients.</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">params <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">3</span>).requires_grad_()</span></code></pre></div>
-</div>
-</section>
-<section id="calculate-the-predictions" class="level2">
-<h2 class="anchored" data-anchor-id="calculate-the-predictions">2. Calculate the predictions</h2>
-<p>We make the calculations by passing our parameter values into our function <code>f</code>. We can visualise what our predictions would look like with those parameters.</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">preds <span class="op" style="color: #5E5E5E;">=</span> f(time, params)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="kw" style="color: #003B4F;">def</span> show_preds(preds, ax<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">None</span>):</span>
-<span id="cb9-2">    <span class="cf" style="color: #003B4F;">if</span> ax <span class="kw" style="color: #003B4F;">is</span> <span class="va" style="color: #111111;">None</span>:</span>
-<span id="cb9-3">        ax <span class="op" style="color: #5E5E5E;">=</span> plt.subplots()[<span class="dv" style="color: #AD0000;">1</span>]</span>
-<span id="cb9-4">        ax.scatter(time, speed)</span>
-<span id="cb9-5">        ax.scatter(time, to_np(preds), color <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">'red'</span>)</span>
-<span id="cb9-6"></span>
-<span id="cb9-7">show_preds(preds)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2022-05-13-sgd-whole-game_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>You can see that there’s a decent amount of difference between the curve denoting our predictions for the params (in red) and the actual function (in blue).</p>
-</section>
-<section id="calculate-the-loss" class="level2">
-<h2 class="anchored" data-anchor-id="calculate-the-loss">3. Calculate the loss</h2>
-<p>We use the mean squared error as a way of calculating our loss.</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">loss <span class="op" style="color: #5E5E5E;">=</span> mse(preds, speed)</span>
-<span id="cb10-2">loss</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>tensor(200.6502, grad_fn=&lt;SqrtBackward0&gt;)</code></pre>
-</div>
-</div>
-<p>This number is a measure of how far off our predictions are from the actual values. We want to improve this loss and drive it down even further, and for that we’ll need the gradients.</p>
-</section>
-<section id="calculate-the-gradient" class="level2">
-<h2 class="anchored" data-anchor-id="calculate-the-gradient">4. Calculate the gradient</h2>
-<p>As described <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/seven-steps-gradient-calculations.html">in the previous post</a>, we use PyTorch’s inbuilt ability to calculate gradients.</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">loss.backward()</span>
-<span id="cb12-2">params.grad</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
-<pre><code>tensor([166.3746,  10.6914,   0.6876])</code></pre>
-</div>
-</div>
-<p>We can update our parameters based on the learning rate. For our purposes here we can choose a really small learning rate: 0.00001 or 1e-5. This is what the values of our parameters would look like after that operation:</p>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">params <span class="op" style="color: #5E5E5E;">*</span> <span class="fl" style="color: #AD0000;">0.00001</span></span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>tensor([ 1.2895e-05,  5.8427e-06, -2.3174e-06], grad_fn=&lt;MulBackward0&gt;)</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">params</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>tensor([ 1.2895,  0.5843, -0.2317], requires_grad=True)</code></pre>
-</div>
-</div>
-</section>
-<section id="step-our-weights" class="level2">
-<h2 class="anchored" data-anchor-id="step-our-weights">5. Step our weights</h2>
-<p>We can step our parameters using the formula <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/seven-steps-gradient-calculations.html">previously described</a>: multiply the learning rate by the gradients.</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">learning_rate <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.00001</span></span>
-<span id="cb18-2">params.data <span class="op" style="color: #5E5E5E;">-=</span> learning_rate <span class="op" style="color: #5E5E5E;">*</span> params.grad.data</span>
-<span id="cb18-3">params.grad</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<pre><code>tensor([166.3746,  10.6914,   0.6876])</code></pre>
-</div>
-</div>
-<p>We can visualise whether this has improved our function’s curve or not:</p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">preds <span class="op" style="color: #5E5E5E;">=</span> f(time, params)</span>
-<span id="cb20-2">mse(preds, speed)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>tensor(200.3723, grad_fn=&lt;SqrtBackward0&gt;)</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">show_preds(preds)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2022-05-13-sgd-whole-game_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>Our loss has gone from 268.4112 to 268.1312. An improvement, but it feels like a small improvement!</p>
-</section>
-<section id="repeat-and-iterate" class="level2">
-<h2 class="anchored" data-anchor-id="repeat-and-iterate">6. Repeat and iterate</h2>
-<p>To save ourselves some time, we can create a function that will help us in iterating through and repeating the above steps:</p>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="kw" style="color: #003B4F;">def</span> repeat_sgd(params, prn<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>):</span>
-<span id="cb23-2">    preds <span class="op" style="color: #5E5E5E;">=</span> f(time, params)</span>
-<span id="cb23-3">    loss <span class="op" style="color: #5E5E5E;">=</span> mse(preds, speed)</span>
-<span id="cb23-4">    loss.backward()</span>
-<span id="cb23-5">    params.data <span class="op" style="color: #5E5E5E;">-=</span> learning_rate <span class="op" style="color: #5E5E5E;">*</span> params.grad.data</span>
-<span id="cb23-6">    params.grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">None</span></span>
-<span id="cb23-7">    <span class="cf" style="color: #003B4F;">if</span> prn:</span>
-<span id="cb23-8">        <span class="bu" style="color: null;">print</span>(loss.item())</span>
-<span id="cb23-9">    <span class="cf" style="color: #003B4F;">return</span> preds</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><span class="co" style="color: #5E5E5E;"># iterate a few times</span></span>
-<span id="cb24-2"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">10</span>):</span>
-<span id="cb24-3">    repeat_sgd(params)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>200.3722686767578
-199.81639099121094
-199.53848266601562
-199.2605743408203
-198.98269653320312
-198.70480346679688
-198.4269561767578
-198.14910888671875
-197.87124633789062
-197.59344482421875</code></pre>
-</div>
-</div>
-<p>We see that our loss is going down, so everything is improving as we’d hope. The progress seems slow, but it’s progress nonetheless. I imagine we could increasing the learning rate to make the loss go down faster.</p>
-</section>
-<section id="stop-when-weve-iterated-enough" class="level2">
-<h2 class="anchored" data-anchor-id="stop-when-weve-iterated-enough">7. Stop when we’ve iterated enough</h2>
-<p>We’ve only iterated a few times here, but really what we’d want to do is keep going until we reached our stopping point (either we’ve taken too long or our model is ‘good enough’ for our needs).</p>
-</section>
-</section>
-<section id="takeaways" class="level1">
-<h1>Takeaways</h1>
-<p>This remains a fairly simple example. We are optimising our three parameter values <code>a</code>, <code>b</code> and <code>c</code> and the calculations are pretty easy to visualise. We’ve seen how our loss function increases as we repeat the steps of gradient and loss calculation, ‘stepping’ and so on.</p>
-
-
-</section>
-
- ]]></description>
-  <category>fastai</category>
-  <category>computervision</category>
-  <category>partone</category>
-  <guid>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</guid>
-  <pubDate>Thu, 12 May 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/ml-training-big-picture/sgd-mini.png" medium="image" type="image/png" height="93" width="144"/>
 </item>
 </channel>
 </rss>
