@@ -33,8 +33,8 @@ I did an initial survey of materials and resources that already exist, collectin
 For my work gathering the dataset together, I had my eyes on three potential sources of authentic Balochi texts:
 
 - Sina Ahmadi's [PersoArabicLID project](https://github.com/sinaahmadi/PersoArabicLID) (language classification for a series of low-resource languages that share a common script) includes (labelled) datasets as part of the repository
-- Baask.com — a website that's been posting Balochi content for around a decade and that I had come across in the past
-- Kissah.org — a project by Junaid Qadir that collates Balochi stories
+- [Baask.com](http://baask.com/archive/) — a website that's been posting Balochi content for around a decade and that I had come across in the past
+- [Kissah.org](https://kissah.org) — a project by [Junaid Qadir](https://github.com/JunaidQadirB) that collates Balochi stories
 
 The mechanics of gathering the texts from these sources was straightforward (a few scripts using `beautifulsoup` and the `requests` module), but I'll admit that the experience felt a little uncomfortable. The content from these sources may technically be 'fair game' but I'll admit to a certain queasiness about how easy it was to put together my promo-dataset of Balochi language in an evening. (For that reason, I'm probably not going to open up the dataset until I've figured out a way to do that properly; the ideal end-goal is to have datasets like this available publicly on the Huggingface Hub and so on.)
 
