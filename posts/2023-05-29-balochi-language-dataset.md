@@ -11,7 +11,7 @@ description: "I share my journey of building language models for Balochi, a lang
 layout: post
 title: "Building a Balochi Language Dataset for NLP Applications"
 toc: false
-# image: images/awesome-balochi-small.png
+image: images/awesome-balochi-small.png
 include-before-body:
   '<script defer data-domain="mlops.systems"
   src="https://plausible.io/js/script.js"></script>'
@@ -38,4 +38,11 @@ For my work gathering the dataset together, I had my eyes on three potential sou
 
 The mechanics of gathering the texts from these sources was straightforward (a few scripts using `beautifulsoup` and the `requests` module), but I'll admit that the experience felt a little uncomfortable. The content from these sources may technically be 'fair game' but I'll admit to a certain queasiness about how easy it was to put together my promo-dataset of Balochi language in an evening. (For that reason, I'm probably not going to open up the dataset until I've figured out a way to do that properly; the ideal end-goal is to have datasets like this available publicly on the Huggingface Hub and so on.)
 
-So now I have a dataset containing some 2.6 million words of Balochi text. This feels like it's enough to do some experiments at least, and we'll see how far I get with it. The first order of business is to look into tokenisation or the process of splitting those texts up into pieces that can be used and processed by the machine learning machinery. Surprise surprise: there aren't any pre-existing tokenisers for Balochi and while there are language-agnostic tokenisation processes I want to understand the tradeoffs around the different algorithms and approaches they take.
+So now I have a dataset containing some 2.6 million words of Balochi text. This
+feels like it's enough to do some experiments at least, and we'll see how far I
+get with it. The first order of business is to look into tokenisation or the
+process of splitting those texts up into pieces that can be used and processed
+by the machine learning machinery. Surprise surprise: there aren't any
+pre-existing tokenisers for Balochi and while there are language-agnostic
+tokenisation processes I want to understand the tradeoffs around the different
+algorithms and approaches they take.
