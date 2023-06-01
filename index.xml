@@ -10,7 +10,219 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 28 May 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 31 May 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>What’s a token anyway?</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-06-01-why-tokenisation.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>For the types of machine learning that involve neural networks, the training process generally involves passing data and some weights into a function which we use to continually and iteratively optimise the weights. We hope that by showing lots of examples of the right way to do things (as per our data and annotations) we’ll emerge with a model (i.e.&nbsp;the updated weights) that performs the way we’d expect.</p>
+<p>This whole process has various kinds of mathematics at its core, some basic calculations and some higher-order ideas to help figure out how to improve the weights. For all this, we need our data to be in a form that can pass through these calculations. We’re in the domain of natural / human languages at the moment, so we need somehow to turn our words into some kind of numerical form. Tokenisation is a big part of that process.</p>
+<p>Most of what goes on with tokenisation is — to some extent — around finding a way to optimise the amount of data we have to feed into our model either during training or inference. We want to do both of these in the most efficient manner possible. Smaller amounts of data needed to train (or faster ways of processing the data) means you can do more with less.</p>
+<section id="simple-tokenization" class="level2">
+<h2 class="anchored" data-anchor-id="simple-tokenization">🔡 Simple tokenization</h2>
+<p>If you think about a text string, a naive approach might be to just split it up by character.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">sentence <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Some 10 million people speak the Balochi language, and most of them are located in Iran and Pakistan."</span></span>
+<span id="cb1-2"><span class="bu" style="color: null;">print</span>(<span class="bu" style="color: null;">list</span>(sentence))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['S', 'o', 'm', 'e', ' ', '1', '0', ' ', 'm', 'i', 'l', 'l', 'i', 'o', 'n', ' ', 'p', 'e', 'o', 'p', 'l', 'e', ' ', 's', 'p', 'e', 'a', 'k', ' ', 't', 'h', 'e', ' ', 'B', 'a', 'l', 'o', 'c', 'h', 'i', ' ', 'l', 'a', 'n', 'g', 'u', 'a', 'g', 'e', ',', ' ', 'a', 'n', 'd', ' ', 'm', 'o', 's', 't', ' ', 'o', 'f', ' ', 't', 'h', 'e', 'm', ' ', 'a', 'r', 'e', ' ', 'l', 'o', 'c', 'a', 't', 'e', 'd', ' ', 'i', 'n', ' ', 'I', 'r', 'a', 'n', ' ', 'a', 'n', 'd', ' ', 'P', 'a', 'k', 'i', 's', 't', 'a', 'n', '.']</code></pre>
+</div>
+</div>
+<p>We can get the unique characters from our sentence to save a bit of space:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="bu" style="color: null;">print</span>(<span class="bu" style="color: null;">set</span>(<span class="bu" style="color: null;">list</span>(sentence)))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'B', 'I', 'e', 'a', 'm', 'd', 'f', 'i', 'n', 'h', 't', 'P', ',', 's', 'r', '0', '.', 'c', ' ', 'g', 'p', '1', 'o', 'l', 'k', 'u', 'S'}</code></pre>
+</div>
+</div>
+<p>We can save even more space by transforming our sentence into lowercase text:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="bu" style="color: null;">print</span>(<span class="bu" style="color: null;">set</span>(<span class="bu" style="color: null;">list</span>(sentence.lower())))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'e', 'b', 'a', 'm', 'd', 'f', 'i', 'n', 'h', 't', ',', 's', 'r', '0', '.', 'c', ' ', 'g', 'p', '1', 'o', 'l', 'k', 'u'}</code></pre>
+</div>
+</div>
+<p>For Balochi this might look something like this:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">balochi_sentence <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ادءَ کسے است کہ انگریزی ءَ گپ جت بہ کنت"</span></span>
+<span id="cb7-2"><span class="co" style="color: #5E5E5E;"># translates to "Is there someone here who speaks English?"</span></span>
+<span id="cb7-3">balochi_chars <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>(<span class="bu" style="color: null;">list</span>(balochi_sentence.lower()))</span>
+<span id="cb7-4"><span class="bu" style="color: null;">print</span>(balochi_chars)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'ء', 'ے', 'ر', 'َ', 'پ', 'ج', 'ب', 'ت', 'ک', 'ی', 'ز', 'س', 'ن', 'ہ', 'د', ' ', 'ا', 'گ'}</code></pre>
+</div>
+</div>
+<p>And we can get a mapping of characters to integers quite easily from here:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">balochi_char_mapping <span class="op" style="color: #5E5E5E;">=</span> {char: index <span class="cf" style="color: #003B4F;">for</span> index, char <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">enumerate</span>(<span class="bu" style="color: null;">sorted</span>(balochi_chars))}</span>
+<span id="cb9-2"><span class="bu" style="color: null;">print</span>(balochi_char_mapping)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{' ': 0, 'ء': 1, 'ا': 2, 'ب': 3, 'ت': 4, 'ج': 5, 'د': 6, 'ر': 7, 'ز': 8, 'س': 9, 'ن': 10, 'َ': 11, 'پ': 12, 'ک': 13, 'گ': 14, 'ہ': 15, 'ی': 16, 'ے': 17}</code></pre>
+</div>
+</div>
+<p>You can already see some wonkiness in how the sorted mapping is displayed. This derives from the fact that the Balochi script is written from right-to-left and this pattern is not well supported in a world dominated by English.</p>
+<p>The mapping is what we want, and we can use this to map our original sentence into a sequence of numbers:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">balochi_sentence_ids <span class="op" style="color: #5E5E5E;">=</span> [balochi_char_mapping[char] <span class="cf" style="color: #003B4F;">for</span> char <span class="kw" style="color: #003B4F;">in</span> balochi_chars]</span>
+<span id="cb11-2"><span class="bu" style="color: null;">print</span>(balochi_sentence_ids)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 17, 7, 11, 12, 5, 3, 4, 13, 16, 8, 9, 10, 15, 6, 0, 2, 14]</code></pre>
+</div>
+</div>
+<p>When it comes to language, the things we care at the tail end of all our modelling all relate to sequences of words and not characters. While our vocabulary (i.e.&nbsp;our list of unique characters) would be pretty small with character-level tokenization, we’d have some other issues:</p>
+<ul>
+<li>loss of semantic meaning – our model would likely find it harder to ‘learn’ the higher level concepts without first finding a way past the idea of words and how they represent meaning in a way that pure characters don’t)</li>
+<li>increased sequence length – if we think of a sentence as a sequence of words, a sequence of characters would be much longer in sheer numbers. This adds overhead in terms of the complexity of processing and training on the text.</li>
+</ul>
+<p>At the other end of the spectrum we have word-based tokenisation:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">balochi_words <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>(balochi_sentence.split())</span>
+<span id="cb13-2"><span class="bu" style="color: null;">print</span>(balochi_words)</span>
+<span id="cb13-3">word_mapping <span class="op" style="color: #5E5E5E;">=</span> {word: index <span class="cf" style="color: #003B4F;">for</span> index, word <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">enumerate</span>(<span class="bu" style="color: null;">sorted</span>(balochi_words))}</span>
+<span id="cb13-4"><span class="bu" style="color: null;">print</span>(word_mapping)</span>
+<span id="cb13-5">word_ids <span class="op" style="color: #5E5E5E;">=</span> [word_mapping[word] <span class="cf" style="color: #003B4F;">for</span> word <span class="kw" style="color: #003B4F;">in</span> balochi_words]</span>
+<span id="cb13-6"><span class="bu" style="color: null;">print</span>(word_ids)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'گپ', 'جت', 'ءَ', 'کہ', 'انگریزی', 'کنت', 'بہ', 'کسے', 'ادءَ', 'است'}
+{'ءَ': 0, 'ادءَ': 1, 'است': 2, 'انگریزی': 3, 'بہ': 4, 'جت': 5, 'کسے': 6, 'کنت': 7, 'کہ': 8, 'گپ': 9}
+[9, 5, 0, 8, 3, 7, 4, 6, 1, 2]</code></pre>
+</div>
+</div>
+<p>This has the advantage of keeping our data at what feesl like an appropriate level of semantic abstraction, but you can probably imagine that our vocabulary size could well get out of control. If we have enough data, eventually our vocabulary size could grow to hundreds of thousands of items and then we’re going to have the same problem we had with long sequences in character-level tokenisation.</p>
+<p>There are various ways of dealing with this. The blunt-force aproach would be to discard the words with a low frequency. We could pick some number (100,000 perhaps) and say that we’ll only include the 100,000 most common words from our corpus. Anything else will get replaced with something like “UNK” or “xxunk” that we’ll know isn’t a real word but just signifies that there was a low-frequency word there. This keeps our vocabulary (relatively) limited, but as you can imagine we might lose important information by discarding all those ‘uncommon’ words.</p>
+</section>
+<section id="linguistically-enhanced-tokenization" class="level2">
+<h2 class="anchored" data-anchor-id="linguistically-enhanced-tokenization">📚 Linguistically-enhanced tokenization</h2>
+<p>Before we get to the current best-in-class solution to this problem, it’s worth mentioning that there are some approaches that use some hand-crafted features derived from a linguistic understanding of a particular language.</p>
+<p>For example, in deciding which words to leave out of tokenization, we might want to ignore ones which tend not to give so much useful information. For English, these are works like “the”, “or” or “a”. (You can get a sense of these words <a href="https://dedolist.com/lists/language/stop-words-english/">here</a>.</p>
+<p>We also might want to use ‘stemming’ and/or ‘lemmatisation’ as a way of reducing the total number of words in our vocabulary:</p>
+<ul>
+<li>Stemming reduces the word to a more basic form, i.e.&nbsp;‘the stem’. So the words “connection”, “connected” and “connects” might all reduce down to “connect”. Note that this stemmed word might not actually exist in English.</li>
+<li>Lemmatisation is similar, but it uses a bit of extra knowledge of the language to reduce the words. For example, “good”, “better” and “best” might all reduce down to “good” even though they are spelled in quite different ways.</li>
+</ul>
+<p>Both stemming and lemmatisation (as far as I know) and some other related techniques require a pre-existing knowledge base to exist and to have been hand-coded or hard-coded into the software you use to process your text. For some languages that’s not a problem, but for Balochi these resources haven’t yet been created. A few years back it might even have been the next step for me in my Balochi project to go ahead and work on preparing these kinds of linguistic features and work using these techniques. They require a considerable amount of expertise in the specific language you’re working on, and I’m assuming they take a long time to put together as well.</p>
+<p>Luckily, there is a technique which allows us the best of many worlds: small(ish) vocabulary and no need for years constructing language-specific lists of words and their roots. Let the CPU handle all that!</p>
+</section>
+<section id="subword-tokenisation" class="level2">
+<h2 class="anchored" data-anchor-id="subword-tokenisation">👶 Subword tokenisation</h2>
+<p>Subword tokenisation is when you let the computer decide how to figure out the right balance between characters and words when it comes to splitting the text corpus up. The technique seems to have gained popularity for tokenisation in only the last decade, though the original algorithm on which some of it was based dates back to 1994.</p>
+<p>The basic rule of thumb is this: split the words into the optimum number of pieces given a specific text corpus. So if we had two words, “car” and “cat”, in our corpus, the tokens we might generate from these would be: “ca##” “##r” and “##t”. The ‘##’ means that something can join to the letter from that side. Obviously in this small example, we didn’t really save any space, but for large volumes of data we’re going to generate down to just the right balance between characters and letters.</p>
+<p>This technique was actually <a href="http://www.pennelynn.com/Documents/CUJ/HTML/94HTML/19940045.HTM">first proposed</a> by Philip Gage as a compression algorithm in 1994, but then presumably rediscovered or reimplemented for tokenisation in a series of updates building on the original idea. There have thus been several implementations of this algorithmic family:</p>
+<ul>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/ja//pubs/archive/37842.pdf">WordPiece</a> (Schuster &amp; Nakajima in 2012) – used in BERT and DistinBERT</li>
+<li><a href="https://www.aclweb.org/anthology/P16-1162/">Byte Pair Encoding (BPE)</a> (Sennrich in 2015)</li>
+<li><a href="https://arxiv.org/abs/1808.06226">Sentence Piece / Unigram</a> (Kudo &amp; Richardson in 2018) – used in XLM-RoBERTa</li>
+<li><a href="https://www.aclweb.org/anthology/2020.acl-main.170/">BPE Dropout</a> (Provilkov et al.&nbsp;in 2020)</li>
+<li><a href="https://arxiv.org/abs/2005.06606">Dynamic programming encoding (DPE)</a> (He et al.&nbsp;in 2020)</li>
+</ul>
+<p>(Thanks to Masato Hagiwara for a useful summary of the history and key developments <a href="https://blog.octanove.org/guide-to-subword-tokenization/">on his blog here</a>.)</p>
+<p>This is my summary of some of the key differences to bear in mind:</p>
+<p><img src="https://mlops.systems/posts/images/tokenisation/spectrum.png" class="img-fluid"></p>
+<p>The key difference between the tokenisation process we’ve seen and subword tokenisation is that now we need a text dataset and a ‘training’ process to ‘learn’ how to split words down into smaller chunks. I’ll get into the specific details of how this works along with some examples for Balochi in the next blog.</p>
+</section>
+<section id="extra-meta-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="extra-meta-tokens">😜 Extra Meta-Tokens</h2>
+<p>There are a few extra tokens that get generated during some of the above tokenisation methods that it’s probably worth talking about now. These tokens are added to the vocabulary of tokens and they represent various contextual information. For example:</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 93%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Token</th>
+<th>Purpose / Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CLS</td>
+<td>‘classification’. Token prepended to the start of each text chunk.</td>
+</tr>
+<tr class="even">
+<td>SEP</td>
+<td>‘separate’. Token used to separate sentences inside a text chunk.</td>
+</tr>
+<tr class="odd">
+<td>##</td>
+<td>(mentioned above). Used to denote other tokens can be attached here.</td>
+</tr>
+<tr class="even">
+<td>BOS</td>
+<td>‘beginning of stream’. Also used to denote the beginning of a sentence.</td>
+</tr>
+<tr class="odd">
+<td>PAD</td>
+<td>‘pad’. A way to make arrays of tokens the same length / size.</td>
+</tr>
+<tr class="even">
+<td>MASK</td>
+<td>‘mask’. Used to mask a word in a sentence and used in training.</td>
+</tr>
+<tr class="odd">
+<td>xxmaj</td>
+<td>indicates that the next word begins with a capital letter.</td>
+</tr>
+<tr class="even">
+<td>UNK</td>
+<td>‘unknown’. Used when you need to limit your vocabulary size.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that these aren’t universally used. The <code>xx</code> prefix is something that FastAI uses in its tokenisation to avoid the chance that something like ‘PAD’ is being used as an actual word in the text.</p>
+</section>
+<section id="numericalising-the-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="numericalising-the-tokens">🔢 Numericalising the tokens</h2>
+<p>Once we have our list of tokens and their ids (see above), it isn’t enough for us just to pass that in for training our models. Neural networks will attach to anything that gives a bit of signal when they are learning from data. If we have a list of tokens and ‘dog’ is assigned the number 3 and ‘cat’ is assigned the number 10, our model might assign some kind of ranking or importance to those numbers. So we have to pass our values in a way that doesn’t lead to this kind of unanticipated signal. The way we do this for language is to ‘one-hot encode’ the values.</p>
+<p>So instead of:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">balochi_sentence_ids <span class="op" style="color: #5E5E5E;">=</span> [word_mapping[word] <span class="cf" style="color: #003B4F;">for</span> word <span class="kw" style="color: #003B4F;">in</span> balochi_sentence.split()]</span>
+<span id="cb15-2"><span class="bu" style="color: null;">print</span>(balochi_sentence_ids)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 6, 2, 8, 3, 0, 9, 5, 4, 7]</code></pre>
+</div>
+</div>
+<p>…we can generate an array of arrays. For each word in the sentence, we have a subarray that has a length of our vocabulary and then we turn the value in the word’s index to <code>1</code> if that’s the word at this point in our sentence. It’ll be easier to see in an example :)</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;">import</span> torch</span>
+<span id="cb17-2"><span class="im" style="color: #00769E;">import</span> torch.nn.functional <span class="im" style="color: #00769E;">as</span> F</span>
+<span id="cb17-3"></span>
+<span id="cb17-4"></span>
+<span id="cb17-5">input_ids <span class="op" style="color: #5E5E5E;">=</span> torch.tensor(balochi_sentence_ids)</span>
+<span id="cb17-6">one_hot_encodings <span class="op" style="color: #5E5E5E;">=</span> F.one_hot(input_ids, num_classes<span class="op" style="color: #5E5E5E;">=</span><span class="bu" style="color: null;">len</span>(balochi_words))</span>
+<span id="cb17-7"><span class="bu" style="color: null;">print</span>(one_hot_encodings)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]])</code></pre>
+</div>
+</div>
+<p>So you can see for the first word (i.e.&nbsp;the first subarray) we have a <code>1</code> at index 1 and this corresponds exactly to our sentence and the mapping of words. (I hope it’s clear now also why we might want to have some kind of limitation of just how large our vocabulary gets.)</p>
+<p>In my next post I’ll walk through all of the details showing how you train your own subword tokenizer, compare how it works in two popular Python libraries (Spacy and 🤗 Tokenisers and in general show how all of this fits together in the bigger picture.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>nlp</category>
+  <category>balochi-language-model</category>
+  <category>tokenisation</category>
+  <guid>https://mlops.systems/posts/2023-06-01-why-tokenisation.html</guid>
+  <pubDate>Wed, 31 May 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/tokenisation/cover-small.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>Building a Balochi Language Dataset for NLP Applications</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -44,7 +256,7 @@
   <category>datasets</category>
   <guid>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</guid>
   <pubDate>Sun, 28 May 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/awesome-balochi.png " medium="image"/>
+  <media:content url="https://mlops.systems/posts/images/awesome-balochi-small.png" medium="image" type="image/png" height="132" width="144"/>
 </item>
 <item>
   <title>The Risks of Language Models in Minority Languages</title>
@@ -3729,427 +3941,6 @@ Training completed. Do not forget to share your model on huggingface.co/models =
   <guid>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</guid>
   <pubDate>Sat, 14 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/ml-training-big-picture/neuralnetwork.png" medium="image" type="image/png" height="92" width="144"/>
-</item>
-<item>
-  <title>Using the seven-step SGD process for Fashion MNIST</title>
-  <link>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="cell" data-execution_count="2">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq fastbook nbdev torch</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> fastbook</span>
-<span id="cb1-3">fastbook.setup_book()</span>
-<span id="cb1-4"></span>
-<span id="cb1-5"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-6"><span class="im" style="color: #00769E;">from</span> fastbook <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-7"><span class="im" style="color: #00769E;">import</span> torch</span>
-<span id="cb1-8"><span class="im" style="color: #00769E;">from</span> torch.utils.data <span class="im" style="color: #00769E;">import</span> Dataset</span>
-<span id="cb1-9"><span class="im" style="color: #00769E;">from</span> torchvision <span class="im" style="color: #00769E;">import</span> datasets</span>
-<span id="cb1-10"><span class="im" style="color: #00769E;">from</span> torchvision.transforms <span class="im" style="color: #00769E;">import</span> ToTensor</span>
-<span id="cb1-11"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span></code></pre></div>
-</details>
-</div>
-<p>In <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/13/sgd-whole-game.html">the previous post</a> I used the seven-step process to fit to an unknown function. The process as a whole is fairly simple to get your head around, but there are a good few details to keep track of along the way. This will continue to be the case as we get into this walkthrough of how to do the same for the Fashion MNIST pullover vs dress data.</p>
-<section id="getting-our-data-into-the-right-format" class="level1">
-<h1>Getting our data into the right format</h1>
-<p>The first thing we need to handle is making sure our data is in the right format, shape and so on. We begin by downloading our data and splitting the data into training and test sets.</p>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">training_data <span class="op" style="color: #5E5E5E;">=</span> datasets.FashionMNIST(</span>
-<span id="cb2-2">    root<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"data"</span>,</span>
-<span id="cb2-3">    train<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb2-4">    download<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb2-5">    transform<span class="op" style="color: #5E5E5E;">=</span>ToTensor()</span>
-<span id="cb2-6">)</span>
-<span id="cb2-7"></span>
-<span id="cb2-8">test_data <span class="op" style="color: #5E5E5E;">=</span> datasets.FashionMNIST(</span>
-<span id="cb2-9">    root<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"data"</span>,</span>
-<span id="cb2-10">    train<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb2-11">    download<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb2-12">    transform<span class="op" style="color: #5E5E5E;">=</span>ToTensor()</span>
-<span id="cb2-13">)</span>
-<span id="cb2-14"></span>
-<span id="cb2-15">training_dresses <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> training_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span>]</span>
-<span id="cb2-16">training_pullovers <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> training_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span>]</span>
-<span id="cb2-17">test_dresses <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> test_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span>]</span>
-<span id="cb2-18">test_pullovers <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> test_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span>]</span>
-<span id="cb2-19"></span>
-<span id="cb2-20">training_dresses_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(training_dresses)</span>
-<span id="cb2-21">training_pullovers_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(training_pullovers)</span>
-<span id="cb2-22">test_dresses_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(test_dresses)</span>
-<span id="cb2-23">test_pullovers_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(test_pullovers)</span>
-<span id="cb2-24"></span>
-<span id="cb2-25">training_dresses_tensor.shape, test_dresses_tensor.shape</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>(torch.Size([6000, 28, 28]), torch.Size([1000, 28, 28]))</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">train_x <span class="op" style="color: #5E5E5E;">=</span> torch.cat([training_dresses_tensor, training_pullovers_tensor]).view(<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>)</span>
-<span id="cb4-2">train_y <span class="op" style="color: #5E5E5E;">=</span> torch.cat([torch.ones(<span class="bu" style="color: null;">len</span>(training_dresses)), torch.zeros(<span class="bu" style="color: null;">len</span>(training_pullovers))]).unsqueeze(<span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb4-3"></span>
-<span id="cb4-4">valid_x <span class="op" style="color: #5E5E5E;">=</span> torch.cat([test_dresses_tensor, test_pullovers_tensor]).view(<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>)</span>
-<span id="cb4-5">valid_y <span class="op" style="color: #5E5E5E;">=</span> torch.cat([torch.ones(<span class="bu" style="color: null;">len</span>(test_dresses)), torch.zeros(<span class="bu" style="color: null;">len</span>(test_pullovers))]).unsqueeze(<span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb4-6">train_x.shape, train_y.shape</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>(torch.Size([12000, 784]), torch.Size([12000, 1]))</code></pre>
-</div>
-</div>
-<p>We transform our images tensors from matrices into vectors with all the values one after another. We create a <code>train_y</code> vector with our labels which we can use to check how well we did with our predictions.</p>
-<p>We create datasets out of our tensors. This means that we can feed our data into our training functions in the way that is most convenient (i.e.&nbsp;an image is paired with the correct label).</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">train_dset <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">list</span>(<span class="bu" style="color: null;">zip</span>(train_x, train_y))</span>
-<span id="cb6-2">valid_dset <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">list</span>(<span class="bu" style="color: null;">zip</span>(valid_x, valid_y))</span></code></pre></div>
-</div>
-</section>
-<section id="initialising-our-weights-and-bias" class="level1">
-<h1>Initialising our weights and bias</h1>
-<p>As in the previous times where we’ve done this, we initialise our parameters or weights with random values. This means that for every pixel represented in the images, we’ll start off with purely random values. We initialise our bias to a random number as well.</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;">def</span> initialise_params(size, std<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">1.0</span>):</span>
-<span id="cb7-2">    <span class="cf" style="color: #003B4F;">return</span> (torch.randn(size) <span class="op" style="color: #5E5E5E;">*</span> std).requires_grad_()</span>
-<span id="cb7-3"></span>
-<span id="cb7-4">weights <span class="op" style="color: #5E5E5E;">=</span> initialise_params((<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">1</span>))</span>
-<span id="cb7-5">bias <span class="op" style="color: #5E5E5E;">=</span> initialise_params(<span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="co" style="color: #5E5E5E;"># calculating a prediction for our first image</span></span>
-<span id="cb8-2">(train_x[<span class="dv" style="color: #AD0000;">0</span>]<span class="op" style="color: #5E5E5E;">*</span>weights.T).<span class="bu" style="color: null;">sum</span>() <span class="op" style="color: #5E5E5E;">+</span> bias</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>tensor([2.8681], grad_fn=&lt;AddBackward0&gt;)</code></pre>
-</div>
-</div>
-</section>
-<section id="matrix-multiplication-to-calculate-our-predictions" class="level1">
-<h1>Matrix multiplication to calculate our predictions</h1>
-<p>We’ll need to make many calculations like the one we just made, and luckily the technique of matrix multiplication helps us with exactly the scenario we have: we want to multiply the values of our image (laid out in a single vector) with the weights and to add the bias.</p>
-<p>In Python, matrix multiplication is carried out with a simple <code>@</code> operator, so we can bring all of this together as a function:</p>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;">def</span> linear1(x_batch):</span>
-<span id="cb10-2">    <span class="cf" style="color: #003B4F;">return</span> x_batch<span class="op" style="color: #5E5E5E;">@</span>weights <span class="op" style="color: #5E5E5E;">+</span> bias</span>
-<span id="cb10-3"></span>
-<span id="cb10-4">preds <span class="op" style="color: #5E5E5E;">=</span> linear1(train_x)</span>
-<span id="cb10-5">preds</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>tensor([[  2.8681],
-        [ -7.6810],
-        [-17.5719],
-        ...,
-        [ -3.8665],
-        [  2.0646],
-        [ -2.5148]], grad_fn=&lt;AddBackward0&gt;)</code></pre>
-</div>
-</div>
-<p>We can check our accuracy for these predictions:</p>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">corrects <span class="op" style="color: #5E5E5E;">=</span> (preds <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="fl" style="color: #AD0000;">0.0</span>).<span class="bu" style="color: null;">float</span>() <span class="op" style="color: #5E5E5E;">==</span> train_y</span>
-<span id="cb12-2">corrects.<span class="bu" style="color: null;">float</span>().mean().item()</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>0.35324999690055847</code></pre>
-</div>
-</div>
-<p>Our accuracy is pretty poor! A lot worse than even 50/50 luck which is what you’d expect to get on average from a random set of initial weights. Apparently we had a bad draw of luck this time round!</p>
-</section>
-<section id="a-loss-function-to-evaluate-model-performance" class="level1">
-<h1>A loss function to evaluate model performance</h1>
-<p>We now need a loss function which will tell us how well we are doing in our predictions, and that can be used as part of the gradient calculations to let us know (as we iterate) how to update our weights.</p>
-<p>The problem, especially in the data set we’re working with, is that we have a binary probability: either it’s a dress or a pullover. Zero or one. Unlike in a regression problem, or something similar, we don’t have any smooth selection of contiguous values that get predicted. We have zero or one.</p>
-<p>At this point we learn about the sigmoid function which is a way to reframe this problem in a way that we can use to our advantage. The sigmoid function when plotted looks like this:</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="kw" style="color: #003B4F;">def</span> sigmoid(x):</span>
-<span id="cb14-2">    <span class="cf" style="color: #003B4F;">return</span> <span class="dv" style="color: #AD0000;">1</span><span class="op" style="color: #5E5E5E;">/</span>(<span class="dv" style="color: #AD0000;">1</span><span class="op" style="color: #5E5E5E;">+</span>torch.exp(<span class="op" style="color: #5E5E5E;">-</span>x))</span>
-<span id="cb14-3"></span>
-<span id="cb14-4">plot_function(torch.sigmoid, title<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Sigmoid"</span>, <span class="bu" style="color: null;">min</span><span class="op" style="color: #5E5E5E;">=-</span><span class="dv" style="color: #AD0000;">5</span>, <span class="bu" style="color: null;">max</span><span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">5</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2022-05-14-SGD-fashion-mnist_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>This function, as you can see, takes any input value and squashes it down such that the output value is between 0 and 1. It also has a smooth curve, all headed in the same direction, between those values. This is ideal for our situation. The first thing we must do as part of our loss function, therefore, is to apply the sigmoid function to the inputs.</p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="kw" style="color: #003B4F;">def</span> fashion_mnist_loss(predictions, targets):</span>
-<span id="cb15-2">    predictions <span class="op" style="color: #5E5E5E;">=</span> predictions.sigmoid()</span>
-<span id="cb15-3">    <span class="cf" style="color: #003B4F;">return</span> torch.where(targets<span class="op" style="color: #5E5E5E;">==</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span> <span class="op" style="color: #5E5E5E;">-</span> predictions, predictions).mean()</span></code></pre></div>
-</div>
-<p>This <code>torch.where(...)</code> function is a handy way of iterating through all our data, checking whether our target is 1 or not, then outputting the distance from the correct prediction and calculating the mean of these predictions across the entire dataset.</p>
-</section>
-<section id="dataloaders-and-datasets" class="level1">
-<h1>DataLoaders and Datasets</h1>
-<p>We’ve already created datasets for our training and validation data. The process of iterating through our data, however, requires some thought as to how we’ll do it. Our options:</p>
-<ul>
-<li>we could iterate through the entire dataset, making the relevant loss and gradient calculations and adjusting the weights but this might make the process quite long, even though we’d benefit from the increased accuracy this would bring since we’d be seeing the entire dataset each iteration.</li>
-<li>we could do our calculations after just seeing a single image, but then our model would be over-influenced and perturbed by the fluctuations from image to image. This also wouldn’t be what we want.</li>
-</ul>
-<p>In practice, we’ll need to choose something in between. This is where mini-batches or just ‘batches’ come in. These will be need to be large enough (and randomly populated!) that our model can meaningfully learn from them, but not so large that our process takes too long.</p>
-<p>Luckily, we have the abstraction of the <code>DataLoader</code> which will create all our randomly assigned batches for us.</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">train_dl <span class="op" style="color: #5E5E5E;">=</span> DataLoader(train_dset, batch_size<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">256</span>, shuffle<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb16-2">valid_dl <span class="op" style="color: #5E5E5E;">=</span> DataLoader(valid_dset, batch_size<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">256</span>, shuffle<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
-</div>
-</section>
-<section id="training-our-model" class="level1">
-<h1>Training our model</h1>
-<p>Now we can bring the whole process together and train our model:</p>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1">weights <span class="op" style="color: #5E5E5E;">=</span> initialise_params((<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">1</span>))</span>
-<span id="cb17-2">bias <span class="op" style="color: #5E5E5E;">=</span> initialise_params(<span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb17-3"></span>
-<span id="cb17-4"><span class="kw" style="color: #003B4F;">def</span> calculate_gradient(x_batch, y_batch, model):</span>
-<span id="cb17-5">    preds <span class="op" style="color: #5E5E5E;">=</span> model(x_batch)</span>
-<span id="cb17-6">    loss <span class="op" style="color: #5E5E5E;">=</span> fashion_mnist_loss(preds, y_batch)</span>
-<span id="cb17-7">    loss.backward()</span>
-<span id="cb17-8"></span>
-<span id="cb17-9"><span class="kw" style="color: #003B4F;">def</span> train_epoch(model, learning_rate, params):</span>
-<span id="cb17-10">    <span class="co" style="color: #5E5E5E;"># iterate over the training data, batch by batch</span></span>
-<span id="cb17-11">    <span class="cf" style="color: #003B4F;">for</span> x_batch, y_batch <span class="kw" style="color: #003B4F;">in</span> train_dl:</span>
-<span id="cb17-12">        <span class="co" style="color: #5E5E5E;"># calculate the gradients</span></span>
-<span id="cb17-13">        calculate_gradient(x_batch, y_batch, model)</span>
-<span id="cb17-14">        </span>
-<span id="cb17-15">        <span class="cf" style="color: #003B4F;">for</span> param <span class="kw" style="color: #003B4F;">in</span> params:</span>
-<span id="cb17-16">            param.data <span class="op" style="color: #5E5E5E;">-=</span> param.grad <span class="op" style="color: #5E5E5E;">*</span> learning_rate</span>
-<span id="cb17-17">            <span class="co" style="color: #5E5E5E;"># set the gradients to zero</span></span>
-<span id="cb17-18">            param.grad.zero_()</span>
-<span id="cb17-19"></span>
-<span id="cb17-20"><span class="kw" style="color: #003B4F;">def</span> batch_accuracy(x_batch, y_batch):</span>
-<span id="cb17-21">    preds <span class="op" style="color: #5E5E5E;">=</span> x_batch.sigmoid()</span>
-<span id="cb17-22">    correct <span class="op" style="color: #5E5E5E;">=</span> (preds <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="fl" style="color: #AD0000;">0.5</span>) <span class="op" style="color: #5E5E5E;">==</span> y_batch</span>
-<span id="cb17-23">    <span class="cf" style="color: #003B4F;">return</span> correct.<span class="bu" style="color: null;">float</span>().mean()</span>
-<span id="cb17-24"></span>
-<span id="cb17-25"><span class="kw" style="color: #003B4F;">def</span> validate_epoch(model):</span>
-<span id="cb17-26">    accs <span class="op" style="color: #5E5E5E;">=</span> [batch_accuracy(model(x_batch), y_batch) <span class="cf" style="color: #003B4F;">for</span> x_batch, y_batch <span class="kw" style="color: #003B4F;">in</span> valid_dl]</span>
-<span id="cb17-27">    <span class="cf" style="color: #003B4F;">return</span> <span class="bu" style="color: null;">round</span>(torch.stack(accs).mean().item(), <span class="dv" style="color: #AD0000;">4</span>)</span>
-<span id="cb17-28"></span>
-<span id="cb17-29">validate_epoch(linear1)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>0.2173</code></pre>
-</div>
-</div>
-<p>We start there, but now we can train and watch our accuracy improving:</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">learning_rate <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">1.</span></span>
-<span id="cb19-2">params <span class="op" style="color: #5E5E5E;">=</span> weights, bias</span>
-<span id="cb19-3"></span>
-<span id="cb19-4"><span class="cf" style="color: #003B4F;">for</span> _ <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">30</span>):</span>
-<span id="cb19-5">    train_epoch(linear1, learning_rate, params)</span>
-<span id="cb19-6">    <span class="bu" style="color: null;">print</span>(validate_epoch(linear1), end<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">" "</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>0.5001 0.5016 0.7994 0.9357 0.9481 0.9523 0.9537 0.9555 0.9572 0.9582 0.9578 0.9604 0.9608 0.9609 0.962 0.9611 0.9622 0.9626 0.9631 0.9625 0.963 0.963 0.9633 0.9638 0.964 0.9631 0.9638 0.9638 0.9643 0.9645 </code></pre>
-</div>
-</div>
-<p>We had 91% accuracy on our validation dataset <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/11/fashion-mnist-pixel-similarity.html#Using-broadcasting-to-check-our-predictions-on-our-validation-data">last time we tried this</a> with pixel similarity.</p>
-<p>After 30 epochs of training with our new process we’ve achieved 96%, but we could still do better! We’ll tackle that in the next post.</p>
-</section>
-<section id="optimising-with-an-optimiser" class="level1">
-<h1>Optimising with an Optimiser</h1>
-<p>Everything that we’ve been doing so far is so common that there is pre-built functionality to handle all of the pieces.</p>
-<ul>
-<li>our <code>linear1</code> function (which calculated predictions based on our weights and biases) can be replaced with PyTorch’s <code>nn.Linear</code> module. Actually, <code>nn.Linear</code> does the same thing as our <code>initialise_params</code> and our <code>linear1</code> function combined.</li>
-</ul>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="co" style="color: #5E5E5E;"># initialises our weights and bias, and is our model / function</span></span>
-<span id="cb21-2">linear_model <span class="op" style="color: #5E5E5E;">=</span> nn.Linear(<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
-</div>
-<p>Our PyTorch module carries an internal representation of our weights and our biases:</p>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">weights, bias <span class="op" style="color: #5E5E5E;">=</span> linear_model.parameters()</span>
-<span id="cb22-2">weights.shape, bias.shape</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>(torch.Size([1, 784]), torch.Size([1]))</code></pre>
-</div>
-</div>
-<ul>
-<li>an optimiser bundles the step functionality and the <code>zero_grad_</code> functionality. In the book we see how to create our own very basic optimiser, but <code>fastai</code> provides the basic <code>SGD</code> class which we can use that handles these same behaviours.</li>
-</ul>
-<p>We’ll need to amend our training function a little to take this into account:</p>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1">linear_model <span class="op" style="color: #5E5E5E;">=</span> nn.Linear(<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb24-2">opt <span class="op" style="color: #5E5E5E;">=</span> SGD(linear_model.parameters(), learning_rate)</span>
-<span id="cb24-3"></span>
-<span id="cb24-4"><span class="kw" style="color: #003B4F;">def</span> train_epoch(model):</span>
-<span id="cb24-5">    <span class="cf" style="color: #003B4F;">for</span> x_batch, y_batch <span class="kw" style="color: #003B4F;">in</span> train_dl:</span>
-<span id="cb24-6">        calculate_gradient(x_batch, y_batch, model)</span>
-<span id="cb24-7">        opt.step()</span>
-<span id="cb24-8">        opt.zero_grad()</span>
-<span id="cb24-9"></span>
-<span id="cb24-10"><span class="kw" style="color: #003B4F;">def</span> train_model(model, epochs):</span>
-<span id="cb24-11">    <span class="cf" style="color: #003B4F;">for</span> _ <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(epochs):</span>
-<span id="cb24-12">        train_epoch(model)</span>
-<span id="cb24-13">        <span class="bu" style="color: null;">print</span>(validate_epoch(model), end<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">" "</span>)</span>
-<span id="cb24-14"></span>
-<span id="cb24-15">train_model(linear_model, <span class="dv" style="color: #AD0000;">30</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>0.96 0.9642 0.966 0.9659 0.9663 0.9672 0.9677 0.9668 0.9678 0.9684 0.9681 0.9674 0.9681 0.9671 0.9678 0.9677 0.9684 0.968 0.9687 0.9677 0.9681 0.968 0.9693 0.9684 0.968 0.9686 0.9688 0.9693 0.9698 0.9697 </code></pre>
-</div>
-</div>
-</section>
-<section id="some-extra-fastai-abstractions" class="level1">
-<h1>Some extra <code>fastai</code> abstractions</h1>
-<p><code>fastai</code> handles so much of this for us all, such that the <code>Learner</code> is actually the thing we can use to get all of the above logic built in.</p>
-<p>The <code>Learner</code> takes all of the pieces that we’ve spent the last few blogs creating:</p>
-<ul>
-<li>the <code>DataLoaders</code> (iterators providing the data in batches, in the right format with paired <code>x</code> and <code>y</code> values)</li>
-<li>the model itself (our function that we’re trying to optimise)</li>
-<li>the optimisation function (which receives our weights and bias parameters as well as the learning rate)</li>
-<li>the loss function</li>
-<li>any optional metrics we want printed</li>
-</ul>
-<div class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">dls <span class="op" style="color: #5E5E5E;">=</span> DataLoaders(train_dl, valid_dl)</span>
-<span id="cb26-2">learn <span class="op" style="color: #5E5E5E;">=</span> Learner(dls, nn.Linear(<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">1</span>), opt_func<span class="op" style="color: #5E5E5E;">=</span>SGD, loss_func<span class="op" style="color: #5E5E5E;">=</span>fashion_mnist_loss, metrics<span class="op" style="color: #5E5E5E;">=</span>batch_accuracy)</span>
-<span id="cb26-3"></span>
-<span id="cb26-4">learn.fit(<span class="dv" style="color: #AD0000;">15</span>, lr <span class="op" style="color: #5E5E5E;">=</span> learning_rate)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-<table class="dataframe table table-sm table-striped">
-  <thead>
-    <tr>
-      <th>epoch</th>
-      <th>train_loss</th>
-      <th>valid_loss</th>
-      <th>batch_accuracy</th>
-      <th>time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0</td>
-      <td>0.063289</td>
-      <td>0.045487</td>
-      <td>0.963500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>0.044268</td>
-      <td>0.042236</td>
-      <td>0.964500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>0.037112</td>
-      <td>0.040228</td>
-      <td>0.965500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>0.034010</td>
-      <td>0.038743</td>
-      <td>0.967000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>0.032013</td>
-      <td>0.038781</td>
-      <td>0.966000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>0.030633</td>
-      <td>0.037635</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>0.030458</td>
-      <td>0.037530</td>
-      <td>0.967500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>0.029747</td>
-      <td>0.036593</td>
-      <td>0.967000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>8</td>
-      <td>0.029511</td>
-      <td>0.036479</td>
-      <td>0.967500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>9</td>
-      <td>0.029305</td>
-      <td>0.035645</td>
-      <td>0.967500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>10</td>
-      <td>0.028643</td>
-      <td>0.035400</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>11</td>
-      <td>0.028562</td>
-      <td>0.035477</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>12</td>
-      <td>0.028788</td>
-      <td>0.035191</td>
-      <td>0.968000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>13</td>
-      <td>0.028261</td>
-      <td>0.034843</td>
-      <td>0.968000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>14</td>
-      <td>0.028172</td>
-      <td>0.034883</td>
-      <td>0.968500</td>
-      <td>00:00</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-<p>So there we have it. We learned how to create a linear learner. Obviously 96.8% accuracy is pretty good, but it could be better. Next time we’re going to add the final touches to this process by creating a neural network, adding layers of nonlinearity to ensure our function can fit the complex patterns in our data.</p>
-
-
-</section>
-
- ]]></description>
-  <category>fastai</category>
-  <category>computervision</category>
-  <category>partone</category>
-  <guid>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</guid>
-  <pubDate>Fri, 13 May 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/fashion-mnist/fashion-mnist-small.png" medium="image" type="image/png" height="142" width="144"/>
 </item>
 </channel>
 </rss>
