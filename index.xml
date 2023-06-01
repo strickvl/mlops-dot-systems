@@ -26,7 +26,7 @@
 <section id="simple-tokenization" class="level2">
 <h2 class="anchored" data-anchor-id="simple-tokenization">🔡 Simple tokenization</h2>
 <p>If you think about a text string, a naive approach might be to just split it up by character.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">sentence <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Some 10 million people speak the Balochi language, and most of them are located in Iran and Pakistan."</span></span>
 <span id="cb1-2"><span class="bu" style="color: null;">print</span>(<span class="bu" style="color: null;">list</span>(sentence))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -34,44 +34,44 @@
 </div>
 </div>
 <p>We can get the unique characters from our sentence to save a bit of space:</p>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="bu" style="color: null;">print</span>(<span class="bu" style="color: null;">set</span>(<span class="bu" style="color: null;">list</span>(sentence)))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'B', 'I', 'e', 'a', 'm', 'd', 'f', 'i', 'n', 'h', 't', 'P', ',', 's', 'r', '0', '.', 'c', ' ', 'g', 'p', '1', 'o', 'l', 'k', 'u', 'S'}</code></pre>
+<pre><code>{'f', 'a', '1', 'm', 'd', 'e', 'k', '.', 'g', 'B', 'c', 's', 'i', 'r', 'u', 't', 'p', 'l', ',', 'I', '0', 'o', 'S', 'h', 'n', ' ', 'P'}</code></pre>
 </div>
 </div>
 <p>We can save even more space by transforming our sentence into lowercase text:</p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="bu" style="color: null;">print</span>(<span class="bu" style="color: null;">set</span>(<span class="bu" style="color: null;">list</span>(sentence.lower())))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'e', 'b', 'a', 'm', 'd', 'f', 'i', 'n', 'h', 't', ',', 's', 'r', '0', '.', 'c', ' ', 'g', 'p', '1', 'o', 'l', 'k', 'u'}</code></pre>
+<pre><code>{'f', 'a', '1', 'm', 'd', 'e', 'k', '.', 'g', 'c', 's', 'i', 'r', 'u', 't', 'p', 'l', ',', '0', 'o', 'h', 'n', 'b', ' '}</code></pre>
 </div>
 </div>
 <p>For Balochi this might look something like this:</p>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">balochi_sentence <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ادءَ کسے است کہ انگریزی ءَ گپ جت بہ کنت"</span></span>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">balochi_sentence <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">" اِدا کسے است کہ انگریزی ءَ گپ جت بہ کنت"</span></span>
 <span id="cb7-2"><span class="co" style="color: #5E5E5E;"># translates to "Is there someone here who speaks English?"</span></span>
 <span id="cb7-3">balochi_chars <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>(<span class="bu" style="color: null;">list</span>(balochi_sentence.lower()))</span>
 <span id="cb7-4"><span class="bu" style="color: null;">print</span>(balochi_chars)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'ء', 'ے', 'ر', 'َ', 'پ', 'ج', 'ب', 'ت', 'ک', 'ی', 'ز', 'س', 'ن', 'ہ', 'د', ' ', 'ا', 'گ'}</code></pre>
+<pre><code>{'ء', 'ک', 'پ', 'ج', 'َ', 'ب', 'ے', 'ن', 'ر', 'ا', 'س', 'د', 'ِ', 'ی', 'ت', 'ہ', 'ز', ' ', 'گ'}</code></pre>
 </div>
 </div>
 <p>And we can get a mapping of characters to integers quite easily from here:</p>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">balochi_char_mapping <span class="op" style="color: #5E5E5E;">=</span> {char: index <span class="cf" style="color: #003B4F;">for</span> index, char <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">enumerate</span>(<span class="bu" style="color: null;">sorted</span>(balochi_chars))}</span>
 <span id="cb9-2"><span class="bu" style="color: null;">print</span>(balochi_char_mapping)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{' ': 0, 'ء': 1, 'ا': 2, 'ب': 3, 'ت': 4, 'ج': 5, 'د': 6, 'ر': 7, 'ز': 8, 'س': 9, 'ن': 10, 'َ': 11, 'پ': 12, 'ک': 13, 'گ': 14, 'ہ': 15, 'ی': 16, 'ے': 17}</code></pre>
+<pre><code>{' ': 0, 'ء': 1, 'ا': 2, 'ب': 3, 'ت': 4, 'ج': 5, 'د': 6, 'ر': 7, 'ز': 8, 'س': 9, 'ن': 10, 'َ': 11, 'ِ': 12, 'پ': 13, 'ک': 14, 'گ': 15, 'ہ': 16, 'ی': 17, 'ے': 18}</code></pre>
 </div>
 </div>
 <p>You can already see some wonkiness in how the sorted mapping is displayed. This derives from the fact that the Balochi script is written from right-to-left and this pattern is not well supported in a world dominated by English.</p>
 <p>The mapping is what we want, and we can use this to map our original sentence into a sequence of numbers:</p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">balochi_sentence_ids <span class="op" style="color: #5E5E5E;">=</span> [balochi_char_mapping[char] <span class="cf" style="color: #003B4F;">for</span> char <span class="kw" style="color: #003B4F;">in</span> balochi_chars]</span>
 <span id="cb11-2"><span class="bu" style="color: null;">print</span>(balochi_sentence_ids)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1, 17, 7, 11, 12, 5, 3, 4, 13, 16, 8, 9, 10, 15, 6, 0, 2, 14]</code></pre>
+<pre><code>[1, 14, 13, 5, 11, 3, 18, 10, 7, 2, 9, 6, 12, 17, 4, 16, 8, 0, 15]</code></pre>
 </div>
 </div>
 <p>When it comes to language, the things we care at the tail end of all our modelling all relate to sequences of words and not characters. While our vocabulary (i.e.&nbsp;our list of unique characters) would be pretty small with character-level tokenization, we’d have some other issues:</p>
@@ -80,7 +80,7 @@
 <li>increased sequence length – if we think of a sentence as a sequence of words, a sequence of characters would be much longer in sheer numbers. This adds overhead in terms of the complexity of processing and training on the text.</li>
 </ul>
 <p>At the other end of the spectrum we have word-based tokenisation:</p>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">balochi_words <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>(balochi_sentence.split())</span>
 <span id="cb13-2"><span class="bu" style="color: null;">print</span>(balochi_words)</span>
 <span id="cb13-3">word_mapping <span class="op" style="color: #5E5E5E;">=</span> {word: index <span class="cf" style="color: #003B4F;">for</span> index, word <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">enumerate</span>(<span class="bu" style="color: null;">sorted</span>(balochi_words))}</span>
@@ -88,9 +88,9 @@
 <span id="cb13-5">word_ids <span class="op" style="color: #5E5E5E;">=</span> [word_mapping[word] <span class="cf" style="color: #003B4F;">for</span> word <span class="kw" style="color: #003B4F;">in</span> balochi_words]</span>
 <span id="cb13-6"><span class="bu" style="color: null;">print</span>(word_ids)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'گپ', 'جت', 'ءَ', 'کہ', 'انگریزی', 'کنت', 'بہ', 'کسے', 'ادءَ', 'است'}
-{'ءَ': 0, 'ادءَ': 1, 'است': 2, 'انگریزی': 3, 'بہ': 4, 'جت': 5, 'کسے': 6, 'کنت': 7, 'کہ': 8, 'گپ': 9}
-[9, 5, 0, 8, 3, 7, 4, 6, 1, 2]</code></pre>
+<pre><code>{'گپ', 'جت', 'بہ', 'اِدا', 'است', 'کہ', 'انگریزی', 'کسے', 'ءَ', 'کنت'}
+{'ءَ': 0, 'است': 1, 'انگریزی': 2, 'اِدا': 3, 'بہ': 4, 'جت': 5, 'کسے': 6, 'کنت': 7, 'کہ': 8, 'گپ': 9}
+[9, 5, 4, 3, 1, 8, 2, 6, 0, 7]</code></pre>
 </div>
 </div>
 <p>This has the advantage of keeping our data at what feesl like an appropriate level of semantic abstraction, but you can probably imagine that our vocabulary size could well get out of control. If we have enough data, eventually our vocabulary size could grow to hundreds of thousands of items and then we’re going to have the same problem we had with long sequences in character-level tokenisation.</p>
@@ -180,15 +180,15 @@
 <h2 class="anchored" data-anchor-id="numericalising-the-tokens">🔢 Numericalising the tokens</h2>
 <p>Once we have our list of tokens and their ids (see above), it isn’t enough for us just to pass that in for training our models. Neural networks will attach to anything that gives a bit of signal when they are learning from data. If we have a list of tokens and ‘dog’ is assigned the number 3 and ‘cat’ is assigned the number 10, our model might assign some kind of ranking or importance to those numbers. So we have to pass our values in a way that doesn’t lead to this kind of unanticipated signal. The way we do this for language is to ‘one-hot encode’ the values.</p>
 <p>So instead of:</p>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">balochi_sentence_ids <span class="op" style="color: #5E5E5E;">=</span> [word_mapping[word] <span class="cf" style="color: #003B4F;">for</span> word <span class="kw" style="color: #003B4F;">in</span> balochi_sentence.split()]</span>
 <span id="cb15-2"><span class="bu" style="color: null;">print</span>(balochi_sentence_ids)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1, 6, 2, 8, 3, 0, 9, 5, 4, 7]</code></pre>
+<pre><code>[3, 6, 1, 8, 2, 0, 9, 5, 4, 7]</code></pre>
 </div>
 </div>
 <p>…we can generate an array of arrays. For each word in the sentence, we have a subarray that has a length of our vocabulary and then we turn the value in the word’s index to <code>1</code> if that’s the word at this point in our sentence. It’ll be easier to see in an example :)</p>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;">import</span> torch</span>
 <span id="cb17-2"><span class="im" style="color: #00769E;">import</span> torch.nn.functional <span class="im" style="color: #00769E;">as</span> F</span>
 <span id="cb17-3"></span>
@@ -197,11 +197,11 @@
 <span id="cb17-6">one_hot_encodings <span class="op" style="color: #5E5E5E;">=</span> F.one_hot(input_ids, num_classes<span class="op" style="color: #5E5E5E;">=</span><span class="bu" style="color: null;">len</span>(balochi_words))</span>
 <span id="cb17-7"><span class="bu" style="color: null;">print</span>(one_hot_encodings)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tensor([[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+<pre><code>tensor([[0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
@@ -209,7 +209,7 @@
         [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]])</code></pre>
 </div>
 </div>
-<p>So you can see for the first word (i.e.&nbsp;the first subarray) we have a <code>1</code> at index 1 and this corresponds exactly to our sentence and the mapping of words. (I hope it’s clear now also why we might want to have some kind of limitation of just how large our vocabulary gets.)</p>
+<p>So you can see for the first word (i.e.&nbsp;the first subarray) we have a <code>1</code> at index 3 and this corresponds exactly to our sentence and the mapping of words. (I hope it’s clear now also why we might want to have some kind of limitation of just how large our vocabulary gets.)</p>
 <p>In my next post I’ll walk through all of the details showing how you train your own subword tokenizer, compare how it works in two popular Python libraries (Spacy and 🤗 Tokenisers and in general show how all of this fits together in the bigger picture.</p>
 
 
