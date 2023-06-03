@@ -14,7 +14,7 @@
 <item>
   <title>Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-06-03-TKTKTKTK.html</link>
+  <link>https://mlops.systems/posts/2023-06-03-training-custom-balochi-tokenizer.html</link>
   <description><![CDATA[ 
 
 
@@ -186,8 +186,8 @@
 </div>
 <p>Judging by this tiny example, actually the tokenization process doesn’t seem to have saved us much in terms of space. The tokens from the encoded text are basically just the words from the original text.</p>
 </section>
-<section id="training-a-custom-tokenizer-using-spacy-and-fastai" class="level1">
-<h1>Training a custom tokenizer using Spacy and FastAI</h1>
+<section id="training-a-tokenizer-using-spacy-and-fastai" class="level1">
+<h1>Training a tokenizer using Spacy and FastAI</h1>
 <p>The FastAI <a href="https://github.com/fastai/fastbook/blob/master/10_nlp.ipynb">course and book</a> have a whole chapter that deals with NLP and a section that deals with tokenization and subwords so I thought I’d follow through that process as well to get a sense of the higher-level API that FastAI provides as well as the implementation under the hood provided by <a href="https://spacy.io">Spacy</a>.</p>
 <p>When you install FastAI, you’ll probably notice that it has Spacy as a dependency. This is because it uses Spacy under the hood for tokenization (along with a lot of other NLP tasks). FastAI provides a wrapper around Spacy’s <code>Tokenizer</code> object along with some helper functions and other bits and pieces.</p>
 <p>I’ll admit to not finding the FastAI interface as intuitive or useful as the 🤗 Tokenizers library, in part because it was harder to get at some of the Spacy primitives when it became necessary to do so. More on this below.</p>
@@ -300,6 +300,7 @@
 <h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
 <p>Now that I have this first iteration complete, I want to reflect a bit on how to know when the tokenizer is ‘good enough’. In particular, how do you evaluate tokenisers? Are there ways of benchmarking this? There must have been work done on this and I want to understand both what the start of the art is as well as how to know when I’ve reached it.</p>
 <p>I also watched <a href="https://www.youtube.com/watch?v=X7c0T7uwtkM">an extremely rewarding talk on low-resource languages</a> (blog notes to follow!) and there was a section in that which stressed the foundational nature of tokenisation as part of language models. It also highlighted a failure mode where bad tokenisation made a model perform very badly on a certain kind of task. So based on this context I would like to understand how to evaluate tokenisers and how to know when I’ve reached a good enough point.</p>
+<p>I also have a grab-bag of odds and ends relating to tokenization (GPU-based tokenization! tiktoken! etc.) that I mean to write up alongside the above.</p>
 
 
 </section>
@@ -310,7 +311,7 @@
   <category>balochi-language-model</category>
   <category>tokenisation</category>
   <category>balochi</category>
-  <guid>https://mlops.systems/posts/2023-06-03-TKTKTKTK.html</guid>
+  <guid>https://mlops.systems/posts/2023-06-03-training-custom-balochi-tokenizer.html</guid>
   <pubDate>Fri, 02 Jun 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/tokenisation/hf-tokenizer-small.png" medium="image" type="image/png" height="110" width="144"/>
 </item>
