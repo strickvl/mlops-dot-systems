@@ -10,7 +10,310 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Wed, 31 May 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 02 Jun 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-06-03-TKTKTKTK.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>In this blog I want to walk through how I trained my first tokenizer(s) on a small Balochi language corpus. I used the Huggingface Tokenizers library and FastAI / Spacy to get a sense of the interfaces involved. There’s also some naive pre-processing I did to get the corpus into a format that the tokenizer could handle. I’m not sure if this is the best way to do it, but it worked for this first iteration.</p>
+<p>We can get straight into the implementation details, but the general process was:</p>
+<ol type="1">
+<li>Load in our data corpus</li>
+<li>Pre-process the data (remove non-Balochi characters and numbers, etc.)</li>
+<li>Load the algorithm we want to use for tokenisation (using BPE here)</li>
+<li>Tokenise the text</li>
+</ol>
+<p>I’ll go through each of these steps in turn.</p>
+<div class="cell" data-execution_count="12">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># !pip install datasets</span></span>
+<span id="cb1-2"><span class="co" style="color: #5E5E5E;"># !huggingface-cli login</span></span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;"># from datasets import load_dataset</span></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;"># load_dataset("balochiml/balochi-language-data", data_dir="data", cache_dir="../data")</span></span></code></pre></div>
+</details>
+</div>
+<section id="load-our-text-corpus" class="level2">
+<h2 class="anchored" data-anchor-id="load-our-text-corpus">Load our text corpus</h2>
+<p>Here I walk through my <code>.txt</code> files and load the paths into a list. You can see we have 4294 files to work with.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;">import</span> os</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="kw" style="color: #003B4F;">def</span> get_txt_file_paths(directory):</span>
+<span id="cb2-5">    txt_file_paths <span class="op" style="color: #5E5E5E;">=</span> []</span>
+<span id="cb2-6">    <span class="cf" style="color: #003B4F;">for</span> root, dirs, files <span class="kw" style="color: #003B4F;">in</span> os.walk(directory):</span>
+<span id="cb2-7">        <span class="cf" style="color: #003B4F;">for</span> <span class="bu" style="color: null;">file</span> <span class="kw" style="color: #003B4F;">in</span> files:</span>
+<span id="cb2-8">            <span class="cf" style="color: #003B4F;">if</span> <span class="bu" style="color: null;">file</span>.endswith(<span class="st" style="color: #20794D;">".txt"</span>):</span>
+<span id="cb2-9">                file_path <span class="op" style="color: #5E5E5E;">=</span> os.path.join(root, <span class="bu" style="color: null;">file</span>)</span>
+<span id="cb2-10">                txt_file_paths.append(file_path)</span>
+<span id="cb2-11">    <span class="cf" style="color: #003B4F;">return</span> txt_file_paths</span>
+<span id="cb2-12"></span>
+<span id="cb2-13"></span>
+<span id="cb2-14"><span class="co" style="color: #5E5E5E;"># Replace "directory_path" with the actual path of the directory you want to search</span></span>
+<span id="cb2-15">directory_path <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"../data/raw_text"</span></span>
+<span id="cb2-16">txt_paths <span class="op" style="color: #5E5E5E;">=</span> get_txt_file_paths(directory_path)</span>
+<span id="cb2-17"></span>
+<span id="cb2-18"><span class="bu" style="color: null;">len</span>(txt_paths)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>4294</code></pre>
+</div>
+</div>
+</section>
+<section id="pre-process-the-texts" class="level2">
+<h2 class="anchored" data-anchor-id="pre-process-the-texts">Pre-process the texts</h2>
+<p>I still don’t fully have a good sense of the best ways to do this, not least of all because I’m not sure of the tradeoffs for decisions I take. For example, I frequently hear that people remove punctuation during pre-processing, but I’m not sure how that’s helpful. It feels like you’d be removing context more than anything else.</p>
+<p>I had similar thoughts on the removal of numbers, but in the end I removed them along with any a-z or A-Z English-language characters. I also removed excess whitespace.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;">import</span> re</span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="kw" style="color: #003B4F;">def</span> clean_text(file_path):</span>
+<span id="cb4-4">    <span class="co" style="color: #5E5E5E;"># Open the file and read it into memory</span></span>
+<span id="cb4-5">    <span class="cf" style="color: #003B4F;">with</span> <span class="bu" style="color: null;">open</span>(file_path, <span class="st" style="color: #20794D;">"r"</span>, encoding<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"utf-8"</span>) <span class="im" style="color: #00769E;">as</span> <span class="bu" style="color: null;">file</span>:</span>
+<span id="cb4-6">        text <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">file</span>.read()</span>
+<span id="cb4-7"></span>
+<span id="cb4-8">    <span class="co" style="color: #5E5E5E;"># Remove English-language characters and numbers</span></span>
+<span id="cb4-9">    text <span class="op" style="color: #5E5E5E;">=</span> re.sub(<span class="vs" style="color: #20794D;">r"[a-zA-Z0-9]"</span>, <span class="st" style="color: #20794D;">""</span>, text)</span>
+<span id="cb4-10"></span>
+<span id="cb4-11">    <span class="co" style="color: #5E5E5E;"># Remove any excess whitespace</span></span>
+<span id="cb4-12">    text <span class="op" style="color: #5E5E5E;">=</span> re.sub(<span class="vs" style="color: #20794D;">r"[^\S\n]+"</span>, <span class="st" style="color: #20794D;">" "</span>, text)</span>
+<span id="cb4-13"></span>
+<span id="cb4-14">    <span class="cf" style="color: #003B4F;">return</span> text</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="cf" style="color: #003B4F;">for</span> path <span class="kw" style="color: #003B4F;">in</span> txt_paths:</span>
+<span id="cb5-2">    cleaned_text <span class="op" style="color: #5E5E5E;">=</span> clean_text(path)</span>
+<span id="cb5-3"></span>
+<span id="cb5-4">    <span class="co" style="color: #5E5E5E;"># write the cleaned text to a new file with an incremented filename</span></span>
+<span id="cb5-5">    <span class="co" style="color: #5E5E5E;"># write the files all into the '../data/processed_text' directory</span></span>
+<span id="cb5-6">    <span class="cf" style="color: #003B4F;">with</span> <span class="bu" style="color: null;">open</span>(</span>
+<span id="cb5-7">        <span class="ss" style="color: #20794D;">f'../data/processed_text/</span><span class="sc" style="color: #5E5E5E;">{</span>path<span class="sc" style="color: #5E5E5E;">.</span>split(<span class="st" style="color: #20794D;">"/"</span>)[<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>]<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">'</span>, <span class="st" style="color: #20794D;">"w"</span>, encoding<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"utf-8"</span></span>
+<span id="cb5-8">    ) <span class="im" style="color: #00769E;">as</span> <span class="bu" style="color: null;">file</span>:</span>
+<span id="cb5-9">        <span class="bu" style="color: null;">file</span>.write(cleaned_text)</span></code></pre></div>
+</div>
+</section>
+<section id="training-a-tokenizer-using-tokenizers" class="level1">
+<h1>Training a Tokenizer using 🤗 Tokenizers</h1>
+<p>The process of ‘training’ a tokeniser using the Huggingface Tokenizers library was pretty straightforward. There are some nuances and parameters where – again – I’m not sure of the tradeoffs I’m making. I’ll mention those when I get to them.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;">from</span> tokenizers <span class="im" style="color: #00769E;">import</span> Tokenizer</span>
+<span id="cb6-2"><span class="im" style="color: #00769E;">from</span> tokenizers.models <span class="im" style="color: #00769E;">import</span> BPE</span>
+<span id="cb6-3"></span>
+<span id="cb6-4">tokenizer <span class="op" style="color: #5E5E5E;">=</span> Tokenizer(BPE(unk_token<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"[UNK]"</span>))</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;">from</span> tokenizers.pre_tokenizers <span class="im" style="color: #00769E;">import</span> Whitespace</span>
+<span id="cb7-2"></span>
+<span id="cb7-3">tokenizer.pre_tokenizer <span class="op" style="color: #5E5E5E;">=</span> Whitespace()</span></code></pre></div>
+</div>
+<p>Here, for example, I’m pretty sure that the vocabulary size is an important hyperparameter to tune, as is the minimum frequency of tokens. The values here are the defaults in the library. I’ve read that a higher vocab size might be warranted in a language that is morphologically complex, but I don’t think that Balochi qualifies for that. Also, a larger vocabulary size might be warranted for a language for which I have a larger corpus.</p>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;">from</span> tokenizers.trainers <span class="im" style="color: #00769E;">import</span> BpeTrainer</span>
+<span id="cb8-2"></span>
+<span id="cb8-3">vocab_size <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">30000</span></span>
+<span id="cb8-4"></span>
+<span id="cb8-5">trainer <span class="op" style="color: #5E5E5E;">=</span> BpeTrainer(</span>
+<span id="cb8-6">    min_frequency<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">2</span>,</span>
+<span id="cb8-7">    vocab_size<span class="op" style="color: #5E5E5E;">=</span>vocab_size,</span>
+<span id="cb8-8">    special_tokens<span class="op" style="color: #5E5E5E;">=</span>[<span class="st" style="color: #20794D;">"[UNK]"</span>, <span class="st" style="color: #20794D;">"[CLS]"</span>, <span class="st" style="color: #20794D;">"[SEP]"</span>, <span class="st" style="color: #20794D;">"[PAD]"</span>, <span class="st" style="color: #20794D;">"[MASK]"</span>],</span>
+<span id="cb8-9">    show_progress<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
+<span id="cb8-10">)</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="co" style="color: #5E5E5E;"># get a list of all the txt files in</span></span>
+<span id="cb9-2"><span class="co" style="color: #5E5E5E;"># '/Users/strickvl/balochi/balochi-tokenizer/data/processed_text'</span></span>
+<span id="cb9-3"></span>
+<span id="cb9-4">processed_files <span class="op" style="color: #5E5E5E;">=</span> get_txt_file_paths(<span class="st" style="color: #20794D;">"../data/processed_text"</span>)</span>
+<span id="cb9-5"><span class="cf" style="color: #003B4F;">assert</span> <span class="bu" style="color: null;">len</span>(processed_files) <span class="op" style="color: #5E5E5E;">==</span> <span class="bu" style="color: null;">len</span>(txt_paths)</span>
+<span id="cb9-6"><span class="bu" style="color: null;">len</span>(processed_files)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="53">
+<pre><code>4294</code></pre>
+</div>
+</div>
+<p>The training process itself was a matter of passing the files and the (configured) trainer into the <code>.train()</code> method. It was extremely quick to run, taking only around minutes to crunch through my corpus. (For reference, I’m now up to around 2.8 million words of Balochi text in the corpus, a drop in the ocean compared to the datasets used to trained English-language LLMs.)</p>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">tokenizer.train(processed_files, trainer)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">tokenizer.model</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="55">
+<pre><code>&lt;tokenizers.models.BPE at 0x108eaa830&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="cf" style="color: #003B4F;">assert</span> tokenizer.get_vocab_size() <span class="op" style="color: #5E5E5E;">==</span> vocab_size</span>
+<span id="cb15-2">tokenizer.get_vocab_size()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="56">
+<pre><code>30000</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="co" style="color: #5E5E5E;"># tokenizer.get_vocab()</span></span></code></pre></div>
+</div>
+<p>I also saved the tokenizer to disk so that I (or others) can load it in without needing the dataset at a later date. This saves a JSON file which contains all the information needed to load the tokenizer separately from the data.</p>
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">tokenizer.save(<span class="st" style="color: #20794D;">"../models/30k-balochi-tokenizer.json"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">tokenizer <span class="op" style="color: #5E5E5E;">=</span> Tokenizer.from_file(<span class="st" style="color: #20794D;">"../models/30k-balochi-tokenizer.json"</span>)</span></code></pre></div>
+</div>
+<p>And here you can see the results on a sample from some Balochi text I found somewhere on the internet.</p>
+<div class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">sample_text <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"&nbsp; &nbsp; &nbsp; آیک&nbsp; جناورے اَت۔&nbsp; لھتے گشیت آ سکیں کارزوالے ات کہ اگاں آزاتی دیگ بہ بیت، بازارءَ، لوگے ءَ، جاگاہ یے&nbsp; ءَ،دپتر ء ُ کارگس یے&nbsp; ءَ یا ھر ھما جاگاہ ءَ کہ شُت کنت مزنیں کارزوالی کنت۔گوں ھر کس ءَ جنگ ء ُ مڑ بیت۔گدء ُ پچاں&nbsp; چنڈ چنڈ ء ُ راڑ راڑ کنت،کاگد ء ُ وانگیاں وارت ء ُ آدراہ کنت۔ورگی چیزاں اگاں وارت نکنت آھاں گٹ پاچیت ھراب کنت۔ایندگہ جناور چہ بندات ء َ ایشی ءِ کازوالیاں چہ وتا دیر دارگ ءِ کوشست کن اَنت۔ چیا کہ آ بازیں دگہ ھرابی ء ُ کارزوالی ھم کنت،پمیشکا کسانیں جناور&nbsp; بالی مُرگ،کوہ پاچن،آسک ء ُ ایندگہ کسان کسانیں جناورچر آئی ءِ کارزوالیانی سوب ءَ آئی ءَ چہ سک باز شزار اَنت ۔"</span>.replace(</span>
+<span id="cb20-2">    <span class="st" style="color: #20794D;">"</span><span class="ch" style="color: #20794D;">\xa0</span><span class="st" style="color: #20794D;">"</span>, <span class="st" style="color: #20794D;">""</span></span>
+<span id="cb20-3">)</span>
+<span id="cb20-4">sample_sentence <span class="op" style="color: #5E5E5E;">=</span> sample_text.split(<span class="st" style="color: #20794D;">"۔"</span>)[<span class="dv" style="color: #AD0000;">2</span>]</span>
+<span id="cb20-5">sample_sentence</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="62">
+<pre><code>'گوں ھر کس ءَ جنگ ء ُ مڑ بیت'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">tokenizer.encode(sample_sentence).tokens</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="63">
+<pre><code>['گوں', 'ھر', 'کس', 'ءَ', 'جنگ', 'ء', 'ُ', 'مڑ', 'بیت']</code></pre>
+</div>
+</div>
+<p>Judging by this tiny example, actually the tokenization process doesn’t seem to have saved us much in terms of space. The tokens from the encoded text are basically just the words from the original text.</p>
+</section>
+<section id="training-a-custom-tokenizer-using-spacy-and-fastai" class="level1">
+<h1>Training a custom tokenizer using Spacy and FastAI</h1>
+<p>The FastAI <a href="https://github.com/fastai/fastbook/blob/master/10_nlp.ipynb">course and book</a> have a whole chapter that deals with NLP and a section that deals with tokenization and subwords so I thought I’d follow through that process as well to get a sense of the higher-level API that FastAI provides as well as the implementation under the hood provided by <a href="https://spacy.io">Spacy</a>.</p>
+<p>When you install FastAI, you’ll probably notice that it has Spacy as a dependency. This is because it uses Spacy under the hood for tokenization (along with a lot of other NLP tasks). FastAI provides a wrapper around Spacy’s <code>Tokenizer</code> object along with some helper functions and other bits and pieces.</p>
+<p>I’ll admit to not finding the FastAI interface as intuitive or useful as the 🤗 Tokenizers library, in part because it was harder to get at some of the Spacy primitives when it became necessary to do so. More on this below.</p>
+<div class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><span class="im" style="color: #00769E;">from</span> fastai.text.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
+<span id="cb24-2"><span class="co" style="color: #5E5E5E;"># a built-in helper function from fastai</span></span>
+<span id="cb24-3">files <span class="op" style="color: #5E5E5E;">=</span> get_text_files(<span class="st" style="color: #20794D;">"../data/processed_text"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><span class="bu" style="color: null;">len</span>(files)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="69">
+<pre><code>4294</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><span class="co" style="color: #5E5E5E;"># get some sample text from the first file</span></span>
+<span id="cb27-2">txt <span class="op" style="color: #5E5E5E;">=</span> files[<span class="dv" style="color: #AD0000;">0</span>].<span class="bu" style="color: null;">open</span>().read()<span class="op" style="color: #5E5E5E;">;</span> txt[:<span class="dv" style="color: #AD0000;">75</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="70">
+<pre><code>'*آمیتگءِ جُستءَمکن* لچّہ: *آمیتگءِ جُستءَمکن* آ میتگءَکہ من وتی شوکیں کسانی'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="97">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="co" style="color: #5E5E5E;"># using the `SpacyTokenizer` from fastai</span></span>
+<span id="cb29-2"><span class="co" style="color: #5E5E5E;"># see https://docs.fast.ai/text.core.html#spacytokenizer</span></span>
+<span id="cb29-3">spacy <span class="op" style="color: #5E5E5E;">=</span> WordTokenizer()</span>
+<span id="cb29-4">toks <span class="op" style="color: #5E5E5E;">=</span> first(spacy([txt]))</span>
+<span id="cb29-5"><span class="bu" style="color: null;">print</span>(coll_repr(toks, <span class="dv" style="color: #AD0000;">30</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(#146) ['*','آمیتگءِ','جُستءَمکن','*','لچّہ',':','*','آمیتگءِ','جُستءَمکن','*','آ','میتگءَکہ','من','وتی','شوکیں','کسانی','پیر','کُت','آ','میتگءِ','جسُتءَمکن','آ','میتگءِ','گیراں','مبو','بے','اوستیں','تاهیراں','مبو','آ'...]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1">tkn <span class="op" style="color: #5E5E5E;">=</span> Tokenizer(spacy)</span>
+<span id="cb31-2"><span class="bu" style="color: null;">print</span>(coll_repr(tkn(txt), <span class="dv" style="color: #AD0000;">31</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(#147) ['xxbos','*','آمیتگءِ','جُستءَمکن','*','لچّہ',':','*','آمیتگءِ','جُستءَمکن','*','آ','میتگءَکہ','من','وتی','شوکیں','کسانی','پیر','کُت','آ','میتگءِ','جسُتءَمکن','آ','میتگءِ','گیراں','مبو','بے','اوستیں','تاهیراں','مبو','آ'...]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1">txts <span class="op" style="color: #5E5E5E;">=</span> L(o.<span class="bu" style="color: null;">open</span>().read() <span class="cf" style="color: #003B4F;">for</span> o <span class="kw" style="color: #003B4F;">in</span> files)</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="co" style="color: #5E5E5E;"># get a sense for the subwords generated from a</span></span>
+<span id="cb34-2"><span class="co" style="color: #5E5E5E;"># small slice of our text data</span></span>
+<span id="cb34-3"><span class="kw" style="color: #003B4F;">def</span> subword(size: <span class="bu" style="color: null;">int</span>):</span>
+<span id="cb34-4">    sp <span class="op" style="color: #5E5E5E;">=</span> SubwordTokenizer(vocab_sz<span class="op" style="color: #5E5E5E;">=</span>size)</span>
+<span id="cb34-5">    sp.setup(txts)</span>
+<span id="cb34-6">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">" "</span>.join(first(sp([txt]))[:<span class="dv" style="color: #AD0000;">40</span>])</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1">subword(<span class="dv" style="color: #AD0000;">1000</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="83">
+<pre><code>'▁* آ می تگ ءِ ▁جُست ءَ م ک ن * ▁لچّہ : ▁* آ می تگ ءِ ▁جُست ءَ م ک ن * ▁آ ▁میتگ ءَ کہ ▁من ▁وتی ▁ش وکیں ▁کس انی ▁پیر ▁کُت ▁آ ▁میتگ ءِ ▁ج'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1">subword(<span class="dv" style="color: #AD0000;">275</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="86">
+<pre><code>'▁ * آ م ی ت گ ء ِ ▁ ج ُ س ت ء َ م ک ن * ▁ ل چ ّ ہ : ▁ * آ م ی ت گ ء ِ ▁ ج ُ س ت'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="87">
+<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1">toks200 <span class="op" style="color: #5E5E5E;">=</span> txts[:<span class="dv" style="color: #AD0000;">200</span>].<span class="bu" style="color: null;">map</span>(tkn)</span>
+<span id="cb39-2">toks200[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="87">
+<pre><code>(#147) ['xxbos','*','آمیتگءِ','جُستءَمکن','*','لچّہ',':','*','آمیتگءِ','جُستءَمکن'...]</code></pre>
+</div>
+</div>
+<p>At this point, once we’ve seen a bit how FastAI and Spacy are able to tokenize the text, we can switch into the numericalisation process and see what we get from our dataset.</p>
+<div class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1">num <span class="op" style="color: #5E5E5E;">=</span> Numericalize()</span>
+<span id="cb41-2">num.setup(toks200)</span>
+<span id="cb41-3">coll_repr(num.vocab,<span class="dv" style="color: #AD0000;">50</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="89">
+<pre><code>"(#4096) ['xxunk','xxpad','xxbos','xxeos','xxfld','xxrep','xxwrep','xxup','xxmaj','ءَ','ءِ','ءُ','۔','کہ','،','انت','من','اے','نہ','وتی','بیت','”','ات','چہ','گوں','اَنت','اِنت','پہ','بہ','‘','یک','آئی','.','آ','منی','ھم',')','کنت','بلوچی','3','تو','بلے','ئے',':','کنگ','(','بوتگ','آں','کن','؟'...]"</code></pre>
+</div>
+</div>
+<p>You can see that some of the meta-tokens <a href="https://mlops.systems/posts/2023-06-01-why-tokenisation.html">mentioned in my last blog</a> are also represented here, and then the rest of the words are sorted by frequency order.</p>
+<p>We can represent a sample of text as the token ids at this point:</p>
+<div class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb43" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1">nums <span class="op" style="color: #5E5E5E;">=</span> num(toks)[:<span class="dv" style="color: #AD0000;">20</span>]<span class="op" style="color: #5E5E5E;">;</span> nums</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="90">
+<pre><code>TensorText([ 156, 2340,    0,  156,  563,   43,  156, 2340,    0,  156,   33,
+               0,   16,   19, 1490,  831,  457,  102,   33, 1031])</code></pre>
+</div>
+</div>
+<p>When we convert this back, you’ll see we get the meta-tokens as well.</p>
+<div class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb45" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><span class="co" style="color: #5E5E5E;">' '</span>.join(num.vocab[o] <span class="cf" style="color: #003B4F;">for</span> o <span class="kw" style="color: #003B4F;">in</span> nums)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="91">
+<pre><code>'* آمیتگءِ xxunk * لچّہ : * آمیتگءِ xxunk * آ xxunk من وتی شوکیں کسانی پیر کُت آ میتگءِ'</code></pre>
+</div>
+</div>
+<section id="lessons-learned" class="level2">
+<h2 class="anchored" data-anchor-id="lessons-learned">Lessons learned</h2>
+<p>This first attempt at tokenisation was instructive in a number of respects.</p>
+<p>I didn’t show what was going on under the hood with the FastAI wrapper, but if you look at the source code you’ll see that the line <code>spacy = WordTokenizer()</code> assumes that the base language we’re dealing with is English. You can of course pass in a language code to the <code>WordTokenizer</code> initialization, but since it uses Spacy under the hood here and since Balochi isn’t represented as an official language supported by Spacy, when you’re basically out of luck. You hit an error and you can either continue using simplistic algorithms like the ones demonstrated above (essentially splitting on word delimiters) or you can abandon FastAI and dive into Spacy.</p>
+<p>At that point, you’ll have to start implementing a whole bunch of things yourself in order to get going quickly. For example, you’ll ideally want to come up with all the list of punctuation marks, stop words, stemming rules and so on that I mentioned last time. (It might well be that it’s possible to get up and running faster for a non-standard language with Spacy, but it wasn’t clear to me how to do that.)</p>
+<p>I do actually now intend to make a contribution to the Spacy repo to have Balochi represented there, and to open the window for others to contribute to the language metadata directly, but that didn’t help me in the moment. You’ll notice that I didn’t show how you can save a serialized version of the Spacy/FastAI tokeniser because I wasn’t able to figure out how to get access to the underlying Spacy object. I’m sure it’s possible since I can [read the Spacy API documentation showing which method to use]((https://spacy.io/api/tokenizer#to_disk) but FastAI didn’t itself expose this functionality directly.</p>
+<p>My initial impression from working with both libraries and spending some time with their documentation is that Spacy might end up being more useful for low-resource languages given the extent to which they support a more complete range of old-school NLP methods and techniques. That said, the 🤗 Tokenizers library was much easier to get up and running with and I think it’s a great option for anyone who wants to get started quickly with tokenization. They support most of the major algorithms you’d ever need to use and if they don’t you can always implement something yourself to extend it.</p>
+</section>
+<section id="balochi-tokenizers-on-huggingface-hub" class="level2">
+<h2 class="anchored" data-anchor-id="balochi-tokenizers-on-huggingface-hub">Balochi Tokenizers on Huggingface Hub</h2>
+<p>I’m still working through a way to open up the core dataset (along with constructing as I work), but this first iteration of the tokenizer is now <a href="https://huggingface.co/balochiml/balochi-tokenizer">available over on the Huggingface Hub</a>. You can load it for use with the single line:</p>
+<div class="sourceCode" id="cb47" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1">tokenizer <span class="op" style="color: #5E5E5E;">=</span> Tokenizer.from_file(<span class="st" style="color: #20794D;">"../models/30k-balochi-tokenizer.json"</span>)</span></code></pre></div>
+<p>The organisation is something I created together with some Balochi colleagues who expressed an interest in working together on this effort. I’m really happy to have made their acquaintance and I hope I’ll be able to make steady progress on this project with their help. (If you’re interested in contributing, please request access to the organization and/or contact me for more information.)</p>
+<p>While creating the tokenizer repository, I also noted how Balochi (as with Spacy) is not represented as a language recognised by the metadata tracking languages used on the Hub. Frustratingly, you’re asked to input <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">an ISO-639-1 two-letter code</a> to represent the language of the model, but of course Balochi doesn’t have one of those. Balochi only has an ISO-693-2 and ISO-693-3 code. I’ll have to see how we can get Balochi represented on the Hub given all this. It can’t be the first time that this has happened.</p>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
+<p>Now that I have this first iteration complete, I want to reflect a bit on how to know when the tokenizer is ‘good enough’. In particular, how do you evaluate tokenisers? Are there ways of benchmarking this? There must have been work done on this and I want to understand both what the start of the art is as well as how to know when I’ve reached it.</p>
+<p>I also watched <a href="https://www.youtube.com/watch?v=X7c0T7uwtkM">an extremely rewarding talk on low-resource languages</a> (blog notes to follow!) and there was a section in that which stressed the foundational nature of tokenisation as part of language models. It also highlighted a failure mode where bad tokenisation made a model perform very badly on a certain kind of task. So based on this context I would like to understand how to evaluate tokenisers and how to know when I’ve reached a good enough point.</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>nlp</category>
+  <category>balochi-language-model</category>
+  <category>tokenisation</category>
+  <category>balochi</category>
+  <guid>https://mlops.systems/posts/2023-06-03-TKTKTKTK.html</guid>
+  <pubDate>Fri, 02 Jun 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/tokenisation/hf-tokenizer-small.png" medium="image" type="image/png" height="110" width="144"/>
+</item>
 <item>
   <title>The What, Why, and How of Tokenisation in Machine Learning</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -3564,383 +3867,6 @@ Training completed. Do not forget to share your model on huggingface.co/models =
   <guid>https://mlops.systems/posts/2022-05-21-nlp-redaction-classifier.html</guid>
   <pubDate>Fri, 20 May 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/nlp-redaction-classifier/filenames.png" medium="image" type="image/png" height="107" width="144"/>
-</item>
-<item>
-  <title>A neural network for Fashion MNIST data</title>
-  <link>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="cell" data-execution_count="17">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq fastbook nbdev torch</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> fastbook</span>
-<span id="cb1-3">fastbook.setup_book()</span>
-<span id="cb1-4"></span>
-<span id="cb1-5"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-6"><span class="im" style="color: #00769E;">from</span> fastbook <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb1-7"><span class="im" style="color: #00769E;">import</span> torch</span>
-<span id="cb1-8"><span class="im" style="color: #00769E;">from</span> torch.utils.data <span class="im" style="color: #00769E;">import</span> Dataset</span>
-<span id="cb1-9"><span class="im" style="color: #00769E;">from</span> torchvision <span class="im" style="color: #00769E;">import</span> datasets</span>
-<span id="cb1-10"><span class="im" style="color: #00769E;">from</span> torchvision.transforms <span class="im" style="color: #00769E;">import</span> ToTensor</span>
-<span id="cb1-11"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
-<span id="cb1-12"></span>
-<span id="cb1-13">training_data <span class="op" style="color: #5E5E5E;">=</span> datasets.FashionMNIST(</span>
-<span id="cb1-14">    root<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"data"</span>,</span>
-<span id="cb1-15">    train<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb1-16">    download<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb1-17">    transform<span class="op" style="color: #5E5E5E;">=</span>ToTensor()</span>
-<span id="cb1-18">)</span>
-<span id="cb1-19"></span>
-<span id="cb1-20">test_data <span class="op" style="color: #5E5E5E;">=</span> datasets.FashionMNIST(</span>
-<span id="cb1-21">    root<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"data"</span>,</span>
-<span id="cb1-22">    train<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb1-23">    download<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb1-24">    transform<span class="op" style="color: #5E5E5E;">=</span>ToTensor()</span>
-<span id="cb1-25">)</span>
-<span id="cb1-26"></span>
-<span id="cb1-27">training_dresses <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> training_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span>]</span>
-<span id="cb1-28">training_pullovers <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> training_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span>]</span>
-<span id="cb1-29">test_dresses <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> test_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span>]</span>
-<span id="cb1-30">test_pullovers <span class="op" style="color: #5E5E5E;">=</span> [item[<span class="dv" style="color: #AD0000;">0</span>][<span class="dv" style="color: #AD0000;">0</span>] <span class="cf" style="color: #003B4F;">for</span> item <span class="kw" style="color: #003B4F;">in</span> test_data <span class="cf" style="color: #003B4F;">if</span> item[<span class="dv" style="color: #AD0000;">1</span>] <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span>]</span>
-<span id="cb1-31"></span>
-<span id="cb1-32">training_dresses_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(training_dresses)</span>
-<span id="cb1-33">training_pullovers_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(training_pullovers)</span>
-<span id="cb1-34">test_dresses_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(test_dresses)</span>
-<span id="cb1-35">test_pullovers_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.stack(test_pullovers)</span>
-<span id="cb1-36"></span>
-<span id="cb1-37">train_x <span class="op" style="color: #5E5E5E;">=</span> torch.cat([training_dresses_tensor, training_pullovers_tensor]).view(<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>)</span>
-<span id="cb1-38">train_y <span class="op" style="color: #5E5E5E;">=</span> torch.cat([torch.ones(<span class="bu" style="color: null;">len</span>(training_dresses)), torch.zeros(<span class="bu" style="color: null;">len</span>(training_pullovers))]).unsqueeze(<span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb1-39"></span>
-<span id="cb1-40">valid_x <span class="op" style="color: #5E5E5E;">=</span> torch.cat([test_dresses_tensor, test_pullovers_tensor]).view(<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>)</span>
-<span id="cb1-41">valid_y <span class="op" style="color: #5E5E5E;">=</span> torch.cat([torch.ones(<span class="bu" style="color: null;">len</span>(test_dresses)), torch.zeros(<span class="bu" style="color: null;">len</span>(test_pullovers))]).unsqueeze(<span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb1-42"></span>
-<span id="cb1-43">train_dset <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">list</span>(<span class="bu" style="color: null;">zip</span>(train_x, train_y))</span>
-<span id="cb1-44">valid_dset <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">list</span>(<span class="bu" style="color: null;">zip</span>(valid_x, valid_y))</span>
-<span id="cb1-45"></span>
-<span id="cb1-46">train_dl <span class="op" style="color: #5E5E5E;">=</span> DataLoader(train_dset, batch_size<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">256</span>, shuffle<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb1-47">valid_dl <span class="op" style="color: #5E5E5E;">=</span> DataLoader(valid_dset, batch_size<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">256</span>, shuffle<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb1-48"></span>
-<span id="cb1-49">dls <span class="op" style="color: #5E5E5E;">=</span> DataLoaders(train_dl, valid_dl)</span>
-<span id="cb1-50"></span>
-<span id="cb1-51"><span class="kw" style="color: #003B4F;">def</span> initialise_params(size, std<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">1.0</span>):</span>
-<span id="cb1-52">    <span class="cf" style="color: #003B4F;">return</span> (torch.randn(size) <span class="op" style="color: #5E5E5E;">*</span> std).requires_grad_()</span>
-<span id="cb1-53"></span>
-<span id="cb1-54"><span class="kw" style="color: #003B4F;">def</span> fashion_mnist_loss(predictions, targets):</span>
-<span id="cb1-55">    predictions <span class="op" style="color: #5E5E5E;">=</span> predictions.sigmoid()</span>
-<span id="cb1-56">    <span class="cf" style="color: #003B4F;">return</span> torch.where(targets<span class="op" style="color: #5E5E5E;">==</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span> <span class="op" style="color: #5E5E5E;">-</span> predictions, predictions).mean()</span>
-<span id="cb1-57"></span>
-<span id="cb1-58"><span class="kw" style="color: #003B4F;">def</span> batch_accuracy(x_batch, y_batch):</span>
-<span id="cb1-59">    preds <span class="op" style="color: #5E5E5E;">=</span> x_batch.sigmoid()</span>
-<span id="cb1-60">    correct <span class="op" style="color: #5E5E5E;">=</span> (preds <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="fl" style="color: #AD0000;">0.5</span>) <span class="op" style="color: #5E5E5E;">==</span> y_batch</span>
-<span id="cb1-61">    <span class="cf" style="color: #003B4F;">return</span> correct.<span class="bu" style="color: null;">float</span>().mean()</span></code></pre></div>
-</details>
-</div>
-<p>In <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/14/SGD-fashion-mnist.html">the previous post</a> we used stochastic gradient descent to train a model to fit a linear function to our Fashion MNIST data, specifically the difference between a pullover and a dress.</p>
-<p>In this final stage, we will take the next step to creating a neural network in code that will be used to detect that same difference between a pullover and a dress. The key difference here is that we will need to ‘add non-linearity’ to our function. I have no mathematics background so I have very little intuitive (or learned!) understanding of specifically what that means, but my current mental model as learned during the course is that linear functions just aren’t flexible enough to learn more complex patterns. In the end, what we want is a function that will fit to the patterns in our training data (as mapped to a multidimensional space). Simple linear functions aren’t going to cut it.</p>
-<p>What this looks like in code is this:</p>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">weights1 <span class="op" style="color: #5E5E5E;">=</span> initialise_params((<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">30</span>))</span>
-<span id="cb2-2">bias1 <span class="op" style="color: #5E5E5E;">=</span> initialise_params(<span class="dv" style="color: #AD0000;">30</span>)</span>
-<span id="cb2-3">weights2 <span class="op" style="color: #5E5E5E;">=</span> initialise_params((<span class="dv" style="color: #AD0000;">30</span>, <span class="dv" style="color: #AD0000;">1</span>))</span>
-<span id="cb2-4">bias2 <span class="op" style="color: #5E5E5E;">=</span> initialise_params(<span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb2-5"></span>
-<span id="cb2-6"><span class="kw" style="color: #003B4F;">def</span> simple_network(x_batch):</span>
-<span id="cb2-7">    result <span class="op" style="color: #5E5E5E;">=</span> x_batch<span class="op" style="color: #5E5E5E;">@</span>weights1 <span class="op" style="color: #5E5E5E;">+</span> bias1</span>
-<span id="cb2-8">    result <span class="op" style="color: #5E5E5E;">=</span> result.<span class="bu" style="color: null;">max</span>(tensor(<span class="fl" style="color: #AD0000;">0.0</span>))</span>
-<span id="cb2-9">    result <span class="op" style="color: #5E5E5E;">=</span> result<span class="op" style="color: #5E5E5E;">@</span>weights2 <span class="op" style="color: #5E5E5E;">+</span> bias2</span>
-<span id="cb2-10">    <span class="cf" style="color: #003B4F;">return</span> result</span></code></pre></div>
-</div>
-<p>You can see the three layers of our simple network pretty clearly in the code above. The middle layer is what otherwise is known as a ReLU or rectified linear unit. It basically means that negative values passing through that function become zero and all positive values are unchanged. When you plot the function it looks like this:</p>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">plot_function(F.relu)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>When we put a non-linear function in between two linear functions, then this network is able to encode and express more complicated patterns. This is basically all we’re doing with deep learning: we stack these layers on to make the functions more and more capable of modelling and representing complex things.</p>
-<p>We can express the above simple network in PyTorch-specific code (functionally it’s the same):</p>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">simple_net <span class="op" style="color: #5E5E5E;">=</span> nn.Sequential(</span>
-<span id="cb4-2">    nn.Linear(<span class="dv" style="color: #AD0000;">28</span><span class="op" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">30</span>),</span>
-<span id="cb4-3">    nn.ReLU(),</span>
-<span id="cb4-4">    nn.Linear(<span class="dv" style="color: #AD0000;">30</span>, <span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb4-5">)</span></code></pre></div>
-</div>
-<p>At this point, training a model is similar to what we did last time round:</p>
-<div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">learn <span class="op" style="color: #5E5E5E;">=</span> Learner(dls, simple_net, opt_func<span class="op" style="color: #5E5E5E;">=</span>SGD, loss_func<span class="op" style="color: #5E5E5E;">=</span>fashion_mnist_loss, metrics<span class="op" style="color: #5E5E5E;">=</span>batch_accuracy)</span>
-<span id="cb5-2">learn.fit(<span class="dv" style="color: #AD0000;">30</span>, <span class="fl" style="color: #AD0000;">0.1</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-<table class="dataframe table table-sm table-striped">
-  <thead>
-    <tr>
-      <th>epoch</th>
-      <th>train_loss</th>
-      <th>valid_loss</th>
-      <th>batch_accuracy</th>
-      <th>time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0</td>
-      <td>0.166980</td>
-      <td>0.079354</td>
-      <td>0.959000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>0.087369</td>
-      <td>0.057471</td>
-      <td>0.961000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>0.059999</td>
-      <td>0.050108</td>
-      <td>0.963500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>0.048050</td>
-      <td>0.046509</td>
-      <td>0.963500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>0.041847</td>
-      <td>0.044165</td>
-      <td>0.964000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>0.038310</td>
-      <td>0.042841</td>
-      <td>0.963500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>0.036514</td>
-      <td>0.041464</td>
-      <td>0.964500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>0.034653</td>
-      <td>0.040640</td>
-      <td>0.964500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>8</td>
-      <td>0.033204</td>
-      <td>0.039827</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>9</td>
-      <td>0.032370</td>
-      <td>0.039344</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>10</td>
-      <td>0.032060</td>
-      <td>0.038778</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>11</td>
-      <td>0.031814</td>
-      <td>0.038854</td>
-      <td>0.965500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>12</td>
-      <td>0.031212</td>
-      <td>0.037872</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>13</td>
-      <td>0.030837</td>
-      <td>0.037836</td>
-      <td>0.964500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>14</td>
-      <td>0.030193</td>
-      <td>0.037372</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>15</td>
-      <td>0.030213</td>
-      <td>0.037250</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>16</td>
-      <td>0.030058</td>
-      <td>0.036885</td>
-      <td>0.965000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>17</td>
-      <td>0.029849</td>
-      <td>0.036862</td>
-      <td>0.965500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>18</td>
-      <td>0.029551</td>
-      <td>0.036518</td>
-      <td>0.965500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>19</td>
-      <td>0.029381</td>
-      <td>0.036236</td>
-      <td>0.966000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>20</td>
-      <td>0.029358</td>
-      <td>0.035996</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>21</td>
-      <td>0.028987</td>
-      <td>0.036024</td>
-      <td>0.966000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>22</td>
-      <td>0.028436</td>
-      <td>0.035731</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>23</td>
-      <td>0.028494</td>
-      <td>0.035813</td>
-      <td>0.967000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>24</td>
-      <td>0.028174</td>
-      <td>0.035535</td>
-      <td>0.966000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>25</td>
-      <td>0.028089</td>
-      <td>0.035361</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>26</td>
-      <td>0.027961</td>
-      <td>0.035035</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>27</td>
-      <td>0.027761</td>
-      <td>0.035248</td>
-      <td>0.966000</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>28</td>
-      <td>0.028016</td>
-      <td>0.035006</td>
-      <td>0.966500</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>29</td>
-      <td>0.027430</td>
-      <td>0.034841</td>
-      <td>0.967500</td>
-      <td>00:00</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">plt.plot(L(learn.recorder.values).itemgot(<span class="dv" style="color: #AD0000;">2</span>))</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<div class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">learn.recorder.values[<span class="op" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>][<span class="dv" style="color: #AD0000;">2</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
-<pre><code>0.9674999713897705</code></pre>
-</div>
-</div>
-<p>We don’t actually emerge at the end of this with a vastly superior score to what we had at the end of the last notebook, but this basis (the simple neural network) has far more open vistas within which we can work and build upon.</p>
-<p>Finally, to round out my understanding, I put together a little diagram showing the various pieces that go into the <code>Learner</code> class when we instantiate it, adding some of the other concepts etc below it as I felt was appropriate. This isn’t a complete picture by any means, but I find it helpful to visualise how things are layered and pieced together:</p>
-<p><img src="https://mlops.systems/posts/nb_images/ml-training-big-picture/learner-abstractions.png" class="img-fluid"></p>
-
-
-
- ]]></description>
-  <category>fastai</category>
-  <category>computervision</category>
-  <category>partone</category>
-  <guid>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</guid>
-  <pubDate>Sat, 14 May 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/ml-training-big-picture/neuralnetwork.png" medium="image" type="image/png" height="92" width="144"/>
 </item>
 </channel>
 </rss>
