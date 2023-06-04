@@ -46,7 +46,7 @@
   <category>links</category>
   <guid>https://mlops.systems/posts/2023-06-04-token-odds-and-sods.html</guid>
   <pubDate>Sat, 03 Jun 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/links-odds-sods.png" medium="image" type="image/png"/>
+  <media:content url="https://mlops.systems/posts/images/link-odds-sods.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 <item>
   <title>Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy</title>
