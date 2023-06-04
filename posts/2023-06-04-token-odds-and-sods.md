@@ -10,7 +10,7 @@ description: "Some links and random observations relating to tokenisation as gat
 layout: post
 title: "Tokenizer Links"
 toc: false
-image: images/links-odds-sods.png
+image: images/link-odds-sods.png
 include-before-body:
   '<script defer data-domain="mlops.systems"
   src="https://plausible.io/js/script.js"></script>'
