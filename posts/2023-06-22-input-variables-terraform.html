@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Alex Strick van Linschoten">
-<meta name="dcterms.date" content="2023-05-21">
-<meta name="description" content="The Balochi language is underrepresented in NLP. I’m interested in contributing to the field by building a language model for Balochi from scratch and contributing training resources and datasets along the way.">
+<meta name="dcterms.date" content="2023-06-22">
+<meta name="description" content="All the ways you can set input and local variables when using Terraform.">
 
-<title>Alex Strick van Linschoten - Low-resource language models: making a start with Balochi</title>
+<title>Alex Strick van Linschoten - Terraform Input Variables</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,22 +65,22 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Alex Strick van Linschoten - Low-resource language models: making a start with Balochi">
-<meta property="og:description" content="The Balochi language is underrepresented in NLP.">
-<meta property="og:image" content="https://mlops.systems/posts/images/starting-balochi-llm.png">
+<meta property="og:title" content="Alex Strick van Linschoten - Terraform Input Variables">
+<meta property="og:description" content="All the ways you can set input and local variables when using Terraform.">
+<meta property="og:image" content="https://mlops.systems/posts/images/inputs-outputs-terraform.png">
 <meta property="og:site-name" content="Alex Strick van Linschoten">
 <meta property="og:image:height" content="400">
 <meta property="og:image:width" content="400">
-<meta name="twitter:title" content="Alex Strick van Linschoten - Low-resource language models: making a start with Balochi">
-<meta name="twitter:description" content="The Balochi language is underrepresented in NLP.">
-<meta name="twitter:image" content="https://mlops.systems/posts/images/starting-balochi-llm.png">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Terraform Input Variables">
+<meta name="twitter:description" content="All the ways you can set input and local variables when using Terraform.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/inputs-outputs-terraform.png">
 <meta name="twitter:creator" content="@strickvl">
 <meta name="twitter:image-height" content="400">
 <meta name="twitter:image-width" content="400">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -130,17 +130,16 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Low-resource language models: making a start with Balochi</h1>
+      <h1 class="title">Terraform Input Variables</h1>
                   <div>
         <div class="description">
-          The Balochi language is underrepresented in NLP. I’m interested in contributing to the field by building a language model for Balochi from scratch and contributing training resources and datasets along the way.
+          All the ways you can set input and local variables when using Terraform.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">balochi</div>
-                <div class="quarto-category">nlp</div>
-                <div class="quarto-category">balochi-language-model</div>
-                <div class="quarto-category">deep-learning</div>
+                <div class="quarto-category">terraform</div>
+                <div class="quarto-category">devops</div>
+                <div class="quarto-category">softwareengineering</div>
               </div>
                   </div>
   </div>
@@ -158,7 +157,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 21, 2023</p>
+        <p class="date">June 22, 2023</p>
       </div>
     </div>
     
@@ -169,22 +168,98 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#variable-blocks" id="toc-variable-blocks" class="nav-link active" data-scroll-target="#variable-blocks">Variable blocks</a></li>
+  <li><a href="#variables-passed-in-at-the-command-line" id="toc-variables-passed-in-at-the-command-line" class="nav-link" data-scroll-target="#variables-passed-in-at-the-command-line">Variables passed in at the command line</a></li>
+  <li><a href="#variables-passed-in-with-files" id="toc-variables-passed-in-with-files" class="nav-link" data-scroll-target="#variables-passed-in-with-files">Variables passed in with files</a></li>
+  <li><a href="#variables-passed-in-using-environment-variables" id="toc-variables-passed-in-using-environment-variables" class="nav-link" data-scroll-target="#variables-passed-in-using-environment-variables">Variables passed in using environment variables</a></li>
+  <li><a href="#using-variables" id="toc-using-variables" class="nav-link" data-scroll-target="#using-variables">Using variables</a></li>
+  <li><a href="#local-variables" id="toc-local-variables" class="nav-link" data-scroll-target="#local-variables">Local variables</a></li>
+  <li><a href="#variable-precedence" id="toc-variable-precedence" class="nav-link" data-scroll-target="#variable-precedence">Variable Precedence</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<p>Large Language Models are all the rage, but what do you do when the language you want to model is essentially unrepresented in the public datasets used for training? I have a few months before the start of my next maths module and I’d like to use the time in part to dive into the ins and outs of training your own language models from scratch.</p>
-<p>The language I’m working with is Balochi, in particular the dialect or subset of Balochi that is spoken in southeastern Iran. The parent subgroup of ‘Balochi’ is spoken by 8-10 million people, but those break down into a few varieties which is in turn driven to a large extent by geography. The kind of Balochi used in Pakistan is subject to different linguistic influences than the one I’m interested in, for example.</p>
-<p>Despite the existence of millions of people speaking this language (family), it is more or less unrepresented in benchmarks and so-called breakthroughs in language modelling. Even the raw data to represent the language is absent. Common Crawl, one popular source of data for training language models, <a href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages">doesn’t even include Balochi</a> as one of the languages represented in its corpus. Moreover, there’s no Balochi Wikipedia or anything really like it, so anyone hoping to work on language models in Balochi is first going to have to put together a corpus of data.</p>
-<p>There’s nothing particularly novel about this problem. Languages with very few resources are known as low-resource languages and there’s a whole field of research (and some practice) busy trying to find ways to better serve these smaller language communities. I view the work as valuable, not only in that it seeks to preserve what might otherwise be lost, but also in terms of the disproportionately large (potential) impact it can have.</p>
-<p>I have personally experienced this issue at a distance, for the most part, having studied and worked with languages for which there are few study materials. The two languages I was passed down by my parents — English and, to a lesser extent, Dutch — are well-represented in the work and time spent by researchers and practitioners thus far. I have learned languages from neighbouring families, both geographically and linguistically, and always wanted to study Balochi myself. My hope is that it will be a gateway for me into the language and its community of speakers.</p>
-<p>I’m quite conscious of wanting to go about this project in a way that is ethical. Work of this kind is too often predicated on a principle of ‘take now, ask later’ so I’ll be writing more about this as I go as well as (hopefully) working with Balochi speakers and researchers to augment the work that is already being done. My initial survey of what has been done so far leads me to think that there is much remaining in the way of low-hanging fruit. I haven’t yet come across a Balochi tokenizer, for example, or embeddings or many other things that you would take for granted if you were working with the English language.</p>
-<p>My somewhat distant goal — one for which I’m unsure how unrealistic I’m being — for all of this would be develop models and materials that can aid non-native speakers of Balochi to learn the language through what is known as <a href="https://www.cambridge.org/core/journals/journal-of-classics-teaching/article/comprehensible-input-and-krashens-theory/2308987050E8D31E3986B530D4B02F6F">comprehensible input</a>. All of which is to say: I don’t know much Balochi as I start this work, but I hope to develop my fluency over time.</p>
+<p>When working with Terraform code, there are ways to take in user input at the time when you are applying whatever you’ve defined. To take a perhaps needlessly simple example, you might write a definition that allows you to deploy a new S3 bucket but you probably wouldn’t want to hardcode the name of the new bucket; instead, you’d rather take that name at the point of deployment. So if we think of the terraform process as a big function call, our input variables are the inputs we pass into this function application.</p>
+<p>There are three main ways that you’ll use and encounter input variables in HCL code.</p>
+<ol type="1">
+<li>variables passed in at the command line using <code>-var</code></li>
+<li>variables defined in separate files either automatically parsed or passed in using the <code>-var-file</code> option at the command line</li>
+<li>variables defined as environment variables</li>
+</ol>
+<p>The first two are fairly commonly used, especially during development / testing, but are not really a great idea if your aim is a production-grade setup. Let’s walk through them one by one, but first let’s look at the variable block itself in HCL.</p>
+<section id="variable-blocks" class="level2">
+<h2 class="anchored" data-anchor-id="variable-blocks">Variable blocks</h2>
+<p>A variable block can look like this:</p>
+<pre class="hcl"><code>variable "some_variable" {
+  description = "This is where you describe the variable"
+  type        = string
+  default     = "ginger_cat"
+  nullable    = false
+  sensitive   = false
+}</code></pre>
+<p>Most of this is self-explanatory. You can also specify a <code>validation</code> value in which you can determine the appropriate or accepted values for the variable. If you set <code>sensitive</code> to true, then terraform will (mostly) keep the value out of any output printed in the terminal. The name for the variable should be unique within the module and the value of this variable must be a literal value; it cannot be the result of an expression. If you don’t specify a default value then on running <code>terraform apply</code> or <code>plan</code> you will be asked what value you want to use.</p>
+<p>(There are also a limited handful of key words that are forbidden for use as names for the variable; you can look them up <a href="https://developer.hashicorp.com/terraform/language/values/variables#declaring-an-input-variable">in the docs</a>.)</p>
+</section>
+<section id="variables-passed-in-at-the-command-line" class="level2">
+<h2 class="anchored" data-anchor-id="variables-passed-in-at-the-command-line">Variables passed in at the command line</h2>
+<p>Instead of just waiting for the terraform CLI to ask you what values you want to assign to variables, you can pass them in at the command line. Your variables might live in a <code>variables.tf</code> file (or be located across your <code>.tf</code> files) but when you run <code>terraform apply</code> you can do so in the following way:</p>
+<pre class="shell"><code>terraform apply -var="some_variable=black_cat"</code></pre>
+<p>If you have multiple variables (as you are likely to have) then you can use the <code>-var</code> option multiple times.</p>
+</section>
+<section id="variables-passed-in-with-files" class="level2">
+<h2 class="anchored" data-anchor-id="variables-passed-in-with-files">Variables passed in with files</h2>
+<p>As you might imagine, this rapidly gets unwieldy so there is also a way to populate a whole file with the variable:value pairs. You can either explicitly specify a filename to use for those variables, or there are certain filenames that will be automatically be loaded in and parsed.</p>
+<pre class="shell"><code># passing a file name explicitly
+terraform apply -var-file="my_vals.tfvars"</code></pre>
+<p>A file called <code>terraform.tfvars</code>, or <code>terraform.tfvars.json</code>, or any file ending in <code>.auto.tfvars</code> or <code>auto.tfvars.json</code> will all be loaded automatically without the need to explicitly pass them in at the command line.</p>
+</section>
+<section id="variables-passed-in-using-environment-variables" class="level2">
+<h2 class="anchored" data-anchor-id="variables-passed-in-using-environment-variables">Variables passed in using environment variables</h2>
+<p>Some situations require different approaches than populating a file or passing them in via the command line so terraform also checks any environment variable with the <code>TF_VAR_</code> prefix and imports those automatically. For example, we could run:</p>
+<pre class="shell"><code>export TF_VAR_some_variable=white_cat</code></pre>
+<p>And the <code>some_variable</code> variable would be populated with the <code>white_cat</code> value.</p>
+</section>
+<section id="using-variables" class="level2">
+<h2 class="anchored" data-anchor-id="using-variables">Using variables</h2>
+<p>You can use variables (to get their values) by using the <code>var.</code> prefix. For example, if I was defining an AWS S3 bucket and I wanted to use the value of the <code>some_variable</code> value for that bucket name, I could do something like this in my HCL definition:</p>
+<pre class="hcl"><code>resource "aws_s3_bucket" "my_first_bucket" {
+  bucket        = var.some_variable
+}</code></pre>
+</section>
+<section id="local-variables" class="level2">
+<h2 class="anchored" data-anchor-id="local-variables">Local variables</h2>
+<p>Sometimes you want to define local variables that don’t need exposing as configurable parameters (as the input variables described above are). We have local variables for this, and you define them in their own block:</p>
+<pre><code>locals {
+  my_cat = "aria"
+}</code></pre>
+<p>The useful thing about local variables is that you <em>can</em> assign expressions as the values for these variables, or you can combine or otherwise transform things.</p>
+<p>These local variables are accessible elsewhere with the <code>local.</code> prefix (e.g.&nbsp;in the above example, as <code>local.my_cat</code>)</p>
+<p>You might want to use local variables where you have some particular expression that’s used multiple times in your file so you want to keep it <em>DRY</em> so you use a local variable. Similarly, if something is likely to be changed, you might want to make the change only in one place instead of multiple places. These are only available for use within the module where it is declared and can’t be overridden from the outside.</p>
+</section>
+<section id="variable-precedence" class="level2">
+<h2 class="anchored" data-anchor-id="variable-precedence">Variable Precedence</h2>
+<p>With all these different ways to pass in values for variables, how do you know which one gets chosen? There are precedence rules that determine which value is used. Variables are loaded in this order, and the last one seen is the one that is used:</p>
+<ul>
+<li>environment variables</li>
+<li>the <code>terraform.tfvars</code> file</li>
+<li>the <code>terraform.tfvars.json</code> file</li>
+<li>any <code>….auto.tfvars</code> (or the <code>.json</code> equivalent) files</li>
+<li>any <code>-var</code> and/or <code>-var-file</code> values set via the command line</li>
+</ul>
+<p>Nothing about using these variables is particularly difficult to understand, but it’s useful to have a sense of those precedence rules nonetheless, especially if you have the same variable defined in multiple places.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
