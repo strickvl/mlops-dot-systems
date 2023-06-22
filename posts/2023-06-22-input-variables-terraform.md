@@ -28,7 +28,7 @@ There are three main ways that you'll use and encounter input variables in HCL c
 
 The first two are fairly commonly used, especially during development / testing, but are not really a great idea if your aim is a production-grade setup. Let's walk through them one by one, but first let's look at the variable block itself in HCL.
 
-## Variable Blocks
+## Variable blocks
 
 A variable block can look like this:
 
