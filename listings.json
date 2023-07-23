@@ -3,6 +3,7 @@
     "listing": "/index.html",
     "items": [
       "/posts/saba.html",
+      "/posts/2023-07-23-maths-prompt-rust-project.html",
       "/posts/2023-06-22-input-variables-terraform.html",
       "/posts/2023-06-04-token-odds-and-sods.html",
       "/posts/2023-06-03-training-custom-balochi-tokenizer.html",
