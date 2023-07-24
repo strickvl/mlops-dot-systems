@@ -6,6 +6,7 @@ categories:
   - mathematics
   - rust
   - mu123
+  - q31
   - skillbuilding
   - softwareengineering
   - tools
@@ -39,11 +40,11 @@ When I posted about my degree on LinkedIn, Matt Squire from the always-worth-fol
 
 He was referring to [CoachBot](http://www.languagecoach.io/coachbot), another web tool I built to scratch a personal itch around getting study prompts when learning a language outside a classroom/group environment.
 
-Alongside my use of Anki to cement the more fact-y parts of the things that I'm studying, I've been a consistent user of ChatGPT to supplement the practice questions that my course gives me. As part of the course, you get access to some practice questions that are generated from templates, I think. The advantage of using those is that the system will grade your answer, but it's pretty rigid / inflexible to use and you can only practice in the sandbox of one particular unit or topic so you miss out on all the very real benefits of interleaved practice. (Interleaved practice is making sure that you mix up the topics and things that you're studying so that you switch e.g. from your Chinese vocabulary to your maths to whatever else it is that you're studying. You'll learn the materials far better if you do your retrieval practice using interleaving than if you study just one topic in isolation, then another topic in isolation and so on.)
+Alongside my use of Anki to cement the more fact-y parts of the things that I'm studying, I've been a consistent user of ChatGPT to supplement the practice questions that my course gives me. As part of the Open University course, you get access to some practice questions that (I think) are generated from templates. The advantage of using those is that the system will grade your answer, but it's pretty rigid / inflexible to use and you can only practice in the sandbox of one particular unit or topic so you miss out on all the very real benefits of interleaved practice. (Interleaved practice is making sure that you mix up the topics and things that you're studying so that you switch e.g. from your Chinese vocabulary to your maths to whatever else it is that you're studying. You'll learn the materials far better if you do your retrieval practice using interleaving than if you study just one topic in isolation, then another topic in isolation and so on.)
 
-There was also no way in the OU system to really get a sense of how strong you are in the different areas beyond just the static once-done-instantly-forgotten end of unit exams and tests.
+There was also no way in the OU system to really get a sense of how strong you are in the different areas beyond just the static once-done-instantly-forgotten end of unit exams and tests. Thus the tool available to me didn't handle spaced repetition or interleaving, two core parts of what have been shown to be good study techniques / foundations.
 
-So what I really wanted was:
+What I really wanted was:
 
 - a way to get practice questions for things that I've studied in maths already
 - a service that would show me the things that I found most difficult more often than the things I found really easy
@@ -73,15 +74,15 @@ There are ways I'd like to improve this going forward (see below for those) but 
 
 ## Why Rust?
 
-I chose to build the project using [Rust](https://www.rust-lang.org) as I've been reading a couple of books over the past few months and I wanted a way to get my hands dirty. (Those two books, [Rust in Action](https://www.amazon.com/Rust-Action-TS-McNamara/dp/1617294551?tag=soumet-20) by Tim McNamara and [Command-Line Rust](https://www.amazon.com/-/en/Ken-Youens-Clark/dp/1098109430/ref=d_pd_sim_sccl_2_3/259-8491770-0412405?tag=soumet-20&pd_rd_r=c7e5134c-8cea-4954-acab-1eead741381c&psc=1&content-id=amzn1.sym.5cdc78f1-a757-4b8d-989e-a305d0a3dfbe&pf_rd_r=FR7GR5R1YC93V3C51T7X&pf_rd_p=5cdc78f1-a757-4b8d-989e-a305d0a3dfbe&pd_rd_wg=k8Of0&pd_rd_w=PDA2A&pd_rd_i=1098109430) by Ken Youens-Clark.) Rust comes with a considerable reputation for its steep learning curve but I found that the passive understanding of syntax / workflows I'd developed by reading in those books coupled with ChatGPT was enough to get this project off the ground at a fast pace.
+I chose to build the project using [Rust](https://www.rust-lang.org) as I've been reading a couple of books over the past few months and I wanted a way to get my hands dirty. (Those two books, [Rust in Action](https://www.amazon.com/Rust-Action-TS-McNamara/dp/1617294551?tag=soumet-20) by Tim McNamara and [Command-Line Rust](https://www.amazon.com/-/en/Ken-Youens-Clark/dp/1098109430/ref=d_pd_sim_sccl_2_3/259-8491770-0412405?tag=soumet-20&pd_rd_r=c7e5134c-8cea-4954-acab-1eead741381c&psc=1&content-id=amzn1.sym.5cdc78f1-a757-4b8d-989e-a305d0a3dfbe&pf_rd_r=FR7GR5R1YC93V3C51T7X&pf_rd_p=5cdc78f1-a757-4b8d-989e-a305d0a3dfbe&pd_rd_wg=k8Of0&pd_rd_w=PDA2A&pd_rd_i=1098109430) by Ken Youens-Clark, were really great in getting me going / started.) Rust comes with a considerable reputation for its steep learning curve but I found that the passive understanding of syntax / workflows I'd developed by reading in those books coupled with ChatGPT was enough to get this project off the ground at a fast pace.
 
-It certainly helped that I knew what I wanted to build and had thought through what the database schema as well as the core functionality on a few long train journeys recently with paper and pen in hand. I guess it also helped that I'd had some previous exposure to and experience with [Golang](https://go.dev/learn/) and that our Python development at work happens in the context of [`mypy`](https://mypy.readthedocs.io) strict mode which is as close as Python gets to being forced to think through your code in terms of types.
+It certainly helped that I knew what I wanted to build and had thought through what the database schema as well as the core functionality on a few long train journeys recently with paper and pen in hand. It also probably helped that I'd had some previous exposure to and experience with [Golang](https://go.dev/learn/) and that our Python development [at work](https://github.com/zenml-io/zenml) happens in the context of [`mypy`](https://mypy.readthedocs.io) strict mode which is as close as Python gets to being forced to think through your code in terms of types.
 
 ## 🤖 ChatGPT to generate question variations
 
-I considered going down the path of generating question templates for every question, and then having some random numbers get inserted into those templates, but for a lot of questions that wouldn't have worked. For instance, within trigonometry there are lots of ways that the variables are somehow interrelated or some values wouldn't make sense at all.
+I considered going down the path of generating question templates for every question, and then having some random numbers get inserted into those templates, but for a lot of questions that wouldn't have worked. For instance, within trigonometry there are lots of ways that the variables are somehow interrelated or some values wouldn't make sense at all. The angles inside a triangle still need to sum up to 180 degrees, for example.
 
-Despite a few misgivings and hesitations around GPT-4's mathematical abilities (which have been [widely](https://www.cantorsparadise.com/gpt-4-is-amazing-but-still-struggles-at-high-school-math-competitions-cbc2e73738e) [noted](https://www.reddit.com/r/singularity/comments/12bgsfu/mathematical_level_of_gpt4/)) I figured it's a quicker way to get going with this project than any other. Moreover, if I find I'm having issues with the quality of the autogenerated questions I can also just remove them from the set that get shown to me. It also added an extra piece of complexity to the project since I had to make those calls to the OpenAI API as part of the app.
+Despite a few misgivings and hesitations around GPT-4's mathematical abilities (which have been [widely](https://www.cantorsparadise.com/gpt-4-is-amazing-but-still-struggles-at-high-school-math-competitions-cbc2e73738e) [noted](https://www.reddit.com/r/singularity/comments/12bgsfu/mathematical_level_of_gpt4/)) I figured it's a quicker way to get going with this project than any other. Moreover, if I find I'm having issues with the quality of the autogenerated questions I can also just remove them from the set that get shown to me. It also added an extra piece of complexity to the project (and thus something new to learn) since I had to make those calls to the OpenAI API as part of the app.
 
 # 👷 What I Built 
 
