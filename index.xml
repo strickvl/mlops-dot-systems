@@ -73,7 +73,7 @@
 </section>
 <section id="some-takeaways-from-the-project" class="level1">
 <h1>Some takeaways from the project</h1>
-<p>Firstly, data labelling is hard! There are 4822 in the core dataset and I read and labelled every single one of them. This took me weeks to carry out and it’s worth reading the report’s section on data labelling to get a sense of why labelling this particular data was hard.</p>
+<p>Firstly, data labelling is hard! There are 4822 events/items in the core dataset and I read and labelled every single one of them. This took me weeks to carry out and it’s worth reading the report’s section on data labelling to get a sense of why labelling this particular data was hard.</p>
 <p>Secondly, data loss is a real thing! Even though we have amazing resources like <a href="https://archive.org">archive.org</a> which preserve old sites, it’s still striking that a military operation that took years and that cost so much money and lives didn’t see it as important to preserve the archival record of its actions. Publishing these press releases as an open dataset is part of <a href="https://www.firstdraft-publishing.com/">other work</a> I’ve done to try to preserve these kinds of documents. I encourage others to do the same.</p>
 <p>Finally, there was an unexpected amount of value in data that at first sight was fairly anodyne and mundane. It’s a good reminder that small projects with focused datasets can provide a lot of value.</p>
 
