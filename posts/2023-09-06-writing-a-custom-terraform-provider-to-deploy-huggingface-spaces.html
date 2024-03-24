@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2023-11-09">
+<meta name="description" content="I worked on this short project to allow people to create/deploy Huggingface Spaces using Terraform (instead of via the API or using the website)">
+
+<title>Alex Strick van Linschoten - Writing a custom Terraform provider to deploy Huggingface Spaces</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Writing a custom Terraform provider to deploy Huggingface Spaces">
+<meta property="og:description" content="I worked on this short project to allow people to create/deploy Huggingface Spaces using Terraform (instead of via the API or using the website)">
+<meta property="og:image" content="https://mlops.systems/posts/TKTKTKTK">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Writing a custom Terraform provider to deploy Huggingface Spaces">
+<meta name="twitter:description" content="I worked on this short project to allow people to create/deploy Huggingface Spaces using Terraform (instead of via the API or using the website)">
+<meta name="twitter:image" content="https://mlops.systems/posts/TKTKTKTK">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Writing a custom Terraform provider to deploy Huggingface Spaces</h1>
+                  <div>
+        <div class="description">
+          I worked on this short project to allow people to create/deploy Huggingface Spaces using Terraform (instead of via the API or using the website)
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">devops</div>
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">terraform</div>
+                <div class="quarto-category">go</div>
+                <div class="quarto-category">skillbuilding</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 9, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-terraform-golden-path" id="toc-the-terraform-golden-path" class="nav-link active" data-scroll-target="#the-terraform-golden-path">The Terraform Golden Path</a></li>
+  <li><a href="#using-http-requests-to-deploy-spaces" id="toc-using-http-requests-to-deploy-spaces" class="nav-link" data-scroll-target="#using-http-requests-to-deploy-spaces">Using HTTP Request(s) to Deploy Spaces</a></li>
+  <li><a href="#terraform-provider-basics" id="toc-terraform-provider-basics" class="nav-link" data-scroll-target="#terraform-provider-basics">Terraform Provider Basics</a></li>
+  <li><a href="#next-steps-list" id="toc-next-steps-list" class="nav-link" data-scroll-target="#next-steps-list">NEXT STEPS LIST</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>If you’re reading this blog, you’ve probably visited <a href="https://huggingface.co/">the Huggingface website</a> and you’ve almost certainly tried out one of <a href="https://huggingface.co/spaces">their ‘Spaces’</a>. These are deployed mini-applications hosted on Huggingface infrastructure. I’ve created spaces of my own, and at work <a href="https://github.com/zenml-io/zenml/pull/1427">I added</a> a way for people to quickly deploy a ZenML server as a ‘Space’. I love browsing all the spaces that exist and they’re really a testament to the creativity, smartness and elbow-grease contributed by the thriving open-source community that Huggingface facilitates through their platform.</p>
+<p>I’ve been working on my Terraform skills <a href="https://mlops.systems/#category=terraform">for a while</a> and recently I thought up a little project that I hope will help deepen my skill-building as well as be useful for others. My goals were to build something that would:</p>
+<ul>
+<li>allow people to deploy HF Spaces (using pre-build templates) using Terraform</li>
+<li>allow for all the templates and not just <code>zenml</code></li>
+<li>facilitate the full range of CRUD functionality for spaces, including renaming and deleting the spaces</li>
+<li>make the provider a ‘good’ one that follows best practices as much as possible</li>
+</ul>
+<p>This blogpost will describe my process and some of the things I learned along the way. A special thanks to Sean Kane at SuperOrbital for writing <a href="https://superorbital.io/blog/custom-terraform-providers/">an extremely useful blogpost</a> that guided me on this journey (alongside <a href="https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider">the official Hashicorp documentation</a>).</p>
+<section id="the-terraform-golden-path" class="level2">
+<h2 class="anchored" data-anchor-id="the-terraform-golden-path">The Terraform Golden Path</h2>
+<p>What I wanted to be able to do was define my resource in something like the following manner:</p>
+<pre class="hcl"><code>terraform {
+  required_providers {
+    huggingface-spaces = {
+      source = "strickvl/huggingface-spaces"
+    }
+  }
+}
+
+provider "huggingface-spaces" {
+  apikey = var.huggingface_apikey
+}
+
+resource "huggingface-spaces_space" "zenml_server" {
+    name     = "test-zenml-space"
+    private  = false
+    template = zenml/zenml
+}</code></pre>
+<p>This really simple interface would allow people to spin up Huggingface spaces without needing to click through buttons on the Huggingface website. You can get a sense of how it works if you were to do it via that web interface here:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hf_tf_provider/hf_web_interface.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Web interface to deploy Huggingface Spaces as of November 2023</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="using-http-requests-to-deploy-spaces" class="level2">
+<h2 class="anchored" data-anchor-id="using-http-requests-to-deploy-spaces">Using HTTP Request(s) to Deploy Spaces</h2>
+<p>Internally, this web interface will just be using API calls (through some layer of abstraction) to make the deployment, so we can take a look at the Huggingface documentation and experiment a bit to find out how we can make such deployments using the raw underlying HTTP.</p>
+<p>It’s important to have a sense of the HTTP API because this is what we’re going to ultimately be using when we write the Terraform provider. For the provider, we’ll have to use <a href="https://go.dev">Go</a> to define how that works so in the interests of clarity I’ll just show the HTTP requests on their own first.</p>
+<p>There’s <a href="https://huggingface.co/spaces/enzostvs/hub-api-playground">a useful Space</a> by <a href="https://huggingface.co/enzostvs">Enzo</a> that allows you to play around with the Hub API, and the <a href="https://huggingface.co/docs/hub/api">Huggingface docs</a> cover the endpoints available for the Hub API.</p>
+<p>For our purposes, we’re interested in the <code>POST /api/repos/create</code> endpoint. Note that we’re not making our query to the <code>api/spaces</code> endpoint, but rather to the <code>repos</code> endpoint. When you create a space, what you’re actually doing is creating a repository with certain custom features that Huggingface then knows to instantiate and deploy as a ‘Space’.</p>
+<p>So as a simple HTTP request we can run the following in the terminal:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http</span> POST <span class="st">"https://huggingface.co/api/repos/create"</span> <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  Authorization:<span class="st">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  type=space <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  name=test-hf-api <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  private=false sdk=docker template=zenml/zenml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll need to add in your authorisation token that you create on the Huggingface site and you can change the specific template you’re creating and the name as you see fit. Running this command will do the same as clicking through the various buttons on the web interface. (I’m using the <code>httpie</code> CLI tool to make the request, but you could just as well use something like <code>curl</code> if you prefer.)</p>
+<p>Once we’ve confirmed that the basic creation of a Space based on the template works, we can try some other commands. If we wanted to rename the space, we can ‘move’ it. (Think how renaming folders in the UNIX terminal is also accomplished with the <code>mv</code> command.)</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http</span> POST <span class="st">"https://huggingface.co/api/repos/move"</span> <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  Authorization:<span class="st">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  fromRepo=<span class="st">"strickvl/test-hf-api"</span> toRepo=<span class="st">"strickvl/my-renamed-space"</span> type=<span class="st">"space"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And then to delete the space we can do the following:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http</span> DELETE <span class="st">"https://huggingface.co/api/repos/delete"</span> <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  Authorization:<span class="st">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  type=space <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  name=my-renamed-space <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  type=space</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So the API allows us to interact with the Space without using the website as expected. So far so good!</p>
+</section>
+<section id="terraform-provider-basics" class="level2">
+<h2 class="anchored" data-anchor-id="terraform-provider-basics">Terraform Provider Basics</h2>
+<p>At the end I want this provider to be available on the Terraform Registry for others to use, so in that case the repository needs to be named in the format <code>terraform-provider-THE_NAME_GOES_HERE</code>. I’ve chosen <a href="https://github.com/strickvl/terraform-provider-huggingface-spaces"><code>terraform-provider-huggingface-spaces</code></a>.</p>
+<p>Terraform <a href="https://github.com/hashicorp/terraform-plugin-framework">released a framework</a> for creating these Terraform providers which is a new (v2) way of doing this. It’s worth noting that it’s fairly new and many (most?) of the community providers you see on the Terraform registry are using the old way. There’s lots of support and even <a href="https://github.com/hashicorp/terraform-provider-scaffolding-framework">a repository you can use as a template</a> scaffold for your own efforts. That’s what we’ll be using as well.</p>
+</section>
+<section id="next-steps-list" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps-list">NEXT STEPS LIST</h2>
+<p>Followed the blog - replacing some default values from the template with ones specific to my provider - let TF use a local copy of the provider (instead of one on the TF registry (which we haven’t even published yet…)) -</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

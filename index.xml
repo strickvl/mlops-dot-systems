@@ -10,7 +10,180 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 23 Jul 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 23 Mar 2024 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Publishing the ISAF Press Releases dataset</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Yesterday I published <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">two</a> <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">datasets</a> to the Hugging Face Hub and I wanted to briefly add some context to them and what they might be useful for.</p>
+<p><img src="https://mlops.systems/posts/images/hf_hub_isaf_dataset_view.png" title="A screenshot of the Hugging Face dataset website for the ISAF press releases dataset." class="img-fluid"></p>
+<p><strong>TL;DR:</strong></p>
+<ul>
+<li>I wrote a paper in 2011 that used international military forces’ press releases about Afghanistan military operations to gain an understanding of what was going on on the ground.</li>
+<li>The paper was covered in the Guardian and on the BBC and elsewhere and subsequently lead to a significant scaling back of press release coverage.</li>
+<li>The data is hard to come by now since ISAF and NATO took down the original website and files. I’ve had researchers contact me asking for the data over the years so now I’m making it available as a public dataset on the Hugging Face Hub.</li>
+<li>The core dataset consists of expert-labelled data pairs (an article with the metadata extracted from the article about how many people were killed and captured and so on) so I’m thinking that it might unintentionally be a useful evaluation task for LLMs. The Hugging Face dataset cards provide more information about what tasks might be appropriate.</li>
+</ul>
+<section id="the-datasets" class="level1">
+<h1>The Datasets</h1>
+<p>The <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">ISAF Press Releases dataset</a> contains data used as the basis for the research paper “<a href="https://www.afghanistan-analysts.org/en/special-reports/a-knock-on-the-door-22-months-of-isaf-press-releases/">A Knock on the Door: 22 Months of ISAF Press Releases</a>”, originally published in October 2011. The dataset provides a comprehensive collection of press releases issued by the International Security Assistance Force (ISAF) in Afghanistan from December 1, 2009, to February 21, 2013. The press releases were collected, processed, and annotated to extract information about <a href="https://www.pbs.org/wgbh/frontline/documentary/kill-capture/">kill-capture missions</a> carried out by ISAF during this period. The dataset offers valuable insights into the nature and extent of these operations, providing a historical record of ISAF’s activities in Afghanistan. It consists of 4822 press release reports, each labelled with information about the event, including the date, location, target group, and the number of people killed or captured (as represented in the data). The Guardian’s datablog team also <a href="https://www.theguardian.com/news/datablog/2011/oct/12/afghanistan-nato-kill-capture-raids-isaf-petraeus">published a series of accompanying visualisations</a> at the time.</p>
+<p>The <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">second dataset</a> is a variation on the same data. It contains the raw HTML files of press releases issued by the International Security Assistance Force (ISAF) in Afghanistan, covering a broader period than the original dataset (spanning 2009-2016). In addition to the raw HTML files containing the news reports, the dataset provides a Parquet file that contains all the data parsed from the HTML files and API requests. This Parquet file serves as the primary resource for researchers and organizations interested in using the dataset. The dataset offers a comprehensive collection of press releases. The HTML files are organized by year and month for archival purposes, while the Parquet file provides a structured and easily accessible format for data analysis.</p>
+</section>
+<section id="motivation-for-the-core-dataset" class="level1">
+<h1>Motivation for the core dataset</h1>
+<p>The dataset was created to provide a comprehensive and publicly accessible record of ISAF’s kill-capture missions in Afghanistan, as reported in their press releases. The motivation was to enable scholars, legal teams, and others to analyse and understand the nature and extent of these operations, as the original ISAF website no longer exists in the same form. The dataset serves as an important historical artifact for Afghan history and provides a means to reverse-engineer the minimum numbers of people killed and captured by ISAF during the specified period.</p>
+<p>The initial data collection involved manually copying the text of press releases from the now defunct ISAF website at [http://www.isaf.nato.int/article/isaf-releases/](http://www.isaf.nato.int/article/isaf-releases/ into <a href="https://www.eastgate.com/Tinderbox/">Tinderbox</a> software. The press releases were collected from December 1, 2009, to February 21, 2013, covering a period of over 21 months. All available press releases during this period were included in the dataset.</p>
+<p>The collected press releases were then processed to split them into individual incident reports. If a press release mentioned multiple incidents, they were separated into distinct entries. The text of the press releases was not modified and remains in its original form.</p>
+<p>The annotation process involved reading each press release and evaluating it against a set of variables. The annotations were performed using Tinderbox software. The variables included:</p>
+<ul>
+<li>Basic data: Incident name, reference number, date of the incident.</li>
+<li>Location data: Province, district, village name (if provided).</li>
+<li>Target data: Target group, claimed capture of a “leader” or someone in a leadership position, specific position of the target.</li>
+<li>Numerics: Indication of someone being killed or detained, minimum number killed or detained, exact terms used to refer to those detained or killed, numbers of “leaders” and “facilitators” claimed to be killed or captured, classification as a “capture-or-kill” raid, involvement of an airstrike. The annotator used a fixed list of interpretations for certain terms when estimating the minimum numbers of people killed or detained. Detailed explanations of the annotation process and variable definitions are provided in the associated research paper.</li>
+</ul>
+</section>
+<section id="the-reports-conclusions" class="level1">
+<h1>The report’s conclusions</h1>
+<p>I’ll just quote <a href="https://www.afghanistan-analysts.org/wp-content/uploads/downloads/2012/10/AAN_2011_ISAFPressReleases_AANpressrelease.pdf">from the report’s press release</a> for this so as not to get any details wrong:</p>
+<blockquote class="blockquote">
+<p>“ISAF officials have long presented the recently stepped‐up capture‐or‐kill operations as one of the most effective parts of the military mission in Afghanistan. They regularly release large figures describing the number of ‘leaders’, ‘facilitators’ and ‘insurgents’ that were killed or captured, to illustrate the success of the campaign. A closer examination of the information that is publicly available, however, reveals some important inconsistencies, particularly surrounding the classification of who is considered an insurgent ‘leader’.”AAN’s latest report, by Alex Strick van Linschoten and Felix Kuehn, is based on an analysis of all ISAF press releases over the last 22 months. The report provides important baseline data, as well as an insight into how ISAF sees the success of their operations. Alex Strick van Linschoten: “Because there is no solid data and no transparency, the debate [with regard to the capture‐or‐kill strategy] tends to be either emotional or anecdotal. If anything goes wrong, ISAF often dismisses the incident as an exception to a successful strategy. Without proper data, you can’t really have this discussion.” “The research covers the period from 1 December 2009 to 30 September 2011 and included 3,771 ISAF press releases, which reported a total of 3,157 incidents (including 2,365 capture‐or‐kill raids). During this period (at least) 3,873 individuals were reported killed and 7,146 detained. The two peaks of ISAF activity were in September 2010 and June 2011. The numbers show a steady general increase in reported kills and captures each month until June 2011, with a slight decrease over the winter (2010—11). The number of ‘leaders’ and ‘facilitators’ that were reported killed amounted to approximately 5 per cent of the total number of deaths, while the number of ‘leaders’ and ‘facilitators’ detained consists of approximately 13 per cent of the total number of reported detentions.”</p>
+</blockquote>
+</section>
+<section id="further-research-using-this-data" class="level1">
+<h1>Further research using this data</h1>
+<p>I originally undertook this project and research work because I was sick and unable to do much onerous fieldwork at the time on the ground in Afghanistan. I was surprised at how much value could be extracted from a seemingly benign set of data as a series of press releases. The report I originally wrote (together with <a href="https://www.linkedin.com/in/felix-kuehn-42b5b5132/">Felix Kuehn</a>) barely scratches the surface in terms of possible analyses, and I hope that, by publishing the raw data, others might follow in my footsteps and produce further analysis. Some possible ideas I had for projects that would be interesting:</p>
+<ul>
+<li>correlate the press releases with the data in the <a href="https://www.wikileaks.org/wiki/Afghan_War_Diary,_2004-2010">Wikileaks Afghanistan war logs</a> to see the extent to which press releases were reporting the reality of what was going on.</li>
+<li>correlate the press releases to local news stories</li>
+<li>compare the public claims about the kill capture raids with the data shared in press releases. I did a bit of this in the original report, but there’s a lot more to be done here.</li>
+</ul>
+<p>Since I’m also sharing this data with the view that it’s also an interesting machine learning dataset, some further ideas include:</p>
+<ul>
+<li>use it for structured data extraction (fine-tune or train a language model that can reproduce the expert labels that I originally made)</li>
+<li>fine-tune a smaller model that can label <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">the full dataset</a>, given the labelled subset (i.e.&nbsp;<a href="https://huggingface.co/datasets/strickvl/isafpressreleases">the original dataset</a>)</li>
+<li>fine-tune a model to write the press releases, given some summary of the days’ activities</li>
+<li>statistical analysis of the full dataset, esp following LLM-driven labelling</li>
+<li>apply the same methodology to the press releases of the Afghan Ministry of Defence, who took over the mantle of providing these daily summaries of kill-capture missions around the country. (I hope to present a separate dataset containing these press releases soon as well, which is important since these have also been taken offline.)</li>
+</ul>
+</section>
+<section id="some-takeaways-from-the-project" class="level1">
+<h1>Some takeaways from the project</h1>
+<p>Firstly, data labelling is hard! There are 4822 in the core dataset and I read and labelled every single one of them. This took me weeks to carry out and it’s worth reading the report’s section on data labelling to get a sense of why labelling this particular data was hard.</p>
+<p>Secondly, data loss is a real thing! Even though we have amazing resources like <a href="https://archive.org">archive.org</a> which preserve old sites, it’s still striking that a military operation that took years and that cost so much money and lives didn’t see it as important to preserve the archival record of its actions. Publishing these press releases as an open dataset is part of <a href="https://www.firstdraft-publishing.com/">other work</a> I’ve done to try to preserve these kinds of documents. I encourage others to do the same.</p>
+<p>Finally, there was an unexpected amount of value in data that at first sight was fairly anodyne and mundane. It’s a good reminder that small projects with focused datasets can provide a lot of value.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>miniproject</category>
+  <category>afghanistan</category>
+  <category>datalabelling</category>
+  <category>datasets</category>
+  <category>nlp</category>
+  <category>llm</category>
+  <guid>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</guid>
+  <pubDate>Sat, 23 Mar 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/midjourney-afghanistan-dataset.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
+<item>
+  <title>Writing a custom Terraform provider to deploy Huggingface Spaces</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2023-09-06-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>If you’re reading this blog, you’ve probably visited <a href="https://huggingface.co/">the Huggingface website</a> and you’ve almost certainly tried out one of <a href="https://huggingface.co/spaces">their ‘Spaces’</a>. These are deployed mini-applications hosted on Huggingface infrastructure. I’ve created spaces of my own, and at work <a href="https://github.com/zenml-io/zenml/pull/1427">I added</a> a way for people to quickly deploy a ZenML server as a ‘Space’. I love browsing all the spaces that exist and they’re really a testament to the creativity, smartness and elbow-grease contributed by the thriving open-source community that Huggingface facilitates through their platform.</p>
+<p>I’ve been working on my Terraform skills <a href="https://mlops.systems/#category=terraform">for a while</a> and recently I thought up a little project that I hope will help deepen my skill-building as well as be useful for others. My goals were to build something that would:</p>
+<ul>
+<li>allow people to deploy HF Spaces (using pre-build templates) using Terraform</li>
+<li>allow for all the templates and not just <code>zenml</code></li>
+<li>facilitate the full range of CRUD functionality for spaces, including renaming and deleting the spaces</li>
+<li>make the provider a ‘good’ one that follows best practices as much as possible</li>
+</ul>
+<p>This blogpost will describe my process and some of the things I learned along the way. A special thanks to Sean Kane at SuperOrbital for writing <a href="https://superorbital.io/blog/custom-terraform-providers/">an extremely useful blogpost</a> that guided me on this journey (alongside <a href="https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider">the official Hashicorp documentation</a>).</p>
+<section id="the-terraform-golden-path" class="level2">
+<h2 class="anchored" data-anchor-id="the-terraform-golden-path">The Terraform Golden Path</h2>
+<p>What I wanted to be able to do was define my resource in something like the following manner:</p>
+<pre class="hcl"><code>terraform {
+  required_providers {
+    huggingface-spaces = {
+      source = "strickvl/huggingface-spaces"
+    }
+  }
+}
+
+provider "huggingface-spaces" {
+  apikey = var.huggingface_apikey
+}
+
+resource "huggingface-spaces_space" "zenml_server" {
+    name     = "test-zenml-space"
+    private  = false
+    template = zenml/zenml
+}</code></pre>
+<p>This really simple interface would allow people to spin up Huggingface spaces without needing to click through buttons on the Huggingface website. You can get a sense of how it works if you were to do it via that web interface here:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/hf_tf_provider/hf_web_interface.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Web interface to deploy Huggingface Spaces as of November 2023</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="using-http-requests-to-deploy-spaces" class="level2">
+<h2 class="anchored" data-anchor-id="using-http-requests-to-deploy-spaces">Using HTTP Request(s) to Deploy Spaces</h2>
+<p>Internally, this web interface will just be using API calls (through some layer of abstraction) to make the deployment, so we can take a look at the Huggingface documentation and experiment a bit to find out how we can make such deployments using the raw underlying HTTP.</p>
+<p>It’s important to have a sense of the HTTP API because this is what we’re going to ultimately be using when we write the Terraform provider. For the provider, we’ll have to use <a href="https://go.dev">Go</a> to define how that works so in the interests of clarity I’ll just show the HTTP requests on their own first.</p>
+<p>There’s <a href="https://huggingface.co/spaces/enzostvs/hub-api-playground">a useful Space</a> by <a href="https://huggingface.co/enzostvs">Enzo</a> that allows you to play around with the Hub API, and the <a href="https://huggingface.co/docs/hub/api">Huggingface docs</a> cover the endpoints available for the Hub API.</p>
+<p>For our purposes, we’re interested in the <code>POST /api/repos/create</code> endpoint. Note that we’re not making our query to the <code>api/spaces</code> endpoint, but rather to the <code>repos</code> endpoint. When you create a space, what you’re actually doing is creating a repository with certain custom features that Huggingface then knows to instantiate and deploy as a ‘Space’.</p>
+<p>So as a simple HTTP request we can run the following in the terminal:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;">http</span> POST <span class="st" style="color: #20794D;">"https://huggingface.co/api/repos/create"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb2-2">  Authorization:<span class="st" style="color: #20794D;">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb2-3">  type=space <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb2-4">  name=test-hf-api <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb2-5">  private=false sdk=docker template=zenml/zenml</span></code></pre></div>
+<p>You’ll need to add in your authorisation token that you create on the Huggingface site and you can change the specific template you’re creating and the name as you see fit. Running this command will do the same as clicking through the various buttons on the web interface. (I’m using the <code>httpie</code> CLI tool to make the request, but you could just as well use something like <code>curl</code> if you prefer.)</p>
+<p>Once we’ve confirmed that the basic creation of a Space based on the template works, we can try some other commands. If we wanted to rename the space, we can ‘move’ it. (Think how renaming folders in the UNIX terminal is also accomplished with the <code>mv</code> command.)</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;">http</span> POST <span class="st" style="color: #20794D;">"https://huggingface.co/api/repos/move"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb3-2">  Authorization:<span class="st" style="color: #20794D;">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb3-3">  fromRepo=<span class="st" style="color: #20794D;">"strickvl/test-hf-api"</span> toRepo=<span class="st" style="color: #20794D;">"strickvl/my-renamed-space"</span> type=<span class="st" style="color: #20794D;">"space"</span></span></code></pre></div>
+<p>And then to delete the space we can do the following:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;">http</span> DELETE <span class="st" style="color: #20794D;">"https://huggingface.co/api/repos/delete"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb4-2">  Authorization:<span class="st" style="color: #20794D;">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb4-3">  type=space <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb4-4">  name=my-renamed-space <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb4-5">  type=space</span></code></pre></div>
+<p>So the API allows us to interact with the Space without using the website as expected. So far so good!</p>
+</section>
+<section id="terraform-provider-basics" class="level2">
+<h2 class="anchored" data-anchor-id="terraform-provider-basics">Terraform Provider Basics</h2>
+<p>At the end I want this provider to be available on the Terraform Registry for others to use, so in that case the repository needs to be named in the format <code>terraform-provider-THE_NAME_GOES_HERE</code>. I’ve chosen <a href="https://github.com/strickvl/terraform-provider-huggingface-spaces"><code>terraform-provider-huggingface-spaces</code></a>.</p>
+<p>Terraform <a href="https://github.com/hashicorp/terraform-plugin-framework">released a framework</a> for creating these Terraform providers which is a new (v2) way of doing this. It’s worth noting that it’s fairly new and many (most?) of the community providers you see on the Terraform registry are using the old way. There’s lots of support and even <a href="https://github.com/hashicorp/terraform-provider-scaffolding-framework">a repository you can use as a template</a> scaffold for your own efforts. That’s what we’ll be using as well.</p>
+</section>
+<section id="next-steps-list" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps-list">NEXT STEPS LIST</h2>
+<p>Followed the blog - replacing some default values from the template with ones specific to my provider - let TF use a local copy of the provider (instead of one on the TF registry (which we haven’t even published yet…)) -</p>
+
+
+</section>
+
+ ]]></description>
+  <category>devops</category>
+  <category>miniproject</category>
+  <category>terraform</category>
+  <category>go</category>
+  <category>skillbuilding</category>
+  <guid>https://mlops.systems/posts/2023-09-06-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html</guid>
+  <pubDate>Wed, 08 Nov 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/TKTKTKTK" medium="image"/>
+</item>
 <item>
   <title>Automating database backups with Tarsnap</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -3008,197 +3181,6 @@ In child: 0.02258025041320865</code></pre>
   <guid>https://mlops.systems/posts/2022-10-24-foundations-mnist-basics.html</guid>
   <pubDate>Sun, 23 Oct 2022 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/fashion-mnist-part-2/fashion-mnist-cover.png" medium="image" type="image/png" height="134" width="144"/>
-</item>
-<item>
-  <title>Deep learning tricks all the way down, with a bit of mathematics for good measure</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><em>(This is part of a series of blog posts relating to and responding to the live FastAI course (part 2) being taught October-December 2022. To read others, see the ones listed for <a href="https://mlops.systems/categories/#parttwo">the ‘parttwo’ tag</a>.)</em></p>
-<p>Much awaited and anticipated, the <a href="https://www.fast.ai/posts/part2-2022.html">second part of the FastAI course</a> is being taught live again. If part one is about getting solid foundations and learning how to get going in a practical/useful way, part two is about approaching things from the foundations but with research or ‘impractical’ questions kept in mind. The backdrop of the current iteration is the breakthroughs happening in the world of generative computer vision models like <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4">Stable Diffusion</a>, which we’ll explore and deconstruct (and reconstruct?!) over the coming weeks.</p>
-<p>Diving into the details of how things work means that along the way we’re much more likely to encounter (legitimate) specialist vocabulary and techniques as well as a decent dose of jargon. Whereas bringing up the intricacies of particular algorithms, architectures or mathematical methods was unnecessary during part one, it seems like part two is a little bit more of a venue for that kind of material. I will use these blogs as a way of reviewing materials and concepts introduced during the lectures as well as keeping track of the big questions I have.</p>
-<p>In this blog, in particular, I’ll keep a glossary at the bottom for some new terms which were introduced. I may repeat this for subsequent blog reviews, depending on what’s covered in those lessons. I’ll also keep a section containing new mathematical symbols that are introduced. (This blog mainly relates to the core lecture given during week 1. I’ll update it later with some small extras that came up from the 9A and 9B videos, or expand those into separate posts on their own.)</p>
-<p>Stable Diffusion isn’t, in itself, a model that I’m especially interested in, except insofar as it teaches me fundamental principles about the craft of deep learning or about doing research in this field. As such, my plan and current intention is to stick to documenting core mental models or bigger-picture lessons that I’m taking away from the lessons rather than each individual step that Jeremy made along the way. (This seems to be the motivation behind including it in the course at all. Stable Diffusion touches so many topics (big and small) and getting to grips with this one thing will help understand many other things about machine learning and the world of research.)</p>
-<section id="stable-diffusion-101" class="level1">
-<h1>💬🌄 Stable Diffusion 101</h1>
-<p>If you’ve been on the internet at all during the past 6-12 months, you’ll almost certainly have been exposed to examples of images that have been generated using techniques grounded in deep learning. Here is one that I generated just now:</p>
-<p><img src="https://mlops.systems/posts/fastai-lesson-9/sd-dutch-nn.png" title="This used the prompt 'a Dutch male AI researcher trying to understand how neural networks work. looking at a computer screen on his desk'" class="img-fluid"></p>
-<p>These images are generated by passing in a prompt into the model which then uses that to come up with something that represents the text you passed in. (Shoutout to the creators and maintainers of <a href="https://github.com/fastai/diffusion-nbs">the tremendously useful <code>diffusion-nbs</code> notebooks</a>.) The interface between the text and the image is still not as seamless as might be hoped, and a discipline of ‘prompt engineering’ has grown around finding the best ways to coax certain kinds of images out of the model. (See <a href="http://dallery.gallery/wp-content/uploads/2022/07/The-DALL·E-2-prompt-book-v1.02.pdf">this book</a> to learn more about what works with DALL-E 2, for example. Or visit <a href="https://lexica.art">Lexica</a> to search images based on the prompts that were used to create them.)</p>
-<p>There are some obvious interim questions that result from the existence of such models and their outputs, notably what this allows in terms of creativity and how it might transform the kinds of tools we use for image editing and creation. The advances are certainly impressive, but outside the field, (and without being moving on too quickly from the unquestioned achievement of these types of models) what does it mean for the rest of deep learning?</p>
-<p>The first thing that is maybe interesting for the field is the way that these models are multi-modal, or in other words they aren’t stuck in the silo of being text-only, or image-only, and so on. We are able to translate (to a greater or lesser degree) between language and images with these models, which seems like it might open up a whole universe of interactions and behaviours that are interesting to explore.</p>
-<p>At a very (very) high level, what’s going on with stable diffusion is that it starts with generating an image that is more or less purely random noise, and then (with subsequent iterations) slowly reveals an image and coherence that was contained within the random noise. Similar to how Michelangelo said of sculpture (“It is already there, I just have to chisel away the superfluous material”), what happens here is that we have to remove the superfluous noise.</p>
-</section>
-<section id="core-takeaways-how-does-it-work" class="level1">
-<h1>🛠 Core Takeaways: How does it work?</h1>
-<p>Those of you not taking the course live will have to wait a few months for the lectures to be released and in any case I don’t want to parrot the order and progression of how Jeremy explained how Stable Diffusion works. With that said, I was pleasantly surprised by how much I was able to follow along given what is a fairly technically involved topic. (Note to self: the fundamentals continue to be important!)</p>
-<section id="fundamentals-still-count" class="level2">
-<h2 class="anchored" data-anchor-id="fundamentals-still-count">Fundamentals still count</h2>
-<p>Even though there are a hundred and one small innovations and technologies which make something like Stable Diffusion possible, in the end we’re still dealing with Deep Learning and we’re still dealing with finding ways of converting things into numbers which can be used by machines to update weights by way of evaluating loss functions. So many of the individual pieces that make up how you build something like Stable Diffusion amount to:</p>
-<ul>
-<li>figure out how to get this non-number-like thing into a numeric representation (ideally a vector of some kind)</li>
-<li>do all the usual deep learning things that we’ve done a thousand times and that we know work</li>
-<li>at the end, maybe find a way to convert the numeric representation that our model learned into some kind of form that is useful to us</li>
-</ul>
-<p>Obviously the details are important and nobody is creating magical generative art with this very high-level hand-wavy explanation, but for someone at the earlier end of their journey into deep learning it is reassuring that the fundamentals continue to have relevance and that those mental models remain useful as a way of thinking about new developments.</p>
-</section>
-<section id="the-tricks-are-the-way" class="level2">
-<h2 class="anchored" data-anchor-id="the-tricks-are-the-way">The tricks <em>are</em> the way</h2>
-<p>The other pleasant surprise was the enduring relevance of ‘tricks’. In chapter one of the FastAI book, Jeremy &amp; Sylvain showcase a number of examples where clever approaches are taken to solve problems with Deep Learning:</p>
-<ul>
-<li>a malware classification program is made by converting malware code into an image which is used to train a model</li>
-<li>a fraud detection algorithm is trained by converting images of computer mouse movements</li>
-<li>…and so on</li>
-</ul>
-<p>Even amongst the Delft FastAI study group, Kurian trained <a href="https://kurianbenoy.com/ml-blog/fastai/fastaicourse/2022/05/01/AudioCNNDemo.html">a classifier to detect genre in music samples</a> using a similar method (i.e.&nbsp;using images as an intermediary form for the samples which were used in training). The book emphasises:</p>
-<blockquote class="blockquote">
-<p>“In general, you’ll find that a small number of general approaches in deep learning can go a long way, if you’re a bit creative in how you represent your data! You shouldn’t think of approaches like the ones described here as”hacky workarounds,” because actually they often (as here) beat previously state-of-the-art results. These really are the right ways to think about these problem domains.”</p>
-</blockquote>
-<p>Most of these ‘tricks’ seem to relate to either performance improvements (i.e.&nbsp;how can we get this training to happen faster, or with fewer compute needs) or ways of getting your problem domain into a form that we can use deep learning techniques on them. In the case of Stable Diffusion, one of the problems we have to address is how to work in this multi-modal manner, where text is used to represent a particular idea (which in turn needs a vector/numeric representation) but where we also want to represent that same idea in image form.</p>
-<p>At the same time, we have the whole autoencoder part of the story — whereby we use an encoder to turn a large image into a (smaller-sized) latent representation which can be used in training, and then we use a decoder to turn a noisy latent into a full-sized image — which seems to mainly be about making the training process more efficient.</p>
-<p>Each of these techniques come with their own complexities and histories, but it’s just notable to me how the story of the development of machine learning techniques seems somehow to be a succession of these small incremental innovations that progressively accrue. That’s not to say that there aren’t big breakthroughs in either understanding why things work the way they do, or in the more tactical method space, but it just seemed very apparent in the unpacking of Stable Diffusion that a great deal of creative stitching together of ideas had taken place.</p>
-<p>The historian in me is fascinated by the different pathways that the field has explored, or the reasons why certain techniques emerged when they did, or how hardware improvements gave tried-and-rejected techniques a new lease of life, but I’m guessing that probably doesn’t help much with the work of research.</p>
-</section>
-<section id="what-happens-when-we-train-the-diffusion-model" class="level2">
-<h2 class="anchored" data-anchor-id="what-happens-when-we-train-the-diffusion-model">💪 What happens when we train the diffusion model</h2>
-<p>A diffusion model is a neural network that we train. The way it works is that it removes noise from an image (passed in as input along with a text prompt) such that the output more closely resembles the prompt. When we are training our network, we pass in the vectorised words along with the latent forms of the images (since those are much smaller file sizes and thus faster / more efficient to train). We use the encoder to get a latent representation of the image that we use for training.</p>
-<p>For the text caption, we want a way to represent the association of images with text captions in vector space. In other words, if there are various phrases that all represent more or less the same image if you were to translate those phrases into an image, then those should be similar when represented as a vector. The technique or trick for this is to use ‘contrastive loss’, a particular kind of loss function which allows us to calculate the relative similarity of two vectors. This contrastive loss is what gives us the first two letters of <a href="https://openai.com/blog/clip/">‘CLIP’</a>, a neural network developed by OpenAI.</p>
-<p>The CLIP model takes some text and outputs an embedding, i.e.&nbsp;some features in vector form that our unet can use for training along with the images in their latent representation form.</p>
-</section>
-<section id="what-happens-when-we-generate-an-image" class="level2">
-<h2 class="anchored" data-anchor-id="what-happens-when-we-generate-an-image">🎨 What happens when we generate an image</h2>
-<p>When generating our image we can use the neural network we trained to progressively remove noise from our candidate image. We start off with a more or less completely noisy image, then apply the unet to it and it returns the noise that it calculates is sitting on top of a latent representation that approximates the vectorised version of our prompt. We take a fraction of that, remove it, and repeat a few times. (Currently that can take as many as 50 iterations before we reach a really impressive image, but new techniques are in review which would dramatically reduce the need for so many iterations.)</p>
-<p>Note that it is during the inference stage where we need the decoder part of our (VAE) encoder to turn a latent tensor representation of an image into a fully-fledged large picture.</p>
-</section>
-</section>
-<section id="how-to-play-practice-for-part-ii" class="level1">
-<h1>🎺 How to play &amp; practice for part II</h1>
-<p>I also wanted to briefly take a second to reflect on what might be useful as ways to get practically involved during the coming weeks. In part one, the instruction was fairly simple: “train lots of models”. In part two, the practicality is initially still there, it seems, but there will be other areas of emphasis. The things that seem to make sense to me currently are:</p>
-<ul>
-<li>continue to blog as a way of reflecting and developing my understanding</li>
-<li>understand and digest the core concepts that are introduced</li>
-<li>whenever the ‘code everything from scratch’ part of the course starts, make sure to at least attempt this on my own alongside whatever is being showcased in lectures</li>
-<li>discuss areas where concepts are unclear during the weekly <a href="https://www.meetup.com/delft-fast-ai-study-group/">Delft FastAI study group</a> calls that I organise</li>
-</ul>
-<p>I suspect that the discipline of the coding will be most instructive, once we get to it, though by extension probably also one that comes with the most struggle.</p>
-<p>Following a session of the Delft Study Group, I gathered some more suggestions for how to get the most out of this part 2:</p>
-<ul>
-<li>get hands-on as much as possible</li>
-<li>‘the details matter’ and try to go above and beyond with the course and you’ll be rewarded</li>
-<li>blog and explain what you’re learning</li>
-<li>answer questions on the forums as a way of cementing your learning</li>
-<li>don’t let yourself get blocked by ideas that you don’t understand along the way. Keep following along with the course and more likely than not these things will clear themselves up</li>
-</ul>
-</section>
-<section id="glossary-of-core-terms" class="level1">
-<h1>📖 Glossary of Core Terms</h1>
-<p>(Listed alphabetically, not in the order of exposition. Also these reflect my current understanding which is not always complete, so I’ll keep this updated as my understanding grows.)</p>
-<ul>
-<li><strong>Analytic derivatives</strong> — This is a faster way of calculating the gradients for our image, such that we calculate the whole set at once. This is what PyTorch uses under the hood in conjunction with a GPU to speed up the training process.</li>
-<li><strong>Autoencoder (model)</strong> — This is a combination of an encoder and a decoder. This model is a neural network with a series of layers that progressively ‘compress’ an image (through convolutions) until the point where it is much smaller. At this point the representation is called a ‘latent’. Then (in the full autoencoder) the image is progressively scaled back up into its full version.</li>
-<li><strong>CLIP</strong> — This is a model that turns text into images, powered by ‘contrastive loss’. It was developed by OpenAI.</li>
-<li><strong>Contrastive loss</strong> — This is a loss function that allows us to compare the similarity of two vectors. We multiply them together and sum up all the values. (This process is also known as the dot product.) If the two vectors are similar, we would expect the number to be large. Contrastive loss is used in CLIP.</li>
-<li><strong>Convolutional layer</strong> — This is a key part of computer vision and it is a way of representing images at different resolutions. Images are either scaled up or down through a convolutional layer (which seems to be some way of averaging the values of an image). Convolutional is the C in CNN.</li>
-<li><strong>Decoder</strong> — This is the part of an autoencoder that takes a latent representation and scales it back up (i.e.&nbsp;‘decompresses’ it) to its full representation.</li>
-<li><strong>Differential equations</strong> — This is a part of mathematics which is really important for Stable Diffusion and whose language forms the context and backdrop for discussions around this technique, but it is a fairly different set of vocabulary from what we use for deep learning.</li>
-<li><strong>Diffusion sampler</strong> — This is the part of the process which relates to adding or subtracting noise from an image.</li>
-<li><strong>Dot product</strong> — This is the process by which we multiply two vectors by each other and sum up the values. It is used when we are calculating contrastive loss, but it is a common linear algebra calculation.</li>
-<li><strong>Embedding</strong> — This is a representation of something as a vector, particularly useful for deep learning. In particularly, it’s useful for areas like text where we might, for example have semantic fields that we want to represent as being similar to each other, but we need to do so in such a way as is comprehensible and processable by a machine. Embeddings allow us to do this in vector space.</li>
-<li><strong>Encoder</strong> — This is one part of an autoencoder that takes a full sized image and passes it through a series of convolutions such that at the end we have a significantly reduced tensor that is known as a latent.</li>
-<li><strong>Finite differentiation</strong> — This is one way of calculating the gradients for our image, but it is done pixel by pixel. It is quite slow. (Contrast with analytic derivative.)</li>
-<li><strong>Guidance + guidance scale</strong> — This is the prompt that we pass into our Stable Diffusion model. The guidance scale is what we can pass in to our generation function call to specify how much we want the prompt to be strictly followed.</li>
-<li><strong>Latent representation(s)</strong> — This is the intermediate product in the middle of an autoencoder. It is what is produced by an encoder, and it is what is consumed by a decoder. It is sort of a compressed version of all the important pieces of information relating to a particular image, for example.</li>
-<li><strong>Momentum</strong> — This is a technique used by optimizers in which if we increase the same parameters (or weights) several times in a row, then it seems likely that we’ll do that again so we can increase the learning rate for those parameters so that we don’t have to make so many iterations.</li>
-<li><strong>Negative prompts</strong> — You can pass in a negative prompt along with your prompt and it is a way somehow of ensuring that the resulting image does not correspond to whatever was in the negative prompt. (Think of it as ‘subtracting’ from the main prompt, which seems to be what is going on under the hood, in vector space).</li>
-<li><strong>Noise</strong> — Noise is random data, with no meaning as such. It is important in the world of Stable Diffusion because the work of generating the image is the work of removing noise.</li>
-<li><strong>Perceptual loss</strong> — This is another kind of loss function that may play a role in Stable Diffusion going forward int he course.</li>
-<li><strong>Pipeline</strong> — This is the concept that is used by the <a href="https://github.com/huggingface/diffusers">HuggingFace Diffusers library</a>, out of which our images are generated.</li>
-<li><strong>Score function</strong> — This is another way of stating the gradients for our image. I.e. the representation of what needs adjusting (and by how much) in order to remove noise from our image.</li>
-<li><strong>Step</strong> — This is one iteration of the inference process.</li>
-<li><strong>Textual Inversion</strong> — This is the process of creating a new embedding for a single specific concept or item. (i.e.&nbsp;the Indian watercolour example in the course)</li>
-<li><strong>Time step</strong> — This is a concept from the way the original Stable Diffusion creators thought about things. It represents a way to go from a value to an amount of noise that gets added to an image.</li>
-<li><strong>VAE</strong> — This is the specific kind of autoencoder used in Stable Diffusion.</li>
-</ul>
-</section>
-<section id="new-mathematical-symbols" class="level1">
-<h1>✖️➗ New Mathematical Symbols</h1>
-<ul>
-<li>∑ — means to sum up</li>
-<li>∇ — we use this symbol instead of something else (d something?) in representing the gradient because we are talking about the gradients of many pixel values and not just a single one</li>
-<li>β — (beta) — used in relation to the time steps to represent the amount of noise or variance. I think this is used instead of the letter σ (sigma), but I might be wrong on that.</li>
-</ul>
-</section>
-<section id="enduring-questions" class="level1">
-<h1>❓ Enduring Questions</h1>
-<p>Some of the questions which I have in my mind following the class include:</p>
-<ul>
-<li>These ‘generative’ models intersect with the field of art and creativity, at least nominally, but to what extent can we even say that they are generating something versus simply repeating things that they’ve already seen? (see also, <a href="https://dl.acm.org/doi/10.1145/3442188.3445922">the ‘stochastic parrots’ paper</a>)</li>
-<li>SKILL: are there tricks or best practices when deciphering jargon-rich papers down to their core and, in doing so, being able to see the parts of the paper that are new (versus the parts that are just standard practice)?</li>
-<li>SKILL: what does it mean to be ‘impractical’ i.e.&nbsp;do research in this field? What is involved and how is it generally or most usefully done?</li>
-<li>What are the useful or fundamental innovations involved in Stable Diffusion?</li>
-<li>What are the parts of ML/DL and/or Stable Diffusion that we do because of time or hardware or cost limitations as opposed to the things that we do because they are the right way to approach this particular problem? (provoked by the whole detour down into autoencoders that seems mainly to be there to improve iteration speed.)</li>
-<li>What’s the bigger takeaway for the field as a whole? In other words, what things can we think about doing now with these new techniques?</li>
-<li>Why does the whole ‘time steps’ conversion stage happen at all? i.e.&nbsp;why can’t we just choose a random number to represent how much or little noise we apply to an image for our training data.</li>
-<li>The autoencoder / compression step seems like an amazing technique all to its own. Is it really lossless, or is some information lost along the way?</li>
-</ul>
-
-
-</section>
-
- ]]></description>
-  <category>computervision</category>
-  <category>fastai</category>
-  <category>parttwo</category>
-  <guid>https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</guid>
-  <pubDate>Sun, 16 Oct 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/fastai-lesson-9/sd-dutch-nn.png" medium="image" type="image/png" height="143" width="144"/>
-</item>
-<item>
-  <title>Avoiding BIDMAS, or how J does notation</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2022-10-16-notational-precedence.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>One of the topics that comes up early on in Open University’s <a href="https://www.open.ac.uk/courses/modules/mu123">MU123 mathematics course</a> is precedence. Those who grew up in English-speaking countries will probably know this as <a href="https://www.bbc.co.uk/bitesize/topics/zxqnsk7/articles/znm8cmn">BODMAS or BIDMAS</a>. The order of precedence for execution of a mathematical expression gives us an idea for how to resolve expressions that don’t make sense. For example, <code>3 + 1 x 4</code> can either amount to 7 or 16, depending on how when you do the multiplication step.</p>
-<p>Brackets are one way to make things more precise, and that’s probably why they’re the B in BIDMAS and that they go first. We could write <code>3 + (1 x 4)</code> to make it really clear that we wanted the <code>1 x 4</code> sub-expression to be evaluated first.</p>
-<p>With the rules of precedence, we technically wouldn’t need to add in any brackets because we could (likely) assume that people would follow the standard rules and they would know that we have to evaluate multiplications before we evaluate the additions. So we have a way, but it maybe feels a bit unsatisfactory.</p>
-<p>Some languages or domains, however, have notational rules which don’t rely on a meta-schema of precedence rules like BIDMAS to tell you which expressions should be evaluated first. Instead, the order is determined in other ways, with the option of brackets when needed.</p>
-<p>Several of the languages in the APL family, like J, simply evaluate from right to left in the order that expressions are encountered. See this example in J:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode j code-with-copy"><code class="sourceCode j"><span id="cb1-1">   <span class="dv" style="color: #AD0000;">3</span> <span class="kw" style="color: #003B4F;">+</span> <span class="dv" style="color: #AD0000;">1</span> <span class="kw" style="color: #003B4F;">*</span> <span class="dv" style="color: #AD0000;">4</span></span>
-<span id="cb1-2"><span class="dv" style="color: #AD0000;">7</span></span>
-<span id="cb1-3">   <span class="dv" style="color: #AD0000;">4</span> <span class="kw" style="color: #003B4F;">*</span> <span class="dv" style="color: #AD0000;">3</span> <span class="kw" style="color: #003B4F;">+</span> <span class="dv" style="color: #AD0000;">1</span></span>
-<span id="cb1-4"><span class="dv" style="color: #AD0000;">16</span></span></code></pre></div>
-<p>The order in which the expressions are evaluated determines the answer.</p>
-<p>Thinking and reading a bit about these orders of precedence brought me to learn a bit about other traditions of mathematical notation. The one most used and that you’ll be most familiar with is called <em>infix notation</em> i.e.&nbsp;<code>3 + 4</code>.</p>
-<p>Prefix notation (AKA Polish notation) is when we write <code>+ 3 4</code> (to the same end) and postfix notation (AKA reverse Polish notation) is when we write <code>3 4 +</code>. (The Polish part relates back to <a href="https://en.wikipedia.org/wiki/Jan_Łukasiewicz">Jan Łukasiewicz</a>, who invented it in 1924.) These kinds of notation are used in Lisp and Clojure, for example.</p>
-<p>Why would you want to use a notation style like this? Some possible reasons:</p>
-<ul>
-<li>the operands in the expressions can handle arbitrary numbers of arguments, making them more efficient to write</li>
-<li>they are consistent with the syntax used for functions in computer programming (which can be easier to get your mind round)</li>
-<li>they’re clearer to read and (mostly) unambiguous, unlike infix notation which (see above) requires a whole order of precedence if you’re not using brackets</li>
-<li>there’s no confusion or need for precedence rules</li>
-<li>it’s faster for a machine to evaluate, since the way expressions are formulated is much easier to translate into computer code.</li>
-</ul>
-<p>So there you go. I’m unclear whether there are more fundamental benefits to living in the world of post-/prefix notation, and perhaps it’s a little like the people who argue that <a href="https://gizmodo.com/why-we-should-switch-to-a-base-12-counting-system-5977095">we’d all be better off</a> if we lived in a base-12 world instead of base-10, but that’s beside the point for now.</p>
-<p>I’ll try to share some more diversions from my mathematics study along the way, hopefully powered by <a href="https://www.jsoftware.com">J</a> which I’m trying to get back into.</p>
-
-
-
- ]]></description>
-  <category>j</category>
-  <category>mathematics</category>
-  <category>mu123</category>
-  <category>q31</category>
-  <category>notation</category>
-  <guid>https://mlops.systems/posts/2022-10-16-notational-precedence.html</guid>
-  <pubDate>Sat, 15 Oct 2022 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/notational-precedence/j-precedence.png" medium="image" type="image/png" height="113" width="144"/>
 </item>
 </channel>
 </rss>
