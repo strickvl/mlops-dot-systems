@@ -77,7 +77,7 @@ Since I'm also sharing this data with the view that it's also an interesting mac
 
 # Some takeaways from the project
 
-Firstly, data labelling is hard! There are 4822 in the core dataset and I read and labelled every single one of them. This took me weeks to carry out and it's worth reading the report's section on data labelling to get a sense of why labelling this particular data was hard.
+Firstly, data labelling is hard! There are 4822 events/items in the core dataset and I read and labelled every single one of them. This took me weeks to carry out and it's worth reading the report's section on data labelling to get a sense of why labelling this particular data was hard.
 
 Secondly, data loss is a real thing! Even though we have amazing resources like [archive.org](https://archive.org) which preserve old sites, it's still striking that a military operation that took years and that cost so much money and lives didn't see it as important to preserve the archival record of its actions. Publishing these press releases as an open dataset is part of [other work](https://www.firstdraft-publishing.com/) I've done to try to preserve these kinds of documents. I encourage others to do the same.
 
