@@ -71,7 +71,7 @@ So as a simple HTTP request we can run the following in the terminal:
 
 ```bash
 http POST "https://huggingface.co/api/repos/create" \
-  Authorization:"Bearer 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" \
+  Authorization:"Bearer YOUR_TOKEN_GOES_HERE" \
   type=space \
   name=test-hf-api \
   private=false sdk=docker template=zenml/zenml
