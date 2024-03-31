@@ -3,8 +3,8 @@
     "listing": "/index.html",
     "items": [
       "/posts/saba.html",
+      "/posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html",
       "/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html",
-      "/posts/2023-09-06-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html",
       "/posts/2023-07-24-database-backups-tarsnap.html",
       "/posts/2023-07-23-maths-prompt-rust-project.html",
       "/posts/2023-06-22-input-variables-terraform.html",
