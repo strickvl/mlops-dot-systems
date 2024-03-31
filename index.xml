@@ -65,7 +65,7 @@ resource "huggingface-spaces_space" "zenml_server" {
 <p>For our purposes, we’re interested in the <code>POST /api/repos/create</code> endpoint. Note that we’re not making our query to the <code>api/spaces</code> endpoint, but rather to the <code>repos</code> endpoint. When you create a space, what you’re actually doing is creating a repository with certain custom features that Huggingface then knows to instantiate and deploy as a ‘Space’.</p>
 <p>So as a simple HTTP request we can run the following in the terminal:</p>
 <div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;">http</span> POST <span class="st" style="color: #20794D;">"https://huggingface.co/api/repos/create"</span> <span class="dt" style="color: #AD0000;">\</span></span>
-<span id="cb2-2">  Authorization:<span class="st" style="color: #20794D;">"Bearer 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"</span> <span class="dt" style="color: #AD0000;">\</span></span>
+<span id="cb2-2">  Authorization:<span class="st" style="color: #20794D;">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt" style="color: #AD0000;">\</span></span>
 <span id="cb2-3">  type=space <span class="dt" style="color: #AD0000;">\</span></span>
 <span id="cb2-4">  name=test-hf-api <span class="dt" style="color: #AD0000;">\</span></span>
 <span id="cb2-5">  private=false sdk=docker template=zenml/zenml</span></code></pre></div>

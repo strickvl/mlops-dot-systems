@@ -299,7 +299,7 @@ resource "huggingface-spaces_space" "zenml_server" {
 <p>For our purposes, we’re interested in the <code>POST /api/repos/create</code> endpoint. Note that we’re not making our query to the <code>api/spaces</code> endpoint, but rather to the <code>repos</code> endpoint. When you create a space, what you’re actually doing is creating a repository with certain custom features that Huggingface then knows to instantiate and deploy as a ‘Space’.</p>
 <p>So as a simple HTTP request we can run the following in the terminal:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http</span> POST <span class="st">"https://huggingface.co/api/repos/create"</span> <span class="dt">\</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  Authorization:<span class="st">"Bearer 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"</span> <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  Authorization:<span class="st">"Bearer YOUR_TOKEN_GOES_HERE"</span> <span class="dt">\</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  type=space <span class="dt">\</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  name=test-hf-api <span class="dt">\</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  private=false sdk=docker template=zenml/zenml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
