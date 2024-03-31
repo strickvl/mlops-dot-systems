@@ -153,6 +153,7 @@ output "test_space_sdk" {
   value = data.huggingface-spaces_space.test_space_data.sdk
 }</code></pre>
 <p>And this will create a Hugging Face Space using the ZenML Docker template. You can even specific specific hardware that you want your space to be provisioned with, or state that you want persistent storage to be added, or add secrets and/or environment variables as part of the deployment. I would encourage you to visit and <a href="https://registry.terraform.io/providers/strickvl/huggingface-spaces/latest/docs">read the documentation</a> for the provider for more information.</p>
+<p>Unfortunately at some point towards the end of my development I seem to have triggered the Hugging Face API’s rate limiter and now I’m in some purgatory where I can’t do anything on the Hugging Face Hub for the next 23+ hours. Not sure what that means for my ability to test this functionality in our CI, but I’ll be exploring this next.</p>
 </section>
 <section id="what-this-unlocks" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-unlocks">What this unlocks</h2>
