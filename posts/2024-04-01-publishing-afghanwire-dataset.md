@@ -42,7 +42,7 @@ While the primary purpose of the Afghanwire Dataset is to serve as a historical 
 
 ## Accessing the Dataset
 
-The Afghanwire Dataset is now available on the Hugging Face Hub under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) license. Researchers and interested parties can access the dataset using the following link: [https://huggingface.co/datasets/strickvl/afghanwire](https://huggingface.co/datasets/strickvl/afghanwire).
+The Afghanwire Dataset is now available on the Hugging Face Hub under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) license. Researchers and interested parties can [access the dataset here](https://huggingface.co/datasets/strickvl/afghanwire).
 
 ## Next Steps
 
