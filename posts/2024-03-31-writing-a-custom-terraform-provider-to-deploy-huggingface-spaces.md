@@ -27,7 +27,7 @@ I've been working on my Terraform skills [for a while](https://mlops.systems/#ca
 - facilitate the full range of CRUD functionality for spaces, including renaming and deleting the spaces
 - make the provider a 'good' one that follows best practices as much as possible
 
-This blogpost will describe my process and some of the things I learned along the way. A special thanks to Sean Kane at SuperOrbital for writing [an extremely useful blogpost](https://superorbital.io/blog/custom-terraform-providers/) that guided me on this journey (alongside [the official Hashicorp documentation](https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider)).
+This blogpost will describe my process and some of the things I learned along the way. A special thanks to Sean Kane at SuperOrbital for writing [an extremely useful blogpost](https://superorbital.io/blog/custom-terraform-providers/) that guided me on this journey (alongside [the official Hashicorp documentation](https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider)). (TL;DR: [check out the finished provider here](https://registry.terraform.io/providers/strickvl/huggingface-spaces/latest/docs)!)
 
 ## The Terraform Golden Path
 
@@ -202,4 +202,4 @@ Working with Go code is pretty pleasant. There were some new parts of Go I hadn'
 
 A final 'as always' lesson was that my work was really helped by taking some time away from code to think through exactly how the provider would work, what pieces of information would be needed where and so on. I don't always remember this lesson — it's really easy to just start typing on a keyboard — but I appreciated having a game plan and some notes to keep me on track when I had choices to make.
 
-So give the extension a try and let me know if you found it useful! (Also let me know if you'd like some other functionality adding and I'll see what I can do!)
+So [give the provider a try](https://registry.terraform.io/providers/strickvl/huggingface-spaces/latest/docs) and let me know if you found it useful! (Also let me know if you'd like some other functionality adding and I'll see what I can do!)
