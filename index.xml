@@ -80,7 +80,7 @@
 <li>facilitate the full range of CRUD functionality for spaces, including renaming and deleting the spaces</li>
 <li>make the provider a ‘good’ one that follows best practices as much as possible</li>
 </ul>
-<p>This blogpost will describe my process and some of the things I learned along the way. A special thanks to Sean Kane at SuperOrbital for writing <a href="https://superorbital.io/blog/custom-terraform-providers/">an extremely useful blogpost</a> that guided me on this journey (alongside <a href="https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider">the official Hashicorp documentation</a>).</p>
+<p>This blogpost will describe my process and some of the things I learned along the way. A special thanks to Sean Kane at SuperOrbital for writing <a href="https://superorbital.io/blog/custom-terraform-providers/">an extremely useful blogpost</a> that guided me on this journey (alongside <a href="https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider">the official Hashicorp documentation</a>). (TL;DR: <a href="https://registry.terraform.io/providers/strickvl/huggingface-spaces/latest/docs">check out the finished provider here</a>!)</p>
 <section id="the-terraform-golden-path" class="level2">
 <h2 class="anchored" data-anchor-id="the-terraform-golden-path">The Terraform Golden Path</h2>
 <p>What I wanted to be able to do was define my resource in something like the following manner:</p>
@@ -221,7 +221,7 @@ output "test_space_sdk" {
 <p>I found it quite hard to understand the precise endpoints of the Hugging Face API that were available. Some documentation can be found, but it’s split <a href="https://huggingface.co/docs/hub/api#hub-api-endpoints">over</a> <a href="https://github.com/huggingface/huggingface_hub/blob/main/src/huggingface_hub/hf_api.py">various</a> <a href="https://huggingface.co/spaces/enzostvs/hub-api-playground">places</a> and still is incomplete. The actual source code for the Hub’s API is closed-source so it’s not even possible just to go to the code implementation. Once I’m done with the testing for the provider I’ll maybe see if I can go back and make a PR to improve the Hugging Face documentation.</p>
 <p>Working with Go code is pretty pleasant. There were some new parts of Go I hadn’t previously encountered, notably modules. Using the new Terraform provider plugin template / system means you have to use modules, but it wasn’t too hard to figure out. Go is certainly easier to grok as a non-expert user than Rust.</p>
 <p>A final ‘as always’ lesson was that my work was really helped by taking some time away from code to think through exactly how the provider would work, what pieces of information would be needed where and so on. I don’t always remember this lesson — it’s really easy to just start typing on a keyboard — but I appreciated having a game plan and some notes to keep me on track when I had choices to make.</p>
-<p>So give the extension a try and let me know if you found it useful! (Also let me know if you’d like some other functionality adding and I’ll see what I can do!)</p>
+<p>So <a href="https://registry.terraform.io/providers/strickvl/huggingface-spaces/latest/docs">give the provider a try</a> and let me know if you found it useful! (Also let me know if you’d like some other functionality adding and I’ll see what I can do!)</p>
 
 
 </section>
