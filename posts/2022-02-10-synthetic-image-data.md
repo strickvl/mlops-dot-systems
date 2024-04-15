@@ -19,8 +19,7 @@ toc: true
 
 ---
 
-![]({{ site.baseurl
-}}/images/synthetic-image-data/synthetic-images-cover.jpg)
+![](images/synthetic-image-data/synthetic-images-cover.jpg)
 
 This blog outlines my process (and a few false starts) for generating a series
 of synthetic images (and corresponding annotations) to supplement training data
@@ -135,8 +134,7 @@ found in the data set. You can see some of this variety in the illustration that
 follows, though note that each individual redaction snippet was its own separate
 image for the purposes of my synthetic generation.
 
-![]({{ site.baseurl
-}}/images/synthetic-image-data/redaction-snippets.jpg "These are the kinds of redactions
+![](images/synthetic-image-data/redaction-snippets.jpg "These are the kinds of redactions
 (superimposed for the purposes of showing the variety) I selected.")
 
 I found that it was pretty trivial to generate images of the kind I proposed
@@ -242,8 +240,7 @@ With these pieces complete, I had the basics of the next version of my synthetic
 image generation. You can see the flow and progression of my script in the
 following diagram:
 
-![]({{ site.baseurl
-}}/images/synthetic-image-data/flow-v2.png "Synthetic image generation v2")
+![](images/synthetic-image-data/flow-v2.png "Synthetic image generation v2")
 
 You'll note that there were a number of other steps that supported the image
 creation. I did again descend into bbox hell when calculating exactly where to
@@ -291,8 +288,7 @@ image. Unfortunately it was simply too aggressive. I guess for some workflows it
 would have been great, but the page ended up looking somewhat unintelligible by
 the end. Compare these two examples:
 
-![]({{ site.baseurl
-}}/images/synthetic-image-data/augraphy-transforms.jpg "Comparing levels of Augraphy
+![](images/synthetic-image-data/augraphy-transforms.jpg "Comparing levels of Augraphy
 image augmentation")
 
 Not only did the default Augraphy transforms often make the redaction
@@ -308,8 +304,7 @@ interested in working on.
 
 ## Final Results: 2097 Synthetic Images
 
-![]({{ site.baseurl
-}}/images/synthetic-image-data/some-synthetic-images.gif "Some of the generated images")
+![](images/synthetic-image-data/some-synthetic-images.gif "Some of the generated images")
 
 This gif gives you a brief sense of some of the images I generated as a result
 of the process I've detailed above. They're not perfect, and as I write I
