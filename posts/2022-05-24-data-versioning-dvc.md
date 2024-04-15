@@ -20,7 +20,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 If you've been following along as I train an object detection model to detect redactions, you'll know that there have been a few iterations in how I go about doing this. For the most part, though, the dataset has remained relatively static. I downloaded a huge tranche of publicly-released government documents right at the beginning and aside from [my experiments](https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html) in [synthetic data creation](https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html) I haven't really been adding to this data.
 

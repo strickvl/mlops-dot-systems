@@ -21,7 +21,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 The [previous](https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/19/data-validation-great-expectations-part-1.html) [two](https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/26/data-validation-great-expectations-part-2.html) posts in this series have made the case for why you might want to consider adding a Great Expectations step or stage to your computer vision project, particularly once it becomes something you're going to want to iterate on a few times.
 

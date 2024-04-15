@@ -83,7 +83,7 @@ You can access the demo / MVP app that I created here:
 This MVP app runs two models to mimic the experience of what a final deployed version of the project might look like.
 
 - The first model (a classification model trained with fastai, available on the Huggingface Hub [here](https://huggingface.co/strickvl/redaction-classifier-fastai) and testable as a standalone demo [here](https://huggingface.co/spaces/strickvl/fastai_redaction_classifier)), classifies and determines which pages of the PDF are redacted. I've written about how I trained this model [here](https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html).
-- The second model (an object detection model trained using [IceVision](https://airctic.com/) (itself built partly on top of fastai)) detects which parts of the image are redacted. This is a model I've been working on for a while and I described my process in [a series of blog posts](https://mlops.systems/categories/#redactionmodel).
+- The second model (an object detection model trained using [IceVision](https://airctic.com/) (itself built partly on top of fastai)) detects which parts of the image are redacted. This is a model I've been working on for a while and I described my process in [a series of blog posts](https://mlops.systems/#category=redactionmodel).
 
 This MVP app does several things:
 

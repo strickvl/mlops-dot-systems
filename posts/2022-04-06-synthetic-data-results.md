@@ -19,7 +19,7 @@ toc: true
 
 _(This is part of a series of blog posts documenting my work to train a model
 that detects redactions in documents. To read other posts, check out
-[the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+[the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 A clean and focused dataset is probably at the top of the list of things that
 would be nice to have when starting to tackle a machine learning problem. For
@@ -27,7 +27,7 @@ object detection, there are some
 [useful starting points](https://huggingface.co/datasets?task_categories=task_categories:object-detection&sort=downloads),
 but for many use cases you're probably going to have to start from scratch. This
 is what I've been doing
-[for the past few months](https://mlops.systems/categories/#redactionmodel):
+[for the past few months](https://mlops.systems/#category=redactionmodel):
 working to bootstrap my way into a dataset that allows me to get decent
 performance training a model that can recognise redactions made on documents.
 

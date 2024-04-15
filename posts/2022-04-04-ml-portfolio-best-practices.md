@@ -21,7 +21,7 @@ in-transit message processing for web applications was a group project that I wo
 
 ![](ml-portfolio-best-practices/ekko.png "A screenshot from the Ekko website")
 
-I've been working on [my redaction project](https://mlops.systems/categories/#redactionmodel) since December and slowly but surely I'm tying the ends together and getting ready for it to come to a close. As part of the final touches, I want to offer something equivalent to how we presented [Ekko](https://ekko-realtime.com). From reading around and exposure to various projects over the years, it seems to me that machine learning projects sometimes have different emphases and conventions. This blog post is my attempt to list some of the characteristics of really great ML portfolio projects, with an emphasis on how the project is presented.
+I've been working on [my redaction project](https://mlops.systems/#category=redactionmodel) since December and slowly but surely I'm tying the ends together and getting ready for it to come to a close. As part of the final touches, I want to offer something equivalent to how we presented [Ekko](https://ekko-realtime.com). From reading around and exposure to various projects over the years, it seems to me that machine learning projects sometimes have different emphases and conventions. This blog post is my attempt to list some of the characteristics of really great ML portfolio projects, with an emphasis on how the project is presented.
 
 ## Some top projects
 

@@ -20,7 +20,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 So we've trained our model… now what? Are we done?
 
@@ -101,7 +101,7 @@ There isn't much in the way of rocket science to testing, but it is a whole worl
 
 ### 👁 Data Validation
 
-Just like our code needs to have some kinds of checks and balances, so does the lifeblood of our project: our data. I recently finished [a three-part series](https://mlops.systems/categories/#datavalidation) on data validation in the context of this project, and both [Great Expectations](https://greatexpectations.io) and [Evidently](https://evidentlyai.com) are excellent options worth considering, depending on your exact requirements.
+Just like our code needs to have some kinds of checks and balances, so does the lifeblood of our project: our data. I recently finished [a three-part series](https://mlops.systems/#category=datavalidation) on data validation in the context of this project, and both [Great Expectations](https://greatexpectations.io) and [Evidently](https://evidentlyai.com) are excellent options worth considering, depending on your exact requirements.
 
 ### 📝 Experiment Tracking
 

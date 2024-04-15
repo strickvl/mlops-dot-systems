@@ -56,7 +56,7 @@ Even with this rudimentary definition, you can see how there might be some advan
 1. Throw an exception — this will break you out of the code flow and prevent the object from being constructed
 2. Do something to make the data fit — you can perform some kind of transformation which sees the cheese ingredient as being forced onto the top layer of the pizza toppings (or whatever is the equivalent for your specific scenario)
 
-Note that the kinds of restrictions posed by these invariants are things that can't fully be captured by the typing system. [We've covered type hints](https://mlops.systems/categories/#redactionmodel) and how they can help make your code more robust, but types don't help much when it comes to the order of a list, for example.
+Note that the kinds of restrictions posed by these invariants are things that can't fully be captured by the typing system. [We've covered type hints](https://mlops.systems/#category=redactionmodel) and how they can help make your code more robust, but types don't help much when it comes to the order of a list, for example.
 
 ## Why code around invariants?
 

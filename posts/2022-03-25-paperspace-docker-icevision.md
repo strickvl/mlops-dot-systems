@@ -17,7 +17,7 @@ toc: true
 
 ---
 
-I've been using [Paperspace](https://www.paperspace.com/) right to fuel my ML/Deep Learning experimentation since more or less the beginning. It was one of the recommended platforms that offered GPUs for the [fastai](https://www.fast.ai/) course and when I started working on [my redaction project](https://mlops.systems/categories/#redactionmodel) I chose to keep going since I had little reason to change.
+I've been using [Paperspace](https://www.paperspace.com/) right to fuel my ML/Deep Learning experimentation since more or less the beginning. It was one of the recommended platforms that offered GPUs for the [fastai](https://www.fast.ai/) course and when I started working on [my redaction project](https://mlops.systems/#category=redactionmodel) I chose to keep going since I had little reason to change.
 
 Fast-forward a few months, and I've had a few issues along the way. Paperspace works by provisioning a Docker image, connecting it to a fixed filesystem / storage backend and then serving this up to you in a web interface as a Jupyter notebook. I found that sometimes there were issues with dependencies breaking, or special `pip install` magic I had to include in my notebook so that things would work again.
 

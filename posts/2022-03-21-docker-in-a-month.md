@@ -27,7 +27,7 @@ I've had my eye on two Manning books by [Elton Stoneman](https://blog.sixeyed.co
 
 I'm not sure whether I'll complete each one in exactly a month, but I'll try to fast-track my reading. The chapters are written in such a way as to be digestible (including exercises) in around an hour. Stoneman says in the introduction to the Kubernetes book that it's best to start with the Docker one, which I suppose makes sense given that one builds on the other.
 
-Just like [my posts as I read through Robust Python](https://mlops.systems/categories/#robustpython) (which I haven't stopped doing), I'll write up various things that I learn along the way, mainly as notes for myself but perhaps it will have value beyond this limited goal. So far I've read through the first three chapters of the Docker book, so what follows are some notes on the key points from that.
+Just like [my posts as I read through Robust Python](https://mlops.systems/#category=robustpython) (which I haven't stopped doing), I'll write up various things that I learn along the way, mainly as notes for myself but perhaps it will have value beyond this limited goal. So far I've read through the first three chapters of the Docker book, so what follows are some notes on the key points from that.
 
 # Core Docker Commands
 

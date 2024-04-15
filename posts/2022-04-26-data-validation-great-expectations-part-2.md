@@ -20,7 +20,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 In [the first part](https://mlops.systems/tools/redactionmodel/computervision/datavalidation/2022/04/19/data-validation-great-expectations-part-1.html) of this series, I made the case for why you might want to include some kind of data validation if you're working on training a model in general, and if your working on object detection in specific. There are many things that can go wrong with your data inputs and you ought to have some kind of safeguards in place to prevent some tricky failures and bugs.
 

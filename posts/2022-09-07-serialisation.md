@@ -21,7 +21,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 Serialisation and deserialisation. I ran headfirst into these two words on my first day in my new job. From the way my colleagues discussed them, it seemed like this was something I should have learned from a computer science degree; foundational concepts with practical applications throughout most places that computers touched.
 

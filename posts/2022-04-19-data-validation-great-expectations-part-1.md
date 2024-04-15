@@ -20,7 +20,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)_
+_(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)_
 
 **Data validation is a process of verifying that data is accurate and consistent. It plays a crucial role in end-to-end machine learning pipelines.**
 
@@ -32,7 +32,7 @@ When something goes wrong with a newly trained or newly deployed version of your
 
 <iframe src="https://giphy.com/embed/YTJXDIivNMPuNSMgc0" width="442" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
-For software engineers, testing your code is a tried-and-tested way to find some confidence in what you're trying to accomplish. (I am exploring some of these best practices in [my review series](https://mlops.systems/categories/#robustpython) about Patrick Viafore's excellent [*Robust Python* ](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&me=&tag=soumet-20&_encoding=UTF8)book, which covers testing along with typing and various other patterns.) For critical systems, testing is one of the things that allows you to sleep soundly. For those living in the world of machine learning or data science, data validation is like writing tests for your data. You can be confident that your data looks and has the shape of what you feel it should when you address the data quality issue head-on.
+For software engineers, testing your code is a tried-and-tested way to find some confidence in what you're trying to accomplish. (I am exploring some of these best practices in [my review series](https://mlops.systems/#category=robustpython) about Patrick Viafore's excellent [*Robust Python* ](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&me=&tag=soumet-20&_encoding=UTF8)book, which covers testing along with typing and various other patterns.) For critical systems, testing is one of the things that allows you to sleep soundly. For those living in the world of machine learning or data science, data validation is like writing tests for your data. You can be confident that your data looks and has the shape of what you feel it should when you address the data quality issue head-on.
 
 If you think of your model training workflow as a pipeline, there are certain places where it makes sense to do some kind of data validation:
 

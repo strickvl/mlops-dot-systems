@@ -16,7 +16,7 @@ toc: true
 
 ---
 
-*(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)*
+*(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)*
 
 Last time I wrote about my work on this project, I'd just finished [creating synthetic image data](https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html) to supplement my manual annotations. Before integrating those into the model training, I wanted to make changes to a few hyper parameters to ensure that I'm getting as much out of the current configuration as possible.
 

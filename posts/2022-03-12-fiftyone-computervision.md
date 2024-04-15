@@ -21,7 +21,7 @@ toc: true
 
 ---
 
-*(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/categories/#redactionmodel).)*
+*(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](https://mlops.systems/#category=redactionmodel).)*
 
 So you've trained a computer vision model, but you think it could do better. What do you do next? This is a common scenario, especially for computer vision problems where fine-tuning someone else's pre-trained model is a pretty normal initial step that gets taken. You emerge with a decent score on whatever metric you care about, but it also isn't great.
 

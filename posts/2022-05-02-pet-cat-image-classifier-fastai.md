@@ -21,7 +21,7 @@ I'm participating in [the latest iteration](https://itee.uq.edu.au/event/2022/pr
 
 I've done the earlier parts of the course before, so some of these demonstrations were less mind-blowing than the first time I saw them. For this iteration of the course, Jeremy showcased [a Kaggle notebook](https://www.kaggle.com/code/jhoward/is-it-a-bird-creating-a-model-from-your-own-data) which trains a model to distinguish whether an image is of a bird or not.
 
-Last time I did the course, I [trained an image classifier model](https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html#fn:3) to distinguish whether an image was redacted or not to around 95% accuracy. (This actually was the genesis of [my larger redaction object detection project](https://mlops.systems/categories/#redactionmodel) that I've been blogging about for the past few months.)
+Last time I did the course, I [trained an image classifier model](https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html#fn:3) to distinguish whether an image was redacted or not to around 95% accuracy. (This actually was the genesis of [my larger redaction object detection project](https://mlops.systems/#category=redactionmodel) that I've been blogging about for the past few months.)
 
 # The key ingredients: what goes into a model?
 

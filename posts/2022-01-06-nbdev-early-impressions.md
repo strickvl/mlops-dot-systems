@@ -20,7 +20,7 @@ toc: false
 ---
 
 While working to
-[develop a computer vision model](https://mlops.systems/categories/#redactionmodel)
+[develop a computer vision model](https://mlops.systems/#category=redactionmodel)
 that detects redactions in documents obtained as a result of
 [FOIA requests](<https://en.wikipedia.org/wiki/Freedom_of_Information_Act_(United_States)>),
 I have encountered some tasks that I end up repeating over and over again. Most

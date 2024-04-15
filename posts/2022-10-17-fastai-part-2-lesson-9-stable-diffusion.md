@@ -17,7 +17,7 @@ toc: true
 
 ---
 
-_(This is part of a series of blog posts relating to and responding to the live FastAI course (part 2) being taught October-December 2022. To read others, see the ones listed for [the 'parttwo' tag](https://mlops.systems/categories/#parttwo).)_
+_(This is part of a series of blog posts relating to and responding to the live FastAI course (part 2) being taught October-December 2022. To read others, see the ones listed for [the 'parttwo' tag](https://mlops.systems/#category=parttwo).)_
 
 Much awaited and anticipated, the [second part of the FastAI course](https://www.fast.ai/posts/part2-2022.html) is being taught live again. If part one is about getting solid foundations and learning how to get going in a practical/useful way, part two is about approaching things from the foundations but with research or 'impractical' questions kept in mind. The backdrop of the current iteration is the breakthroughs happening in the world of generative computer vision models like [Stable Diffusion](https://huggingface.co/CompVis/stable-diffusion-v1-4), which we'll explore and deconstruct (and reconstruct?!) over the coming weeks.
 

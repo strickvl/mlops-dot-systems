@@ -28,7 +28,7 @@ many (any?) pre-existing data sets that I can repurpose so I've been trying to
 find ways to bootstrap and improve the performance of the model I'm training.
 
 Before I dive into the details, I wanted to include a little context on
-[the wider project](https://mlops.systems/categories/#redactionmodel) and what
+[the wider project](https://mlops.systems/#category=redactionmodel) and what
 I'm seeking to accomplish. It is a relatively common practice for documents
 released as part of [FOIA](https://www.foia.gov) requests to contain redactions.
 With so many documents being released — and perhaps in specific cases where
