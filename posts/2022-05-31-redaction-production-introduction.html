@@ -202,7 +202,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/categories/#redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
+<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/#category=redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
 <p>So we’ve trained our model… now what? Are we done?</p>
 <p>If we’re just exercising our curiosity or have a tight focus for our work, then we might well be done with our work. Our responsibility within a larger team might only be for this specific step of training the model, for example. For many cases, however, we’re going to want to do something with our model, perhaps making it available to others via some web interface or an online API.</p>
 <p>The next blog posts in this series will focus on the challenges and practicalities of getting a model ‘in production’. I’ll sidestep the nuances of exactly what we mean by ‘in production’ for the moment, but suffice it to say that the end goal is to have a way to not only make our model available to other consumers but also to deal with re-training and/or re-deploying new models to take the place of older or stale models. There is a whole spectrum of variety in this context that goes by the name “MLOps”. This blog post will try to provide a high level overview of some of the basic elements relevant to getting my redaction model into production.</p>
@@ -271,7 +271,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="data-validation" class="level3">
 <h3 class="anchored" data-anchor-id="data-validation">👁 Data Validation</h3>
-<p>Just like our code needs to have some kinds of checks and balances, so does the lifeblood of our project: our data. I recently finished <a href="https://mlops.systems/categories/#datavalidation">a three-part series</a> on data validation in the context of this project, and both <a href="https://greatexpectations.io">Great Expectations</a> and <a href="https://evidentlyai.com">Evidently</a> are excellent options worth considering, depending on your exact requirements.</p>
+<p>Just like our code needs to have some kinds of checks and balances, so does the lifeblood of our project: our data. I recently finished <a href="https://mlops.systems/#category=datavalidation">a three-part series</a> on data validation in the context of this project, and both <a href="https://greatexpectations.io">Great Expectations</a> and <a href="https://evidentlyai.com">Evidently</a> are excellent options worth considering, depending on your exact requirements.</p>
 </section>
 <section id="experiment-tracking" class="level3">
 <h3 class="anchored" data-anchor-id="experiment-tracking">📝 Experiment Tracking</h3>
