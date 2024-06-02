@@ -10,7 +10,553 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 31 Mar 2024 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 01 Jun 2024 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Structured Data Extraction for ISAF Press Releases with Instructor</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m currently participating in <a href="https://maven.com/parlance-labs/fine-tuning">the Maven LLM course / conference</a>. Originally focused on finetuning LLMs, it’s since expanded to encompass a wide range of LLM-related topics. I thought I’d try to work through a small project alongside the course to get some practical experience with fine-tuning LLMs.</p>
+<p>I previously published a dataset from my time working in Afghanistan: the ISAF Press Releases dataset. (See <a href="https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html">here</a> for a blogpost I wrote describing the dataset in more detail.) Even though it was not really intended as a dataset to be used for any kind of model training, I thought it might serve well to finetune an LLM on top of it. The dataset is made up of press releases from <a href="https://en.wikipedia.org/wiki/International_Security_Assistance_Force">the International Security Assistance Force (ISAF)</a> and I had previously annotated them, extracting out metadata of interest.</p>
+<p>Here’s an example:</p>
+<blockquote class="blockquote">
+<p>“2013-02-21 KABUL, Afghanistan, February 21, 2013 - An Afghan and coalition security force arrested six insurgents during an operation in search of an Islamic Movement of Uzbekistan leader in Kunduz district, Kunduz province, today. The leader is allegedly instrumental in manufacturing, procuring and distributing improvised explosive devices for use in attacks against Afghan and coalition forces in the province. The security force also seized a shotgun as a result of the operation.”</p>
+</blockquote>
+<p>From this I extracted the following metadata:</p>
+<ul>
+<li>the date</li>
+<li>the type of event (detention)</li>
+<li>the province where the even took place (Kunduz)</li>
+<li>The city or district where the event took place (Kunduz)</li>
+<li>the group that was targeted in the raid (IMU)</li>
+<li>the minimum number of people killed (0)</li>
+<li>the minimum number of people captured (6)</li>
+<li>the phrase used to characterise the number captured (6)</li>
+<li>whether anyone was killed or not (no)</li>
+<li>whether anyone was captured or not (yes)</li>
+<li>whether an airstrike was conducted or not (no)</li>
+<li>whether any leaders were arrested or not (no)</li>
+</ul>
+<p>There were a few other pieces of metadata captured but you probably get the idea. Check out <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">the dataset’s card</a> which gives full details.</p>
+<p>There are 4822 such events in the dataset and as you might imagine it took quite a long time to manually annotate all this data. An example like the one above is fairly straightforward but it’s sometimes unclear exactly how many people were involved. Take this press release:</p>
+<blockquote class="blockquote">
+<p>“2012-12-S-025 KABUL, Afghanistan (Dec.&nbsp;26, 2012) An Afghan- led security force of more than 1,000 Afghan National Security Force soldiers and policemen, concluded a five day coalition-supported operation in Baraki Barak district, Logar province, yesterday. The operation was conducted by the Provincial Response Company Laghman, along with elements of the Afghan Local Police, the Afghan Uniformed Police, and the Afghan National Army. During the operation, the Afghan-led force killed multiple insurgents and detained dozens of suspected insurgents. The security force also seized improvised explosive device materials, suicide vests, weapons, ammunition, and a quantity of illicit drugs.”</p>
+</blockquote>
+<p>The number of people killed is specified as “multiple” and the number of those captured is specified as “dozens”. So that means a minimum of 3 killed and a minimum of 24 captured. But you have to be reading fairly closely to pick all of this up, and it gets even more complicated when they refer to multiple events in the same press release (and so on).</p>
+<p>It occurred to me recently that it might make for an interesting test of an LLM’s ability to extract this data out of the raw text in a structured format. So ideally I’d input the press release and I’d get out a JSON object (or Pydantic or whatever) which populates all the various fields.</p>
+<p>I’m lucky in that I’ve already lovingly labeled such a large dataset so I can be really confident in the quality which will allow me to focus on the task of finetuning an LLM to do this task.</p>
+<p>So my learning goals from this project are to:</p>
+<ul>
+<li>get more familiar with the practical flow of finetuning an LLM, particularly given hardware constraints and seeing how much can be done on my local machine vs needing cloud hardware.</li>
+<li>understand the best use cases for finetuning LLMs</li>
+<li>get some experience with deploying the finetuned LLMs (and seeing how that compares to the popular LLMs available via API (Anthropic / OpenAI etc))</li>
+<li>understand the limits of structured data extraction using LLMs</li>
+<li>get a sense of the effort needed to finetune LLMs for a focused task like this</li>
+<li>see how much can be done with local and open-source LLMs</li>
+</ul>
+<p>For the project itself, I keep reading (and <a href="https://www.youtube.com/watch?v=kFdfDJ1fQxY">watching</a>) that you can get GPT-4 level performance on specific focused tasks by finetuning LLMs and I wanted to see how much can be done with limited resources (or just how cherry-picked those public examples actually are.)</p>
+<p>I have <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">a ‘complete’ dataset</a> which includes press releases published after I finished working on my report, so ideally I’ll be able to use the model to label the remaining data (if it’s good enough in terms of accuracy). I’d also like to see how the speed of a finetuned model compares to using something like GPT-4.</p>
+<p>Let’s try this out with a simple prompt and a single example to see how it performs out of the box! We load the dataset first:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># get data from datasets</span></span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">from</span> datasets <span class="im" style="color: #00769E;">import</span> load_dataset</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">from</span> rich <span class="im" style="color: #00769E;">import</span> <span class="bu" style="color: null;">print</span></span>
+<span id="cb1-5"><span class="im" style="color: #00769E;">import</span> tqdm <span class="im" style="color: #00769E;">as</span> notebook_tqdm</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;"># Load the dataset</span></span>
+<span id="cb1-8">dataset <span class="op" style="color: #5E5E5E;">=</span> load_dataset(<span class="st" style="color: #20794D;">"strickvl/isafpressreleases"</span>, split<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"train"</span>)</span>
+<span id="cb1-9"></span>
+<span id="cb1-10"><span class="co" style="color: #5E5E5E;"># Convert the dataset to a pandas DataFrame</span></span>
+<span id="cb1-11">df <span class="op" style="color: #5E5E5E;">=</span> pd.DataFrame(dataset)</span>
+<span id="cb1-12"></span>
+<span id="cb1-13"><span class="co" style="color: #5E5E5E;"># Print the first few rows of the DataFrame</span></span>
+<span id="cb1-14"><span class="bu" style="color: null;">print</span>(df.head())</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/strickvl/.pyenv/versions/3.10.14/envs/isafpr/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">                              name  eventrefnumber  \
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>          Taliban Compound Struck  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span>-CA-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">056</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>   Militants Detained in Kandahar  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span>-CA-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">056</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>      Militants Detained in Khost  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-CA–<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">057</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>     Militants Detained in Wardak  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-CA–<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">057</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span>  Insurgents Detained in Kandahar  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-CA-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">058</span>   
+
+                                                text  StartDate  eventtype  \
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>  Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>: Taliban Compound Struck\n\nNEWS RELEAS<span style="color: #808000; text-decoration-color: #808000">...</span> <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">01</span>  airstrike   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>  Militants Detained in Kandahar\nNEWS RELEASE I<span style="color: #808000; text-decoration-color: #808000">...</span> <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">02</span>  detention   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>  Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>: Militants Detained in Khwost\nNEWS REL<span style="color: #808000; text-decoration-color: #808000">...</span> <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">02</span>  detention   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>  Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>: Militants Detained in Wardak\n\n\n\nNE<span style="color: #808000; text-decoration-color: #808000">...</span> <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">03</span>  detention   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span>  Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span>: Insurgents Detained in Kandahar\nISAF <span style="color: #808000; text-decoration-color: #808000">...</span> <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>  detention   
+
+   province     citydistrict       village targetgroup commander  <span style="color: #808000; text-decoration-color: #808000">...</span>  \
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>     Kunar     Dara-ye Noor                   Taliban            <span style="color: #808000; text-decoration-color: #808000">...</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>  Kandahar    Kandahar City                   Taliban            <span style="color: #808000; text-decoration-color: #808000">...</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>     Khost  Sabari district      Khatekah     Taliban            <span style="color: #808000; text-decoration-color: #808000">...</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>    Wardak       Sayyedabad    Jamad Khel     Taliban            <span style="color: #808000; text-decoration-color: #808000">...</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span>  Kandahar        Arghandab  Nurayo Kariz     Taliban            <span style="color: #808000; text-decoration-color: #808000">...</span>   
+
+  airstrike noshotsfired dataprocessed flagged glossarymeta minleaderskilled  \
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>      true        false          true   false        false                <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>     false         true          true   false        false                <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>     false         true          true   false        false                <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>     false         true          true   false        false                <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span>     false         true          true   false        false                <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   
+
+  minfacilitatorskilled minleaderscaptured minfacilitatorscaptured leaderq  
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                     <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                       <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   false  
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>                     <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                       <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   false  
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>                     <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                       <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>   false  
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>                     <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                       <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>   false  
+<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span>                     <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>                       <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>   false  
+
+<span style="font-weight: bold">[</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">5</span> rows x <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">28</span> columns<span style="font-weight: bold">]</span>
+</pre>
+</div>
+</div>
+<p>We can take a peek at the columns in the dataset:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">df.columns</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>Index(['name', 'eventrefnumber', 'text', 'StartDate', 'eventtype', 'province',
+       'citydistrict', 'village', 'targetgroup', 'commander', 'position',
+       'minkilled', 'mincaptured', 'capturedcharacterisation',
+       'killedcharacterisation', 'killq', 'captureq', 'killcaptureraid',
+       'airstrike', 'noshotsfired', 'dataprocessed', 'flagged', 'glossarymeta',
+       'minleaderskilled', 'minfacilitatorskilled', 'minleaderscaptured',
+       'minfacilitatorscaptured', 'leaderq'],
+      dtype='object')</code></pre>
+</div>
+</div>
+<p>If we look at the options for the ‘eventtype’ column, you’ll see that we have some single-word event types at the top, but also some semi-colon-separated event types. We’ll need to handle these a bit differently when we get to finetuning but perhaps let’s ignore that for now.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">eventtype_options <span class="op" style="color: #5E5E5E;">=</span> df[<span class="st" style="color: #20794D;">"eventtype"</span>].unique().tolist()</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="bu" style="color: null;">print</span>(eventtype_options)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
+    <span style="color: #008000; text-decoration-color: #008000">'airstrike'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'detention'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'captureandkill'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'insurgentskilled'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'exchangeoffire'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">''</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'civiliancasualty'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'2010-07-CA-124'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'insurgentskilled;civiliancasualty'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'airstrike;detention'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'detention;airstrike'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'civiliancasualty;airstrike'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'airstrike;civiliancasualty'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'insurgentskilled;detention'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'detention;insurgentskilled'</span>
+<span style="font-weight: bold">]</span>
+</pre>
+</div>
+</div>
+<p>We have everything we need to set up the task and the data structures that will be filled by our LLM. Let’s start with the event type where we just create an enum to store the options:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;">from</span> pydantic <span class="im" style="color: #00769E;">import</span> BaseModel, Field</span>
+<span id="cb6-2"><span class="im" style="color: #00769E;">from</span> datetime <span class="im" style="color: #00769E;">import</span> date</span>
+<span id="cb6-3"><span class="im" style="color: #00769E;">from</span> enum <span class="im" style="color: #00769E;">import</span> Enum</span>
+<span id="cb6-4"></span>
+<span id="cb6-5"></span>
+<span id="cb6-6"><span class="kw" style="color: #003B4F;">class</span> EventType(<span class="bu" style="color: null;">str</span>, Enum):</span>
+<span id="cb6-7">    airstrike <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"airstrike"</span></span>
+<span id="cb6-8">    detention <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"detention"</span></span>
+<span id="cb6-9">    captureandkill <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"captureandkill"</span></span>
+<span id="cb6-10">    insurgentskilled <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"insurgentskilled"</span></span>
+<span id="cb6-11">    exchangeoffire <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"exchangeoffire"</span></span>
+<span id="cb6-12">    civiliancasualty <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"civiliancasualty"</span></span></code></pre></div>
+</div>
+<p>We can create a similar enum to store the provinces in Afghanistan:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;">class</span> Province(<span class="bu" style="color: null;">str</span>, Enum):</span>
+<span id="cb7-2">    badakhshan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"badakhshan"</span></span>
+<span id="cb7-3">    badghis <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"badghis"</span></span>
+<span id="cb7-4">    baghlan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"baghlan"</span></span>
+<span id="cb7-5">    balkh <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"balkh"</span></span>
+<span id="cb7-6">    bamyan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bamyan"</span></span>
+<span id="cb7-7">    day_kundi <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"day_kundi"</span></span>
+<span id="cb7-8">    farah <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"farah"</span></span>
+<span id="cb7-9">    faryab <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"faryab"</span></span>
+<span id="cb7-10">    ghazni <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ghazni"</span></span>
+<span id="cb7-11">    ghor <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ghor"</span></span>
+<span id="cb7-12">    helmand <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"helmand"</span></span>
+<span id="cb7-13">    herat <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"herat"</span></span>
+<span id="cb7-14">    jawzjan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"jawzjan"</span></span>
+<span id="cb7-15">    kabul <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kabul"</span></span>
+<span id="cb7-16">    kandahar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kandahar"</span></span>
+<span id="cb7-17">    kapisa <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kapisa"</span></span>
+<span id="cb7-18">    khost <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"khost"</span></span>
+<span id="cb7-19">    kunar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kunar"</span></span>
+<span id="cb7-20">    kunduz <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kunduz"</span></span>
+<span id="cb7-21">    laghman <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"laghman"</span></span>
+<span id="cb7-22">    logar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"logar"</span></span>
+<span id="cb7-23">    nangarhar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"nangarhar"</span></span>
+<span id="cb7-24">    nimroz <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"nimroz"</span></span>
+<span id="cb7-25">    nuristan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"nuristan"</span></span>
+<span id="cb7-26">    paktia <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"paktia"</span></span>
+<span id="cb7-27">    paktika <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"paktika"</span></span>
+<span id="cb7-28">    panjshir <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"panjshir"</span></span>
+<span id="cb7-29">    parwan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"parwan"</span></span>
+<span id="cb7-30">    samangan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"samangan"</span></span>
+<span id="cb7-31">    sar_e_pol <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sar_e_pol"</span></span>
+<span id="cb7-32">    takhar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"takhar"</span></span>
+<span id="cb7-33">    uruzgan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"uruzgan"</span></span>
+<span id="cb7-34">    wardak <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"wardak"</span></span>
+<span id="cb7-35">    zabul <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"zabul"</span></span></code></pre></div>
+</div>
+<p>Finally we can create an <code>IsafEvent</code> which is a Pydantic model where we’ll store all the various pieces of data we’re interested in. We include descriptions of the different fields which will help our LLM to understand the data it’s working with.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;">class</span> IsafEvent(BaseModel):</span>
+<span id="cb8-2">    name: <span class="bu" style="color: null;">str</span> <span class="op" style="color: #5E5E5E;">=</span> Field(description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"A title or name for the event"</span>)</span>
+<span id="cb8-3">    start_date: date <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-4">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The start date of the event in YYYY-MM-DD format"</span></span>
+<span id="cb8-5">    )</span>
+<span id="cb8-6">    end_date: date <span class="op" style="color: #5E5E5E;">=</span> Field(description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The end date of the event in YYYY-MM-DD format"</span>)</span>
+<span id="cb8-7">    event_type: EventType <span class="op" style="color: #5E5E5E;">=</span> Field(description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The event type"</span>)</span>
+<span id="cb8-8">    province: Province <span class="op" style="color: #5E5E5E;">=</span> Field(description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The province in which the event occurred"</span>)</span>
+<span id="cb8-9">    target_group: <span class="bu" style="color: null;">str</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-10">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The group that was targetted during the event."</span></span>
+<span id="cb8-11">    )</span>
+<span id="cb8-12">    min_killed: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-13">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of people killed during the event"</span></span>
+<span id="cb8-14">    )</span>
+<span id="cb8-15">    min_captured: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-16">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of people captured during the event"</span></span>
+<span id="cb8-17">    )</span>
+<span id="cb8-18">    killq: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-19">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether someone was killed or not during the event"</span></span>
+<span id="cb8-20">    )</span>
+<span id="cb8-21">    captureq: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-22">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether someone was captured or not during the event"</span></span>
+<span id="cb8-23">    )</span>
+<span id="cb8-24">    killcaptureraid: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-25">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the event was a so-called 'kill-capture raid'."</span></span>
+<span id="cb8-26">    )</span>
+<span id="cb8-27">    airstrike: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-28">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether an airstrike was used during the event"</span></span>
+<span id="cb8-29">    )</span>
+<span id="cb8-30">    noshotsfired: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-31">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether no shots were fired during the event"</span></span>
+<span id="cb8-32">    )</span>
+<span id="cb8-33">    min_leaders_killed: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-34">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of leaders killed during the event"</span></span>
+<span id="cb8-35">    )</span>
+<span id="cb8-36">    min_leaders_captured: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb8-37">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of leaders captured during the event"</span></span>
+<span id="cb8-38">    )</span>
+<span id="cb8-39"></span>
+<span id="cb8-40">    <span class="kw" style="color: #003B4F;">class</span> Config:</span>
+<span id="cb8-41">        arbitrary_types_allowed <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span></span></code></pre></div>
+</div>
+<p>Now let’s get a sample article to work with:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">article_id <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">15</span></span>
+<span id="cb9-2">article_text <span class="op" style="color: #5E5E5E;">=</span> df[<span class="st" style="color: #20794D;">"text"</span>][article_id]</span>
+<span id="cb9-3"><span class="bu" style="color: null;">print</span>(article_text)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span>: Haqqani Facilitator Detained in Khowst; Security Discussed in Farah
+NEWS RELEASE ISAF Joint Command - Afghanistan   <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-CA-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">065</span> For Immediate Release  KABUL, Afghanistan <span style="font-weight: bold">(</span>Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span> - An
+Afghan-international security force detained a couple of militants in Khowst province today, one of whom was a 
+sought-after Haqqani facilitator.&nbsp; The facilitator is responsible for the shipment and distribution of weapons to 
+other militant elements in the area.
+ The joint security force searched a compound near the village of Badal Kalay in the Nader Shakhot district where 
+intelligence sources indicated the facilitator was located.&nbsp; The facilitator identified himself and surrendered 
+without incident.&nbsp; No shots were fired and no one was injured.
+</pre>
+</div>
+</div>
+<p>Now we can construct a simple prompt to help guide the LLM to extract the right data:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">query <span class="op" style="color: #5E5E5E;">=</span> <span class="ss" style="color: #20794D;">f"""</span></span>
+<span id="cb10-2"><span class="ss" style="color: #20794D;">The following is a press release issued by ISAF (formerly operating in Afghanistan):</span></span>
+<span id="cb10-3"><span class="sc" style="color: #5E5E5E;">{</span>article_text<span class="sc" style="color: #5E5E5E;">}</span></span>
+<span id="cb10-4"></span>
+<span id="cb10-5"><span class="ss" style="color: #20794D;">Please extract the following information from the press release:</span></span>
+<span id="cb10-6"><span class="ss" style="color: #20794D;">- The name of the event</span></span>
+<span id="cb10-7"><span class="ss" style="color: #20794D;">- The start date of the event</span></span>
+<span id="cb10-8"><span class="ss" style="color: #20794D;">- The end date of the event</span></span>
+<span id="cb10-9"><span class="ss" style="color: #20794D;">- The event type</span></span>
+<span id="cb10-10"><span class="ss" style="color: #20794D;">- The province in which the event occurred</span></span>
+<span id="cb10-11"><span class="ss" style="color: #20794D;">- The target group of the event</span></span>
+<span id="cb10-12"><span class="ss" style="color: #20794D;">- The minimum number of people killed during the event</span></span>
+<span id="cb10-13"><span class="ss" style="color: #20794D;">- The minimum number of people captured during the event</span></span>
+<span id="cb10-14"><span class="ss" style="color: #20794D;">- Whether someone was killed or not during the event</span></span>
+<span id="cb10-15"><span class="ss" style="color: #20794D;">- Whether someone was captured or not during the event</span></span>
+<span id="cb10-16"><span class="ss" style="color: #20794D;">- Whether the event was a so-called 'kill-capture raid'</span></span>
+<span id="cb10-17"><span class="ss" style="color: #20794D;">- Whether an airstrike was used during the event</span></span>
+<span id="cb10-18"><span class="ss" style="color: #20794D;">- Whether no shots were fired during the event</span></span>
+<span id="cb10-19"><span class="ss" style="color: #20794D;">- The minimum number of leaders killed during the event</span></span>
+<span id="cb10-20"><span class="ss" style="color: #20794D;">- The minimum number of leaders captured during the event</span></span>
+<span id="cb10-21"><span class="ss" style="color: #20794D;">"""</span></span></code></pre></div>
+</div>
+<section id="structured-data-extraction-with-instructor" class="level2">
+<h2 class="anchored" data-anchor-id="structured-data-extraction-with-instructor">Structured data extraction with Instructor</h2>
+<p>Now we can use <a href="https://python.useinstructor.com/">Instructor</a> to help ensure that our data is extracted out according to our Pydantic model and just use GPT-3.5 to see how it performs:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="im" style="color: #00769E;">import</span> instructor</span>
+<span id="cb11-2"><span class="im" style="color: #00769E;">from</span> openai <span class="im" style="color: #00769E;">import</span> OpenAI</span>
+<span id="cb11-3"></span>
+<span id="cb11-4"><span class="co" style="color: #5E5E5E;"># patch the client to add `response_model` to the `create` method</span></span>
+<span id="cb11-5">client <span class="op" style="color: #5E5E5E;">=</span> instructor.patch(OpenAI(), mode<span class="op" style="color: #5E5E5E;">=</span>instructor.Mode.MD_JSON)</span>
+<span id="cb11-6"></span>
+<span id="cb11-7">openai_resp <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb11-8">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"gpt-3.5-turbo"</span>,</span>
+<span id="cb11-9">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb11-10">        {</span>
+<span id="cb11-11">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb11-12">            <span class="st" style="color: #20794D;">"content"</span>: query,</span>
+<span id="cb11-13">        },</span>
+<span id="cb11-14">    ],</span>
+<span id="cb11-15">    response_model<span class="op" style="color: #5E5E5E;">=</span>IsafEvent,</span>
+<span id="cb11-16">)</span>
+<span id="cb11-17"></span>
+<span id="cb11-18"><span class="bu" style="color: null;">print</span>(openai_resp)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detained in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">end_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="font-weight: bold">&gt;</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani facilitator'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<p>As you can see, GPT-3.5 did pretty well! It was able to extract all the data more or less as I’d have hoped. It was able to determine that “Khowst” province in the article was “Khost” province in the schema, and it correctly determined that two individuals were detained. The only thing where I would have done things differently was to state that a minimum of one leader was captured. In this project I didn’t consider a ‘faciliator’ to be a leader so in the original dataset this would have been a 0:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">df[<span class="st" style="color: #20794D;">"minleaderscaptured"</span>][article_id]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>'0'</code></pre>
+</div>
+</div>
+<p>It’s hard for the LLM to have known that we’re taking that approach without having specified it in the prompt, but we can try again, updating the prompt with that rule:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">updated_query <span class="op" style="color: #5E5E5E;">=</span> <span class="ss" style="color: #20794D;">f"""</span></span>
+<span id="cb14-2"><span class="ss" style="color: #20794D;">The following is a press release issued by ISAF (formerly operating in Afghanistan):</span></span>
+<span id="cb14-3"><span class="sc" style="color: #5E5E5E;">{</span>article_text<span class="sc" style="color: #5E5E5E;">}</span></span>
+<span id="cb14-4"></span>
+<span id="cb14-5"><span class="ss" style="color: #20794D;">Please extract the following information from the press release:</span></span>
+<span id="cb14-6"><span class="ss" style="color: #20794D;">- The name of the event</span></span>
+<span id="cb14-7"><span class="ss" style="color: #20794D;">- The start date of the event</span></span>
+<span id="cb14-8"><span class="ss" style="color: #20794D;">- The end date of the event</span></span>
+<span id="cb14-9"><span class="ss" style="color: #20794D;">- The event type</span></span>
+<span id="cb14-10"><span class="ss" style="color: #20794D;">- The province in which the event occurred</span></span>
+<span id="cb14-11"><span class="ss" style="color: #20794D;">- The target group of the event</span></span>
+<span id="cb14-12"><span class="ss" style="color: #20794D;">- The minimum number of people killed during the event</span></span>
+<span id="cb14-13"><span class="ss" style="color: #20794D;">- The minimum number of people captured during the event</span></span>
+<span id="cb14-14"><span class="ss" style="color: #20794D;">- Whether someone was killed or not during the event</span></span>
+<span id="cb14-15"><span class="ss" style="color: #20794D;">- Whether someone was captured or not during the event</span></span>
+<span id="cb14-16"><span class="ss" style="color: #20794D;">- Whether the event was a so-called 'kill-capture raid'</span></span>
+<span id="cb14-17"><span class="ss" style="color: #20794D;">- Whether an airstrike was used during the event</span></span>
+<span id="cb14-18"><span class="ss" style="color: #20794D;">- Whether no shots were fired during the event</span></span>
+<span id="cb14-19"><span class="ss" style="color: #20794D;">- The minimum number of leaders killed during the event</span></span>
+<span id="cb14-20"><span class="ss" style="color: #20794D;">- The minimum number of leaders captured during the event</span></span>
+<span id="cb14-21"></span>
+<span id="cb14-22"><span class="ss" style="color: #20794D;">So-called 'facilitators' aren't considered leaders in this task.</span></span>
+<span id="cb14-23"><span class="ss" style="color: #20794D;">"""</span></span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="im" style="color: #00769E;">import</span> instructor</span>
+<span id="cb15-2"><span class="im" style="color: #00769E;">from</span> openai <span class="im" style="color: #00769E;">import</span> OpenAI</span>
+<span id="cb15-3"></span>
+<span id="cb15-4"><span class="co" style="color: #5E5E5E;"># patch the client to add `response_model` to the `create` method</span></span>
+<span id="cb15-5">client <span class="op" style="color: #5E5E5E;">=</span> instructor.patch(OpenAI(), mode<span class="op" style="color: #5E5E5E;">=</span>instructor.Mode.MD_JSON)</span>
+<span id="cb15-6"></span>
+<span id="cb15-7">openai_resp <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb15-8">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"gpt-3.5-turbo"</span>,</span>
+<span id="cb15-9">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb15-10">        {</span>
+<span id="cb15-11">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb15-12">            <span class="st" style="color: #20794D;">"content"</span>: query,</span>
+<span id="cb15-13">        },</span>
+<span id="cb15-14">    ],</span>
+<span id="cb15-15">    response_model<span class="op" style="color: #5E5E5E;">=</span>IsafEvent,</span>
+<span id="cb15-16">)</span>
+<span id="cb15-17"></span>
+<span id="cb15-18"><span class="bu" style="color: null;">print</span>(openai_resp)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detained in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">end_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="font-weight: bold">&gt;</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani facilitator'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<p>Unfortunately it’s still getting it wrong. Let’s try with GPT-4 this time and hope that it’s better at following instructions:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">openai_resp <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb16-2">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"gpt-4"</span>,</span>
+<span id="cb16-3">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb16-4">        {</span>
+<span id="cb16-5">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb16-6">            <span class="st" style="color: #20794D;">"content"</span>: query,</span>
+<span id="cb16-7">        },</span>
+<span id="cb16-8">    ],</span>
+<span id="cb16-9">    response_model<span class="op" style="color: #5E5E5E;">=</span>IsafEvent,</span>
+<span id="cb16-10">)</span>
+<span id="cb16-11"></span>
+<span id="cb16-12"><span class="bu" style="color: null;">print</span>(openai_resp)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detained in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">end_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="font-weight: bold">&gt;</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<p>Unfortunately we’re still getting the same response. I could fiddle around with the prompt a bit more to get the result I wanted, but you can see that this approach of encoding all these edge cases into the prompt isn’t going to scale very well. It’s also going to overfit a little to the training data and really what we want is a model that can do well at any new articles we pass into it.</p>
+<p>Even when we try Claude’s Opus model we get the same result, which tells us that for sure we’d have to amend this in the prompt to fix the problem.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;">from</span> anthropic <span class="im" style="color: #00769E;">import</span> Anthropic</span>
+<span id="cb17-2"><span class="im" style="color: #00769E;">import</span> instructor</span>
+<span id="cb17-3"></span>
+<span id="cb17-4">client <span class="op" style="color: #5E5E5E;">=</span> instructor.from_anthropic(Anthropic())</span>
+<span id="cb17-5"></span>
+<span id="cb17-6"><span class="co" style="color: #5E5E5E;"># note that client.chat.completions.create will also work</span></span>
+<span id="cb17-7">claude_opus_resp <span class="op" style="color: #5E5E5E;">=</span> client.messages.create(</span>
+<span id="cb17-8">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"claude-3-opus-20240229"</span>,</span>
+<span id="cb17-9">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb17-10">        {</span>
+<span id="cb17-11">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb17-12">            <span class="st" style="color: #20794D;">"content"</span>: query,</span>
+<span id="cb17-13">        },</span>
+<span id="cb17-14">    ],</span>
+<span id="cb17-15">    max_tokens<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">4096</span>,</span>
+<span id="cb17-16">    response_model<span class="op" style="color: #5E5E5E;">=</span>IsafEvent,</span>
+<span id="cb17-17">)</span>
+<span id="cb17-18"></span>
+<span id="cb17-19"><span class="bu" style="color: null;">print</span>(claude_opus_resp)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detained in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">end_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="font-weight: bold">&gt;</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<p>And again, using Ollama locally with their <code>mixtral</code> model we get the same result:</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="co" style="color: #5E5E5E;"># enables `response_model` in create call</span></span>
+<span id="cb18-2">client <span class="op" style="color: #5E5E5E;">=</span> instructor.from_openai(</span>
+<span id="cb18-3">    OpenAI(</span>
+<span id="cb18-4">        base_url<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"http://localhost:11434/v1"</span>,</span>
+<span id="cb18-5">        api_key<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"ollama"</span>,  <span class="co" style="color: #5E5E5E;"># required, but unused</span></span>
+<span id="cb18-6">    ),</span>
+<span id="cb18-7">    mode<span class="op" style="color: #5E5E5E;">=</span>instructor.Mode.JSON,</span>
+<span id="cb18-8">)</span>
+<span id="cb18-9"></span>
+<span id="cb18-10">mixtral_resp <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb18-11">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"mixtral"</span>,</span>
+<span id="cb18-12">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb18-13">        {</span>
+<span id="cb18-14">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb18-15">            <span class="st" style="color: #20794D;">"content"</span>: query,</span>
+<span id="cb18-16">        }</span>
+<span id="cb18-17">    ],</span>
+<span id="cb18-18">    response_model<span class="op" style="color: #5E5E5E;">=</span>IsafEvent,</span>
+<span id="cb18-19">)</span>
+<span id="cb18-20"><span class="bu" style="color: null;">print</span>(mixtral_resp)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detention in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">end_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="font-weight: bold">&gt;</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani militants'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
+<p>If there’s one thing the Maven conference has done well it’s to emphasise the importance of getting a solid sense of an initial baseline from which you can (measureably) improve. So what I’d like to do next is to make a simple evaluation of the performance of the different models on this task.</p>
+<p>Coming up with a score will be interesting as there are multiple pieces of information to compare. Numbers to numbers is an easy comparison, but what happens when it gets the wrong category? Do I subtract a mark from the score, or do I keep scores for all the different attributes? It isn’t clear to me how best to construct this score.</p>
+<p>It also occurred to me while writing the above code that when I was doing the annotation I did so in ‘passes’. So I’d read the article and I’d be reading it looking only for the numbers of killed and captured individuals and nothing else. Then I’d reread the article and extract the data and location, and so on with multiple passes. This is to keep me focused on small details as if I tried to make note of everything at a single pass then I’d certainly miss things or get things wrong. So extrapolating out to LLMs (which, to be clear, don’t work like humans when they read text) I’m wondering whether it might make sense to finetune multiple specialised LLMs to be really best in class at extracting one or two data points instead of expecting it to do what I was unable (i.e. extracting everything at a single pass). Obviously it’d be preferable to have a single model, but I’m wondering whether we might push the limits of what an LLM can do at some of the longer or more complex articles. We’ll have to keep that in mind going forward.</p>
+<p>The one thing I’ll have to make sure to do before I run the evaluation is to make sure that my data structures are set up to match the original dataset. You’ll remember that above we ignored the fact the <code>eventtype</code> field could have multiple types separated by a semicolon. So I’ll have to make sure that my data structures are set up to handle that. I’ll also improve the descriptions of the fields where possible and try to make the prompt a bit more performant.</p>
+<p>In the next blog I’ll show the results of evaluating some of our baseline LLMs (proprietary and open-source) to see how they perform for this task. Once we have that baseline then we can continue to the task of actually finetuning an LLM.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>nlp</category>
+  <category>afghanistan</category>
+  <category>datalabelling</category>
+  <category>llms</category>
+  <category>miniproject</category>
+  <guid>https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html</guid>
+  <pubDate>Sat, 01 Jun 2024 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/structure-extraction.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -2674,32 +3220,6 @@ ERROR: Operation cancelled by user</code></pre>
   <guid>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</guid>
   <pubDate>Sat, 04 Mar 2023 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/stable-eights/sd.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>On mathematical literacy</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I’m at the half-way point in <a href="https://www.open.ac.uk/courses/modules/mu123">MU123</a>, the first module in the mathematics degree I’m currently working towards. So far we’ve covered models, properties of numbers, some basic statistics, basic algebra and a starter kit on how to think about graphs.</p>
-<p>As the first thing you do in the BSc Mathematics (<a href="https://www.open.ac.uk/courses/maths/degrees/bsc-mathematics-q31">Q31</a>) The module is intended as a way for people who haven’t thought about or used mathematics for many years to re-engage. It gives a common vocabulary and shared understanding of several topics from different areas, such that eventually those with more (recent) experience can join classes with the late-starters (like myself).</p>
-<p>All of the above preamble is a way of saying that I understand why MU123 exists and have some sense of why it’s structured and programmed the way it is, but as a student, it can feel a little scattered. Specifically, it feels like we are being armed with a large bag of tricks. If you show me a graph, I can find the gradient and the y-intercept. If you give me <a href="https://www.mathsisfun.com/surds.html">a surd</a> to simplify, I know what to do. Asked to interpret the standard deviation summary for a data set, I have an intuition for what those numbers mean.</p>
-<p>All that is good and well, and there’s something satisfying to mastering the individual techniques, much like the early days of learning a new programming language. Some context to the use of the technique is given, but for the most part you are using the techniques to solve specific questions and problems.</p>
-<p>The missing piece is the sense of how all the various parts, all the tricks, connect together into the whole game of mathematics. For now, I’m writing this post to acknowledge the sense of there being a ‘lack’ in the programme but with the hope and anticipation that this will improve the further down the road we go.</p>
-<p>I should also probably take some responsibility for my own education. In particular, there are probably things I can be doing to make the connections and links myself based on how I’m understanding things as we go. The Open University programme for Maths very much seems to take an ‘a la carte’ approach which means that the onus is more on the student to fill in the gaps. This blog should probably serve as a record of my efforts to make those connections and fill in those gaps.</p>
-
-
-
- ]]></description>
-  <category>mathematics</category>
-  <category>mu123</category>
-  <category>q31</category>
-  <guid>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</guid>
-  <pubDate>Sat, 31 Dec 2022 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/mathematical_literacy.png" medium="image" type="image/png" height="143" width="144"/>
 </item>
 </channel>
 </rss>
