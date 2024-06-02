@@ -10,7 +10,746 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 01 Jun 2024 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 02 Jun 2024 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>In <a href="https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html">the previous post</a> we looked at a single example where a prompt could help us extract structured data from some text. Here were were relying on the inbuilt capabilities of LLMs to ‘reason’ over the text and the task. In this post we’ll try to get a sense of the overall / aggregate performance of <code>gpt-4-turbo</code> on the ISAF Press Releases data extraction task.</p>
+<p>The first thing we need to do is to load and process the data. If you remember from last time, there were some fields that needed conversion so that we’re comparing apples to apples when we get back our result from the LLM.</p>
+<section id="loading-and-processing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-and-processing-the-data">Loading and processing the data</h2>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># get data from datasets</span></span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">from</span> datasets <span class="im" style="color: #00769E;">import</span> load_dataset</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">from</span> rich <span class="im" style="color: #00769E;">import</span> <span class="bu" style="color: null;">print</span></span>
+<span id="cb1-5"><span class="im" style="color: #00769E;">import</span> tqdm <span class="im" style="color: #00769E;">as</span> notebook_tqdm</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;"># Load the dataset</span></span>
+<span id="cb1-8">dataset <span class="op" style="color: #5E5E5E;">=</span> load_dataset(<span class="st" style="color: #20794D;">"strickvl/isafpressreleases"</span>, split<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"train"</span>)</span>
+<span id="cb1-9"></span>
+<span id="cb1-10"><span class="co" style="color: #5E5E5E;"># Convert the dataset to a pandas DataFrame</span></span>
+<span id="cb1-11">df <span class="op" style="color: #5E5E5E;">=</span> pd.DataFrame(dataset)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"a84aac5a6b1240f39c59e1783b82c8a7","version_major":2,"version_minor":0}
+</script>
+</div>
+</div>
+<p>I’ll output the column names as a reference since we’ll be using almost all of these in our evaluation.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">df.columns</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>Index(['name', 'eventrefnumber', 'text', 'StartDate', 'eventtype', 'province',
+       'citydistrict', 'village', 'targetgroup', 'commander', 'position',
+       'minkilled', 'mincaptured', 'capturedcharacterisation',
+       'killedcharacterisation', 'killq', 'captureq', 'killcaptureraid',
+       'airstrike', 'noshotsfired', 'dataprocessed', 'flagged', 'glossarymeta',
+       'minleaderskilled', 'minfacilitatorskilled', 'minleaderscaptured',
+       'minfacilitatorscaptured', 'leaderq'],
+      dtype='object')</code></pre>
+</div>
+</div>
+<p>We set up the same objects to support the Pydantic <code>IsafEvent</code> model. This is the same as last time so I’ll hide the code but you can see it by clicking the popout arrow.</p>
+<div class="cell" data-execution_count="28">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;">from</span> pydantic <span class="im" style="color: #00769E;">import</span> BaseModel, Field</span>
+<span id="cb4-2"><span class="im" style="color: #00769E;">from</span> datetime <span class="im" style="color: #00769E;">import</span> date</span>
+<span id="cb4-3"><span class="im" style="color: #00769E;">from</span> enum <span class="im" style="color: #00769E;">import</span> Enum</span>
+<span id="cb4-4"></span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="kw" style="color: #003B4F;">class</span> EventType(<span class="bu" style="color: null;">str</span>, Enum):</span>
+<span id="cb4-7">    airstrike <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"airstrike"</span></span>
+<span id="cb4-8">    detention <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"detention"</span></span>
+<span id="cb4-9">    captureandkill <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"captureandkill"</span></span>
+<span id="cb4-10">    insurgentskilled <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"insurgentskilled"</span></span>
+<span id="cb4-11">    exchangeoffire <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"exchangeoffire"</span></span>
+<span id="cb4-12">    civiliancasualty <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"civiliancasualty"</span></span>
+<span id="cb4-13"></span>
+<span id="cb4-14"></span>
+<span id="cb4-15"><span class="kw" style="color: #003B4F;">class</span> Province(<span class="bu" style="color: null;">str</span>, Enum):</span>
+<span id="cb4-16">    badakhshan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"badakhshan"</span></span>
+<span id="cb4-17">    badghis <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"badghis"</span></span>
+<span id="cb4-18">    baghlan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"baghlan"</span></span>
+<span id="cb4-19">    balkh <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"balkh"</span></span>
+<span id="cb4-20">    bamyan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bamyan"</span></span>
+<span id="cb4-21">    day_kundi <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"day_kundi"</span></span>
+<span id="cb4-22">    farah <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"farah"</span></span>
+<span id="cb4-23">    faryab <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"faryab"</span></span>
+<span id="cb4-24">    ghazni <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ghazni"</span></span>
+<span id="cb4-25">    ghor <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ghor"</span></span>
+<span id="cb4-26">    helmand <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"helmand"</span></span>
+<span id="cb4-27">    herat <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"herat"</span></span>
+<span id="cb4-28">    jawzjan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"jawzjan"</span></span>
+<span id="cb4-29">    kabul <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kabul"</span></span>
+<span id="cb4-30">    kandahar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kandahar"</span></span>
+<span id="cb4-31">    kapisa <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kapisa"</span></span>
+<span id="cb4-32">    khost <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"khost"</span></span>
+<span id="cb4-33">    kunar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kunar"</span></span>
+<span id="cb4-34">    kunduz <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kunduz"</span></span>
+<span id="cb4-35">    laghman <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"laghman"</span></span>
+<span id="cb4-36">    logar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"logar"</span></span>
+<span id="cb4-37">    nangarhar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"nangarhar"</span></span>
+<span id="cb4-38">    nimroz <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"nimroz"</span></span>
+<span id="cb4-39">    nuristan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"nuristan"</span></span>
+<span id="cb4-40">    paktia <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"paktia"</span></span>
+<span id="cb4-41">    paktika <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"paktika"</span></span>
+<span id="cb4-42">    panjshir <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"panjshir"</span></span>
+<span id="cb4-43">    parwan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"parwan"</span></span>
+<span id="cb4-44">    samangan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"samangan"</span></span>
+<span id="cb4-45">    sar_e_pol <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sar_e_pol"</span></span>
+<span id="cb4-46">    takhar <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"takhar"</span></span>
+<span id="cb4-47">    uruzgan <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"uruzgan"</span></span>
+<span id="cb4-48">    wardak <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"wardak"</span></span>
+<span id="cb4-49">    zabul <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"zabul"</span></span>
+<span id="cb4-50"></span>
+<span id="cb4-51"></span>
+<span id="cb4-52"><span class="kw" style="color: #003B4F;">class</span> TargetGroup(<span class="bu" style="color: null;">str</span>, Enum):</span>
+<span id="cb4-53">    taliban <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"taliban"</span></span>
+<span id="cb4-54">    haqqani <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"haqqani"</span></span>
+<span id="cb4-55">    criminals <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"criminals"</span></span>
+<span id="cb4-56">    aq <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"aq"</span></span>
+<span id="cb4-57">    hig <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"hig"</span></span>
+<span id="cb4-58">    let <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"let"</span></span>
+<span id="cb4-59">    imu <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"imu"</span></span>
+<span id="cb4-60">    judq <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"judq"</span></span>
+<span id="cb4-61">    iju <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"iju"</span></span>
+<span id="cb4-62">    hik <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"hik"</span></span>
+<span id="cb4-63">    ttp <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"ttp"</span></span>
+<span id="cb4-64">    other <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"other"</span></span></code></pre></div>
+</details>
+</div>
+<p>Our <code>IsafEvent</code> is what we’re trying to get to. We want to turn an unstructured piece of text (a press release) into the structured format you see below.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Set</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"></span>
+<span id="cb5-4"><span class="kw" style="color: #003B4F;">class</span> IsafEvent(BaseModel):</span>
+<span id="cb5-5">    name: <span class="bu" style="color: null;">str</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-6">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"A title or name for the event which summarises the event as a headline"</span></span>
+<span id="cb5-7">    )</span>
+<span id="cb5-8">    start_date: date <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-9">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The start date of the event in YYYY-MM-DD format"</span></span>
+<span id="cb5-10">    )</span>
+<span id="cb5-11">    event_type: Set[EventType] <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-12">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The event type. Can be multiple types."</span></span>
+<span id="cb5-13">    )</span>
+<span id="cb5-14">    province: Set[Province] <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-15">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The province in which the event occurred. Can be multiple provinces."</span></span>
+<span id="cb5-16">    )</span>
+<span id="cb5-17">    target_group: Set[TargetGroup] <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-18">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The group that was targetted during the event. Can be multiple groups."</span></span>
+<span id="cb5-19">    )</span>
+<span id="cb5-20">    min_killed: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-21">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of people killed during the event"</span></span>
+<span id="cb5-22">    )</span>
+<span id="cb5-23">    min_captured: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-24">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of people captured during the event"</span></span>
+<span id="cb5-25">    )</span>
+<span id="cb5-26">    killq: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-27">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether someone was killed or not during the event"</span></span>
+<span id="cb5-28">    )</span>
+<span id="cb5-29">    captureq: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-30">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether someone was captured or not during the event"</span></span>
+<span id="cb5-31">    )</span>
+<span id="cb5-32">    killcaptureraid: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-33">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the event was a so-called 'kill-capture raid'."</span></span>
+<span id="cb5-34">    )</span>
+<span id="cb5-35">    airstrike: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-36">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether an airstrike was used during the event"</span></span>
+<span id="cb5-37">    )</span>
+<span id="cb5-38">    noshotsfired: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-39">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether no shots were fired during the event"</span></span>
+<span id="cb5-40">    )</span>
+<span id="cb5-41">    min_leaders_killed: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-42">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of leaders killed during the event"</span></span>
+<span id="cb5-43">    )</span>
+<span id="cb5-44">    min_leaders_captured: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb5-45">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The minimum number of leaders captured during the event"</span></span>
+<span id="cb5-46">    )</span>
+<span id="cb5-47"></span>
+<span id="cb5-48">    <span class="kw" style="color: #003B4F;">class</span> Config:</span>
+<span id="cb5-49">        arbitrary_types_allowed <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span></span></code></pre></div>
+</div>
+<p>Again we can take a look at a single example to understand the task and to construct our first evaluation of this single example. The article looks like this:</p>
+<div class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">article_id <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">15</span></span>
+<span id="cb6-2">article_text <span class="op" style="color: #5E5E5E;">=</span> df[<span class="st" style="color: #20794D;">"text"</span>][article_id]</span>
+<span id="cb6-3"><span class="bu" style="color: null;">print</span>(article_text)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span>: Haqqani Facilitator Detained in Khowst; Security Discussed in Farah
+NEWS RELEASE ISAF Joint Command - Afghanistan   <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>-CA-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">065</span> For Immediate Release  KABUL, Afghanistan <span style="font-weight: bold">(</span>Dec. <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span> - An
+Afghan-international security force detained a couple of militants in Khowst province today, one of whom was a 
+sought-after Haqqani facilitator.&nbsp; The facilitator is responsible for the shipment and distribution of weapons to 
+other militant elements in the area.
+ The joint security force searched a compound near the village of Badal Kalay in the Nader Shakhot district where 
+intelligence sources indicated the facilitator was located.&nbsp; The facilitator identified himself and surrendered 
+without incident.&nbsp; No shots were fired and no one was injured.
+</pre>
+</div>
+</div>
+<p>And our prompt looks like this:</p>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">query <span class="op" style="color: #5E5E5E;">=</span> <span class="ss" style="color: #20794D;">f"""</span></span>
+<span id="cb7-2"><span class="ss" style="color: #20794D;">The following is a press release issued by ISAF (formerly operating in Afghanistan):</span></span>
+<span id="cb7-3"><span class="sc" style="color: #5E5E5E;">{</span>article_text<span class="sc" style="color: #5E5E5E;">}</span></span>
+<span id="cb7-4"></span>
+<span id="cb7-5"><span class="ss" style="color: #20794D;">Please extract the following information from the press release:</span></span>
+<span id="cb7-6"><span class="ss" style="color: #20794D;">- The name of the event (summarising the event / text as a headline)</span></span>
+<span id="cb7-7"><span class="ss" style="color: #20794D;">- The start date of the event</span></span>
+<span id="cb7-8"><span class="ss" style="color: #20794D;">- The event type(s)</span></span>
+<span id="cb7-9"><span class="ss" style="color: #20794D;">- The province(s) in which the event occurred</span></span>
+<span id="cb7-10"><span class="ss" style="color: #20794D;">- The target group(s) of the event</span></span>
+<span id="cb7-11"><span class="ss" style="color: #20794D;">- The minimum number of people killed during the event</span></span>
+<span id="cb7-12"><span class="ss" style="color: #20794D;">- The minimum number of people captured during the event</span></span>
+<span id="cb7-13"><span class="ss" style="color: #20794D;">- Whether someone was killed or not during the event</span></span>
+<span id="cb7-14"><span class="ss" style="color: #20794D;">- Whether someone was captured or not during the event</span></span>
+<span id="cb7-15"><span class="ss" style="color: #20794D;">- Whether the event was a so-called 'kill-capture raid'</span></span>
+<span id="cb7-16"><span class="ss" style="color: #20794D;">- Whether an airstrike was used during the event</span></span>
+<span id="cb7-17"><span class="ss" style="color: #20794D;">- Whether no shots were fired during the event</span></span>
+<span id="cb7-18"><span class="ss" style="color: #20794D;">- The minimum number of leaders killed during the event</span></span>
+<span id="cb7-19"><span class="ss" style="color: #20794D;">- The minimum number of leaders captured during the event</span></span>
+<span id="cb7-20"></span>
+<span id="cb7-21"><span class="ss" style="color: #20794D;">Annotation notes:</span></span>
+<span id="cb7-22"><span class="ss" style="color: #20794D;">- A 'faciliator' is not a leader.</span></span>
+<span id="cb7-23"><span class="ss" style="color: #20794D;">- If a press release states that 'insurgents' were detained without further details, assign a minimum number of two detained. Interpret 'a couple' as two. Interpret 'several' as at least three, even though it may sometimes refer to seven or eight. Classify the terms 'a few', 'some', 'a group', 'a small group', and 'multiple' as denoting at least three, even if they sometimes refer to larger numbers. Choose the smaller number if no other information is available in the press release to come up with a minimally acceptable figure. Interpret 'numerous' and 'a handful' as at least four, and 'a large number' as at least five.</span></span>
+<span id="cb7-24"><span class="ss" style="color: #20794D;">"""</span></span></code></pre></div>
+</div>
+<p>Since we’re going to be doing a lot of LLM calls I took a moment to refactor the code to make it less verbose. Click through to see the full code for the <code>query_llm</code> but basically it’s just a wrapper around OpenAI, Anthropic and Ollama models and we route to one or the other of those depending on what model you say you want to use.</p>
+<div class="cell" data-execution_count="53">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;">import</span> instructor</span>
+<span id="cb8-2"><span class="im" style="color: #00769E;">from</span> anthropic <span class="im" style="color: #00769E;">import</span> Anthropic</span>
+<span id="cb8-3"><span class="im" style="color: #00769E;">from</span> openai <span class="im" style="color: #00769E;">import</span> OpenAI</span>
+<span id="cb8-4"></span>
+<span id="cb8-5"></span>
+<span id="cb8-6"><span class="kw" style="color: #003B4F;">def</span> query_llm(message: <span class="bu" style="color: null;">str</span>, model: <span class="bu" style="color: null;">str</span>, response_model: BaseModel) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">str</span>:</span>
+<span id="cb8-7">    <span class="cf" style="color: #003B4F;">if</span> model <span class="kw" style="color: #003B4F;">in</span> [<span class="st" style="color: #20794D;">"gpt-4"</span>, <span class="st" style="color: #20794D;">"gpt-4-turbo-preview"</span>, <span class="st" style="color: #20794D;">"gpt-4-turbo"</span>]:</span>
+<span id="cb8-8">        client <span class="op" style="color: #5E5E5E;">=</span> instructor.patch(OpenAI(), mode<span class="op" style="color: #5E5E5E;">=</span>instructor.Mode.JSON)</span>
+<span id="cb8-9"></span>
+<span id="cb8-10">        response <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb8-11">            model<span class="op" style="color: #5E5E5E;">=</span>model,</span>
+<span id="cb8-12">            messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb8-13">                {</span>
+<span id="cb8-14">                    <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb8-15">                    <span class="st" style="color: #20794D;">"content"</span>: message,</span>
+<span id="cb8-16">                },</span>
+<span id="cb8-17">            ],</span>
+<span id="cb8-18">            response_model<span class="op" style="color: #5E5E5E;">=</span>response_model,</span>
+<span id="cb8-19">            max_retries<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">3</span>,</span>
+<span id="cb8-20">        )</span>
+<span id="cb8-21">    <span class="cf" style="color: #003B4F;">elif</span> model <span class="kw" style="color: #003B4F;">in</span> [<span class="st" style="color: #20794D;">"claude-3-opus-20240229"</span>, <span class="st" style="color: #20794D;">"claude-3-opus-20240229-preview"</span>]:</span>
+<span id="cb8-22">        client <span class="op" style="color: #5E5E5E;">=</span> instructor.from_anthropic(Anthropic())</span>
+<span id="cb8-23"></span>
+<span id="cb8-24">        <span class="co" style="color: #5E5E5E;"># note that client.chat.completions.create will also work</span></span>
+<span id="cb8-25">        response <span class="op" style="color: #5E5E5E;">=</span> client.messages.create(</span>
+<span id="cb8-26">            model<span class="op" style="color: #5E5E5E;">=</span>model,</span>
+<span id="cb8-27">            messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb8-28">                {</span>
+<span id="cb8-29">                    <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb8-30">                    <span class="st" style="color: #20794D;">"content"</span>: message,</span>
+<span id="cb8-31">                },</span>
+<span id="cb8-32">            ],</span>
+<span id="cb8-33">            max_tokens<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">4096</span>,</span>
+<span id="cb8-34">            response_model<span class="op" style="color: #5E5E5E;">=</span>response_model,</span>
+<span id="cb8-35">            max_retries<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">3</span>,</span>
+<span id="cb8-36">        )</span>
+<span id="cb8-37">    <span class="cf" style="color: #003B4F;">elif</span> model <span class="kw" style="color: #003B4F;">in</span> [<span class="st" style="color: #20794D;">"mistral"</span>, <span class="st" style="color: #20794D;">"mixtral"</span>, <span class="st" style="color: #20794D;">"llama-3"</span>, <span class="st" style="color: #20794D;">"gemma"</span>, <span class="st" style="color: #20794D;">"gemma:2b"</span>]:</span>
+<span id="cb8-38">        client <span class="op" style="color: #5E5E5E;">=</span> instructor.from_openai(</span>
+<span id="cb8-39">            OpenAI(</span>
+<span id="cb8-40">                base_url<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"http://localhost:11434/v1"</span>,</span>
+<span id="cb8-41">                api_key<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"ollama"</span>,  <span class="co" style="color: #5E5E5E;"># required, but unused</span></span>
+<span id="cb8-42">            ),</span>
+<span id="cb8-43">            mode<span class="op" style="color: #5E5E5E;">=</span>instructor.Mode.JSON,</span>
+<span id="cb8-44">        )</span>
+<span id="cb8-45"></span>
+<span id="cb8-46">        response <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb8-47">            model<span class="op" style="color: #5E5E5E;">=</span>model,</span>
+<span id="cb8-48">            messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb8-49">                {</span>
+<span id="cb8-50">                    <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb8-51">                    <span class="st" style="color: #20794D;">"content"</span>: message,</span>
+<span id="cb8-52">                }</span>
+<span id="cb8-53">            ],</span>
+<span id="cb8-54">            response_model<span class="op" style="color: #5E5E5E;">=</span>response_model,</span>
+<span id="cb8-55">        )</span>
+<span id="cb8-56">    <span class="cf" style="color: #003B4F;">return</span> response</span></code></pre></div>
+</details>
+</div>
+<p>And here are the responses for <code>gpt-4-turbo</code> and <code>claude-3-opus-20240229</code>.</p>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">openai_response <span class="op" style="color: #5E5E5E;">=</span> query_llm(query, <span class="st" style="color: #20794D;">"gpt-4-turbo"</span>, IsafEvent)</span>
+<span id="cb9-2"><span class="bu" style="color: null;">print</span>(openai_response)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detained in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">{&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">}</span><span style="color: #000000; text-decoration-color: #000000">,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">{</span><span style="color: #000000; text-decoration-color: #000000">&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="color: #000000; text-decoration-color: #000000">&gt;</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">}</span><span style="color: #000000; text-decoration-color: #000000">,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">target_group</span><span style="color: #000000; text-decoration-color: #000000">=</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">{</span><span style="color: #000000; text-decoration-color: #000000">&lt;TargetGroup.haqqani: </span><span style="color: #008000; text-decoration-color: #008000">'haqqani'</span><span style="font-weight: bold">&gt;}</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<div class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">claude_response <span class="op" style="color: #5E5E5E;">=</span> query_llm(query, <span class="st" style="color: #20794D;">"claude-3-opus-20240229"</span>, IsafEvent)</span>
+<span id="cb10-2"><span class="bu" style="color: null;">print</span>(claude_response)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">name</span>=<span style="color: #008000; text-decoration-color: #008000">'Haqqani Facilitator Detained in Khowst'</span>,
+    <span style="color: #808000; text-decoration-color: #808000">start_date</span>=<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">datetime</span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">.date</span><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2009</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">12</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">11</span><span style="font-weight: bold">)</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type</span>=<span style="font-weight: bold">{&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">EventType.detention:</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #008000; text-decoration-color: #008000">'detention'</span><span style="color: #000000; text-decoration-color: #000000">&gt;</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">}</span><span style="color: #000000; text-decoration-color: #000000">,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">province</span><span style="color: #000000; text-decoration-color: #000000">=</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">{</span><span style="color: #000000; text-decoration-color: #000000">&lt;Province.khost: </span><span style="color: #008000; text-decoration-color: #008000">'khost'</span><span style="color: #000000; text-decoration-color: #000000">&gt;</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">}</span><span style="color: #000000; text-decoration-color: #000000">,</span>
+<span style="color: #000000; text-decoration-color: #000000">    </span><span style="color: #808000; text-decoration-color: #808000">target_group</span><span style="color: #000000; text-decoration-color: #000000">=</span><span style="color: #000000; text-decoration-color: #000000; font-weight: bold">{</span><span style="color: #000000; text-decoration-color: #000000">&lt;TargetGroup.haqqani: </span><span style="color: #008000; text-decoration-color: #008000">'haqqani'</span><span style="font-weight: bold">&gt;}</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<p>Unfortunately I was unable to evaluate a local model for this task as I couldn’t get a response back. I just got a Pydantic validation error, suggesting to me that maybe we’re hitting the context length limits of those local models with all the extra metadata in the JSON schema that we’re passing in via <code>instructor</code>. At any rate for now it’s the first immediate validation of the idea to finetune the model if we’re already hitting the limits of raw prompting for those models.</p>
+</section>
+<section id="evaluating-the-results" class="level2">
+<h2 class="anchored" data-anchor-id="evaluating-the-results">Evaluating the results</h2>
+<p>We’ll want some kind of object to store our evaluation results and you can see all the fields I selected below. For fields where we can say ‘true’ or ‘false’ then I just did that, but for fields with multiple options then I thought a <code>float</code> value from 0 to 1 representing how ‘correct’ the options were would be the best option.</p>
+<p>For fields with numeric values (i.e.&nbsp;number of killed individuals etc) then I generally created two fields: one was just a boolean field for whether it was correct and then another which was the distance between the annotated value and the value we predicted.</p>
+<div class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;">class</span> EvalResult(BaseModel):</span>
+<span id="cb11-2">    start_date_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-3">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the start date of the event is correct"</span></span>
+<span id="cb11-4">    )</span>
+<span id="cb11-5">    event_type_score: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-6">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The score between 0 and 1 for the event type of the event"</span></span>
+<span id="cb11-7">    )</span>
+<span id="cb11-8">    province_score: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-9">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The score between 0 and 1 for the province of the event"</span></span>
+<span id="cb11-10">    )</span>
+<span id="cb11-11">    target_group_score: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-12">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The score between 0 and 1 for the target group of the event"</span></span>
+<span id="cb11-13">    )</span>
+<span id="cb11-14">    min_killed_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-15">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the minimum number of people killed during the event is correct"</span></span>
+<span id="cb11-16">    )</span>
+<span id="cb11-17">    min_killed_distance: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-18">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The distance between the minimum number of people killed during the event and the annotated number of people killed during the event"</span></span>
+<span id="cb11-19">    )</span>
+<span id="cb11-20">    min_captured_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-21">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the minimum number of people captured during the event is correct"</span></span>
+<span id="cb11-22">    )</span>
+<span id="cb11-23">    min_captured_distance: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-24">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The distance between the minimum number of people captured during the event and the annotated number of people captured during the event"</span></span>
+<span id="cb11-25">    )</span>
+<span id="cb11-26">    killq_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the 'killq' field is correct"</span>)</span>
+<span id="cb11-27">    captureq_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-28">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the 'captureq' field is correct"</span></span>
+<span id="cb11-29">    )</span>
+<span id="cb11-30">    killcaptureraid_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-31">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the 'killcaptureraid' field is correct"</span></span>
+<span id="cb11-32">    )</span>
+<span id="cb11-33">    airstrike_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-34">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the 'airstrike' field is correct"</span></span>
+<span id="cb11-35">    )</span>
+<span id="cb11-36">    noshotsfired_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-37">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the 'noshotsfired' field is correct"</span></span>
+<span id="cb11-38">    )</span>
+<span id="cb11-39">    min_leaders_killed_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-40">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the minimum number of leaders killed during the event is correct"</span></span>
+<span id="cb11-41">    )</span>
+<span id="cb11-42">    min_leaders_killed_distance: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-43">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The distance between the minimum number of leaders killed during the event and the annotated number of leaders killed during the event"</span></span>
+<span id="cb11-44">    )</span>
+<span id="cb11-45">    min_leaders_captured_correct: <span class="bu" style="color: null;">bool</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-46">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Whether the minimum number of leaders captured during the event is correct"</span></span>
+<span id="cb11-47">    )</span>
+<span id="cb11-48">    min_leaders_captured_distance: <span class="bu" style="color: null;">int</span> <span class="op" style="color: #5E5E5E;">=</span> Field(</span>
+<span id="cb11-49">        description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"The distance between the minimum number of leaders captured during the event and the annotated number of leaders captured during the event"</span></span>
+<span id="cb11-50">    )</span></code></pre></div>
+</div>
+<p>I then coded up some methods that would calculate the score for each of the fields. Once again, there’s a decent amount of code here so I’ll fold it away and you can unfold the code if you want to take a look.</p>
+<div class="cell" data-execution_count="57">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;">def</span> start_date_correct(start_date: date, correct_date: date) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-2">    <span class="cf" style="color: #003B4F;">return</span> start_date <span class="op" style="color: #5E5E5E;">==</span> correct_date.date()</span>
+<span id="cb12-3"></span>
+<span id="cb12-4"></span>
+<span id="cb12-5"><span class="kw" style="color: #003B4F;">def</span> event_type_score(event_type: Set[EventType], correct_event_types: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">float</span>:</span>
+<span id="cb12-6">    <span class="co" style="color: #5E5E5E;"># Convert the correct event types string to a set of EventType enum values</span></span>
+<span id="cb12-7">    correct_event_types_set <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>(EventType(t) <span class="cf" style="color: #003B4F;">for</span> t <span class="kw" style="color: #003B4F;">in</span> correct_event_types.split(<span class="st" style="color: #20794D;">";"</span>))</span>
+<span id="cb12-8"></span>
+<span id="cb12-9">    <span class="co" style="color: #5E5E5E;"># Calculate the number of correct predictions</span></span>
+<span id="cb12-10">    correct_predictions <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(event_type.intersection(correct_event_types_set))</span>
+<span id="cb12-11"></span>
+<span id="cb12-12">    <span class="co" style="color: #5E5E5E;"># Calculate the total number of correct event types</span></span>
+<span id="cb12-13">    total_correct_types <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(correct_event_types_set)</span>
+<span id="cb12-14"></span>
+<span id="cb12-15">    <span class="co" style="color: #5E5E5E;"># Calculate the accuracy percentage</span></span>
+<span id="cb12-16">    <span class="cf" style="color: #003B4F;">if</span> total_correct_types <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb12-17">        accuracy <span class="op" style="color: #5E5E5E;">=</span> correct_predictions <span class="op" style="color: #5E5E5E;">/</span> total_correct_types</span>
+<span id="cb12-18">    <span class="cf" style="color: #003B4F;">else</span>:</span>
+<span id="cb12-19">        accuracy <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.0</span></span>
+<span id="cb12-20"></span>
+<span id="cb12-21">    <span class="cf" style="color: #003B4F;">return</span> accuracy</span>
+<span id="cb12-22"></span>
+<span id="cb12-23"></span>
+<span id="cb12-24"><span class="kw" style="color: #003B4F;">def</span> province_score(province: Set[Province], correct_province: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">float</span>:</span>
+<span id="cb12-25">    <span class="co" style="color: #5E5E5E;"># Convert the correct province string to a set of Province enum values</span></span>
+<span id="cb12-26">    correct_province_set <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>()</span>
+<span id="cb12-27">    invalid_provinces <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>()</span>
+<span id="cb12-28">    <span class="cf" style="color: #003B4F;">for</span> p <span class="kw" style="color: #003B4F;">in</span> correct_province.split(<span class="st" style="color: #20794D;">";"</span>):</span>
+<span id="cb12-29">        <span class="cf" style="color: #003B4F;">try</span>:</span>
+<span id="cb12-30">            correct_province_set.add(Province(p.lower()))</span>
+<span id="cb12-31">        <span class="cf" style="color: #003B4F;">except</span> <span class="pp" style="color: #AD0000;">ValueError</span>:</span>
+<span id="cb12-32">            invalid_provinces.add(p.lower())</span>
+<span id="cb12-33"></span>
+<span id="cb12-34">    <span class="co" style="color: #5E5E5E;"># Calculate the number of correct predictions</span></span>
+<span id="cb12-35">    correct_predictions <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(province.intersection(correct_province_set))</span>
+<span id="cb12-36"></span>
+<span id="cb12-37">    <span class="co" style="color: #5E5E5E;"># Calculate the total number of provinces</span></span>
+<span id="cb12-38">    total_provinces <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(correct_province_set) <span class="op" style="color: #5E5E5E;">+</span> <span class="bu" style="color: null;">len</span>(invalid_provinces)</span>
+<span id="cb12-39"></span>
+<span id="cb12-40">    <span class="co" style="color: #5E5E5E;"># Calculate the accuracy percentage</span></span>
+<span id="cb12-41">    <span class="cf" style="color: #003B4F;">if</span> total_provinces <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb12-42">        accuracy <span class="op" style="color: #5E5E5E;">=</span> correct_predictions <span class="op" style="color: #5E5E5E;">/</span> total_provinces</span>
+<span id="cb12-43">    <span class="cf" style="color: #003B4F;">else</span>:</span>
+<span id="cb12-44">        accuracy <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.0</span></span>
+<span id="cb12-45"></span>
+<span id="cb12-46">    <span class="cf" style="color: #003B4F;">return</span> accuracy</span>
+<span id="cb12-47"></span>
+<span id="cb12-48"></span>
+<span id="cb12-49"><span class="kw" style="color: #003B4F;">def</span> target_group_score(</span>
+<span id="cb12-50">    target_group: Set[TargetGroup], correct_target_group: <span class="bu" style="color: null;">str</span></span>
+<span id="cb12-51">) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">float</span>:</span>
+<span id="cb12-52">    <span class="co" style="color: #5E5E5E;"># Handle the case where correct_target_group is an empty string</span></span>
+<span id="cb12-53">    <span class="cf" style="color: #003B4F;">if</span> correct_target_group.strip() <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">""</span>:</span>
+<span id="cb12-54">        correct_target_group_set <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>()</span>
+<span id="cb12-55">    <span class="cf" style="color: #003B4F;">else</span>:</span>
+<span id="cb12-56">        <span class="co" style="color: #5E5E5E;"># Convert the correct target group string to a set of TargetGroup enum values</span></span>
+<span id="cb12-57">        correct_target_group_set <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">set</span>(</span>
+<span id="cb12-58">            TargetGroup(t.lower()) <span class="cf" style="color: #003B4F;">for</span> t <span class="kw" style="color: #003B4F;">in</span> correct_target_group.split(<span class="st" style="color: #20794D;">";"</span>)</span>
+<span id="cb12-59">        )</span>
+<span id="cb12-60"></span>
+<span id="cb12-61">    <span class="co" style="color: #5E5E5E;"># Calculate the number of correct predictions</span></span>
+<span id="cb12-62">    correct_predictions <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(target_group.intersection(correct_target_group_set))</span>
+<span id="cb12-63"></span>
+<span id="cb12-64">    <span class="co" style="color: #5E5E5E;"># Calculate the total number of correct target groups</span></span>
+<span id="cb12-65">    total_correct_target_groups <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(correct_target_group_set)</span>
+<span id="cb12-66"></span>
+<span id="cb12-67">    <span class="co" style="color: #5E5E5E;"># Calculate the accuracy percentage</span></span>
+<span id="cb12-68">    <span class="cf" style="color: #003B4F;">if</span> total_correct_target_groups <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
+<span id="cb12-69">        accuracy <span class="op" style="color: #5E5E5E;">=</span> correct_predictions <span class="op" style="color: #5E5E5E;">/</span> total_correct_target_groups</span>
+<span id="cb12-70">    <span class="cf" style="color: #003B4F;">else</span>:</span>
+<span id="cb12-71">        accuracy <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.0</span></span>
+<span id="cb12-72"></span>
+<span id="cb12-73">    <span class="cf" style="color: #003B4F;">return</span> accuracy</span>
+<span id="cb12-74"></span>
+<span id="cb12-75"></span>
+<span id="cb12-76"><span class="kw" style="color: #003B4F;">def</span> min_killed_correct(min_killed: <span class="bu" style="color: null;">int</span>, correct_min_killed: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-77">    <span class="cf" style="color: #003B4F;">return</span> min_killed <span class="op" style="color: #5E5E5E;">==</span> <span class="bu" style="color: null;">int</span>(correct_min_killed)</span>
+<span id="cb12-78"></span>
+<span id="cb12-79"></span>
+<span id="cb12-80"><span class="kw" style="color: #003B4F;">def</span> min_killed_distance(min_killed: <span class="bu" style="color: null;">int</span>, correct_min_killed: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">int</span>:</span>
+<span id="cb12-81">    <span class="cf" style="color: #003B4F;">return</span> <span class="bu" style="color: null;">abs</span>(min_killed <span class="op" style="color: #5E5E5E;">-</span> <span class="bu" style="color: null;">int</span>(correct_min_killed))</span>
+<span id="cb12-82"></span>
+<span id="cb12-83"></span>
+<span id="cb12-84"><span class="kw" style="color: #003B4F;">def</span> min_captured_correct(min_captured: <span class="bu" style="color: null;">int</span>, correct_min_captured: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-85">    <span class="cf" style="color: #003B4F;">return</span> min_captured <span class="op" style="color: #5E5E5E;">==</span> <span class="bu" style="color: null;">int</span>(correct_min_captured)</span>
+<span id="cb12-86"></span>
+<span id="cb12-87"></span>
+<span id="cb12-88"><span class="kw" style="color: #003B4F;">def</span> min_captured_distance(min_captured: <span class="bu" style="color: null;">int</span>, correct_min_captured: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">int</span>:</span>
+<span id="cb12-89">    <span class="cf" style="color: #003B4F;">return</span> <span class="bu" style="color: null;">abs</span>(min_captured <span class="op" style="color: #5E5E5E;">-</span> <span class="bu" style="color: null;">int</span>(correct_min_captured))</span>
+<span id="cb12-90"></span>
+<span id="cb12-91"></span>
+<span id="cb12-92"><span class="kw" style="color: #003B4F;">def</span> killq_correct(killq: <span class="bu" style="color: null;">bool</span>, correct_killq: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-93">    <span class="cf" style="color: #003B4F;">return</span> killq <span class="op" style="color: #5E5E5E;">==</span> (correct_killq <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"true"</span>)</span>
+<span id="cb12-94"></span>
+<span id="cb12-95"></span>
+<span id="cb12-96"><span class="kw" style="color: #003B4F;">def</span> captureq_correct(captureq: <span class="bu" style="color: null;">bool</span>, correct_captureq: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-97">    <span class="cf" style="color: #003B4F;">return</span> captureq <span class="op" style="color: #5E5E5E;">==</span> (correct_captureq <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"true"</span>)</span>
+<span id="cb12-98"></span>
+<span id="cb12-99"></span>
+<span id="cb12-100"><span class="kw" style="color: #003B4F;">def</span> killcaptureraid_correct(</span>
+<span id="cb12-101">    killcaptureraid: <span class="bu" style="color: null;">bool</span>, correct_killcaptureraid: <span class="bu" style="color: null;">str</span></span>
+<span id="cb12-102">) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-103">    <span class="cf" style="color: #003B4F;">return</span> killcaptureraid <span class="op" style="color: #5E5E5E;">==</span> (correct_killcaptureraid <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"true"</span>)</span>
+<span id="cb12-104"></span>
+<span id="cb12-105"></span>
+<span id="cb12-106"><span class="kw" style="color: #003B4F;">def</span> airstrike_correct(airstrike: <span class="bu" style="color: null;">bool</span>, correct_airstrike: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-107">    <span class="cf" style="color: #003B4F;">return</span> airstrike <span class="op" style="color: #5E5E5E;">==</span> (correct_airstrike <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"true"</span>)</span>
+<span id="cb12-108"></span>
+<span id="cb12-109"></span>
+<span id="cb12-110"><span class="kw" style="color: #003B4F;">def</span> noshotsfired_correct(noshotsfired: <span class="bu" style="color: null;">bool</span>, correct_noshotsfired: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-111">    <span class="cf" style="color: #003B4F;">return</span> noshotsfired <span class="op" style="color: #5E5E5E;">==</span> (correct_noshotsfired <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"true"</span>)</span>
+<span id="cb12-112"></span>
+<span id="cb12-113"></span>
+<span id="cb12-114"><span class="kw" style="color: #003B4F;">def</span> min_leaders_killed_correct(</span>
+<span id="cb12-115">    min_leaders_killed: <span class="bu" style="color: null;">int</span>, correct_min_leaders_killed: <span class="bu" style="color: null;">str</span></span>
+<span id="cb12-116">) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-117">    <span class="cf" style="color: #003B4F;">return</span> min_leaders_killed <span class="op" style="color: #5E5E5E;">==</span> <span class="bu" style="color: null;">int</span>(correct_min_leaders_killed)</span>
+<span id="cb12-118"></span>
+<span id="cb12-119"></span>
+<span id="cb12-120"><span class="kw" style="color: #003B4F;">def</span> min_leaders_killed_distance(</span>
+<span id="cb12-121">    min_leaders_killed: <span class="bu" style="color: null;">int</span>, correct_min_leaders_killed: <span class="bu" style="color: null;">str</span></span>
+<span id="cb12-122">) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">int</span>:</span>
+<span id="cb12-123">    <span class="cf" style="color: #003B4F;">return</span> <span class="bu" style="color: null;">abs</span>(min_leaders_killed <span class="op" style="color: #5E5E5E;">-</span> <span class="bu" style="color: null;">int</span>(correct_min_leaders_killed))</span>
+<span id="cb12-124"></span>
+<span id="cb12-125"></span>
+<span id="cb12-126"><span class="kw" style="color: #003B4F;">def</span> min_leaders_captured_correct(</span>
+<span id="cb12-127">    min_leaders_captured: <span class="bu" style="color: null;">int</span>, correct_min_leaders_captured: <span class="bu" style="color: null;">str</span></span>
+<span id="cb12-128">) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">bool</span>:</span>
+<span id="cb12-129">    <span class="cf" style="color: #003B4F;">return</span> min_leaders_captured <span class="op" style="color: #5E5E5E;">==</span> <span class="bu" style="color: null;">int</span>(correct_min_leaders_captured)</span>
+<span id="cb12-130"></span>
+<span id="cb12-131"></span>
+<span id="cb12-132"><span class="kw" style="color: #003B4F;">def</span> min_leaders_captured_distance(</span>
+<span id="cb12-133">    min_leaders_captured: <span class="bu" style="color: null;">int</span>, correct_min_leaders_captured: <span class="bu" style="color: null;">str</span></span>
+<span id="cb12-134">) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">int</span>:</span>
+<span id="cb12-135">    <span class="cf" style="color: #003B4F;">return</span> <span class="bu" style="color: null;">abs</span>(min_leaders_captured <span class="op" style="color: #5E5E5E;">-</span> <span class="bu" style="color: null;">int</span>(correct_min_leaders_captured))</span></code></pre></div>
+</details>
+</div>
+<p>I then wrote a function which could generate one of these <code>EvalResult</code> objects given a response from an LLM, the original dataframe (with the ground truth annotations) and the article id of the row.</p>
+<p>You can see how Claude 3 Opus and GPT-4 Turbo performed on our single article below:</p>
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="kw" style="color: #003B4F;">def</span> evaluate_llm_response(</span>
+<span id="cb13-2">    response: IsafEvent, df: pd.DataFrame, article_id: <span class="bu" style="color: null;">int</span></span>
+<span id="cb13-3">) <span class="op" style="color: #5E5E5E;">-&gt;</span> EvalResult:</span>
+<span id="cb13-4">    <span class="cf" style="color: #003B4F;">return</span> EvalResult(</span>
+<span id="cb13-5">        start_date_correct<span class="op" style="color: #5E5E5E;">=</span>start_date_correct(</span>
+<span id="cb13-6">            response.start_date, df[<span class="st" style="color: #20794D;">"StartDate"</span>][article_id]</span>
+<span id="cb13-7">        ),</span>
+<span id="cb13-8">        event_type_score<span class="op" style="color: #5E5E5E;">=</span>event_type_score(</span>
+<span id="cb13-9">            response.event_type, df[<span class="st" style="color: #20794D;">"eventtype"</span>][article_id]</span>
+<span id="cb13-10">        ),</span>
+<span id="cb13-11">        province_score<span class="op" style="color: #5E5E5E;">=</span>province_score(response.province, df[<span class="st" style="color: #20794D;">"province"</span>][article_id]),</span>
+<span id="cb13-12">        target_group_score<span class="op" style="color: #5E5E5E;">=</span>target_group_score(</span>
+<span id="cb13-13">            response.target_group, df[<span class="st" style="color: #20794D;">"targetgroup"</span>][article_id]</span>
+<span id="cb13-14">        ),</span>
+<span id="cb13-15">        min_killed_correct<span class="op" style="color: #5E5E5E;">=</span>min_killed_correct(</span>
+<span id="cb13-16">            response.min_killed, df[<span class="st" style="color: #20794D;">"minkilled"</span>][article_id]</span>
+<span id="cb13-17">        ),</span>
+<span id="cb13-18">        min_killed_distance<span class="op" style="color: #5E5E5E;">=</span>min_killed_distance(</span>
+<span id="cb13-19">            response.min_killed, df[<span class="st" style="color: #20794D;">"minkilled"</span>][article_id]</span>
+<span id="cb13-20">        ),</span>
+<span id="cb13-21">        min_captured_correct<span class="op" style="color: #5E5E5E;">=</span>min_captured_correct(</span>
+<span id="cb13-22">            response.min_captured, df[<span class="st" style="color: #20794D;">"mincaptured"</span>][article_id]</span>
+<span id="cb13-23">        ),</span>
+<span id="cb13-24">        min_captured_distance<span class="op" style="color: #5E5E5E;">=</span>min_captured_distance(</span>
+<span id="cb13-25">            response.min_captured, df[<span class="st" style="color: #20794D;">"mincaptured"</span>][article_id]</span>
+<span id="cb13-26">        ),</span>
+<span id="cb13-27">        killq_correct<span class="op" style="color: #5E5E5E;">=</span>killq_correct(response.killq, df[<span class="st" style="color: #20794D;">"killq"</span>][article_id]),</span>
+<span id="cb13-28">        captureq_correct<span class="op" style="color: #5E5E5E;">=</span>captureq_correct(</span>
+<span id="cb13-29">            response.captureq, df[<span class="st" style="color: #20794D;">"captureq"</span>][article_id]</span>
+<span id="cb13-30">        ),</span>
+<span id="cb13-31">        killcaptureraid_correct<span class="op" style="color: #5E5E5E;">=</span>killcaptureraid_correct(</span>
+<span id="cb13-32">            response.killcaptureraid, df[<span class="st" style="color: #20794D;">"killcaptureraid"</span>][article_id]</span>
+<span id="cb13-33">        ),</span>
+<span id="cb13-34">        airstrike_correct<span class="op" style="color: #5E5E5E;">=</span>airstrike_correct(</span>
+<span id="cb13-35">            response.airstrike, df[<span class="st" style="color: #20794D;">"airstrike"</span>][article_id]</span>
+<span id="cb13-36">        ),</span>
+<span id="cb13-37">        noshotsfired_correct<span class="op" style="color: #5E5E5E;">=</span>noshotsfired_correct(</span>
+<span id="cb13-38">            response.noshotsfired, df[<span class="st" style="color: #20794D;">"noshotsfired"</span>][article_id]</span>
+<span id="cb13-39">        ),</span>
+<span id="cb13-40">        min_leaders_killed_correct<span class="op" style="color: #5E5E5E;">=</span>min_leaders_killed_correct(</span>
+<span id="cb13-41">            response.min_leaders_killed, df[<span class="st" style="color: #20794D;">"minleaderskilled"</span>][article_id]</span>
+<span id="cb13-42">        ),</span>
+<span id="cb13-43">        min_leaders_killed_distance<span class="op" style="color: #5E5E5E;">=</span>min_leaders_killed_distance(</span>
+<span id="cb13-44">            response.min_leaders_killed, df[<span class="st" style="color: #20794D;">"minleaderskilled"</span>][article_id]</span>
+<span id="cb13-45">        ),</span>
+<span id="cb13-46">        min_leaders_captured_correct<span class="op" style="color: #5E5E5E;">=</span>min_leaders_captured_correct(</span>
+<span id="cb13-47">            response.min_leaders_captured, df[<span class="st" style="color: #20794D;">"minleaderscaptured"</span>][article_id]</span>
+<span id="cb13-48">        ),</span>
+<span id="cb13-49">        min_leaders_captured_distance<span class="op" style="color: #5E5E5E;">=</span>min_leaders_captured_distance(</span>
+<span id="cb13-50">            response.min_leaders_captured, df[<span class="st" style="color: #20794D;">"minleaderscaptured"</span>][article_id]</span>
+<span id="cb13-51">        ),</span>
+<span id="cb13-52">    )</span>
+<span id="cb13-53"></span>
+<span id="cb13-54"></span>
+<span id="cb13-55"><span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">"Claude 3 Opus Scores"</span>)</span>
+<span id="cb13-56"><span class="bu" style="color: null;">print</span>(evaluate_llm_response(claude_response, df, article_id))</span>
+<span id="cb13-57"><span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">"GPT-4 Turbo Scores"</span>)</span>
+<span id="cb13-58"><span class="bu" style="color: null;">print</span>(evaluate_llm_response(openai_response, df, article_id))</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Claude <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span> Opus Scores
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">EvalResult</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">start_date_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type_score</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">province_score</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group_score</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid_correct</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">GPT-<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span> Turbo Scores
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">EvalResult</span><span style="font-weight: bold">(</span>
+    <span style="color: #808000; text-decoration-color: #808000">start_date_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">event_type_score</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">province_score</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">target_group_score</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_killed_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_captured_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killq_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">captureq_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">killcaptureraid_correct</span>=<span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #808000; text-decoration-color: #808000">airstrike_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">noshotsfired_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_killed_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured_correct</span>=<span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #808000; text-decoration-color: #808000">min_leaders_captured_distance</span>=<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">)</span>
+</pre>
+</div>
+</div>
+<p>At first glance it looks like our models performed pretty well. Both got the <code>killcaptureraid</code> status of the article wrong, but otherwise almost perfect across the board.</p>
+<p>Doing this one by one is tedious, of course, and really what we want is an evaluation across a random slice of our articles. So let’s do that next.</p>
+</section>
+<section id="evaluating-in-aggregate" class="level2">
+<h2 class="anchored" data-anchor-id="evaluating-in-aggregate">Evaluating in aggregate</h2>
+<p>Here we’ll shuffle our dataframe to take a random sample of our articles, then we’ll iterate over 100 of our rows to get the generated responses for GPT-4. We’ll also time how long it takes to execute the cell so as to have some kind of benchmark for how long the inference takes. We can use that later on to try to beat this baseline.</p>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="op" style="color: #5E5E5E;">%%</span>time</span>
+<span id="cb14-2"></span>
+<span id="cb14-3"><span class="co" style="color: #5E5E5E;"># Shuffle the DataFrame</span></span>
+<span id="cb14-4">shuffled_df <span class="op" style="color: #5E5E5E;">=</span> df.sample(frac<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>, random_state<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">42</span>)</span>
+<span id="cb14-5"></span>
+<span id="cb14-6">openai_responses <span class="op" style="color: #5E5E5E;">=</span> {}</span>
+<span id="cb14-7"></span>
+<span id="cb14-8"><span class="co" style="color: #5E5E5E;"># Iterate over the first 5 rows of the shuffled DataFrame</span></span>
+<span id="cb14-9"><span class="cf" style="color: #003B4F;">for</span> index, row <span class="kw" style="color: #003B4F;">in</span> shuffled_df.head(<span class="dv" style="color: #AD0000;">100</span>).iterrows():</span>
+<span id="cb14-10">    openai_responses[index] <span class="op" style="color: #5E5E5E;">=</span> query_llm(row[<span class="st" style="color: #20794D;">"text"</span>], <span class="st" style="color: #20794D;">"gpt-4-turbo"</span>, IsafEvent)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 2.53 s, sys: 34.4 ms, total: 2.57 s
+Wall time: 10min 4s</code></pre>
+</div>
+</div>
+<p>As you can see, this took a total of 10 minutes to run so on average this was around 6 seconds per article. Some articles will be longer than others, of course, so perhaps the aggregate ‘10 minutes per 100 articles’ is a better metric.</p>
+<p>We now have our results in memory in the <code>openai_responses</code> dictionary. We can now calculate the scores for the results and plot them.</p>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> List</span>
+<span id="cb16-2"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb16-3"></span>
+<span id="cb16-4"></span>
+<span id="cb16-5"><span class="kw" style="color: #003B4F;">def</span> calculate_scores(eval_results: List[EvalResult]) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">dict</span>:</span>
+<span id="cb16-6">    scores <span class="op" style="color: #5E5E5E;">=</span> {}</span>
+<span id="cb16-7">    total_count <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">len</span>(eval_results)</span>
+<span id="cb16-8"></span>
+<span id="cb16-9">    <span class="cf" style="color: #003B4F;">for</span> attr <span class="kw" style="color: #003B4F;">in</span> EvalResult.__fields__:</span>
+<span id="cb16-10">        <span class="cf" style="color: #003B4F;">if</span> attr.endswith(<span class="st" style="color: #20794D;">"_score"</span>):</span>
+<span id="cb16-11">            scores[attr] <span class="op" style="color: #5E5E5E;">=</span> (</span>
+<span id="cb16-12">                <span class="bu" style="color: null;">sum</span>(<span class="bu" style="color: null;">getattr</span>(result, attr) <span class="cf" style="color: #003B4F;">for</span> result <span class="kw" style="color: #003B4F;">in</span> eval_results) <span class="op" style="color: #5E5E5E;">/</span> total_count</span>
+<span id="cb16-13">            )</span>
+<span id="cb16-14">        <span class="cf" style="color: #003B4F;">elif</span> attr.endswith(<span class="st" style="color: #20794D;">"_correct"</span>):</span>
+<span id="cb16-15">            scores[attr] <span class="op" style="color: #5E5E5E;">=</span> (</span>
+<span id="cb16-16">                <span class="bu" style="color: null;">sum</span>(<span class="bu" style="color: null;">getattr</span>(result, attr) <span class="cf" style="color: #003B4F;">for</span> result <span class="kw" style="color: #003B4F;">in</span> eval_results) <span class="op" style="color: #5E5E5E;">/</span> total_count</span>
+<span id="cb16-17">            )</span>
+<span id="cb16-18">        <span class="cf" style="color: #003B4F;">elif</span> attr.endswith(<span class="st" style="color: #20794D;">"_distance"</span>):</span>
+<span id="cb16-19">            <span class="cf" style="color: #003B4F;">if</span> attr <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"min_captured_distance"</span>:</span>
+<span id="cb16-20">                capped_values <span class="op" style="color: #5E5E5E;">=</span> [</span>
+<span id="cb16-21">                    <span class="bu" style="color: null;">min</span>(<span class="bu" style="color: null;">max</span>(<span class="bu" style="color: null;">getattr</span>(result, attr), <span class="dv" style="color: #AD0000;">0</span>), <span class="dv" style="color: #AD0000;">1</span>) <span class="cf" style="color: #003B4F;">for</span> result <span class="kw" style="color: #003B4F;">in</span> eval_results</span>
+<span id="cb16-22">                ]</span>
+<span id="cb16-23">                scores[attr] <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">1</span> <span class="op" style="color: #5E5E5E;">-</span> (<span class="bu" style="color: null;">sum</span>(capped_values) <span class="op" style="color: #5E5E5E;">/</span> total_count)</span>
+<span id="cb16-24">            <span class="cf" style="color: #003B4F;">else</span>:</span>
+<span id="cb16-25">                scores[attr] <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">1</span> <span class="op" style="color: #5E5E5E;">-</span> (</span>
+<span id="cb16-26">                    <span class="bu" style="color: null;">sum</span>(<span class="bu" style="color: null;">getattr</span>(result, attr) <span class="cf" style="color: #003B4F;">for</span> result <span class="kw" style="color: #003B4F;">in</span> eval_results) <span class="op" style="color: #5E5E5E;">/</span> total_count</span>
+<span id="cb16-27">                )</span>
+<span id="cb16-28"></span>
+<span id="cb16-29">    <span class="cf" style="color: #003B4F;">return</span> scores</span>
+<span id="cb16-30"></span>
+<span id="cb16-31"></span>
+<span id="cb16-32"><span class="kw" style="color: #003B4F;">def</span> plot_scores(scores: <span class="bu" style="color: null;">dict</span>):</span>
+<span id="cb16-33">    attributes <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">list</span>(scores.keys())</span>
+<span id="cb16-34">    values <span class="op" style="color: #5E5E5E;">=</span> [score <span class="op" style="color: #5E5E5E;">*</span> <span class="dv" style="color: #AD0000;">100</span> <span class="cf" style="color: #003B4F;">for</span> score <span class="kw" style="color: #003B4F;">in</span> scores.values()]  <span class="co" style="color: #5E5E5E;"># Convert scores to percentages</span></span>
+<span id="cb16-35"></span>
+<span id="cb16-36">    fig, ax <span class="op" style="color: #5E5E5E;">=</span> plt.subplots(figsize<span class="op" style="color: #5E5E5E;">=</span>(<span class="dv" style="color: #AD0000;">10</span>, <span class="dv" style="color: #AD0000;">8</span>))  <span class="co" style="color: #5E5E5E;"># Adjust the figure size</span></span>
+<span id="cb16-37"></span>
+<span id="cb16-38">    ax.barh(attributes, values)</span>
+<span id="cb16-39">    ax.set_xlim(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">100</span>)  <span class="co" style="color: #5E5E5E;"># Set x-axis range from 0 to 100</span></span>
+<span id="cb16-40">    ax.set_xlabel(<span class="st" style="color: #20794D;">"Score (%)"</span>)</span>
+<span id="cb16-41">    ax.set_ylabel(<span class="st" style="color: #20794D;">"Attribute"</span>)</span>
+<span id="cb16-42">    ax.set_title(<span class="st" style="color: #20794D;">"GPT-4 Turbo Evaluation Scores"</span>)</span>
+<span id="cb16-43"></span>
+<span id="cb16-44">    <span class="cf" style="color: #003B4F;">for</span> i, v <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">enumerate</span>(values):</span>
+<span id="cb16-45">        ax.text(v <span class="op" style="color: #5E5E5E;">+</span> <span class="dv" style="color: #AD0000;">1</span>, i, <span class="ss" style="color: #20794D;">f"</span><span class="sc" style="color: #5E5E5E;">{</span>v<span class="sc" style="color: #5E5E5E;">:.2f}</span><span class="ss" style="color: #20794D;">%"</span>, va<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"center"</span>)  <span class="co" style="color: #5E5E5E;"># Add percentage symbol to labels</span></span>
+<span id="cb16-46"></span>
+<span id="cb16-47">    <span class="co" style="color: #5E5E5E;"># Adjust the left margin to remove extra white space</span></span>
+<span id="cb16-48">    plt.subplots_adjust(left<span class="op" style="color: #5E5E5E;">=</span><span class="fl" style="color: #AD0000;">0.2</span>)</span>
+<span id="cb16-49"></span>
+<span id="cb16-50">    plt.show()</span></code></pre></div>
+</div>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1">eval_results <span class="op" style="color: #5E5E5E;">=</span> []</span>
+<span id="cb17-2"><span class="cf" style="color: #003B4F;">for</span> article_id, response <span class="kw" style="color: #003B4F;">in</span> openai_responses.items():</span>
+<span id="cb17-3">    eval_results.append(evaluate_llm_response(response, df, article_id))</span>
+<span id="cb17-4">scores <span class="op" style="color: #5E5E5E;">=</span> calculate_scores(eval_results)</span>
+<span id="cb17-5">plot_scores(scores)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This gives us a nice overview of how a mostly-unoptimised approach that just pairs prompting with <code>instructor</code> (i.e.&nbsp;passing in the JSON schema for our expected results) performs on our data. Some scores are pretty good, particularly where it’s just a boolean we’re getting back. For others involving numbers (i.e.&nbsp;numbers of killed or captured) we have much lower scores.</p>
+<p>The lowest performing score is the check as to whether the text describes a <code>killcaptureraid</code>. Our prompt doesn’t really give much explanation or context as to how we determined this in the original dataset, so maybe an example or two in the prompt would help there.</p>
+<p>So overall, <code>gpt-4-turbo</code> performs moderately well, but this wouldn’t be acceptable for the purposes of the report that I wrote. The assumption there was that the data was labelled more or less perfectly since I used that data to make accusations and claims about the international military presence in Afghanistan. It simply wouldn’t be good enough to say that we ‘mostly’ got the right numbers when extracting the data from the text. We needed a really high accuracy across the board.</p>
+<p>If I was doing this properly the obvious next step would be to try to split up the task into discrete / focused parts as I mentioned in <a href="https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html">the previous post</a>. That way we could let the model take multiple shots at the problem and have less to handle overall in any one reading. I might return to that at a later stage because that might be the way forward with our finetuning work as well (to get best in class results).</p>
+<p>For now, though, the next step is to prepare our data for finetuning and then to actually run the finetuning. My preference is to select a base model which I can train on my local machine, but since we do have lots of credits with a variety of cloud providers I’ll try to run my finetuning on more powerful machines in the cloud as well.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>nlp</category>
+  <category>afghanistan</category>
+  <category>datalabelling</category>
+  <category>llms</category>
+  <category>miniproject</category>
+  <category>evaluation</category>
+  <guid>https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html</guid>
+  <pubDate>Sun, 02 Jun 2024 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/baseline-evaluation-gpt4.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>Structured Data Extraction for ISAF Press Releases with Instructor</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -2738,488 +3477,6 @@ ERROR: Operation cancelled by user</code></pre>
   <guid>https://mlops.systems/posts/2023-03-18-stable-eights-part-two.html</guid>
   <pubDate>Fri, 17 Mar 2023 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/stable-eights/generated_8.png" medium="image" type="image/png" height="141" width="144"/>
-</item>
-<item>
-  <title>Tricking my digits classifier with diffusion</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>In <a href="https://youtu.be/_7rMfsA24Ls">the lesson 9 video</a> of the FastAI course, Jeremy explains how diffusion models work at a very high level. (These initial videos were released to the public early on, though the rest of the course is still ongoing and thus hasn’t yet been released.) Early on we’re introduced to a basic algorithm which would work for generating images. In doing so, we are given a model for how to think about the diffusion process. This mental model itself reminds of how we train models in the standard machine learning workflow.</p>
-<p>The process goes as follows:</p>
-<ol type="1">
-<li>train a model that outputs a probability of whether a particular image is an image of a handwritten ‘8’ digit. (If one already exists, then use that, but let’s assume that it doesn’t).</li>
-<li>create an image that is just random noise (dimensions should correspond to those of our target image).</li>
-<li>calculate the derivatives for each pixel in that random noise image (with respect to the probability that the image is a handwritten ‘8’</li>
-<li>update the pixels (i.e.&nbsp;subtract from them) by some weighted amount according to the values for the derivatives for those pixels.</li>
-<li>iteratively do this a bunch of times and watch as our random noise image slowly turns into an image of a handwritten ‘8’ digit.</li>
-</ol>
-<p>On some level, the rest of the complexity around the actual Stable Diffusion models relate to things like being able to combine a text prompt with the image generation, or making the process of training the model more efficient and so on. But for now, I’m choosing to focus on the core process as described above.</p>
-<p>My choice to do this centered around the digit ‘8’ is arbitrary. We could as well have chosen something like ‘images of a shoe’ or whatever, but that potentially adds more complexity that could distract from the core process.</p>
-<section id="training-an-8-digit-classifier" class="level2">
-<h2 class="anchored" data-anchor-id="training-an-8-digit-classifier">1: Training an ‘8’ digit classifier</h2>
-<p>Training a model that can output the probability that a digit is a number eight is fairly trivial and is something that <a href="https://course.fast.ai">the FastAI part 1 course</a> prepares you well to tackle, so I’ll handle that first since it’s a pre-requisite for everything that happens subsequently.</p>
-<p>Needless to say, I’ll use the MNIST dataset as my source of training data. Potentially I can use Fashion MNIST as a stretch goal later on, but I’ll start with the digit ‘8’ and see where we get.</p>
-<div class="cell" data-tags="[]" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;">!</span>pip install <span class="op" style="color: #5E5E5E;">-</span>Uqq pip</span>
-<span id="cb1-2"><span class="op" style="color: #5E5E5E;">!</span>pip install timm fastai torch datasets rich <span class="op" style="color: #5E5E5E;">-</span>Uqq</span></code></pre></div>
-</div>
-<div class="cell" data-tags="[]" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;">from</span> fastai.vision.<span class="bu" style="color: null;">all</span> <span class="im" style="color: #00769E;">import</span> <span class="op" style="color: #5E5E5E;">*</span></span>
-<span id="cb2-2"><span class="im" style="color: #00769E;">import</span> timm</span>
-<span id="cb2-3"></span>
-<span id="cb2-4">torch.set_printoptions(precision<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">6</span>, sci_mode<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>)</span></code></pre></div>
-</div>
-<div class="cell" data-tags="[]" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># dataset patched together from the original MNIST dataset</span></span>
-<span id="cb3-2">path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="st" style="color: #20794D;">"./mnist_8_or_not/training"</span>)</span>
-<span id="cb3-3">path.ls()</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>(#4) [Path('mnist_8_or_not/training/not_8'),Path('mnist_8_or_not/training/8'),Path('mnist_8_or_not/training/.ipynb_checkpoints'),Path('mnist_8_or_not/training/eight_classifier.pkl')]</code></pre>
-</div>
-</div>
-<div class="cell" data-tags="[]" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">fnames <span class="op" style="color: #5E5E5E;">=</span> get_image_files(path)</span>
-<span id="cb5-2"><span class="kw" style="color: #003B4F;">def</span> label_func(x): <span class="cf" style="color: #003B4F;">return</span> x.parent.name</span>
-<span id="cb5-3"></span>
-<span id="cb5-4">dls <span class="op" style="color: #5E5E5E;">=</span> ImageDataLoaders.from_path_func(path, fnames, label_func)</span>
-<span id="cb5-5">dls.show_batch()</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>As you can see, we now have a dataloader with images of handwritten eights and images of handwritten digits that are not eights. This data was taken from the MNIST dataset and reassembled for the purposes of making this model. (Heavy data class imbalance in favour of the not-eights, but putting that issue to one side for now).</p>
-<div class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">learn <span class="op" style="color: #5E5E5E;">=</span> vision_learner(dls, resnet34, metrics<span class="op" style="color: #5E5E5E;">=</span>error_rate)</span>
-<span id="cb6-2"></span>
-<span id="cb6-3"><span class="co" style="color: #5E5E5E;"># only train the model if we have no model already</span></span>
-<span id="cb6-4">model_path <span class="op" style="color: #5E5E5E;">=</span> Path(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
-<span id="cb6-5"><span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> model_path.exists():</span>
-<span id="cb6-6">    learn.fine_tune(<span class="dv" style="color: #AD0000;">5</span>)</span>
-<span id="cb6-7">learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="74">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">an_eight <span class="op" style="color: #5E5E5E;">=</span> Path(path <span class="op" style="color: #5E5E5E;">/</span> <span class="st" style="color: #20794D;">"8"</span>).ls()[<span class="dv" style="color: #AD0000;">0</span>]</span>
-<span id="cb7-2">not_an_eight <span class="op" style="color: #5E5E5E;">=</span> Path(path <span class="op" style="color: #5E5E5E;">/</span> <span class="st" style="color: #20794D;">"not_8"</span>).ls()[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">learn.predict(an_eight), learn.predict(not_an_eight)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
-<div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>(('8', TensorBase(0), TensorBase([1.0000e+00, 5.5913e-07])),
- ('not_8', TensorBase(1), TensorBase([2.2082e-06, 1.0000e+00])))</code></pre>
-</div>
-</div>
-<p>Our model is pretty good at detecting whether digits are eights or not. I only trained it for five epochs, but it was already getting an error rate of almost zero. Good enough for the purposes of this proof-of-concept exploration.</p>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Union</span>
-<span id="cb10-2"></span>
-<span id="cb10-3"><span class="kw" style="color: #003B4F;">def</span> get_eight_probability(image_pth: Union[Path, torch.Tensor], learner: Learner) <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
-<span id="cb10-4">    _, _, probs <span class="op" style="color: #5E5E5E;">=</span> learner.predict(image_pth)</span>
-<span id="cb10-5">    <span class="cf" style="color: #003B4F;">return</span> probs[<span class="dv" style="color: #AD0000;">0</span>]</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="75">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">get_eight_probability(an_eight, learn)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
-<div class="cell-output cell-output-display" data-execution_count="75">
-<pre><code>TensorBase(0.995113)</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="76">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">get_eight_probability(not_an_eight, learn)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
-<div class="cell-output cell-output-display" data-execution_count="76">
-<pre><code>TensorBase(0.000268)</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="co" style="color: #5E5E5E;"># export our model so we don't have to retrain it every time from now on</span></span>
-<span id="cb15-2"><span class="cf" style="color: #003B4F;">if</span> <span class="kw" style="color: #003B4F;">not</span> model_path.exists():</span>
-<span id="cb15-3">    learn.export(<span class="st" style="color: #20794D;">"eight_classifier.pkl"</span>)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">loaded_learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
-<span id="cb16-2">get_eight_probability(an_eight, loaded_learn)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>TensorBase(0.999999)</code></pre>
-</div>
-</div>
-</section>
-<section id="create-a-random-noise-image" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-random-noise-image">2: Create a random noise image</h2>
-<p>So we have a way to get the probability that an image is an eight. Now we need to shift to the generation process, and we start by creating an image that is filled with random noise. We’ll shift to raw PyTorch code here probably so that it’s more explicit what’s going on, and so our ‘images’ will be Tensors. Let’s maybe make our images explicitly the same size as our training data, just to eliminate any confusion.</p>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="im" style="color: #00769E;">from</span> PIL <span class="im" style="color: #00769E;">import</span> Image</span>
-<span id="cb18-2"></span>
-<span id="cb18-3">img <span class="op" style="color: #5E5E5E;">=</span> Image.<span class="bu" style="color: null;">open</span>(an_eight)</span>
-<span id="cb18-4">width, height <span class="op" style="color: #5E5E5E;">=</span> img.size</span>
-<span id="cb18-5"></span>
-<span id="cb18-6"><span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"Image dimensions: </span><span class="sc" style="color: #5E5E5E;">{</span>width<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> x </span><span class="sc" style="color: #5E5E5E;">{</span>height<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Image dimensions: 28 x 28</code></pre>
-</div>
-</div>
-<p>Now we can generate a 28x28 image with random noise scattered throughout it.</p>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="im" style="color: #00769E;">import</span> torch</span>
-<span id="cb20-2"><span class="im" style="color: #00769E;">import</span> torchvision.transforms <span class="im" style="color: #00769E;">as</span> transforms</span>
-<span id="cb20-3"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
-<span id="cb20-4"></span>
-<span id="cb20-5"><span class="co" style="color: #5E5E5E;"># Generate a 28x28 tensor filled with random noise</span></span>
-<span id="cb20-6">noise_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)</span>
-<span id="cb20-7"></span>
-<span id="cb20-8"><span class="co" style="color: #5E5E5E;"># Convert the tensor to an image</span></span>
-<span id="cb20-9">transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
-<span id="cb20-10">    transforms.ToPILImage(),</span>
-<span id="cb20-11">    transforms.Grayscale(num_output_channels<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb20-12">])</span>
-<span id="cb20-13">noise_image <span class="op" style="color: #5E5E5E;">=</span> transform(noise_tensor.squeeze())</span>
-<span id="cb20-14"></span>
-<span id="cb20-15"><span class="co" style="color: #5E5E5E;"># Display the image</span></span>
-<span id="cb20-16">plt.imshow(noise_image, cmap<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">'gray'</span>)</span>
-<span id="cb20-17">plt.axis(<span class="st" style="color: #20794D;">'off'</span>)</span>
-<span id="cb20-18">plt.show()</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>Let’s turn that into a function so we can use it later on…</p>
-<div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="co" style="color: #5E5E5E;"># we don't end up using this first function much as we're working with tensors</span></span>
-<span id="cb21-2"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_image() <span class="op" style="color: #5E5E5E;">-&gt;</span> Image:</span>
-<span id="cb21-3">    <span class="co" style="color: #5E5E5E;"># Generate a 28x28 tensor filled with random noise</span></span>
-<span id="cb21-4">    noise_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>)</span>
-<span id="cb21-5"></span>
-<span id="cb21-6">    <span class="co" style="color: #5E5E5E;"># Convert the tensor to an image</span></span>
-<span id="cb21-7">    transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
-<span id="cb21-8">        transforms.ToPILImage(),</span>
-<span id="cb21-9">        transforms.Grayscale(num_output_channels<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb21-10">    ])</span>
-<span id="cb21-11">    <span class="cf" style="color: #003B4F;">return</span> transform(noise_tensor.squeeze())</span>
-<span id="cb21-12"></span>
-<span id="cb21-13"><span class="co" style="color: #5E5E5E;"># we generate a 3x28x28 tensor with random values assigned</span></span>
-<span id="cb21-14"><span class="co" style="color: #5E5E5E;"># we ensure that we can use PyTorch's autograd on the values</span></span>
-<span id="cb21-15"><span class="kw" style="color: #003B4F;">def</span> get_noisy_starter_tensor() <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
-<span id="cb21-16">    noise_tensor <span class="op" style="color: #5E5E5E;">=</span> torch.randn(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">28</span>, <span class="dv" style="color: #AD0000;">28</span>, requires_grad <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb21-17">    <span class="cf" style="color: #003B4F;">return</span> noise_tensor</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">get_noisy_starter_image()</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="bu" style="color: null;">type</span>(get_noisy_starter_tensor())</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
-<pre><code>torch.Tensor</code></pre>
-</div>
-</div>
-</section>
-<section id="get-the-derivatives-for-the-probability-that-its-an-eight" class="level2">
-<h2 class="anchored" data-anchor-id="get-the-derivatives-for-the-probability-that-its-an-eight">3: Get the derivatives for the probability that it’s an eight</h2>
-<p>Our task now is go through the pixels of this 28x28 image and get the derivatives of each pixel with respect to the probability that the image is a digit ‘8’. We don’t have to do this pixel by pixel (i.e.&nbsp;the ‘finite differencing method’) since we have PyTorch, so we can use ‘analytic derivatives’ to calculate the whole lot in a single sweep.</p>
-<p>(Sidebar: I’m using those terms to reference two ways of calculating gradients from the universe of calculus, but I don’t know anything really about what they signify or how they work. Just wanted to signal that I’m using them just because it came up in lesson 9 and it’s often nice to have a name to put to a technique, even if you don’t necessarily know how it works. If you don’t know how it works too, welcome to the club and know that you don’t always need to know everything at every moment :) )</p>
-<div class="cell" data-execution_count="82">
-<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">random_sample <span class="op" style="color: #5E5E5E;">=</span> get_noisy_starter_tensor()</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="83">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">random_sample.shape</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="83">
-<pre><code>torch.Size([1, 3, 28, 28])</code></pre>
-</div>
-</div>
-<section id="adding-and-updating-our-loss-function" class="level3">
-<h3 class="anchored" data-anchor-id="adding-and-updating-our-loss-function">Adding and updating our loss function</h3>
-<p>I experimented a bit with getting a loss function to do what I needed and it took several forms. I’m leaving the code here for posterity, but it doesn’t get used anywhere else in this blog. The two helper functions are for displaying a tensor in the notebook, and for turning a tensor into an image that can be displayed.</p>
-<div class="cell" data-execution_count="26">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><span class="kw" style="color: #003B4F;">def</span> new_eights_loss(preds: torch.Tensor, learner: Learner) <span class="op" style="color: #5E5E5E;">-&gt;</span> torch.Tensor:</span>
-<span id="cb28-2">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
-<span id="cb28-3">    <span class="cf" style="color: #003B4F;">return</span> torch.nn.functional.mse_loss(preds, targets)</span>
-<span id="cb28-4"></span>
-<span id="cb28-5"><span class="kw" style="color: #003B4F;">def</span> display_tensor(tns: torch.Tensor) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="va" style="color: #111111;">None</span>:</span>
-<span id="cb28-6">    plt.imshow(tns, cmap<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">'gray'</span>)</span>
-<span id="cb28-7">    plt.axis(<span class="st" style="color: #20794D;">'off'</span>)</span>
-<span id="cb28-8">    plt.show()</span>
-<span id="cb28-9"></span>
-<span id="cb28-10"><span class="kw" style="color: #003B4F;">def</span> tns_to_img(tns: torch.Tensor) <span class="op" style="color: #5E5E5E;">-&gt;</span> Image:</span>
-<span id="cb28-11">    transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
-<span id="cb28-12">        transforms.ToPILImage(),</span>
-<span id="cb28-13">        transforms.Grayscale(num_output_channels<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb28-14">        ])</span>
-<span id="cb28-15">    <span class="cf" style="color: #003B4F;">return</span> display_tensor(transform(tns.squeeze()))</span></code></pre></div>
-</details>
-</div>
-</section>
-</section>
-<section id="automating-the-iterations" class="level2">
-<h2 class="anchored" data-anchor-id="automating-the-iterations">Automating the iterations</h2>
-<p>At this point we should just give it a try. In what follows, we get an image of something that isn’t an eight, then iterate a number of times through the <code>iterate_image</code> function which:</p>
-<ul>
-<li>ensures that we’re tracking and calculating the gradients on the image</li>
-<li>gets the predictions for our image (i.e.&nbsp;whether it’s an eight or not) and passing them through a softmax</li>
-<li>we pass our predictions and our targets into a <code>l1_loss</code> function (i.e.&nbsp;the mean absolute error) to get the loss for these predictions.</li>
-<li>we call <code>backward()</code> on the loss so that the gradients are calculated</li>
-<li>we then update our image data by some constant times our gradients (just like we do in the normal ML training loop)</li>
-<li>we zero out the gradients prior to the next iteration</li>
-</ul>
-<p>(Every 15 iterations we output the loss as well as the image at that particular moment.)</p>
-<div class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="im" style="color: #00769E;">import</span> torchvision.transforms <span class="im" style="color: #00769E;">as</span> transforms</span>
-<span id="cb29-2"></span>
-<span id="cb29-3">transform <span class="op" style="color: #5E5E5E;">=</span> transforms.Compose([</span>
-<span id="cb29-4">    transforms.ToTensor(),</span>
-<span id="cb29-5">    transforms.Normalize(</span>
-<span id="cb29-6">        mean<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.485</span>, <span class="fl" style="color: #AD0000;">0.456</span>, <span class="fl" style="color: #AD0000;">0.406</span>],</span>
-<span id="cb29-7">        std<span class="op" style="color: #5E5E5E;">=</span>[<span class="fl" style="color: #AD0000;">0.229</span>, <span class="fl" style="color: #AD0000;">0.224</span>, <span class="fl" style="color: #AD0000;">0.225</span>]</span>
-<span id="cb29-8">    )</span>
-<span id="cb29-9">])</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="77">
-<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">image <span class="op" style="color: #5E5E5E;">=</span> transform(Image.<span class="bu" style="color: null;">open</span>(not_an_eight).convert(<span class="st" style="color: #20794D;">"RGB"</span>))</span>
-<span id="cb30-2">_ <span class="op" style="color: #5E5E5E;">=</span> image.requires_grad_()</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="97">
-<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
-<span id="cb31-2"></span>
-<span id="cb31-3"><span class="kw" style="color: #003B4F;">def</span> iterate_image(image, iota: <span class="bu" style="color: null;">int</span>, update_rate: <span class="bu" style="color: null;">float</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">0.1</span>):</span>
-<span id="cb31-4">    image.requires_grad_()</span>
-<span id="cb31-5">    preds <span class="op" style="color: #5E5E5E;">=</span> torch.softmax(loaded_learn.model(image[<span class="va" style="color: #111111;">None</span>]), dim<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">1</span>)</span>
-<span id="cb31-6">    targets <span class="op" style="color: #5E5E5E;">=</span> torch.Tensor([[<span class="fl" style="color: #AD0000;">1.0</span>, <span class="dv" style="color: #AD0000;">0</span>]])</span>
-<span id="cb31-7">    <span class="co" style="color: #5E5E5E;"># loss = torch.nn.functional.mse_loss(preds, targets)</span></span>
-<span id="cb31-8">    loss <span class="op" style="color: #5E5E5E;">=</span> torch.nn.functional.l1_loss(preds, targets)</span>
-<span id="cb31-9">    loss.backward()</span>
-<span id="cb31-10">    <span class="cf" style="color: #003B4F;">if</span> i <span class="op" style="color: #5E5E5E;">%</span> <span class="dv" style="color: #AD0000;">15</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
-<span id="cb31-11">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"grad_sum: </span><span class="sc" style="color: #5E5E5E;">{</span>image<span class="sc" style="color: #5E5E5E;">.</span>grad<span class="sc" style="color: #5E5E5E;">.</span>data<span class="sc" style="color: #5E5E5E;">.</span><span class="bu" style="color: null;">sum</span>()<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">, loss: </span><span class="sc" style="color: #5E5E5E;">{</span>loss<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
-<span id="cb31-12">    </span>
-<span id="cb31-13">    image.data <span class="op" style="color: #5E5E5E;">-=</span> (update_rate <span class="op" style="color: #5E5E5E;">*</span> image.grad.data)</span>
-<span id="cb31-14">    image.grad.zero_()</span>
-<span id="cb31-15">    </span>
-<span id="cb31-16">    <span class="cf" style="color: #003B4F;">if</span> i <span class="op" style="color: #5E5E5E;">%</span> <span class="dv" style="color: #AD0000;">15</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>:</span>
-<span id="cb31-17">        <span class="co" style="color: #5E5E5E;"># N.B. Use v1 to get a sense of what's changing, v2 for the current values</span></span>
-<span id="cb31-18">        </span>
-<span id="cb31-19">        <span class="co" style="color: #5E5E5E;"># VERSION 1</span></span>
-<span id="cb31-20">        <span class="co" style="color: #5E5E5E;"># plt.imshow(np.log1p(image[0].detach().numpy()))</span></span>
-<span id="cb31-21">        <span class="co" style="color: #5E5E5E;"># plt.show(plt.gcf())</span></span>
-<span id="cb31-22">        </span>
-<span id="cb31-23">        <span class="co" style="color: #5E5E5E;"># VERSION 2</span></span>
-<span id="cb31-24">        plt.imshow(image[<span class="dv" style="color: #AD0000;">0</span>].detach().numpy())</span>
-<span id="cb31-25">        plt.show()</span></code></pre></div>
-</div>
-<p>We iterate 50 times, and we our constant for the <code>update_rate</code> is fairly high (i.e.&nbsp;1). Normally for a learning_rate (the equivalent for this value) we would choose something between 0.01 and 0.1 so as not to update too far in any one direction.</p>
-<p>Also, just to confirm, these are our predictions for the <code>not_an_eight</code> image we’re using as the basis for this iterative process:</p>
-<div class="cell" data-execution_count="96">
-<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1">learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
-<span id="cb32-2">learn.predict(not_an_eight)</span></code></pre></div>
-<div class="cell-output cell-output-display">
-
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
-<div class="cell-output cell-output-display" data-execution_count="96">
-<pre><code>('not_8', TensorBase(1), TensorBase([    0.000268,     0.999732]))</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="79">
-<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="cf" style="color: #003B4F;">for</span> i <span class="kw" style="color: #003B4F;">in</span> <span class="bu" style="color: null;">range</span>(<span class="dv" style="color: #AD0000;">50</span>):</span>
-<span id="cb34-2">    iterate_image(image, i, update_rate <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>grad_sum: -0.0006039840518496931, loss: 0.9997323155403137</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-2.png" class="img-fluid"></p>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>grad_sum: -0.003538962686434388, loss: 0.0007090563885867596</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-4.png" class="img-fluid"></p>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>grad_sum: -0.0011799032799899578, loss: 0.00022288746549747884</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-6.png" class="img-fluid"></p>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>grad_sum: -0.0007250444614328444, loss: 0.00012537218572106212</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="https://mlops.systems/posts/2023-03-05-stable-eights_files/figure-html/cell-26-output-8.png" class="img-fluid"></p>
-</div>
-</div>
-<p>As you can see, the loss reduces throughout (and would continue to do so were I to let it continue onwards). The image still looks like a two, however, and doesn’t seem to resemble an eight. So is it doing what we want? A quick check is to run that image we’ve updated / ‘generated’ into the model and get the predictions:</p>
-<div class="cell" data-execution_count="84">
-<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1">torch.sigmoid(loaded_learn.model(image[<span class="va" style="color: #111111;">None</span>]))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="84">
-<pre><code>TensorBase([[0.989906, 0.010533]], grad_fn=&lt;AliasBackward0&gt;)</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="86">
-<div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><span class="co" style="color: #5E5E5E;"># double-checking using a freshly imported learner to make sure</span></span>
-<span id="cb41-2">learn <span class="op" style="color: #5E5E5E;">=</span> load_learner(<span class="st" style="color: #20794D;">"./eight_classifier.pkl"</span>)</span>
-<span id="cb41-3">torch.sigmoid(learn.model(image[<span class="va" style="color: #111111;">None</span>]))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="86">
-<pre><code>TensorBase([[0.989906, 0.010533]], grad_fn=&lt;AliasBackward0&gt;)</code></pre>
-</div>
-</div>
-<p>So even though the image still looks like a two, our model has been bamboozled into thinking it’s an eight. The iteration process has updated the weights just enough that we’ve minimised our loss, and our model now is almost completely certain that this is an image of an eight.</p>
-<p>I’ve tried the same process on the random noise and you don’t get quite as impressive updating as quickly as with our two, but maybe with more iterations it would gradually get there.</p>
-<p>Needless to say, this was a surprising result. I expected to have a neat progression through which the image would gradually look more and more like a number eight. This updating where we adjust enough to completely switch the predictions of the model from certainty that it isn’t an eight, to certainty that it is an eight, that was unexpected to say the least.</p>
-<p><em>I’m really appreciative of the various people who helped me during the process of working on this little experiment: Yogya, Kevin, and all those with whom I have the pleasure to meet each week in the <a href="https://www.meetup.com/delft-fast-ai-study-group/">Delft FastAI Study Group</a>.</em></p>
-</section>
-<section id="appendix-some-pytorch-things" class="level2">
-<h2 class="anchored" data-anchor-id="appendix-some-pytorch-things">Appendix: Some PyTorch Things</h2>
-<p>I learned or encountered a lot of small PyTorch tricks while working on this, so making a note of them as a record for future reference:</p>
-<ul>
-<li><code>autograd</code> - this is PyTorch’s way of automatically calculating the gradients. I’ve never done this process manually myself, nor do I know how to do it, but I reckon this probably saves us a lot of time and complication.</li>
-<li><code>squeeze()</code> and <code>unsqueeze()</code> - these remove and add a dimension to a tensor. It can help in getting things into the right shape.</li>
-<li><code>view()</code> - maybe even more helpful when it comes to getting tensors in the right shape. I ran into lots of places where I was passing something of slightly the wrong shape or dimensions in somewhere and that was causing problems.</li>
-<li><code>zero_()</code> - a way of zeroing out the gradients in-place</li>
-<li><code>detach()</code> - this is a way of getting a copy of the current tensor, but one that isn’t attached to the graph of gradient calculations that are going on.</li>
-<li><code>requires_grad_()</code> - again, another way to ensure that a tensor has the gradient calculations enabled, and it happens in-place.</li>
-<li><code>torch.equals(t1, t2)</code> - a way of comparing two tensors to see if they’re identical or not.</li>
-</ul>
-<p>I discovered that FastAI’s <code>learn.predict()</code> function does some things to whatever you pass in, such that if you use it in the process above you’ll hit an error where it says that there are no longer any gradients to update / accumulate. This is why we’re passing our image values or our tensor directly into the model to get our predictions since this bypasses whatever FastAI is doing. I wasn’t able to fully grok / dig into exactly what’s happening there, but perhaps this is something to look into in the future.</p>
-<section id="debugging-tips" class="level3">
-<h3 class="anchored" data-anchor-id="debugging-tips">Debugging tips</h3>
-<p>On Saturday, I had basically a whole day of hitting lots of walls, somewhat-opaque PyTorch error messages galore. The thing that really seemed to help the most (and that my study group colleagues did with me on Sunday morning) was just to break out each individual step separately, inspecting the return values and the <code>.shape</code> and so on.</p>
-<p>Doing this systematically, interrogating what you expect to happen vs what you see being returned or happening definetely seems like the way to go. At this level of (non-)abstraction, however, there were quite a few PyTorch messages that were hard to wrap my head around. I suppose when you do this often enough you get an intuition for the kinds of ways these things fail, and how to massage your data into the formats required.</p>
-
-
-</section>
-</section>
-
- ]]></description>
-  <category>computervision</category>
-  <category>fastai</category>
-  <category>parttwo</category>
-  <guid>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</guid>
-  <pubDate>Sat, 04 Mar 2023 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/stable-eights/sd.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
