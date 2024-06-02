@@ -1,5 +1,4 @@
 _site/
-.*
 
 /.quarto/
 
@@ -8,3 +7,5 @@ Pipfile
 posts/eight_classifier.pkl
 posts/mnist_8_or_not/
 posts/saba.ipynb
+
+.DS_Store
