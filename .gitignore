@@ -9,3 +9,4 @@ posts/mnist_8_or_not/
 posts/saba.ipynb
 
 .DS_Store
+.ipynb_checkpoints/
