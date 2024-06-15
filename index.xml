@@ -750,7 +750,7 @@
 </tr>
 </tbody>
 </table>
-<p>Now that we have 6 models, we can try some out to see how they fare with some data they haven’t yet seen (from the test set). I used the code from <a href="https://github.com/parlance-labs/ftcourse/blob/master/06_sanity_check.ipynb">Hamel’s Sanity Check notebook</a> to generate some predictions and evaluate them:</p>
+<p>Now that we have 4 models, we can try some out to see how they fare with some data they haven’t yet seen (from the test set). I used the code from <a href="https://github.com/parlance-labs/ftcourse/blob/master/06_sanity_check.ipynb">Hamel’s Sanity Check notebook</a> to generate some predictions and evaluate them:</p>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Union</span>
 <span id="cb17-2"><span class="im" style="color: #00769E;">import</span> torch</span>
