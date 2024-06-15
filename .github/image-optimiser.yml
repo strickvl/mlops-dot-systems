@@ -3,6 +3,8 @@
 name: Compress Images
 on:
   workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
   schedule:
   - cron: '00 23 * * 0'
 jobs:
@@ -26,3 +28,5 @@ jobs:
         branch-suffix: timestamp
         commit-message: Compressed Images
         body: ${{ steps.calibre.outputs.markdown }}
+
+
