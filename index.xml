@@ -90,7 +90,7 @@
 </section>
 <section id="setting-up-our-pydantic-models-with-validation" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-our-pydantic-models-with-validation">Setting up our Pydantic models with validation</h2>
-<p>There’s a decent amount of code in the next cell, and definetely read the previous posts to understand what all the pieces are about, but in a nutshell we’re setting ourselves up to extract structured data from the text. This Pydantic model is what will hold the data we’re interested in.</p>
+<p>There’s a decent amount of code in the next cell, and definitely read the previous posts to understand what all the pieces are about, but in a nutshell we’re setting ourselves up to extract structured data from the text. This Pydantic model is what will hold the data we’re interested in.</p>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;">from</span> enum <span class="im" style="color: #00769E;">import</span> Enum</span>
 <span id="cb6-2"><span class="im" style="color: #00769E;">from</span> typing <span class="im" style="color: #00769E;">import</span> Set, Annotated, Optional</span>
