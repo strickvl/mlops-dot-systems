@@ -3,6 +3,7 @@
     "listing": "/index.html",
     "items": [
       "/posts/saba.html",
+      "/posts/2024-06-17-one-click-finetuning.html",
       "/posts/2024-06-15-isafpr-first-finetune.html",
       "/posts/2024-06-03-isafpr-evaluating-baseline.html",
       "/posts/2024-06-02-isafpr-prompting-baseline.html",
