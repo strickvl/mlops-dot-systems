@@ -10,7 +10,101 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 16 Jun 2024 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 24 Jun 2024 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>How to think about creating a dataset for LLM finetuning evaluation</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I <a href="https://mlops.systems/posts/2024-06-17-one-click-finetuning.html">previously</a> experimented with one-click LLM finetuning providers and now is a good time to return to the core of the matter: evaluating how well all these fine-tuned models and experiments are faring. I have a gut feeling that my fine-tuned models did pretty well, but we’re not in the business of gut feeling so I’m hoping to be able to put some real numbers down to either prove or disprove this hypothesis.</p>
+<p>As a quick reminder if you didn’t read <a href="https://mlops.systems/#category=isafpr">any of the previous posts in the series</a>, I’m building a model that can take a press release text like this:</p>
+<blockquote class="blockquote">
+<p>“2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release KABUL, Afghanistan (Nov.&nbsp;7, 2011) — A combined Afghan and coalition security force conducted an operation in search of a Haqqani facilitator in Argo district, Badakshan province. The facilitator coordinates suicide attacks with other insurgent leaders in the area. During the operation, a local national male failed to comply with repeated verbal warnings and displayed hostile intent toward the security force. The security force engaged the individual, resulting in his death. The security force confiscated a shotgun and intelligence linking the local national to the Haqqani network. The security force also detained two suspected insurgents during the operation.”</p>
+</blockquote>
+<p>…and then turn it into structured data (i.e.&nbsp;a JSON object) like this:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><span class="fu" style="color: #4758AB;">{</span></span>
+<span id="cb1-2">    <span class="er" style="color: #AD0000;">'name'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">'</span><span class="dv" style="color: #AD0000;">1</span><span class="er" style="color: #AD0000;">'</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-3">    <span class="er" style="color: #AD0000;">'start_date'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">'</span><span class="dv" style="color: #AD0000;">2011-11-07</span><span class="er" style="color: #AD0000;">'</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-4">    <span class="er" style="color: #AD0000;">'event_type'</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[</span><span class="er" style="color: #AD0000;">'captureandkill'</span><span class="ot" style="color: #003B4F;">]</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-5">    <span class="er" style="color: #AD0000;">'province'</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[</span><span class="er" style="color: #AD0000;">'badakhshan'</span><span class="ot" style="color: #003B4F;">]</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-6">    <span class="er" style="color: #AD0000;">'target_group'</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[</span><span class="er" style="color: #AD0000;">'haqqani'</span><span class="ot" style="color: #003B4F;">]</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-7">    <span class="er" style="color: #AD0000;">'min_killed'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">1</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-8">    <span class="er" style="color: #AD0000;">'min_captured'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">2</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-9">    <span class="er" style="color: #AD0000;">'killq'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">True</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-10">    <span class="er" style="color: #AD0000;">'captureq'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">True</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-11">    <span class="er" style="color: #AD0000;">'killcaptureraid'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">True</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-12">    <span class="er" style="color: #AD0000;">'airstrike'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">False</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-13">    <span class="er" style="color: #AD0000;">'noshotsfired'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">False</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-14">    <span class="er" style="color: #AD0000;">'min_leaders_killed'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">0</span><span class="fu" style="color: #4758AB;">,</span></span>
+<span id="cb1-15">    <span class="er" style="color: #AD0000;">'min_leaders_captured'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb1-16"><span class="fu" style="color: #4758AB;">}</span></span></code></pre></div>
+<p>I’ve now fine-tuned several models and I want to get a sense of how good these are. I showcased <a href="https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html">some initial baseline evaluations</a> using OpenAI’s <code>gpt-4-turbo</code> but I want to pit model against model now.</p>
+<p>I’m also interested in teasing out some of the edge cases where I know I struggled as a human annotator. (I <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">released the dataset</a> for this project publicly on the Hugging Face Hub and also was responsible for annotating every single item so I know the data intimately.) I can even consider using the hard examples to generate some synthetic data to boost performance on those edge cases, but that’s a task for much later on.</p>
+<p>This blogpost is a prose overview of some of the evaluations I’m adding to my suite of tests (and why I’m adding them). I learned a lot from <a href="https://hamel.dev/blog/posts/evals/">Hamel Husain’s “Your AI Product Needs Evals” blogpost</a> and if you’re interested in this I’d recommend reading it and then actually implementing his suggestions.</p>
+<section id="core-evaluations-for-accuracy" class="level2">
+<h2 class="anchored" data-anchor-id="core-evaluations-for-accuracy">Core evaluations for accuracy</h2>
+<p>The most important measurement to start with is just a pure “did the LLM make a correct prediction or not?” If I was doing all these evaluations manually myself, I’d take a look at the example above, for example, and ask myself “was the start date of the event mentioned in the blogpost really ‘2011-11-07’ as predicted by the model?” and “did the event take place in Badakhshan province?” and “were the Haqqanis the group targeted?”</p>
+<p>It’s fairly straightforward to make these determinations when comparing each property one by one. I can then repeat this over every example in my test slice of my dataset and take an average if I want a single aggregate figure, or I can get individual figures for dates, provinces, target groups and so on (to know if maybe there’s one part of the prediction it struggles with most).</p>
+</section>
+<section id="out-of-domain-data" class="level2">
+<h2 class="anchored" data-anchor-id="out-of-domain-data">Out of domain data</h2>
+<p>The ISAF mission has come to an end, so I don’t have to worry too much about new data and having to adapt to a continuously changing world, but it is possible that some smaller groups weren’t well represented in the training data (for predicting the target group, for example) so I want to know how well my model does with data it hasn’t seen.</p>
+<p>My prompt passes in the schema for the data and I encourage it to follow the schema in its response, but if there’s a new group will it add the new group to the schema? I can write an evaluation to test this.</p>
+<p>Another edge case is the possibility that a press release doesn’t follow the standard format. Having read them all, I know that the vast majority are pretty formulaic, but sometimes there is a special event or incident which caused the author of the press release to depart from the standard formula. I want to know that my model will:</p>
+<ol type="a">
+<li>not just make something up so as to have <em>some</em> kind of JSON response even if the press release is about someone’s birthday party</li>
+<li>even better, produce some sort of error code or blank response when this happens.</li>
+</ol>
+<p>I can use examples of this out of domain data to see what happens, and put a value to how often my model will just hallucinate something out of nothing. This will be important since the name of the game for this model is accuracy.</p>
+</section>
+<section id="gradations-of-some-a-few-many" class="level2">
+<h2 class="anchored" data-anchor-id="gradations-of-some-a-few-many">Gradations of ‘some’, ‘a few’, ‘many’</h2>
+<p>The press releases try to give some information without actually giving too much. Indeed, when I published <a href="https://www.afghanistan-analysts.org/en/special-reports/a-knock-on-the-door-22-months-of-isaf-press-releases/">my report</a> on the press releases back in 2011, ISAF even <a href="https://www.dvidshub.net/news/78455/isaf-responds-use-aan-news-releases-study">issued a press release</a> (!) in which they stated that:</p>
+<blockquote class="blockquote">
+<p>“Release of information in insurgent warfare is not always made public, so studies based on the use of press releases can be both incomplete and problematic. […] Authoritative research cannot be conducted through mere analysis of press releases, since the release of information through such releases is, by design, incomplete.”</p>
+</blockquote>
+<p>So reading the press releases is very much an exercise in reading between the lines. In the press release cited earlier, all the numbers are specific (“a facilitator”, “a male”, “two insurgents”) so it’s easy to put numbers to how many were killed or captured. In many of the press releases, particularly during times where raids were being conducted at a very high tempo, you have to just take assumptions about what their words mean and assign minimum values to those words.</p>
+<p>So ‘a couple’ meant at least two, but ‘a few’ meant 3 or more. Similarly ‘dozens’ means multiple dozens so that meant a minimum value of at least 24. From the original report:</p>
+<blockquote class="blockquote">
+<p>“If a press release said that ‘insurgents’ were detained, without further details, we assigned that incident as having a minimum number of 2 detained (since we could not be sure of more). ‘A couple’ we took to mean 2. ‘Several’ we took to mean at least 3, even though on other occasions ‘several’ was used to refer to 7 or 8. Other terms we classified as denoting at least 3 included: ‘a few’, ‘some’, ‘a group’, ‘a small group’ and ‘multiple’; these terms sometimes were used to refer to far larger numbers but we chose the smaller number (if no other information was available in the press release) in order to come up with a minimally acceptable figure. ‘Numerous’ and ‘a handful’ we took to mean at least 4, and ‘a large number’ at least 5.”</p>
+</blockquote>
+<p>The reports mostly referred to events that had taken place that day or the day before, but occasionally they’d refer to events that took place “last Thursday” or “last week” and so then you’d have to know what day the press release was issued and then make calculations accordingly. For this backwards-referring time assignations, I’m particularly interested (read: concerned!) to know how well my LLMs did. Whatever score we get, it’s probably fixable with a bit of manual parsing and logic, but we need to know if there’s a problem or not first.</p>
+<p>Generally speaking there were province names assigned to incidents (all but 23, to be precise) but when they weren’t, then the LLM has to work back from a village name, potentially, or just specify that an incident took place in southern Afghanistan or Afghanistan as a whole. On a few occasions, the press release actually made an error, stating that village X or Y was in a particular province, when this was incorrect and it was in a different province. So for this, would we expect the LLM to assign the event to the correct province for that village, or just retain the error in the press release?</p>
+<p>Sometimes a press release might refer to an event having taken place “in the provincial capital of X province” but without mentioning that city by name. So the LLM will have to have some knowledge of these things and I want to test how well it performs with this.</p>
+<p>These might seem like tiny errors to get wrong, but for a project like this (where my report was making some strong accusations and drawing certain conclusions based on the data), it wouldn’t do to get things factually wrong. For an internal-facing LLM-powered chatbot, the price of mistakes is minimal, but for a project like this, there are potentially far more serious consequences which is why I’m putting together such detailed evaluations.</p>
+</section>
+<section id="spelling-variation" class="level2">
+<h2 class="anchored" data-anchor-id="spelling-variation">Spelling variation</h2>
+<p>Another issue with some of the press releases is that they use a variety of spellings for the same locations or names of individuals. For some things — province names, for example — it makes sense to standardise on a fixed naming convention but for others it’s not always clear what to do. So our evaluation should ensure that common variations of certain provinces or designations or names are captured correctly by the LLM output.</p>
+</section>
+<section id="complex-stories" class="level2">
+<h2 class="anchored" data-anchor-id="complex-stories">Complex stories</h2>
+<p>Some stories are very complicated and there may be no correct way to assign numbers, for example, to the text that was published. In those cases when annotating I often just left the minimum numbers at zero even though we know that <em>something</em> happened. Would the LLM also make the same call? What is the threshold for deciding not to take a chance on making a guess?</p>
+</section>
+<section id="next-step" class="level2">
+<h2 class="anchored" data-anchor-id="next-step">Next step</h2>
+<p>The obvious next step is to actually code up these evaluation criteria and run those across our fine-tuned LLMs as well as the API-driven proprietary ones. I’ll be working on that over the coming days. Luckily, I did most of the work to identify all of the above when I first wrote the report so there isn’t much ground that needs to be broken so much as just sitting down and getting it done.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>llm</category>
+  <category>finetuning</category>
+  <category>isafpr</category>
+  <category>afghanistan</category>
+  <category>datasets</category>
+  <category>evaluation</category>
+  <category>llms</category>
+  <category>miniproject</category>
+  <guid>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</guid>
+  <pubDate>Mon, 24 Jun 2024 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/eval-preview.png" medium="image" type="image/png" height="144" width="144"/>
+</item>
 <item>
   <title>One-click LLM finetuning with Predibase, OpenPipe and OpenAI</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -261,6 +355,7 @@
   <category>llms</category>
   <category>miniproject</category>
   <category>finetuning</category>
+  <category>isafpr</category>
   <guid>https://mlops.systems/posts/2024-06-17-one-click-finetuning.html</guid>
   <pubDate>Sun, 16 Jun 2024 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/one-click-finetuning.png" medium="image" type="image/png" height="144" width="144"/>
@@ -1150,6 +1245,7 @@
   <category>llms</category>
   <category>miniproject</category>
   <category>finetuning</category>
+  <category>isafpr</category>
   <guid>https://mlops.systems/posts/2024-06-15-isafpr-first-finetune.html</guid>
   <pubDate>Fri, 14 Jun 2024 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/first-finetune.png" medium="image" type="image/png" height="116" width="144"/>
@@ -1887,6 +1983,7 @@ Wall time: 10min 4s</code></pre>
   <category>afghanistan</category>
   <category>datalabelling</category>
   <category>llms</category>
+  <category>isafpr</category>
   <category>miniproject</category>
   <category>evaluation</category>
   <guid>https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html</guid>
@@ -2433,6 +2530,7 @@ without incident.&nbsp; No shots were fired and no one was injured.
   <category>nlp</category>
   <category>afghanistan</category>
   <category>datalabelling</category>
+  <category>isafpr</category>
   <category>llms</category>
   <category>miniproject</category>
   <guid>https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html</guid>
@@ -2487,6 +2585,7 @@ without incident.&nbsp; No shots were fired and no one was injured.
   <category>datasets</category>
   <category>nlp</category>
   <category>llm</category>
+  <category>isafpr</category>
   <guid>https://mlops.systems/posts/2024-04-01-publishing-afghanwire-dataset.html</guid>
   <pubDate>Sun, 31 Mar 2024 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/afghanwire-website.png" medium="image" type="image/png" height="163" width="144"/>
@@ -3851,40 +3950,6 @@ terraform apply -var-file="my_vals.tfvars"</code></pre>
   <guid>https://mlops.systems/posts/2023-04-29-exploring-legacy-terraform-repository.html</guid>
   <pubDate>Fri, 28 Apr 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/terraform-blog.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>How to remove a commit (or two) from your git branch</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-04-28-removing-git-commits.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I ran into a problem where a tool I was using auto-updated my git branch, forcing dozens of changes. The changes were relatively innocuous, but they were irrelevant to the work I was doing which would make reviewing the Pull Request pretty hard going.</p>
-<p>This is what I did to remove the traces of that commit from my git branch logs:</p>
-<p>First, make sure you are on the branch where the commit you want to remove exists. If not, switch to that branch using:</p>
-<pre class="shell"><code>git checkout &lt;branch_name&gt;</code></pre>
-<p>Use <code>git log</code> to find the commit hash (the unique identifier) of the commit you want to remove. The commit hash will be a long string of characters and numbers, e.g., <code>ab12cd34ef56gh78ij90kl12mn34op56qr78st90</code>.</p>
-<p>Use <code>git rebase -i</code> (interactive rebase) to remove the commit. This command will open an editor where you can manipulate the commit history. Use the commit hash that’s one before the one you want to remove:</p>
-<pre class="shell"><code>git rebase -i &lt;parent_commit_hash&gt;</code></pre>
-<p>In the editor that opens, you will see a list of commits starting from the parent commit hash you provided. Find the line with the commit you want to remove. Change the word pick at the beginning of that line to drop or simply delete the entire line. Save and close the editor. (Alternatively, if you’re using VS Code, a sort of UI interface will open which will allow you to select from drop-down pickers which options you want for each of the downstream commits. There is a button at the bottom to switch to the pure text interface if you prefer.)</p>
-<p>Git will perform the rebase, removing the specified commit from the commit tree.</p>
-<p>If you’re satisfied with the changes, push your branch to the remote repository:</p>
-<pre class="shell"><code>git push -f origin &lt;branch_name&gt;</code></pre>
-<p><strong>Important Note:</strong> Using <code>git push -f</code> (force push) can be dangerous, as it overwrites the remote branch with your local one. Make sure you are confident about your changes before using this command. If you’re working on a shared branch with others it’s important to communicate with your team to ensure that no one else is working on the same branch to avoid losing any work.</p>
-<p>The commits I’d made after the one I wanted to remove didn’t overlap or relate to each other, so I didn’t face any conflicts during the rebase process. However, if you do encounter conflicts, you’ll need to resolve them manually and continue with the rebase using <code>git rebase --continue</code>.</p>
-<p>Remember that rebasing and force pushing can rewrite the commit history, so always be cautious when performing these operations.</p>
-
-
-
- ]]></description>
-  <category>git</category>
-  <category>softwareengineering</category>
-  <category>versioncontrol</category>
-  <guid>https://mlops.systems/posts/2023-04-28-removing-git-commits.html</guid>
-  <pubDate>Thu, 27 Apr 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/tree-picking.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
