@@ -21,7 +21,7 @@
 
 
 <p><a href="https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html">My last post</a> outlined the kinds of evaluation I need and want to understand how well my finetuned LLM is performing in the task of structured data extraction from press releases. Let’s start with the core metric I’m interested in, accuracy, and then later we can dive into some of the other evaluation metrics as well.</p>
-<p>This is a long post with lots of detail. I’ve tried to minimise the amount of code you see, but if you want to see how the charts or evals were done, expand the ‘code’ sections. If you’re interested in cutting straight to the aggregate results, click here to go to the end of this post.</p>
+<p>This is a long post with lots of detail. I’ve tried to minimise the amount of code you see, but if you want to see how the charts or evals were done, expand the ‘code’ sections. If you’re interested in cutting straight to the aggregate results, click here to go to the end of this post. (To see the rest of the blog posts about this project, please click <a href="https://mlops.systems/index.html#category=isafpr">here</a>.)</p>
 <section id="loading-the-datasets" class="level2">
 <h2 class="anchored" data-anchor-id="loading-the-datasets">Loading the datasets</h2>
 <p>The data is all available on the Hugging Face Hub in a public repository, and for the purposes of these evaluations I want to use the <code>test</code> split of the dataset since none of our models have seen that data yet so it’s good for determining how well our model performs with new data.</p>

@@ -809,7 +809,7 @@
     "href": "posts/2024-07-01-full-finetuned-model-evaluation.html",
     "title": "My finetuned models beat OpenAI’s GPT-4",
     "section": "",
-    "text": "My last post outlined the kinds of evaluation I need and want to understand how well my finetuned LLM is performing in the task of structured data extraction from press releases. Let’s start with the core metric I’m interested in, accuracy, and then later we can dive into some of the other evaluation metrics as well.\nThis is a long post with lots of detail. I’ve tried to minimise the amount of code you see, but if you want to see how the charts or evals were done, expand the ‘code’ sections. If you’re interested in cutting straight to the aggregate results, click here to go to the end of this post."
+    "text": "My last post outlined the kinds of evaluation I need and want to understand how well my finetuned LLM is performing in the task of structured data extraction from press releases. Let’s start with the core metric I’m interested in, accuracy, and then later we can dive into some of the other evaluation metrics as well.\nThis is a long post with lots of detail. I’ve tried to minimise the amount of code you see, but if you want to see how the charts or evals were done, expand the ‘code’ sections. If you’re interested in cutting straight to the aggregate results, click here to go to the end of this post. (To see the rest of the blog posts about this project, please click here.)"
   },
   {
     "objectID": "posts/2024-07-01-full-finetuned-model-evaluation.html#loading-the-datasets",
