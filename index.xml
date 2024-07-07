@@ -10,7 +10,82 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 30 Jun 2024 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 06 Jul 2024 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>All the things I learned while trending on Hacker News</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>My previous two blog posts — <a href="https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html">here</a> and <a href="https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html">here</a> — were trending / on the front page of Hacker News, driving over 20,000 new visitors to this blog. Welcome! I learned a few new tricks (and some mistakes I’d made) during the ensuing discussion so I thought I’d share some of these here. Some of them might trigger some mini side-investigations into certain hypotheses, too, which is even more exciting. Let’s dive in.</p>
+<section id="temperature-0" class="level2">
+<h2 class="anchored" data-anchor-id="temperature-0">Temperature = 0</h2>
+<p>Some commenters rightly pointed out that setting the temperature to 1 for some of the OpenAI inference meant that I was more likely to have less stable and less factually consistent responses. I also heard back from the OpenPipe team that there was maybe no hard and fast rule on this but that I should experiment around for my specific use case.</p>
+<p>There was enough strongly-voiced opinions on this that I might see if I can rerun the evals using <code>0</code> as the temperature to see how much of a difference it makes.</p>
+</section>
+<section id="function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library" class="level2">
+<h2 class="anchored" data-anchor-id="function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library">Function calling vs JSON mode vs prompt vs some schema-forcing library</h2>
+<p>In <a href="https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html">a previous baseline eval for OpenAI’s models</a> I used <code>instructor</code> to coerce the output into Pydantic objects. <a href="https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html">This time round</a> I just used a strongly-worded request in the prompt to request a JSON response and turned on JSON mode (with the <code>response_format={"type": "json_object"}</code> passed into the <code>create</code> method). That was enough to ensure that <a href="https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html#json-validity-test">every response I got back was valid JSON</a>.</p>
+<p>I’ve since been reading about the performance differences between these different responses, and how certain models (like the OpenAI GPT class) do much better with function-calling than with just a prompt and/or JSON mode.</p>
+<p>I’ll be blogging about the differences between these options (and how exactly they work) but I think there’s also enough potential here for me to try this as well in a separate round of reruns of the evals.</p>
+<p>Specifically: what’s the difference in performance between the prompt that I used (which effectively stuffed the schema into the prompt) and using a more formalised function-calling approach? Given what I’ve read, I suspect function-calling will prove superior, but by how much?</p>
+</section>
+<section id="llama3-eos-and-pad-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="llama3-eos-and-pad-tokens">Llama3 EOS and PAD tokens</h2>
+<p>I had some helpful comments suggesting there was maybe something untoward going on with these tokens during my Llama3 local finetune. I did set them in my <code>axolotl</code> config, but it’s well possible that something went wrong there. I’m planning to return to some local finetunes (since my credits on the one-click providers is not infinite and I want to make the local setup work) so I will dive into this soon. Llama3 performed really well so it seems there’s just some small bug here.</p>
+</section>
+<section id="the-one-click-finetuned-models-can-be-run-locally" class="level2">
+<h2 class="anchored" data-anchor-id="the-one-click-finetuned-models-can-be-run-locally">The one-click finetuned models can be run locally</h2>
+<p>I found out that it <strong>is</strong> possible to download the adapters from places like Predibase and OpenPipe and just set things up to run them locally, but it’s just buried a bit in the docs (or not documented at all.)</p>
+<p>Part of the difficulty with documenting how users can do this is that (thanks to CUDA setup intricacies) there isn’t really an easy one-approach-fits-all option. Docker is maybe the closest to this, but at the moment you have to do some of the legwork yourself.</p>
+</section>
+<section id="others-have-had-similar-success-with-finetuned-models" class="level2">
+<h2 class="anchored" data-anchor-id="others-have-had-similar-success-with-finetuned-models">Others have had similar success with finetuned models</h2>
+<p>There were a few other links to successes that others had with finetuning models for structured data extraction posted in the HN thread. See <a href="https://jacobsgill.es/phdobtained">this doctoral dissertation</a>. Also <a href="https://www.nature.com/articles/s41467-024-45563-x">this article in Nature</a>. And of course the OG <a href="https://arxiv.org/abs/2405.00732">LoRA Land paper</a>.</p>
+</section>
+<section id="controversial-content-means-openai-tries-less-hard" class="level2">
+<h2 class="anchored" data-anchor-id="controversial-content-means-openai-tries-less-hard">Controversial content means OpenAI tries less hard?</h2>
+<p>One commenter suggested that the nature of the content might be the reason why OpenAI’s GPT performance wasn’t as good as the finetuned models. My experience of this is that it’s binary — either you get a real response or you get a canned ‘this is too sensitive a topic’ reply — but (s)he suggested that instead of getting rejected I might just get a degraded-in-quality response.</p>
+<p>This would need some further testing to confirm or deny. A nice little experiment for someone.</p>
+</section>
+<section id="what-about-anthropics-claude-models" class="level2">
+<h2 class="anchored" data-anchor-id="what-about-anthropics-claude-models">What about Anthropic’s Claude models?</h2>
+<p>I should probably have done this as well, but I just hit up against the timebox I allocated for the evaluation work. I’ll try to do some experiments with Haiku and the new Sonnet 3.5 to see if a mixture of tool use (aka function calling) and stuffing the prompt with more examples might be able to get us to feature parity with the finetuned models. Watch this space.</p>
+</section>
+<section id="data-labelling-issues" class="level2">
+<h2 class="anchored" data-anchor-id="data-labelling-issues">Data labelling issues</h2>
+<p>One commenter found some inconsistencies in the data labelling around dates. I’ll admit to not really having a good answer around this, but also I didn’t dive into the issues raised too deeply. They showed some examples of where the ‘ground truth’ date assigned to a press release was wrong. There’s of course the possibility I may have made mistakes while doing the labelling, and there might be some cases where press releases were emailed out earlier than when they were published on the website, but that’s much harder to show. I’ll dig into this a bit at some point, though this is lower priority on the ‘next steps’ list.</p>
+</section>
+<section id="you-cant-predict-what-people-want-to-read" class="level2">
+<h2 class="anchored" data-anchor-id="you-cant-predict-what-people-want-to-read">You can’t predict what people want to read!</h2>
+<p>The title I chose was clearly designed to be a bit provocative and/or draw readers in, but it wasn’t hyperbolic. My evals did actually show my finetuned models ‘beating’ GPT-4o. That said, <a href="https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html">the blog before it</a>, setting up the evals I did, was written in a fairly general way and I was really surprised that people enjoyed reading that one so much. It just goes to show that you just need to keep showing up, writing and publishing and you don’t know what people will like. Most of the time I’m writing just for me anyway, so anything on top is just a bonus.</p>
+<p>Alongside this is the understanding that the things that a Hacker News audience enjoys are not necessarily the same things that the wider world and readership enjoys. That’s worth bearing in mind.</p>
+</section>
+<section id="github-pages-hosting-holds-up" class="level2">
+<h2 class="anchored" data-anchor-id="github-pages-hosting-holds-up">Github Pages hosting holds up!</h2>
+<p>My blog is <a href="https://quarto.org/">a Quarto blog</a> hosted on <a href="https://pages.github.com/">Github Pages</a>. As such I don’t pay anything for this hosting. I was pleasantly surprised that Github Pages did well in scaling up in response to the traffic. There was no slowness or downtime on the site. Good to know that just because you’re using open-source software and free tools that you’re not penalised.</p>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
+<p>My next effort will be to dive into the deployment side of these finetuned LLMs along with some of the low-hanging fruit mentioned above.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>llms</category>
+  <category>miniproject</category>
+  <category>finetuning</category>
+  <category>isafpr</category>
+  <category>evaluation</category>
+  <category>nlp</category>
+  <guid>https://mlops.systems/posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html</guid>
+  <pubDate>Sat, 06 Jul 2024 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/isafpr-hackernews.png" medium="image" type="image/png" height="115" width="144"/>
+</item>
 <item>
   <title>My finetuned models beat OpenAI’s GPT-4</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6048,37 +6123,6 @@ terraform apply -var-file="my_vals.tfvars"</code></pre>
   <guid>https://mlops.systems/posts/2023-05-14-mu123-complete-maths.html</guid>
   <pubDate>Sat, 13 May 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/finishing-mu123.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Exponents and Logarithms: a MU123 review</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-05-02-logarithms-exponents-mu123.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I just finished a unit of my Open University Maths degree that’s all about exponents and logarithms (unit 13 of MU123). This is the penultimate unit and these final units are where the difficulty has started to stack up for me.</p>
-<p>The 2020 COVID pandemic was when all of us had lots of exposure to the idea and reality of exponential curves. In fact, it seemed early on like the people who really understood what exponential growth can do were the most worried. Cancer’s another thing where something that keeps on doubling or increasing can cause real havoc when it compounds. The book talks a bit about Moore’s law, though I recall watching <a href="https://youtu.be/zX4ZNfvw1cw">a talk at JuliaCon in 2018 where Sophie Wilson spoke</a> about all the ways where we may be edging up at various physical realities these days that might slow things down.</p>
-<p>Logarithms were the other big part of the module, and these were fascinating to work with. I had familiarity with the idea of them, mainly just as a button on a calculator, but it was really interesting to start to play around with all the ways they could be useful. Prior to the widespread availability of calculators they were the de facto way of doing big calculations, since using something like logarithm tables or a slide rule would give you a practically useful approximation of your answer in a way that didn’t require you to do complicated calculations in your head.</p>
-<p>I got hold of both an old copy of a book of logarithm tables as well as a slide rule — old tech ftw — and look forward to becoming more familiar with them once the unit has come to an end in a few weeks.</p>
-<p>The previous unit (trigonometry) touched on working with radians and (doing some exercises) it was immediately clear why someone would want to use radians instead of degrees as the unit when working with a certain kind of problem. Similarly, for this exponents &amp; logarithms unit, we came across <em>e</em>, Euler’s number, and had some exposure to how there were quite a few places where it made sense to work with <em>e</em> as the base of our logarithms instead of base 10. I really enjoy these parts of mathematics, where abstract concepts or things that people come up with allow us to manipulate ideas and symbols and objects that in turn allow us to solve problems, or think about things in new ways. In many ways these are the things I enjoy the most while studying the course materials.</p>
-<p>We came up on a few places where we were asked to prove something using various identities that we’d previously explored. For example, we prove that for any base <em>b</em> and any positive numbers <em>x</em> and <em>y</em>, that:</p>
-<p><img src="https://latex.codecogs.com/png.latex?%5Clog_b%20x%20-%20%5Clog_b%20y%20=%20%5Clog_b(%5Cfrac%7Bx%7D%7By%7D)"></p>
-<p>We’re not given a great deal of guidance on this task aside from an analogous example. I know the idea of ‘proof’ is a big thing in higher-level mathematics so I’m looking forward to getting a bit more experience with this.</p>
-<p>As with most of the previous units, the bigger picture is somewhat elusive. I know a lot more about exponents and logarithms than I knew a few weeks ago, but I’m still unsure of how it connects to everything else around it. I’m hoping that comes with time, but in the meanwhile I’m trying to write these blogposts to at least take a step back and think through those bigger connections.</p>
-<p>In the end, logarithms and exponents are another trick, another tool in the box, and another example of how mental models or abstractions can allow for other new thoughts to be had. We end up using some of the index laws that we learned a few months back to allow us to manipulate these new symbols. Manipulating symbols allows us to either simplify things (so we can think at a different level) or move further into something more complex (so we can see what’s going on, through whatever lens we’ve brought to look through).</p>
-<p>As a project and as a path to be explored, it’s exciting to take these steps even if sometimes you just have to trust that everything will come together in the end. Next up: “Mathematics Everywhere”, the final unit which is all about practical applications using the things we’ve learned earlier in the module, with a serving of abstract mathematics thrown in for good measure!</p>
-
-
-
- ]]></description>
-  <category>mathematics</category>
-  <category>mu123</category>
-  <category>q31</category>
-  <guid>https://mlops.systems/posts/2023-05-02-logarithms-exponents-mu123.html</guid>
-  <pubDate>Mon, 01 May 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/dancing-symbols.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
