@@ -12,7 +12,7 @@ description: "I was on the front page of Hacker News for my two last blog posts 
 layout: post
 title: "All the things I learned while trending on Hacker News"
 toc: true
-image: 
+image: 'images/isafpr-hackernews.png'
 include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
