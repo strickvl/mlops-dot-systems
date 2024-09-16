@@ -5,8 +5,6 @@ on:
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened, closed]
-  schedule:
-  - cron: '00 23 * * 0'
 jobs:
   build:
     name: calibreapp/image-actions
