@@ -2435,13 +2435,12 @@
 </section>
 
  ]]></description>
-  <category>llm</category>
+  <category>llms</category>
   <category>finetuning</category>
   <category>isafpr</category>
   <category>afghanistan</category>
   <category>datasets</category>
   <category>evaluation</category>
-  <category>llms</category>
   <category>miniproject</category>
   <guid>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</guid>
   <pubDate>Mon, 24 Jun 2024 22:00:00 GMT</pubDate>
@@ -4926,7 +4925,7 @@ without incident.&nbsp; No shots were fired and no one was injured.
   <category>datalabelling</category>
   <category>datasets</category>
   <category>nlp</category>
-  <category>llm</category>
+  <category>llms</category>
   <category>isafpr</category>
   <guid>https://mlops.systems/posts/2024-04-01-publishing-afghanwire-dataset.html</guid>
   <pubDate>Sun, 31 Mar 2024 22:00:00 GMT</pubDate>
@@ -5180,7 +5179,7 @@ output "test_space_sdk" {
   <category>datalabelling</category>
   <category>datasets</category>
   <category>nlp</category>
-  <category>llm</category>
+  <category>llms</category>
   <guid>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</guid>
   <pubDate>Sat, 23 Mar 2024 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/midjourney-afghanistan-dataset.png" medium="image" type="image/png" height="144" width="144"/>
@@ -5336,7 +5335,7 @@ rm /tmp/mathsprompt_backup.tar</code></pre>
 
  ]]></description>
   <category>openai</category>
-  <category>llm</category>
+  <category>llms</category>
   <category>mathematics</category>
   <category>rust</category>
   <category>mu123</category>
