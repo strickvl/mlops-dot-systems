@@ -2,7 +2,7 @@
 author: Alex Strick van Linschoten
 categories:
   - openai
-  - llm
+  - llms
   - mathematics
   - rust
   - mu123

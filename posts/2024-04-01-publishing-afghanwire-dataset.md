@@ -6,7 +6,7 @@ categories:
   - datalabelling
   - datasets
   - nlp
-  - llm
+  - llms
   - isafpr
 date: "2024-04-01"
 description: "I'm publishing a unique new dataset of Afghan newspaper and magazine articles from the 2006-2009 period. This collection of over 7990 articles were originally translated from Dari and Pashto and published by Afghanwire, a media monitoring organisation that I co-founded and ran in Kabul at the time."

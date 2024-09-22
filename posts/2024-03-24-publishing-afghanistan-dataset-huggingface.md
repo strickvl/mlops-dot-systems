@@ -6,7 +6,7 @@ categories:
   - datalabelling
   - datasets
   - nlp
-  - llm
+  - llms
 date: "2024-03-24"
 description: "I published a dataset from my previous work as a researcher in Afghanistan. It consists of press releases about military operations as well as full annotations showcasing information extracted from those press releases. It has value as a historical artifact but potentially could be used as an LLM evaluation task as well."
 layout: post

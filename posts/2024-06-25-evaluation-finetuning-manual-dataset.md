@@ -1,13 +1,12 @@
 ---
 author: Alex Strick van Linschoten
 categories:
-  - llm
+  - llms
   - finetuning
   - isafpr
   - afghanistan
   - datasets
   - evaluation
-  - llms
   - miniproject
 date: "2024-06-25"
 description: "I summarise the kinds of evaluations that are needed for a structured data generation task."
