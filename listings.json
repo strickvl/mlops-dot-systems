@@ -1,9 +1,14 @@
 [
   {
+    "listing": "/til.html",
+    "items": [
+      "/til/2024-09-16-what-is-the-rust-prelude.html"
+    ]
+  },
+  {
     "listing": "/index.html",
     "items": [
       "/posts/saba.html",
-      "/posts/2024-09-16-what-is-the-rust-prelude.html",
       "/posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html",
       "/posts/2024-07-01-full-finetuned-model-evaluation.html",
       "/posts/2024-06-25-evaluation-finetuning-manual-dataset.html",

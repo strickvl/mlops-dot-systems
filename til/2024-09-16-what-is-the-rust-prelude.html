@@ -6,10 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Alex Strick">
-<meta name="dcterms.date" content="2022-11-15">
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2024-09-16">
+<meta name="description" content="A quick post on what the ‘prelude’ is and why it exists.">
 
-<title>Alex Strick van Linschoten - Creating a Blog Post using a Jupyter Notebook</title>
+<title>Alex Strick van Linschoten - What is the Rust prelude?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -88,22 +89,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -126,18 +127,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Alex Strick van Linschoten - Creating a Blog Post using a Jupyter Notebook">
-<meta property="og:image" content="https://mlops.systems/posts/blupus_detection/gradcam.png">
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - What is the Rust prelude?">
+<meta property="og:description" content="A quick post on what the 'prelude' is and why it exists.">
 <meta property="og:site-name" content="Alex Strick van Linschoten">
-<meta property="og:image:height" content="1074">
-<meta property="og:image:width" content="800">
-<meta name="twitter:title" content="Alex Strick van Linschoten - Creating a Blog Post using a Jupyter Notebook">
-<meta name="twitter:image" content="https://mlops.systems/posts/blupus_detection/gradcam.png">
+<meta name="twitter:title" content="Alex Strick van Linschoten - What is the Rust prelude?">
+<meta name="twitter:description" content="A quick post on what the 'prelude' is and why it exists.">
 <meta name="twitter:creator" content="@strickvl">
-<meta name="twitter:image-height" content="1074">
-<meta name="twitter:image-width" content="800">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -147,7 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Alex Strick van Linschoten</span>
     </a>
   </div>
@@ -157,11 +154,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../til.html">
+    <a class="nav-link" href="../til.html">
  <span class="menu-text">TIL</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html">
+    <a class="nav-link" href="../about.html">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -191,55 +188,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Creating a Blog Post using a Jupyter Notebook</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">blogging</div>
-                <div class="quarto-category">quarto</div>
-                <div class="quarto-category">jupyter</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">November 15, 2022</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">What is the Rust prelude?</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">rust</div>
+    <div class="quarto-category">learning</div>
+    <div class="quarto-category">TIL</div>
+  </div>
+  </div>
 
-
-
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">+</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>2</code></pre>
+<div>
+  <div class="description">
+    A quick post on what the ‘prelude’ is and why it exists.
+  </div>
 </div>
-</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 16, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>I’m studying Rust these days on the side and one thing that I keep hearing and seeing is the idea of the ‘prelude’. I thought I’d write a quick blog to cement exactly what’s going on here.</p>
+<p>At a very high level, the prelude is a bunch of functions, methods and other things that are automatically available to you when you start working on your project without you having to manually or explicitly import them. As <a href="https://doc.rust-lang.org/std/prelude/">the Rust docs</a> state:</p>
+<blockquote class="blockquote">
+<p>“The prelude is the list of things that Rust automatically imports into every Rust program. It’s kept as small as possible, and is focused on things, particularly traits, which are used in almost every single Rust program.”</p>
+</blockquote>
+<p>I thought maybe a good example of this is the classic ‘Hello, World!’ starter when you create a new project using <code>cargo new ...</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">"Hello, World!"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So here we have <code>println!</code> which is actually a macro, and from what I read this is <em>not</em> part of the prelude, though it is available to us by default.</p>
+<p>A better / actual list of some things that are made available would include some types like <code>Option</code>, <code>Result</code>, <code>String</code> and <code>Vec</code>, as well as some traits like <code>Copy</code>, <code>Clone</code>, <code>Eq</code> and so on. For a full list, refer to <a href="https://doc.rust-lang.org/std/prelude/#prelude-contents">the official prelude contents</a> as listed in the docs. Note that there are several versions (2015, 2018, 2021 etc) of the prelude. My understanding is that each successive version only adds new things that are exported by default. If that wasn’t the case, then I’m guessing it would be hard to provide those solid backwards-compatibility guarantees.</p>
+<p>So basically, there are some symbols or imports that were deemed to be used so often that they decided not to force you to have to import them explicitly every time you want to get started writing code.</p>
 
 
 
@@ -376,6 +382,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 
