@@ -3,6 +3,7 @@ author: Alex Strick van Linschoten
 categories:
   - rust
   - learning
+  - TIL
 date: "2024-09-16"
 description: "A quick post on what the 'prelude' is and why it exists."
 layout: post
@@ -32,4 +33,6 @@ So here we have `println!` which is actually a macro, and from what I read this 
 
 A better / actual list of some things that are made available would include some types like `Option`, `Result`, `String` and `Vec`, as well as some traits like `Copy`, `Clone`, `Eq` and so on. For a full list, refer to [the official prelude contents](https://doc.rust-lang.org/std/prelude/#prelude-contents) as listed in the docs. Note that there are several versions (2015, 2018, 2021 etc) of the prelude. My understanding is that each successive version only adds new things that are exported by default. If that wasn't the case, then I'm guessing it would be hard to provide those solid backwards-compatibility guarantees.
 
-So basically, there are some symbols or imports that were deemed to be used so often that they decided not to force you to have to import them explicitly every time you want to get started writing code.
+So basically, there are some symbols or imports that were deemed to be used so
+often that they decided not to force you to have to import them explicitly every
+time you want to get started writing code.

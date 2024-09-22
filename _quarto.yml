@@ -9,7 +9,10 @@ website:
     creator: "@strickvl"
   navbar:
     right:
-      - about.qmd
+      - text: "TIL"
+        file: til.qmd
+      - text: "About"
+        file: about.qmd
       - icon: github
         href: https://github.com/strickvl
       - icon: mastodon

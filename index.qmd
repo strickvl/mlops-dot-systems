@@ -1,10 +1,10 @@
 ---
-title: "MLOps.systems"
+title: "MLOps.systems Blog"
 listing:
   contents: posts
   sort: "date desc"
   type: default
-  categories: true
+  categories: cloud
   sort-ui: false
   filter-ui: false
   feed: true
