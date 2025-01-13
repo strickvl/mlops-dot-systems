@@ -10,7 +10,58 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 11 Jan 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 12 Jan 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Assembling the Prompt: Notes on ‘Prompt Engineering for LLMs’ ch 6</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-01-13-assembling-the-prompt:-notes-on-prompt-engineering-for-llms-ch-6.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Chapter 6 of “Prompt Engineering for LLMs” is devoted to how to structure the prompt and compose its various elements. We first learn about the different kinds of ‘documents’ that we can mimic with our prompts, then think about how to pick which pieces of context to include, and then think through how we might compose all of this together.</p>
+<p><img src="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" class="img-fluid"></p>
+<p>There’s a great figure to give you an idea of ‘the anatomy of a well-constructed prompt’ early on. The introduction is where you introduce the task, then you have the ‘valley of meh’ (which the LLM can struggle to recall or obey) and finally you have the refocusing and restatement of the task.</p>
+<p>There are two key tips at this point:</p>
+<ul>
+<li>the closer a piece of information is to the end of the prompt, the more impact it has on the model</li>
+<li>the model often struggles with the information stuffed in the middle of the prompt</li>
+</ul>
+<p>So craft your prompts accordingly!</p>
+<p>A prompt plus the resulting completion is defined as a ‘document’ in this book, and there are various templates that you can follow: an ‘advice conversation’, an ‘analytic report’ (often formatted with Markdown headers), and a ‘structured document’.</p>
+<p>We learn that analytic report-type documents seem to offer a lighter ‘cognitive load’ for an LLM since it doesn’t have to handle the intricacies of social interaction that it would in the case of an advice conversation. 🤔</p>
+<p>Two other tips or possible things to include in the analytic report-style document:</p>
+<ul>
+<li>a table of contents at the beginning to set the scene</li>
+<li>a scratchpad or notebook section for the model to ‘think’ in</li>
+</ul>
+<p>I haven’t had much use of either of these myself but I can see why they’d be powerful.</p>
+<p>Structured documents can be really powerful, especially when the model has been trained to expect certain kinds of structure (be it JSON or XML or YAML etc). Also TIL that apparently OpenAI’s models are very strong when dealing with JSON as inputs.</p>
+<p>The context to be inserted into the prompt (usually dynamically depending on use case or needs) can be large or small depending on what is available in terms of context window or latency requirements. There are different strategies to how to select what goes in.</p>
+<p>I was curious about the idea of what they call ‘elastic snippets’, i.e.&nbsp;dynamic decisions that get taken as to what makes it way into the prompt depending on how much space is available etc.</p>
+<p>And even then you have to decide about the:</p>
+<ul>
+<li>position (which order do all the elements appear in the prompt)</li>
+<li>importance (how much will dropping this element from the prompt effect the response)</li>
+<li>dependency (if you include one element, can you drop another and vice versa…)</li>
+</ul>
+<p>In the end, you have a kind of optimisation problem: given a theoretical unlimited potential prompt length, how to combine all the elements together to get the most value given the space limitations that the LLM dictates.</p>
+<p><img src="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/additive-greedy.png" class="img-fluid"></p>
+<p>And then what strategy do you use to get rid of elements that your prompt budget cannot afford; we learn about the ‘additive greedy approach’ and the ‘subtractive greedy approach’, all the while bearing in mind that these are all just basic prototypes to play around with.</p>
+<p><img src="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/subtr-greedy.png" class="img-fluid"></p>
+<p>The next chapter is all about the completion and how to make sure we receive meaningful and accurate responses from our LLM!</p>
+
+
+
+ ]]></description>
+  <category>llm</category>
+  <category>prompt-engineering</category>
+  <category>books-i-read</category>
+  <guid>https://mlops.systems/posts/2025-01-13-assembling-the-prompt:-notes-on-prompt-engineering-for-llms-ch-6.html</guid>
+  <pubDate>Sun, 12 Jan 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" medium="image" type="image/png" height="119" width="144"/>
+</item>
 <item>
   <title>Prompt Content: Notes on ‘Prompt Engineering for LLMs’ ch 5</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6151,50 +6202,6 @@ terraform apply -var-file="my_vals.tfvars"</code></pre>
   <guid>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</guid>
   <pubDate>Sun, 28 May 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/awesome-balochi-small.png" medium="image" type="image/png" height="132" width="144"/>
-</item>
-<item>
-  <title>The Risks of Language Models in Minority Languages</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-05-22-balochi-language-model-harms.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>In thinking about my work to put together a language model or some utilities relating to the Balochi language, I thought a fair bit about whether I should even start. At a very high level, we can look at general risks that comes from language models, as highlighted in <a href="https://dl.acm.org/doi/pdf/10.1145/3531146.3533088">the 2022 Deepmind paper</a> entitled “Taxonomy of Risks posed by Language Models” which covers</p>
-<blockquote class="blockquote">
-<p>“six risk areas: I. Discrimination, Hate speech and Exclusion, II. Information Hazards, III. Misinformation Harms, IV. Malicious Uses, V. Human-Computer Interaction Harms, and VI. Environmental and Socioeconomic harms” (p.214)</p>
-</blockquote>
-<p>I’ll leave you to check out the paper if you wish. I can think of a number of specific risks and harms that could be connected to developing a language model for the Balochi language, most of which relate to state actors and their desire for more power and better surveillance capabilities.</p>
-<p>The communities speaking Balochi have historically and currently been subject to more monitoring than many, either from central governments in Iran and Pakistan or from European and American intelligence agencies, for a variety of reasons. In this context, language models can potentially fit into a system which is geared towards maximising power and influence among the powerful, enhancing state control and surveillance. In the longer term — and I haven’t seen to much by the way of research on this, but I’m going to take a leap — I can imagine that language models could well have the effect of creating a kind of linguistic monoculture. (Just think about the kind(s) of language that you read in default responses from ChatGPT and extrapolate from there.)</p>
-<p>My assumption is that large, well-funded intelligence agencies already have strong capabilities for Balochi. Indeed, Balochi is <a href="https://www.cia.gov/careers/language-opportunities/foreign-language-incentive-program/">one of the language specified as qualifying</a> for the CIA’s ‘Foreign Language Incentive Program’ that offers cash bonuses for new and current employees with foreign language skills in Balochi. There is almost certainly a team working on — among other things — language models that allows for the better monitoring of communications in the Balochi language. (To get more of a sense of what such models and capabilities might be used for, check out <a href="https://consciousdigital.org/the-nsas-large-language-models/">this article</a>.)</p>
-<p>What, then, are the positive uses of such technology? In no particular order, some things I thought of in the context of Balochi:</p>
-<ul>
-<li>disaster monitoring and outreach following natural disasters (NGOs and aid organisations (or even governments) are sometimes blocked by their inability to effectively communicate with those they are trying to help)</li>
-<li>translation and accessibility (heavily caveated, but there is the potential for positive action here as long as technology is responsibly deployed)</li>
-<li>equal access to technologies</li>
-<li>aggregation and summarisation tools</li>
-<li>language models as cultural artifacts (in a context of an incremental cultural erasure)</li>
-<li>enhancing the state of the art when it comes to training language models for low resource languages has the potential to support efforts being undertaken for many other languages</li>
-<li>work done to enhance datasets and the raw materials for language models might potentially be incorporated in bigger efforts by larger organisations (who generally would never think or make the effort to cover a language like Balochi)</li>
-<li>local and/or community ownership of the models (vs that of corporations)</li>
-<li>a way to reverse linguistic monoculture</li>
-<li>probably better results and performance for their specialised tasks than generalised mega-large language models</li>
-<li>(and finally, a cause close to my heart) language models can facilitate language learning by those learning it as a second language.</li>
-</ul>
-<p>I don’t believe that there’s a simple calculation than can be made, putting potential harm on one side and potential benefits on the other. Given that these models surely do already exist or are being developed by state actors, I also don’t think it’s a matter of staying away from the area entirely. That said, I do think it’s important to have these questions present when doing this kind of work as well as to involve and work within the context of pre-existing community efforts. I’ll turn to other resources and previous work in my next post to give a sense of what low-hanging fruit remains for the Balochi language.</p>
-
-
-
- ]]></description>
-  <category>balochi</category>
-  <category>nlp</category>
-  <category>balochi-language-model</category>
-  <category>deep-learning</category>
-  <category>ethics</category>
-  <guid>https://mlops.systems/posts/2023-05-22-balochi-language-model-harms.html</guid>
-  <pubDate>Sun, 21 May 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/balochi-llm-harms.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
