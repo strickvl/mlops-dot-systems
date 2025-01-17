@@ -10,7 +10,156 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 12 Jan 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 16 Jan 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Final notes on ‘Prompt Engineering for LLMs’</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Here are the final notes from ‘<a href="https://app.thestorygraph.com/books/8535f61d-1dcd-4610-9cd9-6bcaf774f392">Prompt Engineering for LLMs</a>’, a book I’ve been reading over the past few days (and enjoying!).</p>
+<section id="chapter-10-evaluating-llm-applications" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-10-evaluating-llm-applications">Chapter 10: Evaluating LLM Applications</h2>
+<p>The chapter begins with an interesting anecdote about GitHub Copilot - the first code written in their repository was the evaluation harness, highlighting the importance of testing in LLM applications. The authors, who worked on the project from its inception, emphasise this as a best practice.</p>
+<section id="evaluation-framework" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-framework">Evaluation Framework</h3>
+<p>When evaluating LLM applications, three main aspects can be assessed:</p>
+<ul>
+<li>The model itself - its capabilities and limitations</li>
+<li>Individual interactions with the model (prompts and responses)</li>
+<li>The integration of multiple interactions within the broader application</li>
+</ul>
+<p>As a general rule of thumb, you should always track and record:</p>
+<ul>
+<li>Latency</li>
+<li>Token consumption statistics</li>
+<li>Overall system approach metrics</li>
+</ul>
+</section>
+<section id="offline-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="offline-evaluation">Offline Evaluation</h3>
+<section id="example-suites" class="level4">
+<h4 class="anchored" data-anchor-id="example-suites">Example Suites</h4>
+<p>The foundation of offline evaluation is creating example suites - collections of 10-20 (minimum) input-output pairs that serve as test cases. These should be accompanied by scripts that apply your application’s logic to each example and compare the results.</p>
+<p>Example sources come from three main areas:</p>
+<ul>
+<li>Existing examples from your project</li>
+<li>Real-time user data collection</li>
+<li>Synthetic creation</li>
+</ul>
+<p>When using synthetic data, it’s crucial to use different LLMs for creation versus application/judging to avoid potential biases.</p>
+</section>
+<section id="evaluation-approaches" class="level4">
+<h4 class="anchored" data-anchor-id="evaluation-approaches">Evaluation Approaches</h4>
+<ol type="1">
+<li><strong>Gold Standard Matching</strong></li>
+</ol>
+<ul>
+<li>Can be exact or partial matching</li>
+<li>Particularly effective for binary decisions or multi-label classification</li>
+<li>Can leverage “logical frogs” tricks from Chapter 7 to assess model confidence</li>
+<li>Free-form text requires more creative evaluation approaches</li>
+<li>Tool-use scenarios may be easier to evaluate, especially in agent-driven applications</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Functional Testing</strong></li>
+</ol>
+<ul>
+<li>A step up from unit tests but not full end-to-end testing</li>
+<li>Focuses on testing specific system components</li>
+</ul>
+<ol start="3" type="1">
+<li><strong>LLM as Judge</strong></li>
+</ol>
+<ul>
+<li>Currently trendy but requires careful implementation</li>
+<li>Should include human verification loop, preferably multiple humans</li>
+<li>Key insight: Always frame the evaluation as if the LLM is grading someone else’s work, never its own</li>
+<li>Recommendations for quantitative measures:
+<ul>
+<li>Use gradient and multi-aspect coverage (MA)</li>
+<li>Implement 1-5 scales with specific criteria</li>
+<li>Place all instructions and criteria before the content to be evaluated</li>
+<li>Break down “Goldilocks” questions (was it just right?) into separate questions about whether it was enough and whether it was too much</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="online-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="online-evaluation">Online Evaluation</h3>
+<p>The chapter transitions to discussing why we need online testing despite having offline evaluation capabilities. While offline testing is safer and more scalable, real human interactions are unpredictable and require live testing.</p>
+<p>Key points about online evaluation:</p>
+<ul>
+<li>AB testing is the standard approach</li>
+<li>Existing solutions include Optimizely, VWO Consulting, and AB Tasty</li>
+<li>Applications need to support running in two modes (A and B)</li>
+<li>Consider rollout timing and users on older versions</li>
+</ul>
+<p>Five main metrics for online evaluation (from most to least straightforward):</p>
+<ol type="1">
+<li>Direct feedback (user responses to suggestions)</li>
+<li>Functional correctness</li>
+<li>User acceptance (following suggestions)</li>
+<li>Achieved impact (user benefit)</li>
+<li>Incidental metrics (surrounding measurements)</li>
+</ol>
+<p>Direct feedback data is particularly valuable as it can later be used for model fine-tuning. It’s recommended to track more incidental metrics rather than fewer, both for quality indicators and investigating unexpected changes.</p>
+</section>
+</section>
+<section id="chapter-11-looking-ahead" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-11-looking-ahead">Chapter 11: Looking Ahead</h2>
+<p>The final chapter covers several forward-looking topics:</p>
+<ul>
+<li>Multimodality in LLMs</li>
+<li>User experience and interface considerations</li>
+<li>Published artifacts from Anthropic</li>
+<li>Risks and rewards of custom interfaces</li>
+<li>Trends in model intelligence, cost, and speed</li>
+</ul>
+<section id="book-level-conclusions" class="level3">
+<h3 class="anchored" data-anchor-id="book-level-conclusions">Book-Level Conclusions</h3>
+<p>Two main lessons emerge from the book:</p>
+<ol type="1">
+<li><strong>LLMs as Text Completion Engines</strong>
+<ul>
+<li>They fundamentally mimic training data</li>
+<li>Success comes from aligning prompts with training data patterns</li>
+<li>Particularly relevant for completion models</li>
+</ul></li>
+<li><strong>Empathy with LLMs</strong></li>
+</ol>
+<ul>
+<li>Think of them as mechanical friends with internet knowledge</li>
+<li>Five key insights:
+<ul>
+<li>LLMs are easily distracted; keep prompts focused</li>
+<li>If humans can’t understand the prompt, LLMs will struggle</li>
+<li>Provide clear instructions and examples</li>
+<li>Include all necessary information (LLMs aren’t psychic)</li>
+<li>Give space for “thinking out loud” (chain of thought)</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="personal-reflections" class="level2">
+<h2 class="anchored" data-anchor-id="personal-reflections">Personal Reflections</h2>
+<p>The book, while not revolutionary, provides valuable insights and is a recommended read at 250 pages. It can be completed in about 10-11 days. The heavy focus on completion models versus chat models is interesting, likely due to the authors’ experience with GitHub Copilot. While some points were novel, none were completely mind-blowing. The book’s emphasis on completion models versus chat models is both intriguing and occasionally confusing, though this perspective is understandable given the authors’ background with GitHub Copilot.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>llm</category>
+  <category>prompt-engineering</category>
+  <category>books-i-read</category>
+  <category>evaluation</category>
+  <guid>https://mlops.systems/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</guid>
+  <pubDate>Thu, 16 Jan 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/chapter-10-prompt-eng.png" medium="image" type="image/png" height="98" width="144"/>
+</item>
 <item>
   <title>Assembling the Prompt: Notes on ‘Prompt Engineering for LLMs’ ch 6</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6167,41 +6316,6 @@ terraform apply -var-file="my_vals.tfvars"</code></pre>
   <guid>https://mlops.systems/posts/2023-06-01-why-tokenisation.html</guid>
   <pubDate>Wed, 31 May 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/tokenisation/cover-small.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Building a Balochi Language Dataset for NLP Applications</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I’m working on building out some language models and utilities for the Balochi language. (Read <a href="https://mlops.systems/#category=balochi">previous posts</a> in this series for the full context.) Even though there are some 8-10 million estimated speakers, it certainly falls into the category of being a ‘low-resource’ language. Many (most?) things that you’d take for granted when working with English-language models are either non-existent or bare bones for Balochi.</p>
-<p>The experimentation phase of a project like this rewards a fast iteration speed, so I’m looking for ways to keep moving forward. I don’t need to spend days running a single experiment to validate my ideas; I’m sufficiently green that small datasets and these frequent tweaks to what I’m doing will hopefully reward me.</p>
-<p>I did an initial survey of materials and resources that already exist, collecting a mix of more general language materials alongside some prior work that exists in the NLP space for Balochi. In particular, there are some small datasets on GitHub as well as some more targeted projects for Named Entity Recognition (NER). Since it’s my repository, I also threw in some blog posts that inspired me to get started in the first place (from <a href="https://ljvmiranda921.github.io">Lj Miranda</a> and <a href="https://kurianbenoy.com/blog.html#category=malayalamtextmodels">Kurian Benoy</a>, among others).</p>
-<p><img src="https://mlops.systems/posts/images/awesome-balochi.png" title="A screenshot of the `awesome-balochi-nlp` repository I put together." class="img-fluid"></p>
-<p><a href="https://github.com/strickvl/awesome-balochi-nlp">The <code>awesome-balochi-nlp</code> repository</a> is my first effort at gathering a list of resources. I’ll be keeping it up to date as I continue.</p>
-<p>For my work gathering the dataset together, I had my eyes on three potential sources of authentic Balochi texts:</p>
-<ul>
-<li>Sina Ahmadi’s <a href="https://github.com/sinaahmadi/PersoArabicLID">PersoArabicLID project</a> (language classification for a series of low-resource languages that share a common script) includes (labelled) datasets as part of the repository</li>
-<li><a href="http://baask.com/archive/">Baask.com</a> — a website that’s been posting Balochi content for around a decade and that I had come across in the past</li>
-<li><a href="https://kissah.org">Kissah.org</a> — a project by <a href="https://github.com/JunaidQadirB">Junaid Qadir</a> that collates Balochi stories</li>
-</ul>
-<p>The mechanics of gathering the texts from these sources was straightforward (a few scripts using <code>beautifulsoup</code> and the <code>requests</code> module), but I’ll admit that the experience felt a little uncomfortable. The content from these sources may technically be ‘fair game’ but I’ll admit to a certain queasiness about how easy it was to put together my promo-dataset of Balochi language in an evening. (For that reason, I’m probably not going to open up the dataset until I’ve figured out a way to do that properly; the ideal end-goal is to have datasets like this available publicly on the Huggingface Hub and so on.)</p>
-<p>So now I have a dataset containing some 2.6 million words of Balochi text. This feels like it’s enough to do some experiments at least, and we’ll see how far I get with it. The first order of business is to look into tokenisation or the process of splitting those texts up into pieces that can be used and processed by the machine learning machinery. Surprise surprise: there aren’t any pre-existing tokenisers for Balochi and while there are language-agnostic tokenisation processes I want to understand the tradeoffs around the different algorithms and approaches they take.</p>
-
-
-
- ]]></description>
-  <category>balochi</category>
-  <category>nlp</category>
-  <category>balochi-language-model</category>
-  <category>ethics</category>
-  <category>datasets</category>
-  <guid>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</guid>
-  <pubDate>Sun, 28 May 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/awesome-balochi-small.png" medium="image" type="image/png" height="132" width="144"/>
 </item>
 </channel>
 </rss>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-01-17">
+<meta name="description" content="Detailed notes covering Chapters 10 and 11 of ‘Prompt Engineering for LLMs’ by Berryman and Ziegler, focusing on LLM application evaluation and future trends. Chapter 10 explores comprehensive testing frameworks including offline example suites and online AB testing, while Chapter 11 discusses multimodality, user interfaces, and core principles for effective prompt engineering. Includes personal insights on the book’s emphasis on completion models versus chat models.">
+
+<title>Alex Strick van Linschoten - Final notes on ‘Prompt Engineering for LLMs’</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Final notes on ‘Prompt Engineering for LLMs’">
+<meta property="og:description" content="Detailed notes covering Chapters 10 and 11 of 'Prompt Engineering for LLMs' by Berryman and Ziegler, focusing on LLM application evaluation and future trends.">
+<meta property="og:image" content="https://mlops.systems/posts/images/chapter-10-prompt-eng.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="980">
+<meta property="og:image:width" content="1438">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Final notes on ‘Prompt Engineering for LLMs’">
+<meta name="twitter:description" content="Detailed notes covering Chapters 10 and 11 of 'Prompt Engineering for LLMs' by Berryman and Ziegler, focusing on LLM application evaluation and future trends.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/chapter-10-prompt-eng.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="980">
+<meta name="twitter:image-width" content="1438">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Final notes on ‘Prompt Engineering for LLMs’</h1>
+                  <div>
+        <div class="description">
+          Detailed notes covering Chapters 10 and 11 of ‘Prompt Engineering for LLMs’ by Berryman and Ziegler, focusing on LLM application evaluation and future trends. Chapter 10 explores comprehensive testing frameworks including offline example suites and online AB testing, while Chapter 11 discusses multimodality, user interfaces, and core principles for effective prompt engineering. Includes personal insights on the book’s emphasis on completion models versus chat models.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">llm</div>
+                <div class="quarto-category">prompt-engineering</div>
+                <div class="quarto-category">books-i-read</div>
+                <div class="quarto-category">evaluation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chapter-10-evaluating-llm-applications" id="toc-chapter-10-evaluating-llm-applications" class="nav-link active" data-scroll-target="#chapter-10-evaluating-llm-applications">Chapter 10: Evaluating LLM Applications</a>
+  <ul class="collapse">
+  <li><a href="#evaluation-framework" id="toc-evaluation-framework" class="nav-link" data-scroll-target="#evaluation-framework">Evaluation Framework</a></li>
+  <li><a href="#offline-evaluation" id="toc-offline-evaluation" class="nav-link" data-scroll-target="#offline-evaluation">Offline Evaluation</a></li>
+  <li><a href="#online-evaluation" id="toc-online-evaluation" class="nav-link" data-scroll-target="#online-evaluation">Online Evaluation</a></li>
+  </ul></li>
+  <li><a href="#chapter-11-looking-ahead" id="toc-chapter-11-looking-ahead" class="nav-link" data-scroll-target="#chapter-11-looking-ahead">Chapter 11: Looking Ahead</a>
+  <ul class="collapse">
+  <li><a href="#book-level-conclusions" id="toc-book-level-conclusions" class="nav-link" data-scroll-target="#book-level-conclusions">Book-Level Conclusions</a></li>
+  </ul></li>
+  <li><a href="#personal-reflections" id="toc-personal-reflections" class="nav-link" data-scroll-target="#personal-reflections">Personal Reflections</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Here are the final notes from ‘<a href="https://app.thestorygraph.com/books/8535f61d-1dcd-4610-9cd9-6bcaf774f392">Prompt Engineering for LLMs</a>’, a book I’ve been reading over the past few days (and enjoying!).</p>
+<section id="chapter-10-evaluating-llm-applications" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-10-evaluating-llm-applications">Chapter 10: Evaluating LLM Applications</h2>
+<p>The chapter begins with an interesting anecdote about GitHub Copilot - the first code written in their repository was the evaluation harness, highlighting the importance of testing in LLM applications. The authors, who worked on the project from its inception, emphasise this as a best practice.</p>
+<section id="evaluation-framework" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-framework">Evaluation Framework</h3>
+<p>When evaluating LLM applications, three main aspects can be assessed:</p>
+<ul>
+<li>The model itself - its capabilities and limitations</li>
+<li>Individual interactions with the model (prompts and responses)</li>
+<li>The integration of multiple interactions within the broader application</li>
+</ul>
+<p>As a general rule of thumb, you should always track and record:</p>
+<ul>
+<li>Latency</li>
+<li>Token consumption statistics</li>
+<li>Overall system approach metrics</li>
+</ul>
+</section>
+<section id="offline-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="offline-evaluation">Offline Evaluation</h3>
+<section id="example-suites" class="level4">
+<h4 class="anchored" data-anchor-id="example-suites">Example Suites</h4>
+<p>The foundation of offline evaluation is creating example suites - collections of 10-20 (minimum) input-output pairs that serve as test cases. These should be accompanied by scripts that apply your application’s logic to each example and compare the results.</p>
+<p>Example sources come from three main areas:</p>
+<ul>
+<li>Existing examples from your project</li>
+<li>Real-time user data collection</li>
+<li>Synthetic creation</li>
+</ul>
+<p>When using synthetic data, it’s crucial to use different LLMs for creation versus application/judging to avoid potential biases.</p>
+</section>
+<section id="evaluation-approaches" class="level4">
+<h4 class="anchored" data-anchor-id="evaluation-approaches">Evaluation Approaches</h4>
+<ol type="1">
+<li><strong>Gold Standard Matching</strong></li>
+</ol>
+<ul>
+<li>Can be exact or partial matching</li>
+<li>Particularly effective for binary decisions or multi-label classification</li>
+<li>Can leverage “logical frogs” tricks from Chapter 7 to assess model confidence</li>
+<li>Free-form text requires more creative evaluation approaches</li>
+<li>Tool-use scenarios may be easier to evaluate, especially in agent-driven applications</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Functional Testing</strong></li>
+</ol>
+<ul>
+<li>A step up from unit tests but not full end-to-end testing</li>
+<li>Focuses on testing specific system components</li>
+</ul>
+<ol start="3" type="1">
+<li><strong>LLM as Judge</strong></li>
+</ol>
+<ul>
+<li>Currently trendy but requires careful implementation</li>
+<li>Should include human verification loop, preferably multiple humans</li>
+<li>Key insight: Always frame the evaluation as if the LLM is grading someone else’s work, never its own</li>
+<li>Recommendations for quantitative measures:
+<ul>
+<li>Use gradient and multi-aspect coverage (MA)</li>
+<li>Implement 1-5 scales with specific criteria</li>
+<li>Place all instructions and criteria before the content to be evaluated</li>
+<li>Break down “Goldilocks” questions (was it just right?) into separate questions about whether it was enough and whether it was too much</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="online-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="online-evaluation">Online Evaluation</h3>
+<p>The chapter transitions to discussing why we need online testing despite having offline evaluation capabilities. While offline testing is safer and more scalable, real human interactions are unpredictable and require live testing.</p>
+<p>Key points about online evaluation:</p>
+<ul>
+<li>AB testing is the standard approach</li>
+<li>Existing solutions include Optimizely, VWO Consulting, and AB Tasty</li>
+<li>Applications need to support running in two modes (A and B)</li>
+<li>Consider rollout timing and users on older versions</li>
+</ul>
+<p>Five main metrics for online evaluation (from most to least straightforward):</p>
+<ol type="1">
+<li>Direct feedback (user responses to suggestions)</li>
+<li>Functional correctness</li>
+<li>User acceptance (following suggestions)</li>
+<li>Achieved impact (user benefit)</li>
+<li>Incidental metrics (surrounding measurements)</li>
+</ol>
+<p>Direct feedback data is particularly valuable as it can later be used for model fine-tuning. It’s recommended to track more incidental metrics rather than fewer, both for quality indicators and investigating unexpected changes.</p>
+</section>
+</section>
+<section id="chapter-11-looking-ahead" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-11-looking-ahead">Chapter 11: Looking Ahead</h2>
+<p>The final chapter covers several forward-looking topics:</p>
+<ul>
+<li>Multimodality in LLMs</li>
+<li>User experience and interface considerations</li>
+<li>Published artifacts from Anthropic</li>
+<li>Risks and rewards of custom interfaces</li>
+<li>Trends in model intelligence, cost, and speed</li>
+</ul>
+<section id="book-level-conclusions" class="level3">
+<h3 class="anchored" data-anchor-id="book-level-conclusions">Book-Level Conclusions</h3>
+<p>Two main lessons emerge from the book:</p>
+<ol type="1">
+<li><strong>LLMs as Text Completion Engines</strong>
+<ul>
+<li>They fundamentally mimic training data</li>
+<li>Success comes from aligning prompts with training data patterns</li>
+<li>Particularly relevant for completion models</li>
+</ul></li>
+<li><strong>Empathy with LLMs</strong></li>
+</ol>
+<ul>
+<li>Think of them as mechanical friends with internet knowledge</li>
+<li>Five key insights:
+<ul>
+<li>LLMs are easily distracted; keep prompts focused</li>
+<li>If humans can’t understand the prompt, LLMs will struggle</li>
+<li>Provide clear instructions and examples</li>
+<li>Include all necessary information (LLMs aren’t psychic)</li>
+<li>Give space for “thinking out loud” (chain of thought)</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="personal-reflections" class="level2">
+<h2 class="anchored" data-anchor-id="personal-reflections">Personal Reflections</h2>
+<p>The book, while not revolutionary, provides valuable insights and is a recommended read at 250 pages. It can be completed in about 10-11 days. The heavy focus on completion models versus chat models is interesting, likely due to the authors’ experience with GitHub Copilot. While some points were novel, none were completely mind-blowing. The book’s emphasis on completion models versus chat models is both intriguing and occasionally confusing, though this perspective is understandable given the authors’ background with GitHub Copilot.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
