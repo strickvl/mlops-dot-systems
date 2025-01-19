@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-01-19">
+<meta name="description" content="A detailed analysis of Chapter 1 from Chip Huyen’s ‘AI Engineering’ book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms. Includes insights from a study group discussion on enterprise adoption challenges and emerging evaluation techniques.">
+
+<title>Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 1">
+<meta property="og:description" content="A detailed analysis of Chapter 1 from Chip Huyen's 'AI Engineering' book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms.">
+<meta property="og:image" content="https://mlops.systems/posts/images/aieng1-small.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="593">
+<meta property="og:image:width" content="848">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 1">
+<meta name="twitter:description" content="A detailed analysis of Chapter 1 from Chip Huyen's 'AI Engineering' book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/aieng1-small.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="593">
+<meta name="twitter:image-width" content="848">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Notes on ‘AI Engineering’ (Chip Huyen) chapter 1</h1>
+                  <div>
+        <div class="description">
+          A detailed analysis of Chapter 1 from Chip Huyen’s ‘AI Engineering’ book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms. Includes insights from a study group discussion on enterprise adoption challenges and emerging evaluation techniques.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">books-i-read</div>
+                <div class="quarto-category">llm</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">finetuning</div>
+                <div class="quarto-category">prompt-engineering</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 19, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chapter-1-notes" id="toc-chapter-1-notes" class="nav-link active" data-scroll-target="#chapter-1-notes">Chapter 1 Notes</a>
+  <ul class="collapse">
+  <li><a href="#foundation-models-and-language-models" id="toc-foundation-models-and-language-models" class="nav-link" data-scroll-target="#foundation-models-and-language-models">Foundation Models and Language Models</a></li>
+  </ul></li>
+  <li><a href="#ai-engineering-vs-traditional-approaches" id="toc-ai-engineering-vs-traditional-approaches" class="nav-link" data-scroll-target="#ai-engineering-vs-traditional-approaches">AI Engineering vs Traditional Approaches</a></li>
+  <li><a href="#the-ai-engineering-stack" id="toc-the-ai-engineering-stack" class="nav-link" data-scroll-target="#the-ai-engineering-stack">The AI Engineering Stack</a>
+  <ul class="collapse">
+  <li><a href="#application-development-layer" id="toc-application-development-layer" class="nav-link" data-scroll-target="#application-development-layer">1. Application Development Layer</a></li>
+  <li><a href="#model-development-layer" id="toc-model-development-layer" class="nav-link" data-scroll-target="#model-development-layer">2. Model Development Layer</a></li>
+  <li><a href="#infrastructure-layer" id="toc-infrastructure-layer" class="nav-link" data-scroll-target="#infrastructure-layer">3. Infrastructure Layer</a></li>
+  </ul></li>
+  <li><a href="#planning-ai-applications" id="toc-planning-ai-applications" class="nav-link" data-scroll-target="#planning-ai-applications">Planning AI Applications</a></li>
+  <li><a href="#evaluation-and-implementation-challenges" id="toc-evaluation-and-implementation-challenges" class="nav-link" data-scroll-target="#evaluation-and-implementation-challenges">Evaluation and Implementation Challenges</a></li>
+  <li><a href="#data-and-model-adaptation" id="toc-data-and-model-adaptation" class="nav-link" data-scroll-target="#data-and-model-adaptation">Data and Model Adaptation</a></li>
+  <li><a href="#modern-development-paradigm" id="toc-modern-development-paradigm" class="nav-link" data-scroll-target="#modern-development-paradigm">Modern Development Paradigm</a></li>
+  <li><a href="#discussion-summary" id="toc-discussion-summary" class="nav-link" data-scroll-target="#discussion-summary">Discussion summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Had the first of <a href="https://www.meetup.com/delft-fast-ai-study-group/">a series of meet-ups</a> I’m organising in which we discuss Chip Huyen’s new book. My notes from reading the chapter follow this, and then I’ll try to summarise what we discussed in the group.</p>
+<p>At a high-level, I <em>really</em> enjoyed the final part of the chapter where she got into how she was thinking about the practice of ‘AI Engineering’ and how it differs from ML engineering. Also the use of the term ‘model adaptation’ was an interesting way of encompassing all the different things that engineers are doing to get the LLM to better follow their instructions.</p>
+<section id="chapter-1-notes" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-1-notes">Chapter 1 Notes</h2>
+<p>The chapter begins by establishing AI Engineering as the preferred term over alternatives like GenAI Ops or LLM Ops. This preference stems from a fundamental shift in the field, where application development has become increasingly central to working with AI models. The “ops” suffix inadequately captures the breadth and nature of work involved in modern AI applications.</p>
+<section id="foundation-models-and-language-models" class="level3">
+<h3 class="anchored" data-anchor-id="foundation-models-and-language-models">Foundation Models and Language Models</h3>
+<p>The text provides important technical context about different types of language models. A notable comparison shows that while Mistral 7B has a vocabulary of 32,000 tokens, GPT-4 possesses a much larger vocabulary of 100,256 tokens, highlighting the significant variation in model capabilities and design choices.</p>
+<p>Two primary categories of language models are discussed:</p>
+<ol type="1">
+<li>Masked Language Models (like BERT and modern BERT variants)</li>
+<li>Autoregressive Language Models (like those used in ChatGPT)</li>
+</ol>
+<p>The term “foundation model” carries dual significance, referring both to these models’ fundamental importance and their adaptability for various applications. This terminology also marks an important transition from task-specific models to general-purpose ones, especially relevant in the era of multimodal capabilities.</p>
+</section>
+</section>
+<section id="ai-engineering-vs-traditional-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="ai-engineering-vs-traditional-approaches">AI Engineering vs Traditional Approaches</h2>
+<p>AI Engineering differs substantially from ML Engineering, warranting its distinct terminology. The key distinction lies in its focus on adapting and evaluating models rather than building them from scratch. Model adaptation techniques fall into two main categories:</p>
+<ol type="1">
+<li>Prompt-based techniques (prompt engineering) - These methods adapt models without updating weights</li>
+<li>Fine-tuning techniques - These approaches require weight updates</li>
+</ol>
+<p>The shift from ML Engineering to AI Engineering brings new challenges, particularly in handling open-ended outputs. While this flexibility enables a broader range of applications, it also introduces significant complexity in evaluation and implementation of guardrails.</p>
+</section>
+<section id="the-ai-engineering-stack" class="level2">
+<h2 class="anchored" data-anchor-id="the-ai-engineering-stack">The AI Engineering Stack</h2>
+<p>The framework consists of three distinct layers:</p>
+<section id="application-development-layer" class="level3">
+<h3 class="anchored" data-anchor-id="application-development-layer">1. Application Development Layer</h3>
+<ul>
+<li>Focuses on prompt crafting and context provision</li>
+<li>Requires rigorous evaluation methods</li>
+<li>Emphasizes interface design and user experience</li>
+<li>Primary responsibilities include evaluation, prompt engineering, and AI interface development</li>
+</ul>
+</section>
+<section id="model-development-layer" class="level3">
+<h3 class="anchored" data-anchor-id="model-development-layer">2. Model Development Layer</h3>
+<ul>
+<li>Provides tooling for model development</li>
+<li>Includes frameworks for training, functioning, and inference optimisation</li>
+<li>Requires systematic evaluation approaches</li>
+</ul>
+</section>
+<section id="infrastructure-layer" class="level3">
+<h3 class="anchored" data-anchor-id="infrastructure-layer">3. Infrastructure Layer</h3>
+<ul>
+<li>Handles model serving</li>
+<li>Manages underlying technical requirements</li>
+</ul>
+</section>
+</section>
+<section id="planning-ai-applications" class="level2">
+<h2 class="anchored" data-anchor-id="planning-ai-applications">Planning AI Applications</h2>
+<p>The chapter outlines a modern approach to AI application development that differs significantly from traditional ML projects. Rather than beginning with data collection and model training, AI engineering often starts with product development, leveraging existing models. This approach allows teams to validate product concepts before investing heavily in data and model development.</p>
+<p>Key planning considerations include:</p>
+<ul>
+<li>Setting appropriate expectations</li>
+<li>Determining user exposure levels</li>
+<li>Deciding between internal and external deployment</li>
+<li>Understanding maintenance requirements</li>
+</ul>
+<p>A notable insight is the “80/20” development pattern: while reaching 80% functionality can be relatively quick, achieving the final 20% often requires equal or greater effort than the initial development phase.</p>
+</section>
+<section id="evaluation-and-implementation-challenges" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-and-implementation-challenges">Evaluation and Implementation Challenges</h2>
+<p>The chapter emphasises that working with AI models presents unique evaluation challenges compared to traditional ML systems. This complexity stems from:</p>
+<ul>
+<li>The open-ended nature of outputs</li>
+<li>Difficulty in implementing strict guardrails</li>
+<li>Challenges in type enforcement</li>
+<li>The need for comprehensive evaluation strategies</li>
+</ul>
+</section>
+<section id="data-and-model-adaptation" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-model-adaptation">Data and Model Adaptation</h2>
+<p>The text discusses how data set engineering and inference optimisation, while still relevant, take on different forms in AI engineering compared to traditional ML engineering. The focus shifts from raw data collection and processing to effective model adaptation and deployment strategies.</p>
+</section>
+<section id="modern-development-paradigm" class="level2">
+<h2 class="anchored" data-anchor-id="modern-development-paradigm">Modern Development Paradigm</h2>
+<p>A significant paradigm shift is highlighted in the development approach: unlike traditional ML engineering, which typically begins with data collection and model training, AI engineering enables a product-first approach. This allows teams to validate concepts using existing models before committing to extensive data collection or model development efforts.</p>
+</section>
+<section id="discussion-summary" class="level2">
+<h2 class="anchored" data-anchor-id="discussion-summary">Discussion summary</h2>
+<p>The conversation started with a bit on how AI Engineering represents an interesting shift in the software engineering landscape, potentially opening new career paths for traditional software engineers. While developers may not need deep mathematical knowledge of derivatives and linear algebra upfront, there’s a growing recognition that understanding how AI systems behave - their constraints and opportunities - is becoming increasingly valuable.</p>
+<p>A key tension emerged in the discussion around enterprise adoption. While there’s significant enthusiasm around AI applications, particularly on social media where developers showcase apps with substantial user bases, enterprise companies often maintain their traditional team structures. This creates an interesting dynamic where companies might maintain their existing ML engineering teams while simultaneously forming new “tiger teams” focused on generative AI initiatives, leading to organisational friction.</p>
+<p>The group discussed how while it’s now possible for software engineers to quickly build AI applications by calling APIs, they often hit limitations that require deeper understanding. This raises questions about whether the “shallow” approach of purely application-level development is sustainable, or whether engineers will inevitably need to develop deeper technical knowledge around model behaviour, evaluation, and fine-tuning.</p>
+<p>A particularly notable challenge discussed was handling the non-deterministic nature of AI systems. Traditional software engineering practices, like unit testing, don’t translate cleanly to systems where outputs can vary even with temperature set to zero. This highlights how AI Engineering requires new patterns and practices beyond traditional software engineering approaches.</p>
+<p>The discussion also touched on evaluation techniques, including the use of log probabilities to understand model confidence and improve prompts. This represents an emerging area where traditional ML evaluation meets new challenges in assessing large language model outputs.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
