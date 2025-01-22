@@ -10,7 +10,190 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Mon, 20 Jan 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 21 Jan 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 4</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>This chapter represents a crucial bridge between academic research and production engineering practice in AI system evaluation. What sets it apart is the Chip’s very balanced perspective - neither succumbing to the prevalent hype in the field nor becoming overly academic. Instead, she melds together practical insights with theoretical foundations, creating a useful framework for evaluation that acknowledges both technical and ethical considerations.</p>
+<section id="introduction-and-context" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-and-context">Introduction and Context</h2>
+<blockquote class="blockquote">
+<p><strong>Key Insight</strong>: The author’s approach demonstrates that effective AI system evaluation requires a synthesis of academic rigour and practical engineering concerns, much like how traditional software engineering evolved to balance theoretical computer science with practical development methodologies.</p>
+</blockquote>
+<p>The chapter is structured in three main parts, each building upon the previous to create a complete picture of AI system evaluation:</p>
+<ol type="1">
+<li>Evaluation criteria fundamentals</li>
+<li>Model selection and benchmark navigation</li>
+<li>Practical pipeline implementation</li>
+</ol>
+</section>
+<section id="part-1-evaluation-criteria---a-deep-dive" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-evaluation-criteria---a-deep-dive">Part 1: Evaluation Criteria - A Deep Dive</h2>
+<section id="the-evolution-of-evaluation-driven-development" class="level3">
+<h3 class="anchored" data-anchor-id="the-evolution-of-evaluation-driven-development">The Evolution of Evaluation-Driven Development</h3>
+<p>The author introduces <strong>evaluation-driven development</strong> (EDD), a methodological evolution that adapts the principles of test-driven development to the unique challenges of AI systems.</p>
+<blockquote class="blockquote">
+<p><strong>Evaluation-Driven Development</strong>: A methodology where AI application development begins with explicit evaluation criteria, similar to how test-driven development starts with test cases. However, EDD encompasses a broader range of metrics and considerations specific to AI systems.</p>
+</blockquote>
+<p>The fundamental principle here is that AI applications require a more nuanced and multifaceted approach to evaluation than traditional software. Where traditional software might have binary pass/fail criteria, AI systems often operate in a spectrum of performance across multiple dimensions.</p>
+</section>
+<section id="the-four-pillars-of-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="the-four-pillars-of-evaluation">The Four Pillars of Evaluation</h3>
+<section id="domain-specific-capability" class="level4">
+<h4 class="anchored" data-anchor-id="domain-specific-capability">1. Domain-Specific Capability</h4>
+<p>The author presents domain-specific capability evaluation as the foundational layer of AI system assessment. This approach is particularly innovative in its use of <strong>multiple choice evaluation techniques</strong> - a method that bridges the gap between human-interpretable results and machine performance metrics.</p>
+<p><em>For example</em>, when evaluating code generation capabilities, presenting a model with multiple implementations where only one is functionally correct serves as both a test and a teaching tool. This mimics how human experts often evaluate junior developers’ understanding of coding patterns and best practices.</p>
+</section>
+<section id="generation-capability" class="level4">
+<h4 class="anchored" data-anchor-id="generation-capability">2. Generation Capability</h4>
+<p>The section on generation capability draws parallels with the historical development of Natural Language Generation (NLG) in computational linguistics. This historical context provides valuable insights into how we can approach modern language model evaluation.</p>
+<p>The author breaks down factual consistency into two crucial dimensions:</p>
+<blockquote class="blockquote">
+<p><strong>Local Factual Consistency</strong>: The internal coherence of generated content and its alignment with the immediate context of the prompt. This is analogous to maintaining logical consistency within a single conversation or document.</p>
+<p><strong>Global Factual Consistency</strong>: The accuracy of generated content when compared against established knowledge and facts. This represents the model’s ability to maintain truthfulness in a broader context.</p>
+</blockquote>
+<p>The discussion of hallucination detection is particularly noteworthy, presenting three complementary approaches:</p>
+<ol type="1">
+<li><strong>Basic Prompting</strong>: Direct detection through carefully crafted prompts</li>
+<li><strong>Self-Verification</strong>: A novel approach using internal consistency checks across multiple generations</li>
+<li><strong>Knowledge-Augmented Verification</strong>: Advanced techniques like Google DeepMind’s SAFE paper (search augmented factuality evaluator)</li>
+</ol>
+<p>The knowledge-augmented verification system represents a fascinating approach to fact-checking that mirrors how human experts verify information:</p>
+<ul>
+<li>It breaks down complex statements into atomic claims</li>
+<li>Each claim is independently verified through search</li>
+<li>The results are synthesised into a final accuracy assessment</li>
+</ul>
+<p>Seems pricey, though :)</p>
+</section>
+<section id="instruction-following-capability" class="level4">
+<h4 class="anchored" data-anchor-id="instruction-following-capability">3. Instruction Following Capability</h4>
+<p>The author makes a crucial observation about the bidirectional nature of instruction following evaluation. Poor performance might indicate either model limitations or instruction ambiguity - a distinction that’s often overlooked in practice.</p>
+<blockquote class="blockquote">
+<p><strong>Instruction-Performance Paradox</strong>: The quality of instruction following cannot be evaluated in isolation from the quality of the instructions themselves, creating a circular dependency that must be carefully managed in evaluation design.</p>
+</blockquote>
+<p>The solution proposed is the development of custom benchmarks that specifically target your application’s requirements. This approach ensures that your evaluation criteria align perfectly with your practical needs rather than relying solely on generic benchmarks.</p>
+</section>
+<section id="cost-and-latency-considerations" class="level4">
+<h4 class="anchored" data-anchor-id="cost-and-latency-considerations">4. Cost and Latency Considerations</h4>
+<p>The author introduces the concept of <strong>Pareto optimization</strong> in the context of AI system evaluation, demonstrating how different performance metrics often involve trade-offs that must be carefully balanced.</p>
+<blockquote class="blockquote">
+<p><strong>Pareto Optimization</strong>: A multi-objective optimization approach where improvements in one metric cannot be achieved without degrading another, leading to a set of optimal trade-off solutions rather than a single optimal point.</p>
+</blockquote>
+</section>
+</section>
+</section>
+<section id="part-2-model-selection---a-strategic-approach" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-model-selection---a-strategic-approach">Part 2: Model Selection - A Strategic Approach</h2>
+<section id="the-four-step-evaluation-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="the-four-step-evaluation-workflow">The Four-Step Evaluation Workflow</h3>
+<p>The author presents a sophisticated workflow that combines both quantitative and qualitative factors in model selection. This approach is particularly valuable because it acknowledges the complexity of real-world deployment while providing a structured path forward.</p>
+<ol type="1">
+<li><p><strong>Initial Filtering</strong> The first step involves filtering based on hard constraints, which might include:</p>
+<ul>
+<li>Deployment requirements (on-premise vs.&nbsp;cloud)</li>
+<li>Security and privacy considerations</li>
+<li>Licensing restrictions</li>
+<li>Resource constraints</li>
+</ul></li>
+<li><p><strong>Public Information Assessment</strong> This stage involves a systematic review of:</p>
+<ul>
+<li>Benchmark performances across relevant tasks</li>
+<li>Leaderboard rankings with context</li>
+<li>Published latency and cost metrics</li>
+</ul>
+<p>The author emphasises the importance of looking beyond raw numbers to understand the context and limitations of public benchmarks.</p></li>
+<li><p><strong>Experimental Evaluation</strong> This phase involves hands-on testing with your specific use case, considering:</p>
+<ul>
+<li>Custom evaluation metrics</li>
+<li>Integration requirements</li>
+<li>Real-world performance characteristics</li>
+</ul></li>
+<li><p><strong>Continuous Monitoring</strong> The final step acknowledges that evaluation is an ongoing process, not a one-time event. This involves:</p>
+<ul>
+<li>Regular performance monitoring</li>
+<li>Failure detection and analysis</li>
+<li>Feedback collection and incorporation</li>
+<li>Continuous improvement cycles</li>
+</ul></li>
+</ol>
+</section>
+<section id="the-build-vs.-buy-decision-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="the-build-vs.-buy-decision-matrix">The Build vs.&nbsp;Buy Decision Matrix</h3>
+<p>The author provides an analysis of the build vs.&nbsp;buy decision, going beyond simple cost comparisons to consider factors like:</p>
+<blockquote class="blockquote">
+<p><strong>Total Cost of Ownership (TCO)</strong>: The complete cost picture including: - Direct costs (API fees, computing resources) - Indirect costs (engineering time, maintenance) - Opportunity costs (time to market, feature development) - Risk costs (security, reliability, vendor lock-in)</p>
+</blockquote>
+<p>This section particularly shines in its discussion of the often-overlooked aspects of model deployment, such as the hidden costs of maintaining self-hosted models and the true value of vendor-provided updates and improvements.</p>
+</section>
+</section>
+<section id="part-3-building-evaluation-pipelines---practical-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-building-evaluation-pipelines---practical-implementation">Part 3: Building Evaluation Pipelines - Practical Implementation</h2>
+<section id="system-component-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="system-component-evaluation">System Component Evaluation</h3>
+<p>The author advocates for a <strong>dual-track evaluation approach</strong>:</p>
+<ol type="1">
+<li>End-to-end system evaluation</li>
+<li>Component-level assessment</li>
+</ol>
+<p>This approach allows organisations to:</p>
+<ul>
+<li>Identify bottlenecks and failure points</li>
+<li>Understand component interactions</li>
+<li>Make targeted improvements</li>
+<li>Maintain system reliability during updates</li>
+</ul>
+</section>
+<section id="creating-effective-evaluation-guidelines" class="level3">
+<h3 class="anchored" data-anchor-id="creating-effective-evaluation-guidelines">Creating Effective Evaluation Guidelines</h3>
+<p>The author emphasises the importance of creating clear, actionable evaluation guidelines that bridge technical and business metrics. This section introduces the concept of <strong>metric alignment</strong> - ensuring that technical evaluation metrics directly correspond to business value.</p>
+<blockquote class="blockquote">
+<p><strong>Metric Alignment</strong>: The process of mapping technical performance metrics to business outcomes, creating a clear connection between model improvements and business value.</p>
+</blockquote>
+</section>
+<section id="data-management-and-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="data-management-and-sampling">Data Management and Sampling</h3>
+<p>Chip provides valuable insights into data management for evaluation, including:</p>
+<blockquote class="blockquote">
+<p><strong>Data Slicing</strong>: The strategic separation of evaluation data into meaningful subsets to: - Identify performance variations across different use cases - Detect potential biases - Enable targeted improvement efforts - Avoid Simpson’s paradox in performance analysis</p>
+</blockquote>
+<p>The discussion of sample size is particularly practical, providing concrete guidelines based on statistical confidence levels and desired detection thresholds. The author cites OpenAI’s research suggesting that sample sizes between 100 and 1,000 are typically sufficient for most evaluation needs, depending on the required confidence level.</p>
+<p><img src="https://mlops.systems/posts/images/chip4-sample-number.png" class="img-fluid"></p>
+</section>
+<section id="meta-evaluation-evaluating-your-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="meta-evaluation-evaluating-your-evaluation">Meta-Evaluation: Evaluating Your Evaluation</h3>
+<p>The chapter concludes with a crucial discussion of meta-evaluation - the process of assessing and improving your evaluation pipeline itself. This includes considerations of:</p>
+<ul>
+<li>Signal quality and reliability</li>
+<li>Metric correlation and redundancy</li>
+<li>Resource utilisation and efficiency</li>
+<li>Integration with development workflows</li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The author concludes around the inherent limitations of AI system evaluation: no single metric or method can fully capture the complexity of these systems. However, this acknowledgment leads to a constructive approach: combining multiple evaluation methods, maintaining awareness of their limitations, and continuously iterating based on real-world feedback.</p>
+<p>This chapter ultimately provides a solid framework for AI system evaluation that is both theoretically sound and practically applicable. It serves as a valuable resource for organisations working to implement effective evaluation strategies for their AI systems, while maintaining a clear-eyed view of both the possibilities and limitations of current evaluation methods.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>books-i-read</category>
+  <category>llm</category>
+  <category>llms</category>
+  <category>evaluation</category>
+  <guid>https://mlops.systems/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</guid>
+  <pubDate>Tue, 21 Jan 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/chip-ch4.png" medium="image" type="image/png" height="85" width="144"/>
+</item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 3</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6099,43 +6282,6 @@ terraform apply -var-file="my_vals.tfvars"</code></pre>
   <guid>https://mlops.systems/posts/2023-06-22-input-variables-terraform.html</guid>
   <pubDate>Wed, 21 Jun 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/inputs-outputs-terraform.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Tokenizer Links</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-06-04-token-odds-and-sods.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This is just a collection of various links and observations that I came across while learning about tokenisation during the past week that would otherwise have no other home.</p>
-<ul>
-<li><a href="https://www.nltk.org">NLTK</a> and <a href="http://cltk.org">CLTK</a> are two other NLP libraries from the pre-deep learning era. CLTK has a focus on classical languages, but my sense of NLTK is that it maybe hasn’t kept pace as much and I don’t plan to delve too deeply into where it is strong.</li>
-<li>via <a href="https://github.com/ARBML">the ArabML community</a> there is <a href="https://github.com/ARBML/tkseem">tkseem</a> which offers tokenization for the Arabic language. Ideas to learn from in there, probably.</li>
-<li>I watched <a href="https://www.youtube.com/watch?v=X7c0T7uwtkM">this video</a> from the MARI conference (about which more soon), and there was a really good example of the importance of tokenization mentioned (pointing to <a href="https://aclanthology.org/2021.mrl-1.8/">this paper</a>) for negation in Swahili</li>
-<li><a href="https://blog.yenniejun.com/p/all-languages-are-not-created-tokenized">Some interesting observations</a> on how certain languages are disproportionately lossy when it comes to their text-to-token ratio. Feels like a useful area to research more.</li>
-<li>Apparently <a href="https://developer.nvidia.com/blog/run-state-of-the-art-nlp-workloads-at-scale-with-rapids-huggingface-and-dask/">GPU tokenization is a thing</a>, too, though unclear whether this is just NVIDIA making something so that they can sell more GPUs. (i.e.&nbsp;what is the need for this, given how fast it already runs)</li>
-</ul>
-<section id="more-questions" class="level2">
-<h2 class="anchored" data-anchor-id="more-questions">More Questions</h2>
-<p>And some other questions (beyond my larger questions around how to evaluate tokenisers):</p>
-<ul>
-<li>How useful (or not) is data augmentation when it comes to training a tokenizer?</li>
-<li>Is a list of dictionary words useful for training a tokenizer?</li>
-</ul>
-
-
-</section>
-
- ]]></description>
-  <category>nlp</category>
-  <category>balochi-language-model</category>
-  <category>tokenisation</category>
-  <category>links</category>
-  <guid>https://mlops.systems/posts/2023-06-04-token-odds-and-sods.html</guid>
-  <pubDate>Sat, 03 Jun 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/link-odds-sods.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-01-22">
+<meta name="description" content="A comprehensive guide to AI system evaluation, synthesising Chapter 4 of Chip Huyen’s ‘AI Engineering.’ These notes detail practical frameworks for assessing AI models, covering evaluation criteria, model selection strategies, and pipeline implementation, while maintaining a balanced perspective between academic rigour and real-world application needs.">
+
+<title>Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 4">
+<meta property="og:description" content="A comprehensive guide to AI system evaluation, synthesising Chapter 4 of Chip Huyen's 'AI Engineering.">
+<meta property="og:image" content="https://mlops.systems/posts/images/chip-ch4.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="812">
+<meta property="og:image:width" content="1372">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 4">
+<meta name="twitter:description" content="A comprehensive guide to AI system evaluation, synthesising Chapter 4 of Chip Huyen's 'AI Engineering.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/chip-ch4.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="812">
+<meta name="twitter:image-width" content="1372">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Notes on ‘AI Engineering’ (Chip Huyen) chapter 4</h1>
+                  <div>
+        <div class="description">
+          A comprehensive guide to AI system evaluation, synthesising Chapter 4 of Chip Huyen’s ‘AI Engineering.’ These notes detail practical frameworks for assessing AI models, covering evaluation criteria, model selection strategies, and pipeline implementation, while maintaining a balanced perspective between academic rigour and real-world application needs.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">books-i-read</div>
+                <div class="quarto-category">llm</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">evaluation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 22, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-and-context" id="toc-introduction-and-context" class="nav-link active" data-scroll-target="#introduction-and-context">Introduction and Context</a></li>
+  <li><a href="#part-1-evaluation-criteria---a-deep-dive" id="toc-part-1-evaluation-criteria---a-deep-dive" class="nav-link" data-scroll-target="#part-1-evaluation-criteria---a-deep-dive">Part 1: Evaluation Criteria - A Deep Dive</a>
+  <ul class="collapse">
+  <li><a href="#the-evolution-of-evaluation-driven-development" id="toc-the-evolution-of-evaluation-driven-development" class="nav-link" data-scroll-target="#the-evolution-of-evaluation-driven-development">The Evolution of Evaluation-Driven Development</a></li>
+  <li><a href="#the-four-pillars-of-evaluation" id="toc-the-four-pillars-of-evaluation" class="nav-link" data-scroll-target="#the-four-pillars-of-evaluation">The Four Pillars of Evaluation</a></li>
+  </ul></li>
+  <li><a href="#part-2-model-selection---a-strategic-approach" id="toc-part-2-model-selection---a-strategic-approach" class="nav-link" data-scroll-target="#part-2-model-selection---a-strategic-approach">Part 2: Model Selection - A Strategic Approach</a>
+  <ul class="collapse">
+  <li><a href="#the-four-step-evaluation-workflow" id="toc-the-four-step-evaluation-workflow" class="nav-link" data-scroll-target="#the-four-step-evaluation-workflow">The Four-Step Evaluation Workflow</a></li>
+  <li><a href="#the-build-vs.-buy-decision-matrix" id="toc-the-build-vs.-buy-decision-matrix" class="nav-link" data-scroll-target="#the-build-vs.-buy-decision-matrix">The Build vs.&nbsp;Buy Decision Matrix</a></li>
+  </ul></li>
+  <li><a href="#part-3-building-evaluation-pipelines---practical-implementation" id="toc-part-3-building-evaluation-pipelines---practical-implementation" class="nav-link" data-scroll-target="#part-3-building-evaluation-pipelines---practical-implementation">Part 3: Building Evaluation Pipelines - Practical Implementation</a>
+  <ul class="collapse">
+  <li><a href="#system-component-evaluation" id="toc-system-component-evaluation" class="nav-link" data-scroll-target="#system-component-evaluation">System Component Evaluation</a></li>
+  <li><a href="#creating-effective-evaluation-guidelines" id="toc-creating-effective-evaluation-guidelines" class="nav-link" data-scroll-target="#creating-effective-evaluation-guidelines">Creating Effective Evaluation Guidelines</a></li>
+  <li><a href="#data-management-and-sampling" id="toc-data-management-and-sampling" class="nav-link" data-scroll-target="#data-management-and-sampling">Data Management and Sampling</a></li>
+  <li><a href="#meta-evaluation-evaluating-your-evaluation" id="toc-meta-evaluation-evaluating-your-evaluation" class="nav-link" data-scroll-target="#meta-evaluation-evaluating-your-evaluation">Meta-Evaluation: Evaluating Your Evaluation</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>This chapter represents a crucial bridge between academic research and production engineering practice in AI system evaluation. What sets it apart is the Chip’s very balanced perspective - neither succumbing to the prevalent hype in the field nor becoming overly academic. Instead, she melds together practical insights with theoretical foundations, creating a useful framework for evaluation that acknowledges both technical and ethical considerations.</p>
+<section id="introduction-and-context" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-and-context">Introduction and Context</h2>
+<blockquote class="blockquote">
+<p><strong>Key Insight</strong>: The author’s approach demonstrates that effective AI system evaluation requires a synthesis of academic rigour and practical engineering concerns, much like how traditional software engineering evolved to balance theoretical computer science with practical development methodologies.</p>
+</blockquote>
+<p>The chapter is structured in three main parts, each building upon the previous to create a complete picture of AI system evaluation:</p>
+<ol type="1">
+<li>Evaluation criteria fundamentals</li>
+<li>Model selection and benchmark navigation</li>
+<li>Practical pipeline implementation</li>
+</ol>
+</section>
+<section id="part-1-evaluation-criteria---a-deep-dive" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-evaluation-criteria---a-deep-dive">Part 1: Evaluation Criteria - A Deep Dive</h2>
+<section id="the-evolution-of-evaluation-driven-development" class="level3">
+<h3 class="anchored" data-anchor-id="the-evolution-of-evaluation-driven-development">The Evolution of Evaluation-Driven Development</h3>
+<p>The author introduces <strong>evaluation-driven development</strong> (EDD), a methodological evolution that adapts the principles of test-driven development to the unique challenges of AI systems.</p>
+<blockquote class="blockquote">
+<p><strong>Evaluation-Driven Development</strong>: A methodology where AI application development begins with explicit evaluation criteria, similar to how test-driven development starts with test cases. However, EDD encompasses a broader range of metrics and considerations specific to AI systems.</p>
+</blockquote>
+<p>The fundamental principle here is that AI applications require a more nuanced and multifaceted approach to evaluation than traditional software. Where traditional software might have binary pass/fail criteria, AI systems often operate in a spectrum of performance across multiple dimensions.</p>
+</section>
+<section id="the-four-pillars-of-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="the-four-pillars-of-evaluation">The Four Pillars of Evaluation</h3>
+<section id="domain-specific-capability" class="level4">
+<h4 class="anchored" data-anchor-id="domain-specific-capability">1. Domain-Specific Capability</h4>
+<p>The author presents domain-specific capability evaluation as the foundational layer of AI system assessment. This approach is particularly innovative in its use of <strong>multiple choice evaluation techniques</strong> - a method that bridges the gap between human-interpretable results and machine performance metrics.</p>
+<p><em>For example</em>, when evaluating code generation capabilities, presenting a model with multiple implementations where only one is functionally correct serves as both a test and a teaching tool. This mimics how human experts often evaluate junior developers’ understanding of coding patterns and best practices.</p>
+</section>
+<section id="generation-capability" class="level4">
+<h4 class="anchored" data-anchor-id="generation-capability">2. Generation Capability</h4>
+<p>The section on generation capability draws parallels with the historical development of Natural Language Generation (NLG) in computational linguistics. This historical context provides valuable insights into how we can approach modern language model evaluation.</p>
+<p>The author breaks down factual consistency into two crucial dimensions:</p>
+<blockquote class="blockquote">
+<p><strong>Local Factual Consistency</strong>: The internal coherence of generated content and its alignment with the immediate context of the prompt. This is analogous to maintaining logical consistency within a single conversation or document.</p>
+<p><strong>Global Factual Consistency</strong>: The accuracy of generated content when compared against established knowledge and facts. This represents the model’s ability to maintain truthfulness in a broader context.</p>
+</blockquote>
+<p>The discussion of hallucination detection is particularly noteworthy, presenting three complementary approaches:</p>
+<ol type="1">
+<li><strong>Basic Prompting</strong>: Direct detection through carefully crafted prompts</li>
+<li><strong>Self-Verification</strong>: A novel approach using internal consistency checks across multiple generations</li>
+<li><strong>Knowledge-Augmented Verification</strong>: Advanced techniques like Google DeepMind’s SAFE paper (search augmented factuality evaluator)</li>
+</ol>
+<p>The knowledge-augmented verification system represents a fascinating approach to fact-checking that mirrors how human experts verify information:</p>
+<ul>
+<li>It breaks down complex statements into atomic claims</li>
+<li>Each claim is independently verified through search</li>
+<li>The results are synthesised into a final accuracy assessment</li>
+</ul>
+<p>Seems pricey, though :)</p>
+</section>
+<section id="instruction-following-capability" class="level4">
+<h4 class="anchored" data-anchor-id="instruction-following-capability">3. Instruction Following Capability</h4>
+<p>The author makes a crucial observation about the bidirectional nature of instruction following evaluation. Poor performance might indicate either model limitations or instruction ambiguity - a distinction that’s often overlooked in practice.</p>
+<blockquote class="blockquote">
+<p><strong>Instruction-Performance Paradox</strong>: The quality of instruction following cannot be evaluated in isolation from the quality of the instructions themselves, creating a circular dependency that must be carefully managed in evaluation design.</p>
+</blockquote>
+<p>The solution proposed is the development of custom benchmarks that specifically target your application’s requirements. This approach ensures that your evaluation criteria align perfectly with your practical needs rather than relying solely on generic benchmarks.</p>
+</section>
+<section id="cost-and-latency-considerations" class="level4">
+<h4 class="anchored" data-anchor-id="cost-and-latency-considerations">4. Cost and Latency Considerations</h4>
+<p>The author introduces the concept of <strong>Pareto optimization</strong> in the context of AI system evaluation, demonstrating how different performance metrics often involve trade-offs that must be carefully balanced.</p>
+<blockquote class="blockquote">
+<p><strong>Pareto Optimization</strong>: A multi-objective optimization approach where improvements in one metric cannot be achieved without degrading another, leading to a set of optimal trade-off solutions rather than a single optimal point.</p>
+</blockquote>
+</section>
+</section>
+</section>
+<section id="part-2-model-selection---a-strategic-approach" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-model-selection---a-strategic-approach">Part 2: Model Selection - A Strategic Approach</h2>
+<section id="the-four-step-evaluation-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="the-four-step-evaluation-workflow">The Four-Step Evaluation Workflow</h3>
+<p>The author presents a sophisticated workflow that combines both quantitative and qualitative factors in model selection. This approach is particularly valuable because it acknowledges the complexity of real-world deployment while providing a structured path forward.</p>
+<ol type="1">
+<li><p><strong>Initial Filtering</strong> The first step involves filtering based on hard constraints, which might include:</p>
+<ul>
+<li>Deployment requirements (on-premise vs.&nbsp;cloud)</li>
+<li>Security and privacy considerations</li>
+<li>Licensing restrictions</li>
+<li>Resource constraints</li>
+</ul></li>
+<li><p><strong>Public Information Assessment</strong> This stage involves a systematic review of:</p>
+<ul>
+<li>Benchmark performances across relevant tasks</li>
+<li>Leaderboard rankings with context</li>
+<li>Published latency and cost metrics</li>
+</ul>
+<p>The author emphasises the importance of looking beyond raw numbers to understand the context and limitations of public benchmarks.</p></li>
+<li><p><strong>Experimental Evaluation</strong> This phase involves hands-on testing with your specific use case, considering:</p>
+<ul>
+<li>Custom evaluation metrics</li>
+<li>Integration requirements</li>
+<li>Real-world performance characteristics</li>
+</ul></li>
+<li><p><strong>Continuous Monitoring</strong> The final step acknowledges that evaluation is an ongoing process, not a one-time event. This involves:</p>
+<ul>
+<li>Regular performance monitoring</li>
+<li>Failure detection and analysis</li>
+<li>Feedback collection and incorporation</li>
+<li>Continuous improvement cycles</li>
+</ul></li>
+</ol>
+</section>
+<section id="the-build-vs.-buy-decision-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="the-build-vs.-buy-decision-matrix">The Build vs.&nbsp;Buy Decision Matrix</h3>
+<p>The author provides an analysis of the build vs.&nbsp;buy decision, going beyond simple cost comparisons to consider factors like:</p>
+<blockquote class="blockquote">
+<p><strong>Total Cost of Ownership (TCO)</strong>: The complete cost picture including: - Direct costs (API fees, computing resources) - Indirect costs (engineering time, maintenance) - Opportunity costs (time to market, feature development) - Risk costs (security, reliability, vendor lock-in)</p>
+</blockquote>
+<p>This section particularly shines in its discussion of the often-overlooked aspects of model deployment, such as the hidden costs of maintaining self-hosted models and the true value of vendor-provided updates and improvements.</p>
+</section>
+</section>
+<section id="part-3-building-evaluation-pipelines---practical-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-building-evaluation-pipelines---practical-implementation">Part 3: Building Evaluation Pipelines - Practical Implementation</h2>
+<section id="system-component-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="system-component-evaluation">System Component Evaluation</h3>
+<p>The author advocates for a <strong>dual-track evaluation approach</strong>:</p>
+<ol type="1">
+<li>End-to-end system evaluation</li>
+<li>Component-level assessment</li>
+</ol>
+<p>This approach allows organisations to:</p>
+<ul>
+<li>Identify bottlenecks and failure points</li>
+<li>Understand component interactions</li>
+<li>Make targeted improvements</li>
+<li>Maintain system reliability during updates</li>
+</ul>
+</section>
+<section id="creating-effective-evaluation-guidelines" class="level3">
+<h3 class="anchored" data-anchor-id="creating-effective-evaluation-guidelines">Creating Effective Evaluation Guidelines</h3>
+<p>The author emphasises the importance of creating clear, actionable evaluation guidelines that bridge technical and business metrics. This section introduces the concept of <strong>metric alignment</strong> - ensuring that technical evaluation metrics directly correspond to business value.</p>
+<blockquote class="blockquote">
+<p><strong>Metric Alignment</strong>: The process of mapping technical performance metrics to business outcomes, creating a clear connection between model improvements and business value.</p>
+</blockquote>
+</section>
+<section id="data-management-and-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="data-management-and-sampling">Data Management and Sampling</h3>
+<p>Chip provides valuable insights into data management for evaluation, including:</p>
+<blockquote class="blockquote">
+<p><strong>Data Slicing</strong>: The strategic separation of evaluation data into meaningful subsets to: - Identify performance variations across different use cases - Detect potential biases - Enable targeted improvement efforts - Avoid Simpson’s paradox in performance analysis</p>
+</blockquote>
+<p>The discussion of sample size is particularly practical, providing concrete guidelines based on statistical confidence levels and desired detection thresholds. The author cites OpenAI’s research suggesting that sample sizes between 100 and 1,000 are typically sufficient for most evaluation needs, depending on the required confidence level.</p>
+<p><img src="images/chip4-sample-number.png" class="img-fluid"></p>
+</section>
+<section id="meta-evaluation-evaluating-your-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="meta-evaluation-evaluating-your-evaluation">Meta-Evaluation: Evaluating Your Evaluation</h3>
+<p>The chapter concludes with a crucial discussion of meta-evaluation - the process of assessing and improving your evaluation pipeline itself. This includes considerations of:</p>
+<ul>
+<li>Signal quality and reliability</li>
+<li>Metric correlation and redundancy</li>
+<li>Resource utilisation and efficiency</li>
+<li>Integration with development workflows</li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The author concludes around the inherent limitations of AI system evaluation: no single metric or method can fully capture the complexity of these systems. However, this acknowledgment leads to a constructive approach: combining multiple evaluation methods, maintaining awareness of their limitations, and continuously iterating based on real-world feedback.</p>
+<p>This chapter ultimately provides a solid framework for AI system evaluation that is both theoretically sound and practically applicable. It serves as a valuable resource for organisations working to implement effective evaluation strategies for their AI systems, while maintaining a clear-eyed view of both the possibilities and limitations of current evaluation methods.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
