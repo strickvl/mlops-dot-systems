@@ -10,7 +10,203 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Tue, 21 Jan 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 23 Jan 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 6</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>This chapter was all about RAG and agents. It’s only 50 pages, so clearly there’s only so much of the details she can get into, but it was pretty good nonetheless and there were a few things in here I’d never really read. Also Chip does a good job bringing the RAG story into the story about agents, particularly in terms of how she defines agents. (Note that <a href="https://huyenchip.com/2025/01/07/agents.html">the second half of this chapter</a>, on agents, is available <a href="https://huyenchip.com/2025/01/07/agents.html">on Chip’s blog</a> as a free excerpt!)</p>
+<p>As always, what follows is just my notes on the things that seemed interesting to me (and a high-level overview of the main points of the chapter just for future reference). YMMV!</p>
+<section id="chapter-structure-and-framing" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-structure-and-framing">Chapter Structure and Framing</h2>
+<p>This chapter undertakes the ambitious task of unifying two major paradigms in AI engineering: Retrieval-Augmented Generation (RAG) and Agents. At first glance, combining these topics might seem surprising given their scope and complexity. However, Chip creates a compelling framework that positions both as sophisticated approaches to <em>context construction</em>.</p>
+<p>The unifying thesis presents RAG as a specialised case of the agent pattern, where the retriever functions as a tool at the model’s disposal. Both patterns serve to transcend context limitations and maintain current information, though agents ultimately offer broader capabilities. This framing provides an elegant theoretical bridge between these technologies while acknowledging their distinct characteristics.</p>
+</section>
+<section id="retrieval-augmented-generation-rag" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval-augmented-generation-rag">Retrieval-Augmented Generation (RAG)</h2>
+<section id="core-concepts-and-context-windows" class="level3">
+<h3 class="anchored" data-anchor-id="core-concepts-and-context-windows">Core Concepts and Context Windows</h3>
+<p>The discussion begins with a fundamental examination of RAG’s purpose: enhancing model outputs with query-specific context to produce more grounded and useful results. Chip introduces a fascinating variation on Parkinson’s Law:</p>
+<blockquote class="blockquote">
+<p><strong>Context Expansion Law</strong>: Application context tends to expand to fill the context limits supported by the model.</p>
+</blockquote>
+<p>This observation challenges the common assumption that RAG might become obsolete with infinite context models. Chip argues that larger context windows don’t necessarily solve the fundamental challenges RAG addresses, particularly noting that models often struggle with information buried in the middle of large context windows.</p>
+</section>
+<section id="retrieval-architecture-and-algorithms" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-architecture-and-algorithms">Retrieval Architecture and Algorithms</h3>
+<p>The retrieval architecture discussion introduces two primary paradigms:</p>
+<blockquote class="blockquote">
+<p><strong>Sparse Retrieval</strong>: Term-based approaches that rely on explicit matching of terms between queries and documents. The primary example is the <strong>TFIDF</strong> (Term Frequency-Inverse Document Frequency) algorithm, which evaluates term importance based on frequency patterns.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Dense Retrieval</strong>: Embedding-based approaches that transform text into vector representations, requiring specialised vector databases for storage and sophisticated nearest-neighbour search algorithms for retrieval.</p>
+</blockquote>
+</section>
+<section id="cost-considerations-and-trade-offs" class="level3">
+<h3 class="anchored" data-anchor-id="cost-considerations-and-trade-offs">Cost Considerations and Trade-offs</h3>
+<p>A striking revelation emerges regarding the cost structure of RAG systems: vector database expenses often consume between one-fifth to half of a company’s total model API spending. This cost burden becomes particularly acute for systems requiring frequent embedding updates due to changing data. Chip notes that both vector storage and vector search queries can be surprisingly expensive operations.</p>
+</section>
+<section id="retrieval-optimisation-techniques" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-optimisation-techniques">Retrieval Optimisation Techniques</h3>
+<p><img src="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/chunks-for-chunks.png" class="img-fluid"></p>
+<p>The chapter presents several sophisticated approaches to optimisation:</p>
+<p><strong>Chunking Strategies</strong>: While the section is brief, it addresses the critical trade-offs in how documents are segmented for retrieval.</p>
+<p><strong>Query Rewriting</strong>: A powerful but potentially complex technique that enhances initial queries with contextual information. For example, transforming a query like “how about her?” into “how about Aunt Mabel from the previous question?” Chip notes this can introduce latency issues and suggests careful consideration before implementation.</p>
+<p><strong>Contextual Retrieval</strong>: Introduces the innovative “chunks-for-chunks” approach, where each retrieved chunk triggers additional retrievals for supplementary context. This might include retrieving related tags or associated metadata to enrich the initial results.</p>
+<p><strong>Hybrid Search</strong>: Combines term-based and embedding-based retrieval, typically implementing a re-ranking process. A common pattern involves using term-based retrieval (like Elasticsearch) to obtain an initial set of ~50 (or however many!) documents, followed by embedding-based re-ranking to identify the most relevant subset.</p>
+</section>
+<section id="evaluation-framework" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-framework">Evaluation Framework</h3>
+<p>The evaluation framework centres on two primary metrics:</p>
+<blockquote class="blockquote">
+<p><strong>Context Precision</strong>: The percentage of retrieved documents that are relevant to the query. Generally easier to measure and optimise.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Context Recall</strong>: The percentage of all relevant documents that are successfully retrieved. More challenging to measure as it requires comprehensive dataset annotation.</p>
+</blockquote>
+</section>
+</section>
+<section id="agents" class="level2">
+<h2 class="anchored" data-anchor-id="agents">Agents</h2>
+<section id="foundational-definition" class="level3">
+<h3 class="anchored" data-anchor-id="foundational-definition">Foundational Definition</h3>
+<p>Chip provides a clear definition of an agent:</p>
+<blockquote class="blockquote">
+<p><strong>Agent Definition</strong>: An entity capable of perceiving its environment and acting upon it, characterised by: - The environment it operates in (defined by use case) - The set of actions it can perform (augmented by tools)</p>
+</blockquote>
+</section>
+<section id="tool-types-and-capabilities" class="level3">
+<h3 class="anchored" data-anchor-id="tool-types-and-capabilities">Tool Types and Capabilities</h3>
+<p>The chapter delineates three primary categories of tools:</p>
+<p><strong>Knowledge Augmentation Tools</strong>: - RAG systems - Web search capabilities - API calls for information retrieval</p>
+<p><strong>Capability Extension Tools</strong>: - Code interpreters - Terminal access - Function execution capabilities These have been shown to significantly boost model performance compared to prompting or fine-tuning alone.</p>
+<p><strong>Write Actions</strong>: - Data manipulation capabilities - Storage and deletion operations</p>
+</section>
+<section id="planning-architecture" class="level3">
+<h3 class="anchored" data-anchor-id="planning-architecture">Planning Architecture</h3>
+<p>The planning process emerges as a four-stage cycle:</p>
+<ol type="1">
+<li><strong>Plan Generation</strong>: Task decomposition and strategy development</li>
+<li><strong>Initial Reflection</strong>: Plan evaluation and potential revision</li>
+<li><strong>Execution</strong>: Implementation of planned actions, often involving specific function calls</li>
+<li><strong>Final Reflection</strong>: Outcome evaluation and error correction</li>
+</ol>
+<p>Chip includes an interesting debate about foundation models as planners, noting Yan LeCun’s assertion that autoregressive models cannot truly plan, though this remains a point of discussion in the field.</p>
+</section>
+<section id="plan-execution-patterns" class="level3">
+<h3 class="anchored" data-anchor-id="plan-execution-patterns">Plan Execution Patterns</h3>
+<p><img src="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" class="img-fluid"></p>
+<p>The execution of agent plans reveals a fascinating interplay between computational patterns and practical implementation. Chip identifies several fundamental execution patterns that form the backbone of agent behaviour, each offering distinct advantages and trade-offs in different scenarios.</p>
+<blockquote class="blockquote">
+<p><strong>Execution Paradigms</strong>: The core patterns through which agents transform plans into actions, ranging from simple sequential execution to complex conditional logic.</p>
+</blockquote>
+<p>The primary execution patterns include:</p>
+<p><strong>Sequential Execution</strong>: The most straightforward pattern, where actions are performed one after another in a predetermined order. This approach offers predictability and simplicity but may not maximise efficiency when actions could be performed concurrently.</p>
+<p><strong>Parallel Execution</strong>: Enables multiple actions to be performed simultaneously when dependencies permit. While this pattern can significantly improve performance, it introduces complexity in managing concurrent operations and handling potential conflicts.</p>
+<p><strong>Conditional Execution</strong>: Implements decision points through <code>if</code> statements, allowing agents to adapt their execution path based on intermediate results or environmental conditions. This pattern introduces crucial flexibility but requires careful handling of branch logic and state management.</p>
+<p><strong>Iterative Execution</strong>: Utilises <code>for</code> loops to handle repetitive tasks or process collections of items. This pattern is particularly powerful when dealing with datasets or when similar actions need to be performed multiple times with variations.</p>
+<blockquote class="blockquote">
+<p><strong>Pattern Selection</strong>: The choice of execution pattern often emerges from the intersection of task requirements, system constraints, and performance goals.</p>
+</blockquote>
+<p>The effectiveness of these patterns depends heavily on the underlying system architecture and the specific requirements of the task at hand. For instance, parallel execution might offer theoretical performance benefits but could introduce unnecessary complexity for simple, linear tasks. Similarly, conditional execution provides valuable flexibility but requires robust error handling and state management to maintain system reliability.</p>
+<p>Chip emphasises that these patterns aren’t mutually exclusive - sophisticated agent systems often combine multiple patterns to create more complex and capable execution strategies. This hybrid approach allows for the development of highly adaptable agents that can handle a wide range of tasks while maintaining system stability and performance.</p>
+</section>
+<section id="planning-optimisation" class="level3">
+<h3 class="anchored" data-anchor-id="planning-optimisation">Planning Optimisation</h3>
+<p>The chapter provides several practical tips for improving agent planning:</p>
+<ol type="1">
+<li>Enhance system prompts with more examples</li>
+<li>Provide better tool descriptions and parameter documentation</li>
+<li>Simplify complex functions through refactoring</li>
+<li>Consider using stronger models or fine-tuning for plan generation</li>
+</ol>
+</section>
+<section id="function-calling-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="function-calling-implementation">Function Calling Implementation</h3>
+<p>The function calling architecture requires:</p>
+<ol type="1">
+<li>Tool inventory creation, including:
+<ul>
+<li>Function names and entry points</li>
+<li>Parameter specifications</li>
+<li>Comprehensive documentation</li>
+</ul></li>
+<li>Tool usage specification (required vs.&nbsp;optional)</li>
+<li>Version control for function names, parameters, and documentation</li>
+</ol>
+</section>
+<section id="planning-granularity" class="level3">
+<h3 class="anchored" data-anchor-id="planning-granularity">Planning Granularity</h3>
+<p>Chip introduces an important discussion of planning levels, analogous to temporal planning horizons (yearly plans vs.&nbsp;daily tasks). This presents a fundamental trade-off:</p>
+<blockquote class="blockquote">
+<p><strong>Planning Trade-off</strong>: Higher-level plans are easier to generate but harder to execute, while detailed plans are harder to generate but easier to execute.</p>
+</blockquote>
+</section>
+<section id="tool-selection-and-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="tool-selection-and-evaluation">Tool Selection and Evaluation</h3>
+<p>The chapter provides a systematic approach to tool selection:</p>
+<ol type="1">
+<li>Conduct ablation studies to measure performance impact</li>
+<li>Monitor tool usage patterns and error rates</li>
+<li>Analyze tool call distribution</li>
+<li>Consider model-specific tool preferences (noting that GPT-4 tends to use a wider tool set than ChatGPT)</li>
+</ol>
+</section>
+<section id="memory-systems" class="level3">
+<h3 class="anchored" data-anchor-id="memory-systems">Memory Systems</h3>
+<p>The memory architecture comprises two core functions:</p>
+<blockquote class="blockquote">
+<p><strong>Memory Functions</strong>: - Memory management - Memory retrieval</p>
+</blockquote>
+<p>The system supports three types of memory:</p>
+<ul>
+<li>Internal knowledge</li>
+<li>Short-term memory</li>
+<li>Long-term memory</li>
+</ul>
+<p>These systems prove crucial for:</p>
+<ul>
+<li>Managing information overflow</li>
+<li>Maintaining session persistence</li>
+<li>Ensuring model consistency</li>
+<li>Preserving data structural integrity</li>
+</ul>
+</section>
+<section id="evaluation-and-failure-modes" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-and-failure-modes">Evaluation and Failure Modes</h3>
+<p>The comprehensive evaluation framework considers:</p>
+<ul>
+<li>Planning effectiveness</li>
+<li>Tool execution accuracy</li>
+<li>System latency</li>
+<li>Overall efficiency</li>
+<li>Memory system performance</li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The unifying thread of context construction provides a compelling framework for understanding these technologies not as separate entities, but as complementary approaches to extending model capabilities.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>books-i-read</category>
+  <category>llm</category>
+  <category>llms</category>
+  <category>agents</category>
+  <category>rag</category>
+  <category>evaluation</category>
+  <guid>https://mlops.systems/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</guid>
+  <pubDate>Thu, 23 Jan 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" medium="image" type="image/png" height="91" width="144"/>
+</item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 4</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6193,95 +6389,6 @@ rm /tmp/mathsprompt_backup.tar</code></pre>
   <guid>https://mlops.systems/posts/2023-07-23-maths-prompt-rust-project.html</guid>
   <pubDate>Sat, 22 Jul 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/mathsprompt/rust-mathsprompt-cover.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Terraform Input Variables</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-06-22-input-variables-terraform.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>When working with Terraform code, there are ways to take in user input at the time when you are applying whatever you’ve defined. To take a perhaps needlessly simple example, you might write a definition that allows you to deploy a new S3 bucket but you probably wouldn’t want to hardcode the name of the new bucket; instead, you’d rather take that name at the point of deployment. So if we think of the terraform process as a big function call, our input variables are the inputs we pass into this function application.</p>
-<p>There are three main ways that you’ll use and encounter input variables in HCL code.</p>
-<ol type="1">
-<li>variables passed in at the command line using <code>-var</code></li>
-<li>variables defined in separate files either automatically parsed or passed in using the <code>-var-file</code> option at the command line</li>
-<li>variables defined as environment variables</li>
-</ol>
-<p>The first two are fairly commonly used, especially during development / testing, but are not really a great idea if your aim is a production-grade setup. Let’s walk through them one by one, but first let’s look at the variable block itself in HCL.</p>
-<section id="variable-blocks" class="level2">
-<h2 class="anchored" data-anchor-id="variable-blocks">Variable blocks</h2>
-<p>A variable block can look like this:</p>
-<pre class="hcl"><code>variable "some_variable" {
-  description = "This is where you describe the variable"
-  type        = string
-  default     = "ginger_cat"
-  nullable    = false
-  sensitive   = false
-}</code></pre>
-<p>Most of this is self-explanatory. You can also specify a <code>validation</code> value in which you can determine the appropriate or accepted values for the variable. If you set <code>sensitive</code> to true, then terraform will (mostly) keep the value out of any output printed in the terminal. The name for the variable should be unique within the module and the value of this variable must be a literal value; it cannot be the result of an expression. If you don’t specify a default value then on running <code>terraform apply</code> or <code>plan</code> you will be asked what value you want to use.</p>
-<p>(There are also a limited handful of key words that are forbidden for use as names for the variable; you can look them up <a href="https://developer.hashicorp.com/terraform/language/values/variables#declaring-an-input-variable">in the docs</a>.)</p>
-</section>
-<section id="variables-passed-in-at-the-command-line" class="level2">
-<h2 class="anchored" data-anchor-id="variables-passed-in-at-the-command-line">Variables passed in at the command line</h2>
-<p>Instead of just waiting for the terraform CLI to ask you what values you want to assign to variables, you can pass them in at the command line. Your variables might live in a <code>variables.tf</code> file (or be located across your <code>.tf</code> files) but when you run <code>terraform apply</code> you can do so in the following way:</p>
-<pre class="shell"><code>terraform apply -var="some_variable=black_cat"</code></pre>
-<p>If you have multiple variables (as you are likely to have) then you can use the <code>-var</code> option multiple times.</p>
-</section>
-<section id="variables-passed-in-with-files" class="level2">
-<h2 class="anchored" data-anchor-id="variables-passed-in-with-files">Variables passed in with files</h2>
-<p>As you might imagine, this rapidly gets unwieldy so there is also a way to populate a whole file with the variable:value pairs. You can either explicitly specify a filename to use for those variables, or there are certain filenames that will be automatically be loaded in and parsed.</p>
-<pre class="shell"><code># passing a file name explicitly
-terraform apply -var-file="my_vals.tfvars"</code></pre>
-<p>A file called <code>terraform.tfvars</code>, or <code>terraform.tfvars.json</code>, or any file ending in <code>.auto.tfvars</code> or <code>auto.tfvars.json</code> will all be loaded automatically without the need to explicitly pass them in at the command line.</p>
-</section>
-<section id="variables-passed-in-using-environment-variables" class="level2">
-<h2 class="anchored" data-anchor-id="variables-passed-in-using-environment-variables">Variables passed in using environment variables</h2>
-<p>Some situations require different approaches than populating a file or passing them in via the command line so terraform also checks any environment variable with the <code>TF_VAR_</code> prefix and imports those automatically. For example, we could run:</p>
-<pre class="shell"><code>export TF_VAR_some_variable=white_cat</code></pre>
-<p>And the <code>some_variable</code> variable would be populated with the <code>white_cat</code> value.</p>
-</section>
-<section id="using-variables" class="level2">
-<h2 class="anchored" data-anchor-id="using-variables">Using variables</h2>
-<p>You can use variables (to get their values) by using the <code>var.</code> prefix. For example, if I was defining an AWS S3 bucket and I wanted to use the value of the <code>some_variable</code> value for that bucket name, I could do something like this in my HCL definition:</p>
-<pre class="hcl"><code>resource "aws_s3_bucket" "my_first_bucket" {
-  bucket        = var.some_variable
-}</code></pre>
-</section>
-<section id="local-variables" class="level2">
-<h2 class="anchored" data-anchor-id="local-variables">Local variables</h2>
-<p>Sometimes you want to define local variables that don’t need exposing as configurable parameters (as the input variables described above are). We have local variables for this, and you define them in their own block:</p>
-<pre><code>locals {
-  my_cat = "aria"
-}</code></pre>
-<p>The useful thing about local variables is that you <em>can</em> assign expressions as the values for these variables, or you can combine or otherwise transform things.</p>
-<p>These local variables are accessible elsewhere with the <code>local.</code> prefix (e.g.&nbsp;in the above example, as <code>local.my_cat</code>)</p>
-<p>You might want to use local variables where you have some particular expression that’s used multiple times in your file so you want to keep it <em>DRY</em> so you use a local variable. Similarly, if something is likely to be changed, you might want to make the change only in one place instead of multiple places. These are only available for use within the module where it is declared and can’t be overridden from the outside.</p>
-</section>
-<section id="variable-precedence" class="level2">
-<h2 class="anchored" data-anchor-id="variable-precedence">Variable Precedence</h2>
-<p>With all these different ways to pass in values for variables, how do you know which one gets chosen? There are precedence rules that determine which value is used. Variables are loaded in this order, and the last one seen is the one that is used:</p>
-<ul>
-<li>environment variables</li>
-<li>the <code>terraform.tfvars</code> file</li>
-<li>the <code>terraform.tfvars.json</code> file</li>
-<li>any <code>….auto.tfvars</code> (or the <code>.json</code> equivalent) files</li>
-<li>any <code>-var</code> and/or <code>-var-file</code> values set via the command line</li>
-</ul>
-<p>Nothing about using these variables is particularly difficult to understand, but it’s useful to have a sense of those precedence rules nonetheless, especially if you have the same variable defined in multiple places.</p>
-
-
-</section>
-
- ]]></description>
-  <category>terraform</category>
-  <category>devops</category>
-  <category>softwareengineering</category>
-  <guid>https://mlops.systems/posts/2023-06-22-input-variables-terraform.html</guid>
-  <pubDate>Wed, 21 Jun 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/inputs-outputs-terraform.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
