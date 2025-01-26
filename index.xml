@@ -10,7 +10,231 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Thu, 23 Jan 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 25 Jan 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7:-finetuning.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I enjoyed chapter 7 on finetuning. It jams a lot of detail into the 50 pages she takes to explain things. Some areas had more detail than you’d expect, and others less, but overall this was a solid summary / review.</p>
+<blockquote class="blockquote">
+<p><strong>Core Narrative</strong>: Fine-tuning represents a significant technical and organisational investment that should be approached as a last resort, not a first solution.</p>
+</blockquote>
+<p>The chapter’s essential message can be distilled into three key points:</p>
+<ol type="1">
+<li>The decision to fine-tune should follow exhausting simpler approaches like prompt engineering and RAG. At the end she sums it up: <em>fine-tuning is for form, while RAG is for facts</em>.</li>
+<li>Memory considerations dominate the technical landscape of fine-tuning, leading to the emergence of techniques like PEFT (particularly LoRA) that make fine-tuning more accessible. The chapter emphasises that while the actual process of fine-tuning isn’t necessarily complex, the surrounding infrastructure and maintenance requirements are substantial.</li>
+<li>A clear progression pathway emerges: start with prompt engineering, move to examples (up to ~50), implement RAG if needed, and only then consider fine-tuning. Even then, breaking down complex tasks into simpler components might be preferable to full fine-tuning.</li>
+</ol>
+<p>So fine-tuning can be incredibly powerful when applied judiciously, but it requires careful consideration of both technical capabilities and organisational readiness.</p>
+<section id="chapter-overview-and-context" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-overview-and-context">Chapter Overview and Context</h2>
+<p>This long chapter (approximately 50 pages, much like the others) was notably one of the most challenging for Chip to write. It presents fine-tuning as an advanced approach that moves beyond basic prompt engineering, covering everything from fundamental concepts to practical implementation strategies.</p>
+<p>The depth and breadth of the chapter reflect the complexity of fine-tuning as both a technical and organisational challenge, though the things she writes about doesn’t really cover the reality of what it’s like to work on these kinds of initiatives within a team.</p>
+</section>
+<section id="core-decision-when-to-fine-tune" class="level2">
+<h2 class="anchored" data-anchor-id="core-decision-when-to-fine-tune">Core Decision: When to Fine-tune</h2>
+<p>The decision to fine-tune should never be taken lightly. While the potential benefits are significant, including improved model quality and task-specific capabilities, the chapter emphasises that fine-tuning should be considered a last resort rather than a default approach.</p>
+<blockquote class="blockquote">
+<p><strong>Notable Case Study</strong>: Grammarly achieved remarkable results with their fine-tuned T5 models, which outperformed GPT-3 variants despite being 60 times smaller. This example illustrates how targeted fine-tuning can sometimes achieve better results than using larger, more general models.</p>
+</blockquote>
+<section id="reasons-to-avoid-fine-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="reasons-to-avoid-fine-tuning">Reasons to Avoid Fine-tuning</h3>
+<p>The chapter presents several compelling reasons why organisations might want to exhaust other options before pursuing fine-tuning:</p>
+<ol type="1">
+<li>Performance Degradation: Fine-tuning can actually degrade model performance on tasks outside the specific target domain</li>
+<li>Engineering Complexity: The process introduces significant technical overhead</li>
+<li>Specialised Knowledge Requirements: Teams need expertise in model training</li>
+<li>Infrastructure Demands: Self-serving infrastructure becomes necessary</li>
+<li>Ongoing Maintenance: Requires dedicated policies and budgets for monitoring and updates</li>
+</ol>
+</section>
+<section id="fine-tuning-vs.-rag-a-critical-distinction" class="level3">
+<h3 class="anchored" data-anchor-id="fine-tuning-vs.-rag-a-critical-distinction">Fine-tuning vs.&nbsp;RAG: A Critical Distinction</h3>
+<p>One of the most important conceptual frameworks presented is the distinction between fine-tuning and RAG:</p>
+<ul>
+<li>Fine-tuning focuses on form - how the model expresses information</li>
+<li>RAG specialises in facts - what information the model can access and use</li>
+</ul>
+<p>This separation provides a clear decision framework, though the chapter acknowledges there are exceptions to this general rule.</p>
+</section>
+</section>
+<section id="progressive-implementation-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="progressive-implementation-workflow">Progressive Implementation Workflow</h2>
+<p><img src="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/prompting_to_rag_to_finetuning.png" class="img-fluid"></p>
+<p>The chapter outlines a thoughtful progression of implementation strategies, suggesting organisations should:</p>
+<ol type="1">
+<li>Begin with prompt engineering optimisation</li>
+<li>Expand to include more examples (up to approximately 50)</li>
+<li>Implement dynamic data source connections through RAG</li>
+<li>Consider advanced RAG methodologies</li>
+<li>Explore fine-tuning only after exhausting other options</li>
+<li>Consider task decomposition if still unsuccessful</li>
+</ol>
+</section>
+<section id="memory-bottlenecks-and-technical-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="memory-bottlenecks-and-technical-considerations">Memory Bottlenecks and Technical Considerations</h2>
+<section id="critical-memory-factors" class="level3">
+<h3 class="anchored" data-anchor-id="critical-memory-factors">Critical Memory Factors</h3>
+<p>The chapter emphasises three key contributors to a model’s memory footprint during fine-tuning:</p>
+<ul>
+<li>Parameter count</li>
+<li>Trainable parameter count</li>
+<li>Numeric representations</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Technical Note</strong>: The relationship between trainable parameters and memory requirements becomes a key motivator for PEFT (Parameter Efficient Fine Tuning) approaches.</p>
+</blockquote>
+</section>
+<section id="quantisation-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="quantisation-strategies">Quantisation Strategies</h3>
+<p>The chapter provides a detailed examination of quantisation approaches, particularly noting the distinction between:</p>
+<ol type="1">
+<li>Post-Training Quantisation (PTQ)
+<ul>
+<li>Most common approach</li>
+<li>Particularly relevant for AI application developers</li>
+<li>Supported by major frameworks with minimal code requirements</li>
+</ul></li>
+<li>Training Quantisation
+<ul>
+<li>Emerging approach gaining traction</li>
+<li>Aims to optimise both inference performance and training costs</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="advanced-fine-tuning-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-fine-tuning-techniques">Advanced Fine-tuning Techniques</h2>
+<section id="peft-methodologies" class="level3">
+<h3 class="anchored" data-anchor-id="peft-methodologies">PEFT Methodologies</h3>
+<p>The chapter identifies two primary PEFT approaches:</p>
+<ol type="1">
+<li>Adapter-based methods (Additive):
+<ul>
+<li>LoRA emerges as the most popular implementation</li>
+<li>Includes variants like Dora and qDora from Anthropic</li>
+<li>Involves adding new modules to existing model weights</li>
+</ul></li>
+<li>Soft prompt-based methods:
+<ul>
+<li>Less common but growing in popularity</li>
+<li>Introduces trainable tokens for input processing modification</li>
+<li>Offers a middle ground between full fine-tuning and basic prompting, so maybe interesting for teams who don’t <em>really</em> want to go too deep into finetuning (?)</li>
+</ul></li>
+</ol>
+</section>
+<section id="model-merging-and-multitask-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="model-merging-and-multitask-considerations">Model Merging and Multitask Considerations</h3>
+<p>The chapter presents model merging as an evolving science, requiring significant expertise. Three primary approaches are discussed:</p>
+<ul>
+<li>Summing</li>
+<li>Layer stacking</li>
+<li>Concatenation (generally not recommended due to memory implications)</li>
+</ul>
+<p><img src="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/model_merging.png" class="img-fluid"></p>
+<p>There’s a lot of detail in this section (much more than I’d expected) but it was interesting to read about something that I haven’t much practical expertise with.</p>
+</section>
+</section>
+<section id="core-approaches-to-model-merging" class="level2">
+<h2 class="anchored" data-anchor-id="core-approaches-to-model-merging">Core Approaches to Model Merging</h2>
+<p>The chapter outlines three fundamental approaches to model merging, each with its own technical considerations and trade-offs:</p>
+<blockquote class="blockquote">
+<p><strong>Technical Architecture</strong>: The three primary merging strategies</p>
+<ol type="1">
+<li><strong>Summing</strong>: Direct weight combination</li>
+<li><strong>Layer stacking</strong>: Vertical integration of model components</li>
+<li><strong>Concatenation</strong>: Horizontal expansion (though notably discouraged due to memory implications)</li>
+</ol>
+</blockquote>
+<p>The relative simplicity of these approaches belies their potential impact on model architecture and performance. Particularly interesting is how these techniques interface with the broader challenge of multitask learning.</p>
+</section>
+<section id="multitask-learning-a-new-paradigm" class="level2">
+<h2 class="anchored" data-anchor-id="multitask-learning-a-new-paradigm">Multitask Learning: A New Paradigm</h2>
+<p>Traditional approaches to multitask learning have typically forced practitioners into one of two suboptimal paths:</p>
+<ol type="1">
+<li><strong>Simultaneous Training</strong>
+<ul>
+<li>Requires creation of a comprehensive dataset containing examples for all tasks</li>
+<li>Necessitates careful balancing of task representation</li>
+<li>Often leads to compromise in per-task performance</li>
+</ul></li>
+<li><strong>Sequential Training</strong>
+<ul>
+<li>Fine-tunes the model on each task in sequence</li>
+<li>Risks catastrophic forgetting as new tasks overwrite previous learning</li>
+<li>Requires careful orchestration of task order and learning rates</li>
+</ul></li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>Key Innovation</strong>: Model merging introduces a third path - parallel fine-tuning followed by strategic combination. This approach fundamentally alters the landscape of multitask learning optimisation.</p>
+</blockquote>
+</section>
+<section id="the-parallel-processing-advantage" class="level2">
+<h2 class="anchored" data-anchor-id="the-parallel-processing-advantage">The Parallel Processing Advantage</h2>
+<p>Model merging enables a particularly elegant solution to the multitask learning challenge through parallel processing:</p>
+<ol type="1">
+<li>Individual models can be fine-tuned for specific tasks independently</li>
+<li>Training can occur in parallel, optimising computational resource usage</li>
+<li>Models can be merged post-training, preserving task-specific optimisations</li>
+</ol>
+<p>This approach brings several compelling advantages:</p>
+<blockquote class="blockquote">
+<p><strong>Strategic Benefits</strong>: - Parallel training efficiency - Independent task optimisation - Flexible deployment options - Reduced risk of inter-task interference</p>
+</blockquote>
+</section>
+<section id="practical-implications" class="level2">
+<h2 class="anchored" data-anchor-id="practical-implications">Practical Implications</h2>
+<p>While the implementation details remain somewhat experimental, the potential applications are significant. Organisations can:</p>
+<ul>
+<li>Develop specialised models in parallel</li>
+<li>Optimise individual task performance without compromise</li>
+<li>Maintain flexibility in deployment architecture</li>
+<li>Scale their multitask capabilities more efficiently</li>
+</ul>
+</section>
+<section id="implementation-pathways" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-pathways">Implementation Pathways</h2>
+<p>The chapter concludes with two distinct development approaches:</p>
+<section id="progression-path" class="level3">
+<h3 class="anchored" data-anchor-id="progression-path">Progression Path</h3>
+<ol type="1">
+<li>Begin with the most economical and fastest model</li>
+<li>Validate with a mid-tier model</li>
+<li>Push boundaries with the optimal model</li>
+<li>Map the price-performance frontier</li>
+<li>Select the most appropriate model based on requirements</li>
+</ol>
+</section>
+<section id="distillation-path" class="level3">
+<h3 class="anchored" data-anchor-id="distillation-path">Distillation Path</h3>
+<ol type="1">
+<li>Start with a small dataset and the strongest affordable model</li>
+<li>Generate additional training data using the fine-tuned model</li>
+<li>Train a more cost-effective model using the expanded dataset</li>
+</ol>
+</section>
+</section>
+<section id="final-observations" class="level2">
+<h2 class="anchored" data-anchor-id="final-observations">Final Observations</h2>
+<p>The chapter emphasises that while the technical process of fine-tuning isn’t necessarily complex, the surrounding context and implications are highly nuanced. Success requires careful consideration of business priorities, resource availability, and long-term maintenance capabilities. This holistic perspective is crucial for organisations considering fine-tuning as part of their AI strategy.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>books-i-read</category>
+  <category>finetuning</category>
+  <category>llm</category>
+  <category>llms</category>
+  <guid>https://mlops.systems/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7:-finetuning.html</guid>
+  <pubDate>Sat, 25 Jan 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png" medium="image" type="image/png" height="99" width="144"/>
+</item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 6</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6260,135 +6484,6 @@ rm /tmp/mathsprompt_backup.tar</code></pre>
   <guid>https://mlops.systems/posts/2023-07-24-database-backups-tarsnap.html</guid>
   <pubDate>Sun, 23 Jul 2023 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/mathsprompt/database-backups-cover.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Building MathsPrompt: a tool to help me review and practice problems for my degree</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-07-23-maths-prompt-rust-project.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><strong>TL;DR:</strong></p>
-<ul>
-<li>I built a little app in Rust to help me revise and practice mathematics exercises.</li>
-<li>I input questions I’ve already studied / completed and the app gets more questions autogenerated via OpenAI’s GPT-4 API.</li>
-<li>All of this populates a database which is then queried to show me the questions and topic areas where I’m least confident.</li>
-<li>It’s just v0.1 but I was surprised at how much I could get done in an evening.</li>
-</ul>
-<p>Last week I received the results for the MU123 module of <a href="https://www.open.ac.uk/courses/maths/degrees/bsc-mathematics-q31">my Open University Maths degree</a>. I was really happy to have achieved a distinction. The course starts off slowly — one of the reasons I went with the OU — but there was still a lot of work that went into that grade. I used a combination of study techniques to revise and cement my understanding along the way, but a core tenet of how I study anything is spaced repetition. (I actually care so much about spaced repetition that I’m one of the co-founders of the <a href="https://www.spacedrepfoundation.org/about">Spaced Repetition Foundation</a> and have <a href="https://www.alexstrick.com/blog/tag/spaced+repetition#show-archive">written about it a fair bit over on my other blog</a>.) For my maths work thus far this has meant creating a not insignificant quantity of <a href="http://ankisrs.net">Anki</a> cards. (Just checked and I have 673 cards that I created for that first module.)</p>
-<p>When I posted about my degree on LinkedIn, Matt Squire from the always-worth-following <a href="https://www.fuzzylabs.ai">FuzzyLabs</a> (seriously, <a href="https://www.fuzzylabs.ai/blog">check out their blog</a>!) replied:</p>
-<p><img src="https://mlops.systems/posts/images/mathsprompt/matt-linkedin.png" class="img-fluid"></p>
-<p>He was referring to <a href="http://www.languagecoach.io/coachbot">CoachBot</a>, another web tool I built to scratch a personal itch around getting study prompts when learning a language outside a classroom/group environment.</p>
-<p>Alongside my use of Anki to cement the more fact-y parts of the things that I’m studying, I’ve been a consistent user of ChatGPT to supplement the practice questions that my course gives me. As part of the Open University course, you get access to some practice questions that (I think) are generated from templates. The advantage of using those is that the system will grade your answer, but it’s pretty rigid / inflexible to use and you can only practice in the sandbox of one particular unit or topic so you miss out on all the very real benefits of interleaved practice. (Interleaved practice is making sure that you mix up the topics and things that you’re studying so that you switch e.g.&nbsp;from your Chinese vocabulary to your maths to whatever else it is that you’re studying. You’ll learn the materials far better if you do your retrieval practice using interleaving than if you study just one topic in isolation, then another topic in isolation and so on.)</p>
-<p>There was also no way in the OU system to really get a sense of how strong you are in the different areas beyond just the static once-done-instantly-forgotten end of unit exams and tests. Thus the tool available to me didn’t handle spaced repetition or interleaving, two core parts of what have been shown to be good study techniques / foundations.</p>
-<p>What I really wanted was:</p>
-<ul>
-<li>a way to get practice questions for things that I’ve studied in maths already</li>
-<li>a service that would show me the things that I found most difficult more often than the things I found really easy</li>
-<li>some way to encourage me to <em>do</em> maths instead of just read about it. (Lots of the skills vanish fairly quickly if you don’t regularly solve problems using them, I discovered.)</li>
-</ul>
-<section id="introducing-mathsprompt" class="level2">
-<h2 class="anchored" data-anchor-id="introducing-mathsprompt">🧮 Introducing MathsPrompt</h2>
-<p>So that’s what I built :) MathsPrompt has three core modes. Firstly we have the core, a place you go to review the problems you’re studying:</p>
-<p><img src="https://mlops.systems/posts/images/mathsprompt/mp-review.png" class="img-fluid"></p>
-<p>This pretty closely replicates the interface you see when using Anki. You get a question to solve and then when you’ve solved it you grade how easy you found the exercise. (Note that all we have here are prompts for things to solve. There aren’t any generated solutions to check against; most of the time all of this can be looked up fairly easily if need be.) Then depending on how easy or hard you found it, you’ll see that prompt or exercise later or sooner. More on that later.</p>
-<p>To populate the database of questions / prompts, we have the input screen which was actually the first thing I built.</p>
-<p><img src="https://mlops.systems/posts/images/mathsprompt/mp-input.png" class="img-fluid"></p>
-<p>You type or copy-paste in some maths exercise, give it some tags (per topic name or unit) and it’ll add that question to the database. Then it’ll send that question (embedded in a lovingly-crafted prompt) to <a href="https://chat.openai.com">ChatGPT</a> to get 5 more similar questions (but with different values / variables) and it’ll then add those (with an <code>autogenerated</code> flag) to the database as well. This adds a little bit of variation into the mix and ensures that I’m actually getting to practice things I haven’t seen before.</p>
-<p>Finally, we have a ‘Focus’ mode where you can pick one of the tags that you want to specifically focus on (in a non-interleaved way) and you’ll just get infinite random questions relating to that particular topic area:</p>
-<p><img src="https://mlops.systems/posts/images/mathsprompt/mp-focus.png" class="img-fluid"></p>
-<p>There are ways I’d like to improve this going forward (see below for those) but for now I’m happy with having this functional prototype to use in my studies. The data (in the form of my database) is completely separated out from the web interface so I can update and improve this without worrying that the questions I’ve created and the answers I’ve inputted will need to be restarted from scratch going forward.</p>
-</section>
-<section id="my-tool-cabinet" class="level1">
-<h1>🔨 My tool cabinet</h1>
-<section id="why-rust" class="level2">
-<h2 class="anchored" data-anchor-id="why-rust">Why Rust?</h2>
-<p>I chose to build the project using <a href="https://www.rust-lang.org">Rust</a> as I’ve been reading a couple of books over the past few months and I wanted a way to get my hands dirty. (Those two books, <a href="https://www.amazon.com/Rust-Action-TS-McNamara/dp/1617294551?tag=soumet-20">Rust in Action</a> by Tim McNamara and <a href="https://www.amazon.com/-/en/Ken-Youens-Clark/dp/1098109430/ref=d_pd_sim_sccl_2_3/259-8491770-0412405?tag=soumet-20&amp;pd_rd_r=c7e5134c-8cea-4954-acab-1eead741381c&amp;psc=1&amp;content-id=amzn1.sym.5cdc78f1-a757-4b8d-989e-a305d0a3dfbe&amp;pf_rd_r=FR7GR5R1YC93V3C51T7X&amp;pf_rd_p=5cdc78f1-a757-4b8d-989e-a305d0a3dfbe&amp;pd_rd_wg=k8Of0&amp;pd_rd_w=PDA2A&amp;pd_rd_i=1098109430">Command-Line Rust</a> by Ken Youens-Clark, were really great in getting me going / started.) Rust comes with a considerable reputation for its steep learning curve but I found that the passive understanding of syntax / workflows I’d developed by reading in those books coupled with ChatGPT was enough to get this project off the ground at a fast pace.</p>
-<p>It certainly helped that I knew what I wanted to build and had thought through what the database schema as well as the core functionality on a few long train journeys recently with paper and pen in hand. It also probably helped that I’d had some previous exposure to and experience with <a href="https://go.dev/learn/">Golang</a> and that our Python development <a href="https://github.com/zenml-io/zenml">at work</a> happens in the context of <a href="https://mypy.readthedocs.io"><code>mypy</code></a> strict mode which is as close as Python gets to being forced to think through your code in terms of types.</p>
-</section>
-<section id="chatgpt-to-generate-question-variations" class="level2">
-<h2 class="anchored" data-anchor-id="chatgpt-to-generate-question-variations">🤖 ChatGPT to generate question variations</h2>
-<p>I considered going down the path of generating question templates for every question, and then having some random numbers get inserted into those templates, but for a lot of questions that wouldn’t have worked. For instance, within trigonometry there are lots of ways that the variables are somehow interrelated or some values wouldn’t make sense at all. The angles inside a triangle still need to sum up to 180 degrees, for example.</p>
-<p>Despite a few misgivings and hesitations around GPT-4’s mathematical abilities (which have been <a href="https://www.cantorsparadise.com/gpt-4-is-amazing-but-still-struggles-at-high-school-math-competitions-cbc2e73738e">widely</a> <a href="https://www.reddit.com/r/singularity/comments/12bgsfu/mathematical_level_of_gpt4/">noted</a>) I figured it’s a quicker way to get going with this project than any other. Moreover, if I find I’m having issues with the quality of the autogenerated questions I can also just remove them from the set that get shown to me. It also added an extra piece of complexity to the project (and thus something new to learn) since I had to make those calls to the OpenAI API as part of the app.</p>
-</section>
-</section>
-<section id="what-i-built" class="level1">
-<h1>👷 What I Built</h1>
-<p>There are three main pieces to what I put together, all interacting in the form / shape of the web app showcased above. All the code is <a href="https://github.com/strickvl/mathsprompt">available online in my public GitHub repository</a> so feel free to check that out!</p>
-<section id="frontend-web-ui" class="level2">
-<h2 class="anchored" data-anchor-id="frontend-web-ui">Frontend / Web UI</h2>
-<p>I studied web development / engineering for 3 years at <a href="https://launchschool.com">Launch School</a> yet have very little interest in importing some framework behemoth into this project. Where possible I’m pragmatically and philosophically aligned towards simplicity so I chose just to make my site in <a href="https://github.com/strickvl/mathsprompt/tree/main/frontend">raw HTML, CSS and JavaScript</a>. Really nothing special there. Probably lots of things I could do to make the site look unique, but that can come later if at all. I was pleased that I got to use many of the things I’d learnt in the past for the JavaScript part, however!</p>
-</section>
-<section id="rust-server-backend" class="level2">
-<h2 class="anchored" data-anchor-id="rust-server-backend">🖥️ Rust Server / Backend</h2>
-<p>All the server logic is captured <a href="https://github.com/strickvl/mathsprompt/blob/main/src/main.rs">in a single file</a> and this was a strong GPT-4 collaboration piece. I knew enough to tweak things once I had some basic code, but writing it from scratch is far beyond my personal abilities right now so I just iterated <em>many</em> times to get to this.</p>
-<p>It’s all pretty simple. Most of the logic is around sending the text of the input question to OpenAI and then parsing whatever gets returned back. The server logic is all standard. I have no idea if <code>actix</code> is the standard for web servers in the Rust world but it was what ChatGPT recommended so I went with it and it was easy to get my heard round setting up the endpoints and plugging in the logic for what happens when requests came in.</p>
-</section>
-<section id="postgresql-database" class="level2">
-<h2 class="anchored" data-anchor-id="postgresql-database">💾 PostgreSQL Database</h2>
-<p>I started out with SQLite but then I wanted a few extras that I knew weren’t built in with SQLite (particularly some types) so I just created a local Postgres database, <a href="https://github.com/strickvl/mathsprompt/blob/main/database/create_tables.sql">created the tables</a> and populated it all with some dummy data to get started.</p>
-<p>Again, nothing fancy here. Four tables to hold the questions, the tags for the questions as well as metadata around how well I did when answering each question.</p>
-<p>I considered hosting this online somewhere but that wasn’t necessary either and keeping everything local kept my iteration speed fast. Towards the end I refactored the Rust code to allow you to use any database you want (local or managed/hosted) so this gives me a way to put it all online should I want.</p>
-</section>
-</section>
-<section id="which-cards-to-review" class="level1">
-<h1>🤔 Which cards to review?</h1>
-<p>The core bit of functionality that I wanted to make sure this enabled was the spaced repetition part. Which is to say: I mainly want to see problems for areas or topics that I know I struggle to complete the problems; I don’t want to regularly get tested on things that I am generally finding easy to complete. This is the spaced repetition way in a nutshell.</p>
-<p>The way I’ve coded this so far is represented by the following SQL query:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><span class="kw" style="color: #003B4F;">SELECT</span> q.<span class="kw" style="color: #003B4F;">id</span>, q.text <span class="kw" style="color: #003B4F;">FROM</span> questions q</span>
-<span id="cb1-2">    <span class="kw" style="color: #003B4F;">INNER</span> <span class="kw" style="color: #003B4F;">JOIN</span> (</span>
-<span id="cb1-3">        <span class="kw" style="color: #003B4F;">SELECT</span> question_id, <span class="fu" style="color: #4758AB;">AVG</span>(ease) <span class="kw" style="color: #003B4F;">as</span> avg_ease <span class="kw" style="color: #003B4F;">FROM</span> question_answers</span>
-<span id="cb1-4">        <span class="kw" style="color: #003B4F;">GROUP</span> <span class="kw" style="color: #003B4F;">BY</span> question_id</span>
-<span id="cb1-5">    ) qa <span class="kw" style="color: #003B4F;">ON</span> qa.question_id <span class="op" style="color: #5E5E5E;">=</span> q.<span class="kw" style="color: #003B4F;">id</span></span>
-<span id="cb1-6">    <span class="kw" style="color: #003B4F;">WHERE</span> q.next_due <span class="op" style="color: #5E5E5E;">&lt;=</span> NOW() <span class="kw" style="color: #003B4F;">AND</span> qa.avg_ease <span class="op" style="color: #5E5E5E;">&lt;=</span> <span class="dv" style="color: #AD0000;">1</span></span>
-<span id="cb1-7">    <span class="kw" style="color: #003B4F;">ORDER</span> <span class="kw" style="color: #003B4F;">BY</span> <span class="kw" style="color: #003B4F;">RANDOM</span>()</span>
-<span id="cb1-8">    <span class="kw" style="color: #003B4F;">LIMIT</span> <span class="dv" style="color: #AD0000;">1</span></span></code></pre></div>
-<p>Here I’m returning a random question from a set of questions where I have a low ease of answering (averaged over the particular topic area). I also don’t want to see cards that have been set to ‘due’ at some point in the future.</p>
-<p>It’s a super naive way of implementing what I wanted. There’s a reason <a href="https://en.wikipedia.org/wiki/Hermann_Ebbinghaus">Ebbinghaus</a> is famous for his research on the forgetting curve and there’s <a href="https://supermemo.guru/wiki/History_of_SuperMemo_algorithm">a fairly long history of people working on building out</a> from that original kernel of insight.</p>
-<p>This will be one of the first things I revisit going forward. I want to be doing more than just this naive implementation. But I’ll come back to that below.</p>
-</section>
-<section id="what-i-learned" class="level1">
-<h1>💡 What I learned</h1>
-<p>First and most importantly, <strong>fundamentals really matter</strong>! I wouldn’t have been able to put this together as quickly as I did without a basic understanding of how generally these kinds of things are developed. Similarly with setting up the database, without previous experience of this and getting the data layer well-grounded this would have been much more painful.</p>
-<p><strong>You’ll rarely regret thinking something through</strong> before you start typing / building. I wanted to start work on this a bit earlier, but the extra time I spent away from the computer designing and thinking things through was time really well spent. I’m sure this saved me time for this project.</p>
-<p><strong>Rust is nice</strong>, and not as scary as people keep saying! This is probably yet another reminder to take things that people say on the internet with a pinch of salt, but there are actually really good learning materials and ways of learning Rust (like <a href="https://doc.rust-lang.org/rust-by-example/index.html">Rust By Example</a>!) such that so long as you’re not trying to implement something super complicated involving distributed process or whatever you’ll probably be fine. Of course, there’s a lot of complexity that I’ve just hand-waved away there, but there’s a time and a place to dive into all that in due course. Building this project gave me a feel for the workflow and put to rest any idea that developing ideas using Rust needed to be slow.</p>
-<p>Truism-alert: <strong>ChatGPT-enabled coding makes you fast</strong>! Probably doesn’t even bear stating, but I was surprised how much faster it enabled me to move through the various tasks needed in this project. A combination of Copilot and ChatGPT really was a winning combination here and I was able to stay at the implementation layer instead of getting lost in syntactical details. Of course, and again, I’m sure my code could be improved, but as an experience this was one I’d be happy to repeat. As a corollary to this, it’s easy to move fast and break things with ChatGPT, but it was often clear to me that I was walking over large chasms where someone with skill and wisdom would have had a better sense of the tradeoffs being made at any particular moment. Building that up takes more time.</p>
-<p>I also used the OpenAI API in conjunction with my prompt as if it’s a static API I can somehow trust. (I know we now have <a href="https://platform.openai.com/docs/guides/gpt/function-calling">Function Calling</a> but I haven’t dug into the details of that yet.) Just trusting that the LLM is going to follow the (sometimes loud and forceful) instructions of my prompt is probably a losing game. Not only is the model changing out under our feet in <a href="https://www.aisnakeoil.com/p/is-gpt-4-getting-worse-over-time">a wholly unpredictable way</a>, but different inputs might cause outputs to be in unexpected formats. For the purposes of this project it keeps me fast and nimble, but I wouldn’t want to use this in production without many (many) guardrails and safeguards. (I’m also watching the emergence of tools like <a href="https://github.com/1rgs/jsonformer">jsonformer</a> or the structured prompting of <a href="https://lmql.ai">LMQL</a> but feel it’s not quite there yet.)</p>
-<p>Prompting really is an art, probably best suited to people who are creative in how they write / express themselves and not necessarily to engineers. The experimentation I did to get the model to reliably return my data in the format / way I wanted was quite fun and creative. I think I’ll be sad to see this playful side of the workflow go away, buried under layers of abstraction, as seems inevitable.</p>
-</section>
-<section id="whats-next-for-mathsprompt" class="level1">
-<h1>🧑‍💻 What’s next for MathsPrompt</h1>
-<p>I have bunch of things that feel like obvious next steps to take:</p>
-<ul>
-<li>Figuring out the spaced repetition piece. This will involve diving into the various forms the algorithm takes and implementing something that isn’t too onerous to maintain and also that doesn’t depart too far from the data schema I’ve set up on the database end.</li>
-<li>A stats page showing areas where I’m strong and weak. Maybe I can add some charts here as well like Anki has.</li>
-<li>Improvements to the web UI. Probably it can look a bit nicer, and I can implement the ‘tab’ flow a bit better.</li>
-<li>CLI tool. My original idea was to have this as a CLI tool but then I found the web interface easy to implement so I went down that road. I think I’d appreciate having all the same functionality in the CLI would be useful for me and shouldn’t be technically that hard.</li>
-<li>PDF output. I want a way to get 3 pages full of problems, for example, so that if I’m taking a train journey I can print that out and have something to work on offline.</li>
-<li>Mobile app? Alongside or as an alternative to the PDF output, I could just access the questions via a mobile app. This feels like something that would be difficult to put together (it’s a whole universe of tooling), but maybe with ChatGPT it’s an afternoon of work to hack something together?</li>
-<li>Allow images in the prompt. There are some maths problems which are hard to describe just using language, so potentially I’d want to be able to include an image alongside the text. This isn’t essential, as I can already do almost everything I need without, so I imagine I won’t get round to this part.</li>
-</ul>
-<p>And that’s what I wanted to say about MathsPrompt for now! Feel free to <a href="https://github.com/strickvl/mathsprompt/">check out the code on my Github repository</a> and give me a star ⭐️. There are instructions there if you want to spin it up yourself.</p>
-
-
-</section>
-
- ]]></description>
-  <category>openai</category>
-  <category>llms</category>
-  <category>mathematics</category>
-  <category>rust</category>
-  <category>mu123</category>
-  <category>q31</category>
-  <category>skillbuilding</category>
-  <category>softwareengineering</category>
-  <category>tools</category>
-  <category>miniproject</category>
-  <guid>https://mlops.systems/posts/2023-07-23-maths-prompt-rust-project.html</guid>
-  <pubDate>Sat, 22 Jul 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/mathsprompt/rust-mathsprompt-cover.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
