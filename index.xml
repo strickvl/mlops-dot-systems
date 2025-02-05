@@ -10,7 +10,195 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 25 Jan 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 04 Feb 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Dataset Engineering: The Art and Science of Data Preparation</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Finally back on track and reading the next chapter of Chip Huyen’s book, ‘AI Engineering’. Here are my notes on the chapter.</p>
+<section id="overview-and-core-philosophy" class="level2">
+<h2 class="anchored" data-anchor-id="overview-and-core-philosophy">Overview and Core Philosophy</h2>
+<blockquote class="blockquote">
+<p>“Data will be mostly just toil, tears and sweat.”</p>
+</blockquote>
+<p>This is how we start the chapter :) This candid assessment frames dataset engineering as a discipline that requires both technical sophistication and pragmatic persistence. While the chapter’s placement might have been suitable earlier in the book, its position allows it to build effectively on previously established concepts.</p>
+</section>
+<section id="data-curation-the-foundation" class="level2">
+<h2 class="anchored" data-anchor-id="data-curation-the-foundation">Data Curation: The Foundation</h2>
+<p>Data curation addresses various use cases including fine-tuning, pre-training, and training from scratch, with specific considerations for chain of thought reasoning and tool use. The process addresses three fundamental aspects:</p>
+<blockquote class="blockquote">
+<p><strong>Data Quality</strong>: The equivalent of ingredient quality in cooking</p>
+<p><strong>Data Coverage</strong>: Analogous to having the right mix of ingredients</p>
+<p><strong>Data Quantity</strong>: Determining the optimal volume of ingredients</p>
+</blockquote>
+<section id="quality-criteria" class="level3">
+<h3 class="anchored" data-anchor-id="quality-criteria">Quality Criteria</h3>
+<p>Data quality encompasses multiple dimensions:</p>
+<ul>
+<li>Relevance to task requirements</li>
+<li>Consistency in format and structure</li>
+<li>Sufficient uniqueness</li>
+<li>Regulatory compliance (especially critical in regulated industries)</li>
+</ul>
+</section>
+<section id="coverage-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="coverage-considerations">Coverage Considerations</h3>
+<p>Coverage involves strategic decisions about data proportions:</p>
+<ul>
+<li>Large language models often utilize significant code data (up to 50%) in training, which appears to enhance logical reasoning capabilities beyond just coding</li>
+<li>Language distribution can be surprisingly efficient (even 1% representation of a language can enable meaningful capabilities)</li>
+<li>Training proportions may vary across different stages of the training process</li>
+</ul>
+</section>
+<section id="quantity-and-optimization" class="level3">
+<h3 class="anchored" data-anchor-id="quantity-and-optimization">Quantity and Optimization</h3>
+<p>A key phenomenon discussed is <strong>ossification</strong>, where extensive pre-training can effectively freeze model weights, potentially hampering fine-tuning adaptability. This effect is particularly pronounced in smaller models.</p>
+<p>Key quantity considerations include:</p>
+<ul>
+<li>Task complexity correlation with data requirements</li>
+<li>Base model performance implications</li>
+<li>Model size considerations (OpenAI notes that with ~100 examples, more advanced models show superior fine-tuning performance)</li>
+<li>Potential for using lower quality or less relevant data for initial fine-tuning to reduce high-quality data requirements</li>
+<li>Recognition of performance plateaus where additional data yields diminishing returns</li>
+</ul>
+</section>
+<section id="data-acquisition-process" class="level3">
+<h3 class="anchored" data-anchor-id="data-acquisition-process">Data Acquisition Process</h3>
+<p>The chapter provides a detailed example workflow for creating an instruction-response dataset:</p>
+<ol type="1">
+<li>Initial dataset identification (~10,000 examples)</li>
+<li>Low-quality instruction removal (reducing to ~9,000)</li>
+<li>Low-quality response filtering (removing 3,000)</li>
+<li>Manual response writing for remaining high-quality instructions</li>
+<li>Topic gap identification and template creation (100 templates)</li>
+<li>AI synthesis of 2,000 new instructions</li>
+<li>Manual annotation of synthetic instructions</li>
+</ol>
+<p>Final result: 11,000 high-quality examples</p>
+</section>
+</section>
+<section id="data-augmentation-and-synthesis" class="level2">
+<h2 class="anchored" data-anchor-id="data-augmentation-and-synthesis">Data Augmentation and Synthesis</h2>
+<section id="synthesis-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="synthesis-objectives">Synthesis Objectives</h3>
+<ol type="1">
+<li>Increasing data quantity</li>
+<li>Expanding coverage</li>
+<li>Enhancing quality</li>
+<li>Addressing privacy concerns</li>
+<li>Enabling model distillation</li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>Notable Research</strong>: An Anthropic paper (2022) found that language model-generated datasets can match or exceed human-written ones in quality for certain tasks.</p>
+</blockquote>
+<p>Note that some teams actually prefer AI-generated preference data due to human fatigue and inconsistency factors.</p>
+</section>
+<section id="synthesis-applications" class="level3">
+<h3 class="anchored" data-anchor-id="synthesis-applications">Synthesis Applications</h3>
+<p>The chapter distinguishes between pre-training and post-training synthesis:</p>
+<ul>
+<li>Synthetic data appears more frequently in post-training</li>
+<li>Pre-training limitation: AI can reshape existing knowledge but struggles to synthesize new knowledge</li>
+</ul>
+</section>
+<section id="llama-3-synthesis-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="llama-3-synthesis-pipeline">LLaMA 3 Synthesis Pipeline</h3>
+<p>A comprehensive workflow example:</p>
+<ol type="1">
+<li>AI generation of problem descriptions</li>
+<li>Solution generation in multiple programming languages</li>
+<li>Unit test generation</li>
+<li>Error correction</li>
+<li>Cross-language translation with test verification</li>
+<li>Conversation and documentation generation with back-translation verification</li>
+</ol>
+<p>This pipeline generated 2.7 million synthetic coding examples for LLaMA 3.1’s supervised fine-tuning.</p>
+</section>
+<section id="model-collapse-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="model-collapse-considerations">Model Collapse Considerations</h3>
+<p>The chapter addresses the risk of <strong>model collapse</strong> in synthetic data usage:</p>
+<ul>
+<li>Potential loss of training signal through repeated synthetic data use</li>
+<li>Current research suggests proper implementation can avoid collapse</li>
+<li>Importance of quality control in synthetic data generation</li>
+</ul>
+</section>
+<section id="model-distillation" class="level3">
+<h3 class="anchored" data-anchor-id="model-distillation">Model Distillation</h3>
+<p>Notable example: BuzzFeed’s fine-tuning of Flan T5 using LoRa and OpenAI’s <code>text-davinci-003</code> generated examples, achieving 80% inference cost reduction.</p>
+</section>
+</section>
+<section id="data-processing-best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="data-processing-best-practices">Data Processing Best Practices</h2>
+<blockquote class="blockquote">
+<p><strong>Expert Tip</strong>: “Manual inspection of data has probably the highest value to prestige ratio of any activity in machine learning.” - Greg Brockman, OpenAI co-founder</p>
+</blockquote>
+<section id="processing-guidelines" class="level3">
+<h3 class="anchored" data-anchor-id="processing-guidelines">Processing Guidelines</h3>
+<p>The chapter emphasizes efficiency optimization:</p>
+<ol type="1">
+<li><p>Order optimization (e.g., deduplication before cleaning if computationally advantageous)</p></li>
+<li><p>Trial run validation before full dataset processing</p></li>
+<li><p>Data preservation (avoid in-place modifications)</p></li>
+<li><p>Original data retention for:</p>
+<ul>
+<li>Alternative processing needs</li>
+<li>Team requirements</li>
+<li>Error recovery</li>
+</ul></li>
+</ol>
+</section>
+<section id="technical-processing-approaches" class="level3">
+<h3 class="anchored" data-anchor-id="technical-processing-approaches">Technical Processing Approaches</h3>
+<p>Deduplication strategies include:</p>
+<ul>
+<li>Pairwise comparison</li>
+<li>Hashing methods</li>
+<li>Dimensionality reduction techniques</li>
+</ul>
+<p>Multiple libraries are referenced (page 400) for implementation.</p>
+</section>
+<section id="data-cleaning-and-formatting" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning-and-formatting">Data Cleaning and Formatting</h3>
+<ul>
+<li>HTML tag removal for signal enhancement</li>
+<li>Careful prompt template formatting, crucial for:
+<ul>
+<li>Fine-tuning operations</li>
+<li>Instruction tuning</li>
+<li>Model performance optimization</li>
+</ul></li>
+</ul>
+</section>
+<section id="data-inspection" class="level3">
+<h3 class="anchored" data-anchor-id="data-inspection">Data Inspection</h3>
+<p>The chapter emphasizes the importance of manual data inspection:</p>
+<ul>
+<li>Utilize various data exploration tools</li>
+<li>Dedicate time to direct data examination (recommended: 15 minutes of direct observation)</li>
+<li>Consider this step non-optional in the process</li>
+</ul>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>books-i-read</category>
+  <category>datasets</category>
+  <category>datalabelling</category>
+  <category>llm</category>
+  <category>llms</category>
+  <category>finetuning</category>
+  <guid>https://mlops.systems/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</guid>
+  <pubDate>Tue, 04 Feb 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/ch8-proportions.png" medium="image" type="image/png" height="50" width="144"/>
+</item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6449,41 +6637,6 @@ output "test_space_sdk" {
   <guid>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</guid>
   <pubDate>Sat, 23 Mar 2024 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/midjourney-afghanistan-dataset.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Automating database backups with Tarsnap</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2023-07-24-database-backups-tarsnap.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><a href="https://mlops.systems/posts/2023-07-23-maths-prompt-rust-project.html">Yesterday I wrote</a> about <a href="https://github.com/strickvl/mathsprompt/">my MathsPrompt tool</a> which serves up questions to help me practice new skills I’m learning as part of my mathematics degree. Today I realised that all the data (both autogenerated and copy-pasted) is being stored in my database and that I hadn’t really given much thought yet to ensuring a long life for that data.</p>
-<p>I put together a shell script that backs up my data to <a href="https://www.tarsnap.com/">Tarsnap</a>, my preferred cloud backup service for things like this. It has the tagline “online backups for the truly paranoid” and while it perhaps isn’t the best choice for rich media like photos and videos, it’s really great for compressible text data. I use it on all my personal cloud machines to painlessly back up critical files.</p>
-<p>So my backup script goes as follows:</p>
-<pre class="shell"><code>#!/bin/sh
-pg_dump -U my_username -F t mathsprompt &gt; /tmp/mathsprompt_backup.tar || exit 1
-/usr/local/bin/tarsnap -c \
-    -f "$(uname -n)-$(date +%Y-%m-%d_%H-%M-%S)-mathsprompt-db" \
-    /tmp/mathsprompt_backup.tar 
-rm /tmp/mathsprompt_backup.tar</code></pre>
-<p>Then I set up a <a href="https://en.wikipedia.org/wiki/Cron">cronjob</a> to handle running this script every day at 5pm. Adding that was as simple as adding the following line (via <code>crontab -e</code>) to my previously configured jobs:</p>
-<pre><code>0 17 * * * path/to/tarsnap-db-backup.sh</code></pre>
-<p>There are fancier things I could do to backup this database, for instance <a href="https://litestream.io">configuring a streaming backup</a> (a useful suggestion I learned about <a href="https://blog.wesleyac.com/posts/how-i-run-my-servers">here</a>), but that’d be overkill for my particular scenario, I think.</p>
-<p>Tarsnap is also sufficiently cheap that I don’t need to worry about costs or using up too much space, but in the future I might consider doing some regular cleanup of really old database backups.</p>
-
-
-
- ]]></description>
-  <category>databases</category>
-  <category>skillbuilding</category>
-  <category>softwareengineering</category>
-  <category>tools</category>
-  <category>miniproject</category>
-  <guid>https://mlops.systems/posts/2023-07-24-database-backups-tarsnap.html</guid>
-  <pubDate>Sun, 23 Jul 2023 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/mathsprompt/database-backups-cover.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
