@@ -10,7 +10,322 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Tue, 04 Feb 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 06 Feb 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Notes on ‘AI Engineering’ chapter 9: Inference Optimisation</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-02-07-ai-engineering-chapter-9.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>What follows are my notes on chapter 9 of Chip Huyen’s ‘AI Engineering’ book. This chapter was on optimising your inference and I learned a lot while reading it! There are interesting techniques like prompt caching and architectural considerations that I was vaguely aware of but hadn’t fully appreciated how they might work in real inference systems.</p>
+<section id="chapter-9-overview" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-9-overview">Chapter 9: Overview</h2>
+<p>Machine learning inference optimization operates across three fundamental domains: model optimization, hardware optimization, and service optimization. While hardware optimization often requires significant investment and may offer limited individual leverage, model and service optimizations provide substantial opportunities for AI engineers to improve performance.</p>
+<blockquote class="blockquote">
+<p><strong>Critical Cost Insight</strong>: A 2023 survey revealed that inference can account for up to 90% of machine learning costs in deployed AI systems, often exceeding training costs. This emphasizes why inference optimization isn’t just an engineering challenge - it’s a critical business necessity.</p>
+</blockquote>
+</section>
+<section id="core-concepts-and-bottlenecks" class="level2">
+<h2 class="anchored" data-anchor-id="core-concepts-and-bottlenecks">Core Concepts and Bottlenecks</h2>
+<p>Understanding inference bottlenecks is essential for effective optimization. Two primary types of computational bottlenecks impact inference performance:</p>
+<blockquote class="blockquote">
+<p><strong>Compute-Bound Bottlenecks</strong>: Tasks that are limited by raw computational capacity, typically involving complex mathematical operations that take significant time to complete. These bottlenecks are particularly evident in computationally intensive operations within neural networks.</p>
+<p><strong>Memory Bandwidth-Bound Bottlenecks</strong>: Limitations arising from data transfer requirements between system components, particularly between memory and processors. This becomes especially relevant in Large Language Models where significant amounts of data need to be moved between different memory hierarchies.</p>
+</blockquote>
+<p>In Large Language Models (LLMs), different operations exhibit varying profiles of these bottlenecks. This understanding has led to architectural decisions such as decoupling the prefilling step from the decode step in production environments - a practice that has become increasingly common as organizations optimize their inference pipelines.</p>
+</section>
+<section id="inference-apis-and-service-patterns" class="level2">
+<h2 class="anchored" data-anchor-id="inference-apis-and-service-patterns">Inference APIs and Service Patterns</h2>
+<p>Two fundamental approaches to inference deployment exist:</p>
+<ol type="1">
+<li><strong>Online Inference APIs</strong>
+<ul>
+<li>Optimized for minimal latency</li>
+<li>Designed for real-time responses</li>
+<li>Typically more expensive per inference</li>
+<li>Critical for interactive applications</li>
+</ul></li>
+<li><strong>Batch Inference APIs</strong>
+<ul>
+<li>Optimized for cost efficiency</li>
+<li>Can tolerate longer processing times (potentially hours)</li>
+<li>Allows providers to optimize resource utilization</li>
+<li>Ideal for bulk processing tasks</li>
+</ul></li>
+</ol>
+</section>
+<section id="inference-performance-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="inference-performance-metrics">Inference Performance Metrics</h2>
+<p>Several key metrics help quantify inference performance:</p>
+<section id="latency-components" class="level3">
+<h3 class="anchored" data-anchor-id="latency-components">Latency Components</h3>
+<ol type="1">
+<li><strong>Time to First Token</strong>
+<ul>
+<li>Measures duration between query submission and initial response</li>
+<li>Critical for user experience in interactive applications</li>
+<li>Often a key optimization target for real-time systems</li>
+</ul></li>
+<li><strong>Time per Output Token</strong>
+<ul>
+<li>Generation speed after the first token</li>
+<li>Impacts overall completion time</li>
+<li>Can vary based on model architecture and optimization</li>
+</ul></li>
+<li><strong>Inter-token Latency</strong>
+<ul>
+<li>Time intervals between consecutive tokens</li>
+<li>Affects perceived smoothness of generation</li>
+<li>Important for streaming applications</li>
+</ul></li>
+</ol>
+<p>Total latency can be expressed as: <code>time_to_first_token + (time_per_token × number_of_tokens)</code></p>
+</section>
+<section id="throughput-and-goodput-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="throughput-and-goodput-metrics">Throughput and Goodput Metrics</h3>
+<blockquote class="blockquote">
+<p><strong>Throughput</strong>: The number of output tokens per second an inference service can generate across all users and requests. This raw metric provides insight into system capacity.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Goodput</strong>: The number of requests per second that successfully meet the Service Level Objective (SLO). This metric offers a more realistic view of useful system capacity.</p>
+</blockquote>
+</section>
+<section id="resource-utilization-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="resource-utilization-metrics">Resource Utilization Metrics</h3>
+<ol type="1">
+<li><strong>Model FLOPS Utilization (MFU)</strong>
+<ul>
+<li>Ratio of actual to theoretical FLOPS</li>
+<li>Indicates computational efficiency</li>
+<li>Key metric for hardware optimization</li>
+</ul></li>
+<li><strong>Model Bandwidth Utilization (MBU)</strong>
+<ul>
+<li>Percentage of achievable memory bandwidth utilized</li>
+<li>Critical for memory-intensive operations</li>
+<li>Helps identify memory bottlenecks</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="hardware-considerations-and-ai-accelerators" class="level2">
+<h2 class="anchored" data-anchor-id="hardware-considerations-and-ai-accelerators">Hardware Considerations and AI Accelerators</h2>
+<p>While NVIDIA GPUs dominate the market, various specialized chips exist for inference:</p>
+<section id="popular-ai-accelerators" class="level3">
+<h3 class="anchored" data-anchor-id="popular-ai-accelerators">Popular AI Accelerators</h3>
+<ul>
+<li>NVIDIA GPUs (market leader)</li>
+<li>AMD accelerators</li>
+<li>Google TPUs</li>
+<li>Various emerging specialized chips</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Inference vs Training Hardware</strong>: Inference-optimized chips prioritize lower precision and faster memory access over large memory capacity, contrasting with training-focused hardware that requires substantial memory capacity.</p>
+</blockquote>
+<p>Key hardware optimization considerations include:</p>
+<ul>
+<li>Memory size and bandwidth requirements</li>
+<li>Chip architecture specifics</li>
+<li>Power consumption profiles</li>
+<li>Physical chip architecture variations</li>
+<li>Cost-performance ratios</li>
+</ul>
+</section>
+</section>
+<section id="model-optimization-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="model-optimization-techniques">Model Optimization Techniques</h2>
+<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/inference-optimization-differences.png" class="img-fluid"></p>
+<section id="core-approaches" class="level3">
+<h3 class="anchored" data-anchor-id="core-approaches">Core Approaches</h3>
+<ol type="1">
+<li><strong>Quantization</strong>
+<ul>
+<li>Reduces numerical precision (e.g., 32-bit to 16-bit)</li>
+<li>Decreases memory footprint</li>
+<li>Weight-only quantization is particularly common</li>
+<li>Can halve model size with minimal performance impact</li>
+</ul></li>
+<li><strong>Pruning</strong>
+<ul>
+<li>Removes non-essential parameters</li>
+<li>Preserves core model behavior</li>
+<li>Multiple techniques available</li>
+<li>Requires careful validation</li>
+</ul></li>
+<li><strong>Distillation</strong>
+<ul>
+<li>Creates smaller, more efficient models</li>
+<li>Maintains key capabilities</li>
+<li>Covered extensively in Chapter 8</li>
+</ul></li>
+</ol>
+</section>
+<section id="advanced-decoding-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="advanced-decoding-strategies">Advanced Decoding Strategies</h3>
+<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/pytorch-llama3-optimization.png" class="img-fluid"></p>
+<section id="speculative-decoding" class="level4">
+<h4 class="anchored" data-anchor-id="speculative-decoding">Speculative Decoding</h4>
+<p>This approach combines a large model with a smaller, faster model:</p>
+<ul>
+<li>Small model generates rapid initial outputs</li>
+<li>Large model verifies and corrects as needed</li>
+<li>Provides faster token generation</li>
+<li>Easy to implement</li>
+<li>Integrated into frameworks like VLLM and LamaCPU</li>
+</ul>
+</section>
+<section id="inference-with-reference" class="level4">
+<h4 class="anchored" data-anchor-id="inference-with-reference">Inference with Reference</h4>
+<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/inference_with_reference.png" class="img-fluid"></p>
+<ul>
+<li>Performs mini-RAG operations during decoding</li>
+<li>Retrieves relevant context from input query</li>
+<li>Requires additional memory overhead</li>
+<li>Useful for maintaining context accuracy</li>
+</ul>
+</section>
+<section id="parallel-decoding" class="level4">
+<h4 class="anchored" data-anchor-id="parallel-decoding">Parallel Decoding</h4>
+<p>Rather than strictly sequential token generation, this method:</p>
+<ul>
+<li>Generates multiple tokens simultaneously</li>
+<li>Uses resolution mechanisms to maintain coherence</li>
+<li>Implements look-ahead techniques</li>
+<li>Algorithmically complex but offers significant speed benefits</li>
+<li>Demonstrated success with look-ahead decoding method</li>
+</ul>
+</section>
+<section id="attention-optimization" class="level4">
+<h4 class="anchored" data-anchor-id="attention-optimization">Attention Optimization</h4>
+<p>Several strategies exist for optimizing attention mechanisms:</p>
+<ol type="1">
+<li><strong>Key-Value Cache Optimization</strong>
+<ul>
+<li>Critical for large context windows</li>
+<li>Requires substantial memory</li>
+<li>Various techniques for size reduction</li>
+</ul></li>
+<li><strong>Specialized Attention Kernels</strong>
+<ul>
+<li>Flash Attention as leading example</li>
+<li>Hardware-specific implementations</li>
+<li>Flash Attention 3 for H100 GPUs</li>
+</ul></li>
+</ol>
+<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" class="img-fluid"></p>
+</section>
+</section>
+</section>
+<section id="service-level-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="service-level-optimization">Service-Level Optimization</h2>
+<section id="batching-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="batching-strategies">Batching Strategies</h3>
+<ol type="1">
+<li><strong>Static Batching</strong>
+<ul>
+<li>Processes fixed-size batches</li>
+<li>Waits for complete batch (e.g., 100 requests)</li>
+<li>Simple but potentially inefficient</li>
+</ul></li>
+<li><strong>Dynamic Batching</strong>
+<ul>
+<li>Uses time windows for batch formation</li>
+<li>Processes incomplete batches after timeout</li>
+<li>Balances latency and throughput</li>
+</ul></li>
+<li><strong>Continuous Batching</strong>
+<ul>
+<li>Returns completed responses immediately</li>
+<li>Dynamically manages resource utilization</li>
+<li>Similar to a bus route that continuously picks up new passengers</li>
+<li>Optimizes occupation rate</li>
+<li>Based on Orca paper’s findings</li>
+</ul></li>
+</ol>
+</section>
+<section id="prefill-decode-decoupling" class="level3">
+<h3 class="anchored" data-anchor-id="prefill-decode-decoupling">Prefill-Decode Decoupling</h3>
+<ul>
+<li>Separates prefill and decode operations</li>
+<li>Essential for large-scale inference providers</li>
+<li>Allows optimal resource allocation</li>
+<li>Improves overall system efficiency</li>
+</ul>
+</section>
+<section id="prompt-caching" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-caching">Prompt Caching</h3>
+<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/prompt_caching.png" class="img-fluid"></p>
+<ul>
+<li>Stores computations for overlapping text segments</li>
+<li>Offered by providers like Gemini and Anthropic</li>
+<li>May incur storage costs</li>
+<li>Requires careful cost-benefit analysis</li>
+<li>Must be explicitly enabled</li>
+</ul>
+</section>
+<section id="parallelism-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="parallelism-strategies">Parallelism Strategies</h3>
+<ol type="1">
+<li><strong>Replica Parallelism</strong>
+<ul>
+<li>Creates multiple copies of the model</li>
+<li>Distributes requests across replicas</li>
+<li>Simplest form of parallelism</li>
+</ul></li>
+<li><strong>Tensor Parallelism</strong>
+<ul>
+<li>Splits individual tensors across devices</li>
+<li>Enables processing of larger models</li>
+<li>Requires careful coordination</li>
+</ul></li>
+<li><strong>Pipeline Parallelism</strong>
+<ul>
+<li>Divides model computation into stages</li>
+<li>Assigns stages to different devices</li>
+<li>Optimizes resource utilization</li>
+<li>Reduces memory requirements</li>
+</ul></li>
+<li><strong>Context Parallelism</strong>
+<ul>
+<li>Processes different parts of input context in parallel</li>
+<li>Particularly useful for long sequences</li>
+<li>Can significantly reduce latency</li>
+</ul></li>
+<li><strong>Sequence Parallelism</strong>
+<ul>
+<li>Processes multiple sequences simultaneously</li>
+<li>Leverages hardware-specific features</li>
+<li>Requires careful implementation</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="implementation-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-considerations">Implementation Considerations</h2>
+<p>When implementing inference optimizations:</p>
+<ul>
+<li>Multiple optimization techniques are typically combined in production</li>
+<li>Hardware-specific optimizations require careful testing</li>
+<li>Service-level optimizations often provide significant gains with minimal model modifications</li>
+<li>Optimization choices depend heavily on specific use cases and requirements</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>books-i-read</category>
+  <category>inference</category>
+  <category>llm</category>
+  <category>llms</category>
+  <category>hardware</category>
+  <guid>https://mlops.systems/posts/2025-02-07-ai-engineering-chapter-9.html</guid>
+  <pubDate>Thu, 06 Feb 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" medium="image" type="image/png" height="83" width="144"/>
+</item>
 <item>
   <title>Dataset Engineering: The Art and Science of Data Preparation</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -6557,86 +6872,6 @@ output "test_space_sdk" {
   <guid>https://mlops.systems/posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html</guid>
   <pubDate>Sat, 30 Mar 2024 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/tf-registry-docs.png" medium="image" type="image/png" height="104" width="144"/>
-</item>
-<item>
-  <title>Publishing the ISAF Press Releases dataset</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Yesterday I published <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">two</a> <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">datasets</a> to the Hugging Face Hub and I wanted to briefly add some context to them and what they might be useful for.</p>
-<p><img src="https://mlops.systems/posts/images/hf_hub_isaf_dataset_view.png" title="A screenshot of the Hugging Face dataset website for the ISAF press releases dataset." class="img-fluid"></p>
-<p><strong>TL;DR:</strong></p>
-<ul>
-<li>I wrote a paper in 2011 that used international military forces’ press releases about Afghanistan military operations to gain an understanding of what was going on on the ground.</li>
-<li>The paper was covered in the Guardian and on the BBC and elsewhere and subsequently lead to a significant scaling back of press release coverage.</li>
-<li>The data is hard to come by now since ISAF and NATO took down the original website and files. I’ve had researchers contact me asking for the data over the years so now I’m making it available as a public dataset on the Hugging Face Hub.</li>
-<li>The core dataset consists of expert-labelled data pairs (an article with the metadata extracted from the article about how many people were killed and captured and so on) so I’m thinking that it might unintentionally be a useful evaluation task for LLMs. The Hugging Face dataset cards provide more information about what tasks might be appropriate.</li>
-</ul>
-<section id="the-datasets" class="level1">
-<h1>The Datasets</h1>
-<p>The <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">ISAF Press Releases dataset</a> contains data used as the basis for the research paper “<a href="https://www.afghanistan-analysts.org/en/special-reports/a-knock-on-the-door-22-months-of-isaf-press-releases/">A Knock on the Door: 22 Months of ISAF Press Releases</a>”, originally published in October 2011. The dataset provides a comprehensive collection of press releases issued by the International Security Assistance Force (ISAF) in Afghanistan from December 1, 2009, to February 21, 2013. The press releases were collected, processed, and annotated to extract information about <a href="https://www.pbs.org/wgbh/frontline/documentary/kill-capture/">kill-capture missions</a> carried out by ISAF during this period. The dataset offers valuable insights into the nature and extent of these operations, providing a historical record of ISAF’s activities in Afghanistan. It consists of 4822 press release reports, each labelled with information about the event, including the date, location, target group, and the number of people killed or captured (as represented in the data). The Guardian’s datablog team also <a href="https://www.theguardian.com/news/datablog/2011/oct/12/afghanistan-nato-kill-capture-raids-isaf-petraeus">published a series of accompanying visualisations</a> at the time.</p>
-<p>The <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">second dataset</a> is a variation on the same data. It contains the raw HTML files of press releases issued by the International Security Assistance Force (ISAF) in Afghanistan, covering a broader period than the original dataset (spanning 2009-2016). In addition to the raw HTML files containing the news reports, the dataset provides a Parquet file that contains all the data parsed from the HTML files and API requests. This Parquet file serves as the primary resource for researchers and organizations interested in using the dataset. The dataset offers a comprehensive collection of press releases. The HTML files are organized by year and month for archival purposes, while the Parquet file provides a structured and easily accessible format for data analysis.</p>
-</section>
-<section id="motivation-for-the-core-dataset" class="level1">
-<h1>Motivation for the core dataset</h1>
-<p>The dataset was created to provide a comprehensive and publicly accessible record of ISAF’s kill-capture missions in Afghanistan, as reported in their press releases. The motivation was to enable scholars, legal teams, and others to analyse and understand the nature and extent of these operations, as the original ISAF website no longer exists in the same form. The dataset serves as an important historical artifact for Afghan history and provides a means to reverse-engineer the minimum numbers of people killed and captured by ISAF during the specified period.</p>
-<p>The initial data collection involved manually copying the text of press releases from the now defunct ISAF website at <a href="http://www.isaf.nato.int/article/isaf-releases/">http://www.isaf.nato.int/article/isaf-releases/</a> into <a href="https://www.eastgate.com/Tinderbox/">Tinderbox</a> software. The press releases were collected from December 1, 2009, to February 21, 2013, covering a period of over 21 months. All available press releases during this period were included in the dataset.</p>
-<p>The collected press releases were then processed to split them into individual incident reports. If a press release mentioned multiple incidents, they were separated into distinct entries. The text of the press releases was not modified and remains in its original form.</p>
-<p>The annotation process involved reading each press release and evaluating it against a set of variables. The annotations were performed using Tinderbox software. The variables included:</p>
-<ul>
-<li>Basic data: Incident name, reference number, date of the incident.</li>
-<li>Location data: Province, district, village name (if provided).</li>
-<li>Target data: Target group, claimed capture of a “leader” or someone in a leadership position, specific position of the target.</li>
-<li>Numerics: Indication of someone being killed or detained, minimum number killed or detained, exact terms used to refer to those detained or killed, numbers of “leaders” and “facilitators” claimed to be killed or captured, classification as a “capture-or-kill” raid, involvement of an airstrike. The annotator used a fixed list of interpretations for certain terms when estimating the minimum numbers of people killed or detained. Detailed explanations of the annotation process and variable definitions are provided in the associated research paper.</li>
-</ul>
-</section>
-<section id="the-reports-conclusions" class="level1">
-<h1>The report’s conclusions</h1>
-<p>I’ll just quote <a href="https://www.afghanistan-analysts.org/wp-content/uploads/downloads/2012/10/AAN_2011_ISAFPressReleases_AANpressrelease.pdf">from the report’s press release</a> for this so as not to get any details wrong:</p>
-<blockquote class="blockquote">
-<p>“ISAF officials have long presented the recently stepped‐up capture‐or‐kill operations as one of the most effective parts of the military mission in Afghanistan. They regularly release large figures describing the number of ‘leaders’, ‘facilitators’ and ‘insurgents’ that were killed or captured, to illustrate the success of the campaign. A closer examination of the information that is publicly available, however, reveals some important inconsistencies, particularly surrounding the classification of who is considered an insurgent ‘leader’.”AAN’s latest report, by Alex Strick van Linschoten and Felix Kuehn, is based on an analysis of all ISAF press releases over the last 22 months. The report provides important baseline data, as well as an insight into how ISAF sees the success of their operations. Alex Strick van Linschoten: “Because there is no solid data and no transparency, the debate [with regard to the capture‐or‐kill strategy] tends to be either emotional or anecdotal. If anything goes wrong, ISAF often dismisses the incident as an exception to a successful strategy. Without proper data, you can’t really have this discussion.” “The research covers the period from 1 December 2009 to 30 September 2011 and included 3,771 ISAF press releases, which reported a total of 3,157 incidents (including 2,365 capture‐or‐kill raids). During this period (at least) 3,873 individuals were reported killed and 7,146 detained. The two peaks of ISAF activity were in September 2010 and June 2011. The numbers show a steady general increase in reported kills and captures each month until June 2011, with a slight decrease over the winter (2010—11). The number of ‘leaders’ and ‘facilitators’ that were reported killed amounted to approximately 5 per cent of the total number of deaths, while the number of ‘leaders’ and ‘facilitators’ detained consists of approximately 13 per cent of the total number of reported detentions.”</p>
-</blockquote>
-</section>
-<section id="further-research-using-this-data" class="level1">
-<h1>Further research using this data</h1>
-<p>I originally undertook this project and research work because I was sick and unable to do much onerous fieldwork at the time on the ground in Afghanistan. I was surprised at how much value could be extracted from a seemingly benign set of data as a series of press releases. The report I originally wrote (together with <a href="https://www.linkedin.com/in/felix-kuehn-42b5b5132/">Felix Kuehn</a>) barely scratches the surface in terms of possible analyses, and I hope that, by publishing the raw data, others might follow in my footsteps and produce further analysis. Some possible ideas I had for projects that would be interesting:</p>
-<ul>
-<li>correlate the press releases with the data in the <a href="https://www.wikileaks.org/wiki/Afghan_War_Diary,_2004-2010">Wikileaks Afghanistan war logs</a> to see the extent to which press releases were reporting the reality of what was going on.</li>
-<li>correlate the press releases to local news stories</li>
-<li>compare the public claims about the kill capture raids with the data shared in press releases. I did a bit of this in the original report, but there’s a lot more to be done here.</li>
-</ul>
-<p>Since I’m also sharing this data with the view that it’s also an interesting machine learning dataset, some further ideas include:</p>
-<ul>
-<li>use it for structured data extraction (fine-tune or train a language model that can reproduce the expert labels that I originally made)</li>
-<li>fine-tune a smaller model that can label <a href="https://huggingface.co/datasets/strickvl/isafpressreleasescomplete">the full dataset</a>, given the labelled subset (i.e.&nbsp;<a href="https://huggingface.co/datasets/strickvl/isafpressreleases">the original dataset</a>)</li>
-<li>fine-tune a model to write the press releases, given some summary of the days’ activities</li>
-<li>statistical analysis of the full dataset, esp following LLM-driven labelling</li>
-<li>apply the same methodology to the press releases of the Afghan Ministry of Defence, who took over the mantle of providing these daily summaries of kill-capture missions around the country. (I hope to present a separate dataset containing these press releases soon as well, which is important since these have also been taken offline.)</li>
-</ul>
-</section>
-<section id="some-takeaways-from-the-project" class="level1">
-<h1>Some takeaways from the project</h1>
-<p>Firstly, data labelling is hard! There are 4822 events/items in the core dataset and I read and labelled every single one of them. This took me weeks to carry out and it’s worth reading the report’s section on data labelling to get a sense of why labelling this particular data was hard.</p>
-<p>Secondly, data loss is a real thing! Even though we have amazing resources like <a href="https://archive.org">archive.org</a> which preserve old sites, it’s still striking that a military operation that took years and that cost so much money and lives didn’t see it as important to preserve the archival record of its actions. Publishing these press releases as an open dataset is part of <a href="https://www.firstdraft-publishing.com/">other work</a> I’ve done to try to preserve these kinds of documents. I encourage others to do the same.</p>
-<p>Finally, there was an unexpected amount of value in data that at first sight was fairly anodyne and mundane. It’s a good reminder that small projects with focused datasets can provide a lot of value.</p>
-
-
-</section>
-
- ]]></description>
-  <category>miniproject</category>
-  <category>afghanistan</category>
-  <category>datalabelling</category>
-  <category>datasets</category>
-  <category>nlp</category>
-  <category>llms</category>
-  <guid>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</guid>
-  <pubDate>Sat, 23 Mar 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/midjourney-afghanistan-dataset.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
