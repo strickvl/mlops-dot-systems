@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-02-12">
+
+<title>Alex Strick van Linschoten - I forgot how powerful old-school NLP is</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - I forgot how powerful old-school NLP is">
+<meta property="og:description" content="[This is a long one. Sorry / not sorry.">
+<meta property="og:image" content="https://mlops.systems/posts/images/2025-02-12-i-forgot-how-powerful-old-school-nlp-is/someimage.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - I forgot how powerful old-school NLP is">
+<meta name="twitter:description" content="[This is a long one. Sorry / not sorry.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/2025-02-12-i-forgot-how-powerful-old-school-nlp-is/someimage.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">I forgot how powerful old-school NLP is</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">datalabelling</div>
+                <div class="quarto-category">finetuning</div>
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">nlp</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 12, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-problem-it-takes-time-to-curate-the-database" id="toc-the-problem-it-takes-time-to-curate-the-database" class="nav-link active" data-scroll-target="#the-problem-it-takes-time-to-curate-the-database">The Problem: it takes time to curate the database</a></li>
+  <li><a href="#lets-train-a-model-to-pick-the-articles" id="toc-lets-train-a-model-to-pick-the-articles" class="nav-link" data-scroll-target="#lets-train-a-model-to-pick-the-articles">💡 Let’s train a model to pick the articles</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>[This is a long one. Sorry / not sorry. <em>TL;DR</em>: I automated the process of curating articles to be included in the a popular database I maintain by using Spacy to create a classifier that’s only 2 MB in size!]</p>
+<p>A few weeks back I created and launched <a href="https://www.zenml.io/llmops-database">a big database</a> that curated implementations of GenAI use cases and LLMOps out in the wild. I’d been keeping a list of these interesting blogs for a while and it occurred to me that it might be useful for others to share the full list.</p>
+<p><img src="images/2025-02-12-i-forgot-how-powerful-old-school-nlp-is/someimage.png" class="img-fluid"></p>
+<p>Each entry in the database has some metadata and tags attached to it (to help with search / discoverability) as well as a comprehensive summary of the key points of the link’s contents. (Links were most often blogs, but sometimes YouTube videos where the task was then to grab the transcript and summarise that.)</p>
+<section id="the-problem-it-takes-time-to-curate-the-database" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem-it-takes-time-to-curate-the-database">The Problem: it takes time to curate the database</h2>
+<p>The database has grown quite a bit since we launched and now is approaching 600 entries (!). At ZenML, we’ll continue to maintain and update it but the process of finding new entries is non-trivial:</p>
+<ul>
+<li><strong>Finding good use cases</strong>: where possible we try to meet some kind of technical depth standard where we’re not just republishing some marketing press release. The gold standard is the engineering team of some company writing a deep dive into what they learned from implementing feature X or Y, ideally with code samples and/or architecture diagrams.</li>
+<li><strong>Staying fresh</strong>: things change fast in the world of LLMOps, so we want to stay more or less up to date with whatever people are building <em>now</em> and not just the fresh trends of a year ago.</li>
+<li><strong>Not just the big names</strong>: there are well-known and (rightfully) acclaimed engineering blogs from mega-companies but there are also smaller groups doing interesting work that is at least as worthy of inclusion in the database.</li>
+</ul>
+<p>We have <a href="https://docs.google.com/forms/d/e/1FAIpQLSfrRC0_k3LrrHRBCjtxULmER1-RJgtt1lveyezMY98Li_5lWw/viewform">a ‘submit your case study’ link</a> at the top of the database but to be honest so far it’s been a flytrap for spammers rather than a go-to destination for the people writing their technical accounts. All of of the above means that, till now, my process for updating the database looks something like this:</p>
+<ul>
+<li>In general, I keep an eye out on social media (mostly Twitter, but occasionally LinkedIn and/or Bluesky) for new posts or videos that get shared. This is low-effort but also low-frequency.</li>
+<li>I have RSS subscriptions (yay <a href="https://newsblur.com/">Newsblur</a>!) to some blogs and YouTube channels that consistently have good content and I group them together so I can process that queue every few days.</li>
+<li>As mentioned above, we have a link to submit technical write-ups which I check whenever someone makes a new submission.</li>
+<li>Search with exa.ai: this is the most high-value thing I do to populate the list. (Exa.ai is an embeddings-based search engine that excels at finding ‘other articles like this one’ and I’d guess that 70% of the blogs (i.e.&nbsp;non-YouTube links) in the database were found with it.)</li>
+</ul>
+<p>For all of this, usually ‘processing’ means clicking through the URL, giving the article a quick skim read. For videos, it means a mix of skipping through the contents directly in video form or passing it off to an LLM using <a href="https://gist.github.com/strickvl/ac2a6a6e6f642ed6be375bd1943bd65f">my custom YouTube summarisation tool</a>. I have a ‘I know it when I see it’ set of criteria that determines whether an article is worthy of inclusion in the database. That mostly boils down to:</p>
+<ol type="1">
+<li>Does the article actually match up with the subjects we’re trying to cover? i.e.&nbsp;GenAI uses <em>in production</em> and not just some experiment that someone tried locally or some pushing of some benchmark score forward by 0.2% etc. The focus is on production use cases, so how these things work as a system and how people are ensuring reliability and what are they learning along the way.</li>
+<li>Does the article have some depth to it? There is a <em>lot</em> written about AI use cases these days and (aside from the content that’s auto-generated purely for SEO) not all of it actually contains useful insights or implementation details. I’m not saying we need to see your code, but we’re really looking for something more than just ‘we made this amazing system and it uses these 3 tools’.</li>
+</ol>
+<p>I haven’t properly written down my acceptance criteria yet because so far it was only me working on the project and it’s also a pretty hard one to summarise as a text spec. It seems like there’s many edge cases, and when I’m checking the links I often have to stop, think and weigh the value of what I’m consuming.</p>
+<p>Long story short: it takes up quite a bit of time to sift through the internet in the hope that someone’s written a new technical blog describing how they built something or what lessons they learned along the way. So far it’s been a pretty manual process taking a non-zero amount of time. (Not hours and hours, but perhaps 20 minutes every two or three days. ‘It’s not nothing’ would be how I’d quantify it!)</p>
+</section>
+<section id="lets-train-a-model-to-pick-the-articles" class="level2">
+<h2 class="anchored" data-anchor-id="lets-train-a-model-to-pick-the-articles">💡 Let’s train a model to pick the articles</h2>
+<p>I read <a href="https://danielvanstrien.xyz/posts/2025/deepseek/distil-deepseek-modernbert.html">Daniel van Strien’s article</a> on distilling DeepSeek down into a ModernBERT classifier with interest and I wondered whether I could also use a model to help process the incoming articles. This seems like an obvious next step in retrospect, but I think I also needed the months of drip-drip work on curating the articles till this point for me to have arrived at a solid collection of validated examples.</p>
+<p>On the other hand, I hadn’t been</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
