@@ -6,7 +6,7 @@ categories:
   - claude
   - miniproject
 date: "2025-02-21"
-description: "I built a Model Context Protocol (MCP) server for Beeminder to connect AI assistants with my personal goal tracking data. Here's how I implemented this integration using Claude Desktop, what I learned about MCP development, and my vision for AI-powered personal productivity workflows."
+description: "I built a Model Context Protocol (MCP) server for Beeminder to connect AI assistants with my personal goal tracking data. Here's how I implemented this integration using Claude Desktop, what I learned about MCP development."
 layout: post
 title: "Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data"
 toc: false
@@ -51,4 +51,8 @@ Now that I have my Beeminder MCP server, I also want one for [Omnifocus](https:/
 
 The ease of building this MCP server suggests an interesting future where more of our tools and services become directly accessible to AI assistants. The real value isn't in any single connection, but in the potential for creating a network of interconnected tools that AI can help us manage more effectively.
 
-If you're interested in trying this out yourself, you can find the code and setup instructions in the [GitHub repository](https://github.com/strickvl/mcp-beeminder). While this implementation focuses on Beeminder, the same principles could be applied to create MCP servers for other services and tools.
+If you're interested in trying this out yourself, you can find the code and
+setup instructions in the [GitHub
+repository](https://github.com/strickvl/mcp-beeminder). While this
+implementation focuses on Beeminder, the same principles could be applied to
+create MCP servers for other services and tools.
