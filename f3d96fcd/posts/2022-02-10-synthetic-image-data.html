@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-02-10">
+<meta name="description" content="I iterated through several prototypes to get to a script that could autogenerate synthetic training data for my computer vision model. I hoped to bootstrap my training to get a bit jump in model performance.">
+
+<title>Alex Strick van Linschoten - It’s raining bboxes: how I wrote a Python script to create 2097 synthetic images to help improve my machine learning model</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - It’s raining bboxes: how I wrote a Python script to create 2097 synthetic images to help improve my machine learning model">
+<meta property="og:description" content="I iterated through several prototypes to get to a script that could autogenerate synthetic training data for my computer vision model.">
+<meta property="og:image" content="https://mlops.systems/posts/synthetic-image-data/synthetic-images-post.jpg">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - It’s raining bboxes: how I wrote a Python script to create 2097 synthetic images to help improve my machine learning model">
+<meta name="twitter:description" content="I iterated through several prototypes to get to a script that could autogenerate synthetic training data for my computer vision model.">
+<meta name="twitter:image" content="https://mlops.systems/posts/synthetic-image-data/synthetic-images-post.jpg">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">It’s raining bboxes: how I wrote a Python script to create 2097 synthetic images to help improve my machine learning model</h1>
+                  <div>
+        <div class="description">
+          I iterated through several prototypes to get to a script that could autogenerate synthetic training data for my computer vision model. I hoped to bootstrap my training to get a bit jump in model performance.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">redactionmodel</div>
+                <div class="quarto-category">computervision</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">tools</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 10, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#whats-the-deal-with-synthetic-images" id="toc-whats-the-deal-with-synthetic-images" class="nav-link active" data-scroll-target="#whats-the-deal-with-synthetic-images">What’s the deal with synthetic images?</a></li>
+  <li><a href="#phase-1-get-a-baseline-naive-trial" id="toc-phase-1-get-a-baseline-naive-trial" class="nav-link" data-scroll-target="#phase-1-get-a-baseline-naive-trial">Phase 1: Get a Baseline / Naive Trial</a></li>
+  <li><a href="#detour-get-stuck-pretty-quickly-experience-bbox-sprawl" id="toc-detour-get-stuck-pretty-quickly-experience-bbox-sprawl" class="nav-link" data-scroll-target="#detour-get-stuck-pretty-quickly-experience-bbox-sprawl">Detour: Get Stuck Pretty Quickly, Experience bbox Sprawl</a></li>
+  <li><a href="#phase-2-generate-my-own-base-images" id="toc-phase-2-generate-my-own-base-images" class="nav-link" data-scroll-target="#phase-2-generate-my-own-base-images">Phase 2: Generate My Own Base Images</a></li>
+  <li><a href="#phase-3-generate-my-own-redactions" id="toc-phase-3-generate-my-own-redactions" class="nav-link" data-scroll-target="#phase-3-generate-my-own-redactions">Phase 3: Generate My Own Redactions</a></li>
+  <li><a href="#the-big-picture-bringing-it-all-together" id="toc-the-big-picture-bringing-it-all-together" class="nav-link" data-scroll-target="#the-big-picture-bringing-it-all-together">The Big Picture: Bringing It All Together</a></li>
+  <li><a href="#phase-5-make-the-images-look-old-and-worn" id="toc-phase-5-make-the-images-look-old-and-worn" class="nav-link" data-scroll-target="#phase-5-make-the-images-look-old-and-worn">Phase 5: Make The Images Look Old and Worn</a></li>
+  <li><a href="#final-results-2097-synthetic-images" id="toc-final-results-2097-synthetic-images" class="nav-link" data-scroll-target="#final-results-2097-synthetic-images">Final Results: 2097 Synthetic Images</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="images/synthetic-image-data/synthetic-images-cover.jpg" class="img-fluid"></p>
+<p>This blog outlines my process (and a few false starts) for generating a series of synthetic images (and corresponding annotations) to supplement training data used in a machine learning project. This problem is one for which there aren’t many (any?) pre-existing data sets that I can repurpose so I’ve been trying to find ways to bootstrap and improve the performance of the model I’m training.</p>
+<p>Before I dive into the details, I wanted to include a little context on <a href="https://mlops.systems/#category=redactionmodel">the wider project</a> and what I’m seeking to accomplish. It is a relatively common practice for documents released as part of <a href="https://www.foia.gov">FOIA</a> requests to contain redactions. With so many documents being released — and perhaps in specific cases where legal teams are dealing with huge numbers of those redacted documents — it can be useful to identify which documents are redacted and/or to get a sense of just how much has been redacted. If you have 10 or 20 documents you can fairly easily get that overview, but if you have 10,000 or a million documents? That’s where my project comes in: I want to train a model to make it easy to detect redactions in a document and to generate statistics on what proportion of a document or documents have been redacted.</p>
+<p>You can <a href="https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html">read more about the problem domain</a>, about <a href="https://mlops.systems/redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html">my initial forays</a> into annotating a dataset for this problem, as well as view <a href="https://mlops.systems/redactionmodel/2021/12/15/redaction-taxonomy.html">some examples</a> of these redactions (and perhaps why they’re not as easy to identify as you might think). You can even try out a demo showing some of what the model can identify <a href="https://huggingface.co/spaces/strickvl/redaction-model-demo">here</a>. Note that this isn’t the latest version of the model so it’s not the absolute best performance.</p>
+<section id="whats-the-deal-with-synthetic-images" class="level2">
+<h2 class="anchored" data-anchor-id="whats-the-deal-with-synthetic-images">What’s the deal with synthetic images?</h2>
+<p>It’s a truism that in computer vision projects you probably need or want a lot of data to get good results. For the Facebooks and Bytedances of the world this perhaps isn’t an issue: they have access to a ton of data, for better or for worse. But for me, I don’t have teams of data annotators or millions of users generating all this data. This is probably the norm for small- to medium-sized computer vision problems being solved out in the world, especially with more non-traditional entrants into the field who are just trying to <em>do</em> things with the skills instead of generating research and so on.</p>
+<p>Instead of using huge amounts of data, we need to be smarter about how we work, levelling ourselves up with whatever tricks of the trade we can muster. The <a href="https://course.fast.ai/">fastai course</a> contains a great number of these best practices, perhaps unsurprisingly since it is in some way targeted at individuals seeking to solve their domain-specific problems. One of the key insights I took away from earlier parts of <a href="https://github.com/fastai/fastbook">the fastai book</a> was the benefits of using pre-trained models. With a wealth of these models <a href="https://github.com/balavenkatesh3322/CV-pretrained-model">available</a> and <a href="https://github.com/shubham-shahh/Open-Source-Models">accessible</a>, you don’t need to start your work from scratch. Instead, fine-tune your model and benefit from the expertise and hard work of others.</p>
+<p>You do need <em>some</em> data to get started with fine-tuning a pre-trained model, however. That’s why I took a bit of time to <a href="https://mlops.systems/redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html">make some initial annotations</a>. I currently have annotated 2097 images, labelling where I have found redactions on the images as well as a box to show which parts of the image contain text or content. That approach has done pretty well so far, with in the low to mid seventies in terms of a % <a href="https://cocodataset.org/#detection-eval">COCO score</a>. (This is a commonly-used metric to assess the performance for object detection problems.) I want to go further, though, which is where synthetic images come in.</p>
+<p>The big bottleneck in the annotation process is, of course, me. Depending on how many redactions any particular image contains, it could take me 5-10 minutes for a single image’s worth of annotations. This does not scale. Part of the speedup for this process is to use self-training, but I’ll write about that separately. Another option that has is often used is to generate images which approximate (to a greater or lesser degree) the actual real images. The useful thing about generating the images yourself is that you know where you placed the redactions, so you have the annotations at the same time.</p>
+<p>My overall goal here was to boost my model’s performance. I didn’t know how how well these synthetic images would contribute, or even if they’d contribute to any boost at all. I was also quite conscious of the fact that you could probably spend a year generating pixel-perfect synthetic redacted documents. I didn’t want to waste too much time doing that, so at various points I had to make decisions as to whether a particular stage was good enough.</p>
+</section>
+<section id="phase-1-get-a-baseline-naive-trial" class="level2">
+<h2 class="anchored" data-anchor-id="phase-1-get-a-baseline-naive-trial">Phase 1: Get a Baseline / Naive Trial</h2>
+<p>When I started this, I didn’t know how hard or easy it was going to be, so I set myself a low bar. I knew it was theoretically possible to create images with Python, but I’d never done it before so didn’t have a sense of the range of possibilities.</p>
+<p>In situations like this, I find Jupyter notebooks really reveal their strengths. Experimentation is easy and the pace of iteration can be really high. A few minutes of searching around and it seemed like <a href="https://pillow.readthedocs.io/en/stable/">Pillow</a> (aka ‘PIL’) was probably the best option to go with. I noted that you could edit, resize, copy and paste images. For my basic version of a synthetic image generator, that’s most of what I needed to do:</p>
+<ul>
+<li>Take an image that we know contains no redactions.</li>
+<li>Get a separate image file that is of a redaction box / squiggle or shape.</li>
+<li>Randomly resize the redaction shape.</li>
+<li>Paste the redaction shape at a random location on top of the base unredacted image.</li>
+</ul>
+<p>And voila! Finding unredacted images was easy since <a href="https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html">I had previously used <code>fastai</code></a> to build a model that could detect to ~95% accuracy whether an image contained a redaction or not. For the redactions, it took me about an hour with <a href="https://www.pixelmator.com/pro/">Pixelmator Pro</a> and its ‘quick selection’ tool to extract 100 examples of various kinds of redaction that I knew were commonly found in the data set. You can see some of this variety in the illustration that follows, though note that each individual redaction snippet was its own separate image for the purposes of my synthetic generation.</p>
+<p><img src="images/synthetic-image-data/redaction-snippets.jpg" title="These are the kinds of redactions (superimposed for the purposes of showing the variety) I selected." class="img-fluid"></p>
+<p>I found that it was pretty trivial to generate images of the kind I proposed above. The placement of the redactions didn’t always make sense, and sometimes the random resize that the redaction underwent meant that it was either far too small or far too large. I also hadn’t included any steps to capture the annotation in this prototype, but I knew it was possible so continued onwards.</p>
+</section>
+<section id="detour-get-stuck-pretty-quickly-experience-bbox-sprawl" class="level2">
+<h2 class="anchored" data-anchor-id="detour-get-stuck-pretty-quickly-experience-bbox-sprawl">Detour: Get Stuck Pretty Quickly, Experience bbox Sprawl</h2>
+<p>Buoyed by my success in the prototype stage, I immediately added a bunch of improvements and features to what I wanted to achieve. I knew I wanted to make sure that the redaction stayed within the boundaries of the original base image. I also wanted to ensure that it stayed within the boundaries of the content of the base image — i.e.&nbsp;redactions generally tend to be made on top of content which tends not to be right on the outer margins.</p>
+<p>I rushed into things too fast without thinking the problem through and quite quickly got into deep waters as all the various pieces started to overlap. I was somehow still in notebook mode, passing various objects through various other custom libraries, not sure what I was passing where. In short: it was a mess.</p>
+<p>One thing that tripped me up really fast was bboxes. (A bbox, in case this means nothing to you, is a data structure or type that allows you to represent where a box is positioned if you were to paste it on top of a base image (for example). It seems that there are different conventions about how to represent this concept of the location of a box on top of some other larger space. Some people represented it with pairs of coordinates, such that for each of the four corners of the box you’d have an <code>[x, y]</code> pair to represent each point. Others took this bbox type to contain references to the <code>xmin</code>, <code>ymin</code>, <code>xmax</code>, and <code>ymax</code> values of the box. In this way you could reconstruct the various corners since you had two opposite corners specified. Another option was that used by COCO, which was <code>[xmin, ymin, width, height]</code>. And yet another option was to represent a bounding box by <code>[x_center, y_center, width, height]</code>. (This is <a href="https://albumentations.ai/docs/getting_started/bounding_boxes_augmentation/">a useful article</a> that details some of these representation differences.)</p>
+<p>I’m sure there are people who are really good at keeping multiple types of x and y coordinates, each with slightly different nuances, in their heads. I am not such a person and after an hour or two of struggling in these deep waters I realised I needed to regroup.</p>
+<p>My notebook experiments had been good for uncovering the range of possibility, but now that I had a better sense of the edges of the problem — and the twists and turns of dealing with bounding boxes — I had to take a more systematic approach. I spent some time with pen and paper thinking through the flow that this synthetic generation process would have to include. I thought through what the various independent parts of this could be, and how data would flow through this set of steps.</p>
+</section>
+<section id="phase-2-generate-my-own-base-images" class="level2">
+<h2 class="anchored" data-anchor-id="phase-2-generate-my-own-base-images">Phase 2: Generate My Own Base Images</h2>
+<p>The first part of this process was to generate my own base images. In general, the types of base unredacted images in the core data set were relatively unremarkable. These were mostly letters, reports or some kind of form / table. I figured I could approximate this pretty quickly. By chance, that very weekend I happened to listen to <a href="https://realpython.com/podcasts/rpp/84/">an episode of the Real Python podcast</a> which interviewed the creator of <code>borb</code>, a Python package for creating and manipulating PDFs. I knew I wanted images in the end, but I had <a href="https://mlops.systems/python/jupyter/fastai/tools/2022/01/06/nbdev-early-impressions.html">already created a tool to extract images from PDFs</a> and I figured <code>borb</code> would probably save me time, even if it meant I had to do some converting back and forth between images and PDF files.</p>
+<p>The great thing about <code>borb</code> is that it offers an easy abstraction with which to reason about creating PDF documents. Have some text and want it to be displayed on a page? Done. Want that text to be displayed in three columns? Done. Want do insert some images and have the text flow round it? Done. Have styling requirements? Done. And on and on. I figured that this was just the level of abstraction I needed — rather than staying in the world of pixel primitives like lines and boxes.</p>
+<p>Once I got going it was easy to generate base images with multi-column text and some random coloured shapes thrown in here and there. (I used <a href="https://lorem-text.readthedocs.io/en/latest/"><code>lorem-text</code></a> to generate random Latin texts.) After I created the PDF I then had to convert it into an image format for use elsewhere in the generator pipeline but I think that speed hit was a price worth paying.</p>
+</section>
+<section id="phase-3-generate-my-own-redactions" class="level2">
+<h2 class="anchored" data-anchor-id="phase-3-generate-my-own-redactions">Phase 3: Generate My Own Redactions</h2>
+<p>The redactions weren’t quite as easy as the base images. The easiest version of a redaction box was literally that: a black box that sits on top of the base image. That much was easy to create. <a href="https://pillow.readthedocs.io/en/stable/">Pillow</a> had some useful interfaces that I could use to quickly create randomly sized boxes. I could even add text to them in the upper left corner as I’d noticed that many of the real redactions did that.</p>
+<p>It was less clear to me how I’d go about generating the other kinds of redactions, particularly ones that resembled a handwritten mark in thick black marker over the top of a document. In the end, I decided not to go any further with anything that wasn’t a box, but I did make the redaction boxes more varied. I set it such that the box would be filled with a random colour. If the colour was dark enough, I made sure that the text was in a light (contrasting) colour. And ensure that there wasn’t always a text on the box.</p>
+<p>Not perfect, but still it gave me a way to move forward.</p>
+</section>
+<section id="the-big-picture-bringing-it-all-together" class="level2">
+<h2 class="anchored" data-anchor-id="the-big-picture-bringing-it-all-together">The Big Picture: Bringing It All Together</h2>
+<p>With these pieces complete, I had the basics of the next version of my synthetic image generation. You can see the flow and progression of my script in the following diagram:</p>
+<p><img src="images/synthetic-image-data/flow-v2.png" title="Synthetic image generation v2" class="img-fluid"></p>
+<p>You’ll note that there were a number of other steps that supported the image creation. I did again descend into bbox hell when calculating exactly where to paste the redaction image, but with a much more modularised approach to my code I didn’t get lost. <a href="https://mlops.systems/robustpython/python/books-i-read/2022/01/03/robust-python-3.html">Type hints</a> also kept me honest about what variables I was passing in and out of the functions I’d created.</p>
+<p>I ended up using the initial model I’d trained so far in the step that figured out where the content of the image was. You’ll recall that this was one of the annotations I’d already been generating when I annotated my data, and since it’s a fairly simple computer vision task I was already seeing excellent performance from that specific class in object detection. <a href="https://airctic.com/0.11.0/">IceVision</a>, a library that I’m using for the computer vision and deep learning parts of this project, allowed me to fairly easily make this inference on the images and extract the bbox coordinates for the content box.</p>
+<p>I made sure to include a lot of random variation in the first two steps where the base and redaction images were created. I didn’t remove the original naive approach completely. Instead, I made it 50% likely that we’d generate an image versus just picking one of the unredacted images from our store. Then I gave the same chance for the redaction as to whether we’d use an actual redaction snippet or one of the computer-generated boxes. There was lots of resizing and colouring and various other randomisation that was also included.</p>
+</section>
+<section id="phase-5-make-the-images-look-old-and-worn" class="level2">
+<h2 class="anchored" data-anchor-id="phase-5-make-the-images-look-old-and-worn">Phase 5: Make The Images Look Old and Worn</h2>
+<p>Only one step remained. I realised that when I generated the images completely from scratch, not using any of the real base images or redaction snippets, that they looked very new and unrealistic. A significant proportion of the documents in the collection looked like they’d been photocopied a thousand times and in general had seen better days. Sometimes the quality was such to make them unreadable. I realised if I was going to get good results with the overall goal (i.e.&nbsp;improve my model’s performance) I’d have to make the synthetic creations look old somehow.</p>
+<p>After some exploration I settled on <code>augraphy</code> as how I’d process the newly generated images to look old and worn. Luckily for me, this package seems to have been created explicitly to support machine learning workflows for synthetic data creation, and it seemed to be (somewhat) actively maintained. There was a default set of so-called ‘augmentations’ that Augraphy suggested I apply to my image. Unfortunately it was simply too aggressive. I guess for some workflows it would have been great, but the page ended up looking somewhat unintelligible by the end. Compare these two examples:</p>
+<p><img src="images/synthetic-image-data/augraphy-transforms.jpg" title="Comparing levels of Augraphy image augmentation" class="img-fluid"></p>
+<p>Not only did the default Augraphy transforms often make the redaction indistinguishable, it shifted parts of the image around on the page for these crinkle and scrunch effects, which would have rendered my annotations inaccurate.</p>
+<p>That said, as you can see from the left image, it was pretty easy to switch out the default for a set of random transforms to be applied that wasn’t quite so aggressive. I’m thankful that tools like this exist out in the open-source space and that allow me to get on with the work of solving the actual problem I’m interested in working on.</p>
+</section>
+<section id="final-results-2097-synthetic-images" class="level2">
+<h2 class="anchored" data-anchor-id="final-results-2097-synthetic-images">Final Results: 2097 Synthetic Images</h2>
+<p><img src="images/synthetic-image-data/some-synthetic-images.gif" title="Some of the generated images" class="img-fluid"></p>
+<p>This gif gives you a brief sense of some of the images I generated as a result of the process I’ve detailed above. They’re not perfect, and as I write I currently don’t know how well they will perform when training my model.</p>
+<p>I have 2097 real annotated images, so I’m going to combine them with a maximum of an equal number of synthetic images. I’ll try out different proportions of real to synthetic, but that’s also a topic for another blogpost to follow. Stay tuned!</p>
+<p>It took about three and a half hours to create these 2000+ images on my laptop. There are LOTS of places where I could have made speed improvements, notably all the conversion between PDF and image objects, the inference for the content box and also the fact that the pipeline wasn’t performed in parallel on all my CPU cores. I spent about 30 minutes exploring <a href="https://www.ray.io">Ray</a> as a means to getting this process to be executed in parallel but it ended up being not as simple as I’d initially thought so I’ve left that to one side for now. In any case, I won’t be creating so many synthetic images at once so often, so it wasn’t a real blocking point for my work.</p>
+<p>Note, too, that the annotations get created as part of the same script. I append them to a synthetic annotations file at the same time as the synthetic images is generated, and the file is subject to being combined with the real annotations at a later stage.</p>
+<p>There are obviously lots of ways this synthetic data creation process could be optimised, but I was recently reminded that it’s also important not to lose momentum and not to let the perfect be the enemy of the good.</p>
+<p>The next step is to carry out an experiment to see the effect of adding in the synthetic annotations on model performance. There are a bunch of really tricky aspects to this (most notably finding ways to make sure not to allow my training data to leak into the validation data) but I’ll save all that for my next blogpost.</p>
+<p>(If you got all the way to the end, well done!)</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
