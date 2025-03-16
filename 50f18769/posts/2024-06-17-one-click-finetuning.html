@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2024-06-17">
+<meta name="description" content="I tried out some services that promise to simplify the process of finetuning open models. I describe my experiences with Predibase, OpenPipe and OpenAI.">
+
+<title>Alex Strick van Linschoten - One-click LLM finetuning with Predibase, OpenPipe and OpenAI</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - One-click LLM finetuning with Predibase, OpenPipe and OpenAI">
+<meta property="og:description" content="I tried out some services that promise to simplify the process of finetuning open models. I describe my experiences with Predibase, OpenPipe and OpenAI.">
+<meta property="og:image" content="https://mlops.systems/posts/images/one-click-finetuning.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="400">
+<meta property="og:image:width" content="400">
+<meta name="twitter:title" content="Alex Strick van Linschoten - One-click LLM finetuning with Predibase, OpenPipe and OpenAI">
+<meta name="twitter:description" content="I tried out some services that promise to simplify the process of finetuning open models. I describe my experiences with Predibase, OpenPipe and OpenAI.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/one-click-finetuning.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="400">
+<meta name="twitter:image-width" content="400">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</h1>
+                  <div>
+        <div class="description">
+          I tried out some services that promise to simplify the process of finetuning open models. I describe my experiences with Predibase, OpenPipe and OpenAI.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">nlp</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">finetuning</div>
+                <div class="quarto-category">isafpr</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 17, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#predibase" id="toc-predibase" class="nav-link active" data-scroll-target="#predibase">Predibase</a></li>
+  <li><a href="#openai" id="toc-openai" class="nav-link" data-scroll-target="#openai">OpenAI</a></li>
+  <li><a href="#openpipe" id="toc-openpipe" class="nav-link" data-scroll-target="#openpipe">OpenPipe</a></li>
+  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts">Final thoughts</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>The <a href="https://mlops.systems/posts/2024-06-15-isafpr-first-finetune.html">last post in this series</a> showed that finetuning an LLM needn’t be particularly difficult. I used <code>axolotl</code> to produce finetuned versions of Llama3, Mistral and TinyLlama models. During the course we were given a bunch of credits by various companies in the LLM and finetuning space. Among those were credits from some finetuning-as-a-service companies and I thought now might be a good time to try out these services now that I’ve done the process manually a few times.</p>
+<p>I picked three to try out: Predibase, OpenPipe and OpenAI. All were surprisingly similar in the approach they took. I’ll give a few details on the experience for each and how they compare to each other. With all the services, the process was roughly the same as when I did it manually:</p>
+<ol type="1">
+<li>Upload custom data</li>
+<li>Select some hyperparameters</li>
+<li>Start the finetuning</li>
+<li>Try the model</li>
+</ol>
+<p>The step I had the most trouble with was the custom data upload, since each provider wanted the data in a different format. Converting the data from the Pydantic models I had previously created was not a huge deal, but I wasn’t sure about the tradeoffs that I was making (or that were being made for me) by converting my data into these formats.</p>
+<section id="predibase" class="level2">
+<h2 class="anchored" data-anchor-id="predibase">Predibase</h2>
+<p>I started with <a href="https://predibase.com/">Predibase</a> since I had enjoyed the talk Travis Addair had given during the course. Predibase is famous for their work on LORA adapters, particularly their demonstration of <a href="https://predibase.com/blog/lora-land-fine-tuned-open-source-llms-that-outperform-gpt-4">Lora Land</a> where they gave some examples of how finetuned LORA models / adapters could outperform GPT-4.</p>
+<p>Predibase requires that the data you upload has certain column names depending on the task you select for the finetuning. At the moment they have instruction tuning and text completion as their two tasks, but it wasn’t clear to me which to select. (They also have <a href="https://colab.research.google.com/drive/1r505Aq_SWZdaSkBIs3ovh4F8c36DHwAh?usp=sharing">a Colab notebook</a> to help with constructing splits from your data.)</p>
+<p>Once your data is ready and validated, you can select the model you want to finetune along with a few other hyperparameters. This is the full extent of what you can set from the web UI:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/predibase-hyperparameters.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of Predibase website and the hyperparameters you can set</figcaption><p></p>
+</figure>
+</div>
+<p>There’s also a helpful dataset preview pane to give a final sanity check for your data, to make sure that the inputs and outputs look what you’d expect:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/predibase-dataset-preview.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of Predibase website and the dataset preview pane</figcaption><p></p>
+</figure>
+</div>
+<p>As you’ll read in a little bit, this feature helps catch potentially costly errors before you start the finetuning process.</p>
+<p>Once you click the button to start the training, there isn’t a great deal of information available to you beyond (eventually) a loss curve that you can see. I chose to finetune Qwen2 in Predibase and this took about 53 minutes using an A-100 GPU accelerator.</p>
+<p>Once your model is ready, you can prompt the model in the UI, or using their REST API / Python SDK. They give code snippets prefilled with some dummy text that you can easily try out locally. Let’s show that here, but before you can run your inference query you have to first deploy the model. I hadn’t expected this extra step, and it takes a while to spin up since it’s deploying the adaptor along with the base model it was finetuned alongside. My Qwen2 model has a context window of 131072 tokens and supposedly would cost $3.90 per hour that it was up (as a dedicated deployment).</p>
+<p>Let’s show the results we got:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pr1 <span class="op">=</span> <span class="st">"""2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">      KABUL, Afghanistan (Nov. 7, 2011) — A combined Afghan and coalition</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">      security force conducted an operation in search of a Haqqani facilitator</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">      in Argo district, Badakshan province. The facilitator coordinates suicide</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">      attacks with other insurgent leaders in the area. During the operation, a</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">      local national male failed to comply with repeated verbal warnings and</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">      displayed hostile intent toward the security force. The security force</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">      engaged the individual, resulting in his death. The security force</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">      confiscated a shotgun and intelligence linking the local national to the</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">      Haqqani network. The security force also detained two suspected insurgents during the operation."""</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> <span class="ss">f"""You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">### Instruction:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">PRESS RELEASE TEXT: '</span><span class="sc">{</span>pr1<span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">### Response:</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> predibase <span class="im">import</span> Predibase</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>pb <span class="op">=</span> Predibase(api_token<span class="op">=</span>os.getenv(<span class="st">"PREDIBASE_API_KEY"</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pb = Predibase(api_token="")</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>lorax_client <span class="op">=</span> pb.deployments.client(<span class="st">"isafpr"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lorax_client.generate(prompt, max_new_tokens<span class="op">=</span><span class="dv">100</span>).generated_text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Unfortunately my Predibase model deployment was still ‘initializing’ after a couple of hours of spinning up. I didn’t want to leave that dedicated deployment up and running overnight, so I just deleted the deployment and I’ll try to get this going at a later date. So no inference sample to show you for this one. I’m very curious to see how Qwen2 did, though!</p>
+</section>
+<section id="openai" class="level2">
+<h2 class="anchored" data-anchor-id="openai">OpenAI</h2>
+<p>I was actually surprised that this is even a thing that people do or that is offered by OpenAI. Currently you’re able to finetune three versions of GPT3.5 as well as <code>babbage-002</code> and <code>davinci-002</code>. In the OpenAI presentation during the course they mentioned that they were working to make it possible to finetune GPT4 as well, but no timeline was given on this.</p>
+<p>So why would someone want to finetune GPT3.5? I think there are some problems that are sufficiently complex or of a specific nature where the OpenAI GPT family shines where you might want to squeeze out a final last bit of performance and where the open LLMs just aren’t there yet.</p>
+<p>The OpenAI models are sort of the antithesis of an ‘open’ model and nothing about the finetuning process lent itself to disabusing you of that idea. This was the UI to fill in in order to finetune a model and as you can see there aren’t really too many options available to you.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/openai-finetuning-ui.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">OpenAI Finetuning UI</figcaption><p></p>
+</figure>
+</div>
+<p>Supposedly the data you upload (options for train as well as a separate test set here) will never be used by OpenAI to train their models but you have to just trust them on that front.</p>
+<p><img src="images/openai-finetuning-ui-2.png" class="img-fluid" alt="UI medatada during finetuning 1"> <img src="images/openai-finetuning-ui-3.png" class="img-fluid" alt="UI medatada during finetuning 2"></p>
+<p>As with Predibase, during finetuning you don’t have access to any logs or even too much feedback during training. You get a loss curve and a few scraps of metadata and that’s it. The training took around 90 minutes to run and then you’re able to prompt the model to see how it works, using the standard OpenAI interface and methods you’re used to:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(api_key<span class="op">=</span>os.getenv(<span class="st">"OPENAI_API_KEY"</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"ft:gpt-3.5-turbo-SOME_EXTRA_STUFF_HERE_FOR_MY_MODEL"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']."</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: pr1</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.loads(response.choices[<span class="dv">0</span>].message.content))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+    <span style="color: #008000; text-decoration-color: #008000">'name'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'start_date'</span>: <span style="color: #008000; text-decoration-color: #008000">'2011-11-07'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'event_type'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'captureandkill'</span><span style="font-weight: bold">]</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'province'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'badakhshan'</span><span style="font-weight: bold">]</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'target_group'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'haqqani'</span><span style="font-weight: bold">]</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'killq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'captureq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'killcaptureraid'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'airstrike'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'noshotsfired'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">}</span>
+</pre>
+</div>
+</div>
+<p>They also give you an interface to see the response of the base model side-by-side against the finetuned model:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/openai-finetuning-ui-4.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Side-by-side UI of base model and finetuned model inference</figcaption><p></p>
+</figure>
+</div>
+<p>As you can see, it’s done pretty well! It stuck to the JSON structure, and the extracted metadata looks good. Of course, since this is a GPT3.5 model, there’s no way to now download this model and run it locally. You’re hostage to OpenAI, to being online, etc etc. Not a scenario I’d like to be in, so I don’t think I’ll pursue this much further and rather use my OpenAI credits for other purposes.</p>
+<p>All that said, I do think there might be some scenarios where only the OpenAI models are reliable enough to use (be that in terms of accuracy or with sufficient guardrails) and there were people in the course who were in this boat.</p>
+</section>
+<section id="openpipe" class="level2">
+<h2 class="anchored" data-anchor-id="openpipe">OpenPipe</h2>
+<p>This was the last one-click provider I tried. As with the others, you upload your data first. When I tried this, I got a fairly opaque error message but I guess the format I’d used was incompatible. OpenPipe uses the same format as OpenAI does, it turns out, but it handles the train/test split itself so you just have to set your data up in a single file (unlike with OpenAI where they can take two separate files).</p>
+<p>The interface for finetuning your model was somehow the most threadbare of all:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/openpipe-finetuning-ui.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">OpenPipe finetuning UI</figcaption><p></p>
+</figure>
+</div>
+<p>Moreover, the selection of base models on which to finetune were also pretty slim: Llama3, Mistral, Mixtral and two OpenAI GPT3.5 models. I was surprised by the estimate of how much it’d cost to finetune the model (around $30 USD) but by limiting the number of options available to the user the path forward really was pretty easy.</p>
+<p>You get no single morsel of information during the finetuning process and for me it took a while for the job to even start working, but after an hour or two (I can’t be sure as I left my desk) you get a model out the other end. At this point you can export the weights or just try out the model with a Python call.</p>
+<p>Helpfully, the web UI gives you code snippets you can use for Python, Javascript and cURL, and the snippets even have your prompt pre-filled with an example from your dataset. This was a nice touch.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install openpipe</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openpipe <span class="im">import</span> OpenAI</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  openpipe<span class="op">=</span>{<span class="st">"api_key"</span>: os.getenv(<span class="st">"OPENPIPE_API_KEY"</span>)}</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>completion <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openpipe:MY_MODEL_ID_WAS_HERE"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']."</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: pr1</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    openpipe<span class="op">=</span>{</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tags"</span>: {</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"prompt_id"</span>: <span class="st">"counting"</span>,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"any_key"</span>: <span class="st">"any_value"</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.loads(completion.choices[<span class="dv">0</span>].message.content))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+    <span style="color: #008000; text-decoration-color: #008000">'name'</span>: <span style="color: #008000; text-decoration-color: #008000">'3 killed and 2 captured in Badakhshan'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'start_date'</span>: <span style="color: #008000; text-decoration-color: #008000">'2011-11-07'</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'event_type'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'captureandkill'</span><span style="font-weight: bold">]</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'province'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'badakhshan'</span><span style="font-weight: bold">]</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'target_group'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'haqqani'</span><span style="font-weight: bold">]</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'killq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'captureq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'killcaptureraid'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'airstrike'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'noshotsfired'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
+    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
+<span style="font-weight: bold">}</span>
+</pre>
+</div>
+</div>
+<p>Again you can see we have a really nice result here: JSON is good and the content is solid too. This was a finetune of Llama3 so clearly the problem I noted <a href="https://mlops.systems/posts/2024-06-15-isafpr-first-finetune.html#finetuning-our-model">in the previous blog post</a> was a problem with how I’d set up my local finetune and not with Llama3 itself.</p>
+<p>I liked how OpenPipe automatically deployed my model for me once the finetune was complete. Moreover, there was no extra cost associated with this. (Since their base models are limited, I assume this means that they have lost of customers’ LORA adapters all connected to these base models and that’s how they’re able to keep all these deployments up and cost-effective.)</p>
+<p>There was one final trick that OpenPipe had up its sleeve: an ‘evals’ interface. The interface is pretty simple again, but the gist is that you get to select OpenAI models to compare your finetune against a test dataset and get a comparison. You can select multiple models to run at the same time and the cost is pretty reasonable.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/openpipe-eval-ui.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Openpipe eval UI</figcaption><p></p>
+</figure>
+</div>
+<p>The evaluation is parallelised and you get a nice table with the aggregate results:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/openpipe-eval-results.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Openpipe eval results</figcaption><p></p>
+</figure>
+</div>
+<p>You also (in the datasets tab) get a table with the individual responses for the test data:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/openpipe-eval-datasets.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Openpipe eval datasets</figcaption><p></p>
+</figure>
+</div>
+<p>Looking at the results you quickly become aware that this specific evaluation didn’t really make much sense. Comparing the same prompt between the finetuned model and GPT4 could never have been fair since my prompt never asks for the result back in a certain format, or that it should be JSON and so on.</p>
+<p>Moreover, you can see that the evaluation prompt itself doesn’t do a good job of picking up that the finetuned model really did a great job on the whole and so the aggregate comparison scores don’t really make much sense here.</p>
+<p>That said, I found this feature a useful ‘nice-to-have’ and I can see how someone might find this helpful if they either wanted to run a quick experiment or weren’t particularly technically savvy.</p>
+</section>
+<section id="final-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="final-thoughts">Final thoughts</h2>
+<p>Overall I found this an interesting experience to do these finetunes in parallel. I suspect that I am not the core audience / market for these services. I was surprised how little customisation they offered, and I actually wonder who is using them. They were easy to use, however, and they do potentially open up the possibility for someone less technical to do something somewhat advanced with LLMs that they wouldn’t otherwise be able to do.</p>
+<p>The moment you want to do something slightly custom, with your prompt template or with the architecture or try something new and cutting-edge, then immediately these services aren’t for you. Similarly, even though I think all of the services offer a Python SDK to replicate what I did in the web UI, I think you essentially have the same limited options available to you if you wanted to trigger these jobs programatically as part of a larger pipeline.</p>
+<p>For the most part you never had the feeling that you were part of a wider ecosystem of these open models, with new techniques coming out all the time and new models as well. These are some of the things I missed from the experience, but as I mentioned before, I’m not the core audience here.</p>
+<p>I do appreciate the opportunity to try these out a few times and the companies for providing credits to do some meaningful attempts at doing something useful. I’ll try these a bit further down the road again and report back if my impression changes or if/when new features are added.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

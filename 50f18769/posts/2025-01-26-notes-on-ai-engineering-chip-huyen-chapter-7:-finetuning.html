@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-01-26">
+<meta name="description" content="Explores when and how to implement finetuning effectively, looking at key technical aspects like memory considerations and PEFT, while emphasising fine-tuning as a last-resort approach after simpler solutions like prompt engineering and RAG have been exhausted.">
+
+<title>Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning">
+<meta property="og:description" content="Explores when and how to implement finetuning effectively, looking at key technical aspects like memory considerations and PEFT, while emphasising fine-tuning as a last-resort approach after simpler…">
+<meta property="og:image" content="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="976">
+<meta property="og:image:width" content="1418">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning">
+<meta name="twitter:description" content="Explores when and how to implement finetuning effectively, looking at key technical aspects like memory considerations and PEFT, while emphasising fine-tuning as a last-resort approach after simpler…">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="976">
+<meta name="twitter:image-width" content="1418">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning</h1>
+                  <div>
+        <div class="description">
+          Explores when and how to implement finetuning effectively, looking at key technical aspects like memory considerations and PEFT, while emphasising fine-tuning as a last-resort approach after simpler solutions like prompt engineering and RAG have been exhausted.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">books-i-read</div>
+                <div class="quarto-category">finetuning</div>
+                <div class="quarto-category">llm</div>
+                <div class="quarto-category">llms</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 26, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chapter-overview-and-context" id="toc-chapter-overview-and-context" class="nav-link active" data-scroll-target="#chapter-overview-and-context">Chapter Overview and Context</a></li>
+  <li><a href="#core-decision-when-to-fine-tune" id="toc-core-decision-when-to-fine-tune" class="nav-link" data-scroll-target="#core-decision-when-to-fine-tune">Core Decision: When to Fine-tune</a>
+  <ul class="collapse">
+  <li><a href="#reasons-to-avoid-fine-tuning" id="toc-reasons-to-avoid-fine-tuning" class="nav-link" data-scroll-target="#reasons-to-avoid-fine-tuning">Reasons to Avoid Fine-tuning</a></li>
+  <li><a href="#fine-tuning-vs.-rag-a-critical-distinction" id="toc-fine-tuning-vs.-rag-a-critical-distinction" class="nav-link" data-scroll-target="#fine-tuning-vs.-rag-a-critical-distinction">Fine-tuning vs.&nbsp;RAG: A Critical Distinction</a></li>
+  </ul></li>
+  <li><a href="#progressive-implementation-workflow" id="toc-progressive-implementation-workflow" class="nav-link" data-scroll-target="#progressive-implementation-workflow">Progressive Implementation Workflow</a></li>
+  <li><a href="#memory-bottlenecks-and-technical-considerations" id="toc-memory-bottlenecks-and-technical-considerations" class="nav-link" data-scroll-target="#memory-bottlenecks-and-technical-considerations">Memory Bottlenecks and Technical Considerations</a>
+  <ul class="collapse">
+  <li><a href="#critical-memory-factors" id="toc-critical-memory-factors" class="nav-link" data-scroll-target="#critical-memory-factors">Critical Memory Factors</a></li>
+  <li><a href="#quantisation-strategies" id="toc-quantisation-strategies" class="nav-link" data-scroll-target="#quantisation-strategies">Quantisation Strategies</a></li>
+  </ul></li>
+  <li><a href="#advanced-fine-tuning-techniques" id="toc-advanced-fine-tuning-techniques" class="nav-link" data-scroll-target="#advanced-fine-tuning-techniques">Advanced Fine-tuning Techniques</a>
+  <ul class="collapse">
+  <li><a href="#peft-methodologies" id="toc-peft-methodologies" class="nav-link" data-scroll-target="#peft-methodologies">PEFT Methodologies</a></li>
+  <li><a href="#model-merging-and-multitask-considerations" id="toc-model-merging-and-multitask-considerations" class="nav-link" data-scroll-target="#model-merging-and-multitask-considerations">Model Merging and Multitask Considerations</a></li>
+  </ul></li>
+  <li><a href="#core-approaches-to-model-merging" id="toc-core-approaches-to-model-merging" class="nav-link" data-scroll-target="#core-approaches-to-model-merging">Core Approaches to Model Merging</a></li>
+  <li><a href="#multitask-learning-a-new-paradigm" id="toc-multitask-learning-a-new-paradigm" class="nav-link" data-scroll-target="#multitask-learning-a-new-paradigm">Multitask Learning: A New Paradigm</a></li>
+  <li><a href="#the-parallel-processing-advantage" id="toc-the-parallel-processing-advantage" class="nav-link" data-scroll-target="#the-parallel-processing-advantage">The Parallel Processing Advantage</a></li>
+  <li><a href="#practical-implications" id="toc-practical-implications" class="nav-link" data-scroll-target="#practical-implications">Practical Implications</a></li>
+  <li><a href="#implementation-pathways" id="toc-implementation-pathways" class="nav-link" data-scroll-target="#implementation-pathways">Implementation Pathways</a>
+  <ul class="collapse">
+  <li><a href="#progression-path" id="toc-progression-path" class="nav-link" data-scroll-target="#progression-path">Progression Path</a></li>
+  <li><a href="#distillation-path" id="toc-distillation-path" class="nav-link" data-scroll-target="#distillation-path">Distillation Path</a></li>
+  </ul></li>
+  <li><a href="#final-observations" id="toc-final-observations" class="nav-link" data-scroll-target="#final-observations">Final Observations</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>I enjoyed chapter 7 on finetuning. It jams a lot of detail into the 50 pages she takes to explain things. Some areas had more detail than you’d expect, and others less, but overall this was a solid summary / review.</p>
+<blockquote class="blockquote">
+<p><strong>Core Narrative</strong>: Fine-tuning represents a significant technical and organisational investment that should be approached as a last resort, not a first solution.</p>
+</blockquote>
+<p>The chapter’s essential message can be distilled into three key points:</p>
+<ol type="1">
+<li>The decision to fine-tune should follow exhausting simpler approaches like prompt engineering and RAG. At the end she sums it up: <em>fine-tuning is for form, while RAG is for facts</em>.</li>
+<li>Memory considerations dominate the technical landscape of fine-tuning, leading to the emergence of techniques like PEFT (particularly LoRA) that make fine-tuning more accessible. The chapter emphasises that while the actual process of fine-tuning isn’t necessarily complex, the surrounding infrastructure and maintenance requirements are substantial.</li>
+<li>A clear progression pathway emerges: start with prompt engineering, move to examples (up to ~50), implement RAG if needed, and only then consider fine-tuning. Even then, breaking down complex tasks into simpler components might be preferable to full fine-tuning.</li>
+</ol>
+<p>So fine-tuning can be incredibly powerful when applied judiciously, but it requires careful consideration of both technical capabilities and organisational readiness.</p>
+<section id="chapter-overview-and-context" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-overview-and-context">Chapter Overview and Context</h2>
+<p>This long chapter (approximately 50 pages, much like the others) was notably one of the most challenging for Chip to write. It presents fine-tuning as an advanced approach that moves beyond basic prompt engineering, covering everything from fundamental concepts to practical implementation strategies.</p>
+<p>The depth and breadth of the chapter reflect the complexity of fine-tuning as both a technical and organisational challenge, though the things she writes about doesn’t really cover the reality of what it’s like to work on these kinds of initiatives within a team.</p>
+</section>
+<section id="core-decision-when-to-fine-tune" class="level2">
+<h2 class="anchored" data-anchor-id="core-decision-when-to-fine-tune">Core Decision: When to Fine-tune</h2>
+<p>The decision to fine-tune should never be taken lightly. While the potential benefits are significant, including improved model quality and task-specific capabilities, the chapter emphasises that fine-tuning should be considered a last resort rather than a default approach.</p>
+<blockquote class="blockquote">
+<p><strong>Notable Case Study</strong>: Grammarly achieved remarkable results with their fine-tuned T5 models, which outperformed GPT-3 variants despite being 60 times smaller. This example illustrates how targeted fine-tuning can sometimes achieve better results than using larger, more general models.</p>
+</blockquote>
+<section id="reasons-to-avoid-fine-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="reasons-to-avoid-fine-tuning">Reasons to Avoid Fine-tuning</h3>
+<p>The chapter presents several compelling reasons why organisations might want to exhaust other options before pursuing fine-tuning:</p>
+<ol type="1">
+<li>Performance Degradation: Fine-tuning can actually degrade model performance on tasks outside the specific target domain</li>
+<li>Engineering Complexity: The process introduces significant technical overhead</li>
+<li>Specialised Knowledge Requirements: Teams need expertise in model training</li>
+<li>Infrastructure Demands: Self-serving infrastructure becomes necessary</li>
+<li>Ongoing Maintenance: Requires dedicated policies and budgets for monitoring and updates</li>
+</ol>
+</section>
+<section id="fine-tuning-vs.-rag-a-critical-distinction" class="level3">
+<h3 class="anchored" data-anchor-id="fine-tuning-vs.-rag-a-critical-distinction">Fine-tuning vs.&nbsp;RAG: A Critical Distinction</h3>
+<p>One of the most important conceptual frameworks presented is the distinction between fine-tuning and RAG:</p>
+<ul>
+<li>Fine-tuning focuses on form - how the model expresses information</li>
+<li>RAG specialises in facts - what information the model can access and use</li>
+</ul>
+<p>This separation provides a clear decision framework, though the chapter acknowledges there are exceptions to this general rule.</p>
+</section>
+</section>
+<section id="progressive-implementation-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="progressive-implementation-workflow">Progressive Implementation Workflow</h2>
+<p><img src="images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/prompting_to_rag_to_finetuning.png" class="img-fluid"></p>
+<p>The chapter outlines a thoughtful progression of implementation strategies, suggesting organisations should:</p>
+<ol type="1">
+<li>Begin with prompt engineering optimisation</li>
+<li>Expand to include more examples (up to approximately 50)</li>
+<li>Implement dynamic data source connections through RAG</li>
+<li>Consider advanced RAG methodologies</li>
+<li>Explore fine-tuning only after exhausting other options</li>
+<li>Consider task decomposition if still unsuccessful</li>
+</ol>
+</section>
+<section id="memory-bottlenecks-and-technical-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="memory-bottlenecks-and-technical-considerations">Memory Bottlenecks and Technical Considerations</h2>
+<section id="critical-memory-factors" class="level3">
+<h3 class="anchored" data-anchor-id="critical-memory-factors">Critical Memory Factors</h3>
+<p>The chapter emphasises three key contributors to a model’s memory footprint during fine-tuning:</p>
+<ul>
+<li>Parameter count</li>
+<li>Trainable parameter count</li>
+<li>Numeric representations</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Technical Note</strong>: The relationship between trainable parameters and memory requirements becomes a key motivator for PEFT (Parameter Efficient Fine Tuning) approaches.</p>
+</blockquote>
+</section>
+<section id="quantisation-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="quantisation-strategies">Quantisation Strategies</h3>
+<p>The chapter provides a detailed examination of quantisation approaches, particularly noting the distinction between:</p>
+<ol type="1">
+<li>Post-Training Quantisation (PTQ)
+<ul>
+<li>Most common approach</li>
+<li>Particularly relevant for AI application developers</li>
+<li>Supported by major frameworks with minimal code requirements</li>
+</ul></li>
+<li>Training Quantisation
+<ul>
+<li>Emerging approach gaining traction</li>
+<li>Aims to optimise both inference performance and training costs</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="advanced-fine-tuning-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-fine-tuning-techniques">Advanced Fine-tuning Techniques</h2>
+<section id="peft-methodologies" class="level3">
+<h3 class="anchored" data-anchor-id="peft-methodologies">PEFT Methodologies</h3>
+<p>The chapter identifies two primary PEFT approaches:</p>
+<ol type="1">
+<li>Adapter-based methods (Additive):
+<ul>
+<li>LoRA emerges as the most popular implementation</li>
+<li>Includes variants like Dora and qDora from Anthropic</li>
+<li>Involves adding new modules to existing model weights</li>
+</ul></li>
+<li>Soft prompt-based methods:
+<ul>
+<li>Less common but growing in popularity</li>
+<li>Introduces trainable tokens for input processing modification</li>
+<li>Offers a middle ground between full fine-tuning and basic prompting, so maybe interesting for teams who don’t <em>really</em> want to go too deep into finetuning (?)</li>
+</ul></li>
+</ol>
+</section>
+<section id="model-merging-and-multitask-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="model-merging-and-multitask-considerations">Model Merging and Multitask Considerations</h3>
+<p>The chapter presents model merging as an evolving science, requiring significant expertise. Three primary approaches are discussed:</p>
+<ul>
+<li>Summing</li>
+<li>Layer stacking</li>
+<li>Concatenation (generally not recommended due to memory implications)</li>
+</ul>
+<p><img src="images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/model_merging.png" class="img-fluid"></p>
+<p>There’s a lot of detail in this section (much more than I’d expected) but it was interesting to read about something that I haven’t much practical expertise with.</p>
+</section>
+</section>
+<section id="core-approaches-to-model-merging" class="level2">
+<h2 class="anchored" data-anchor-id="core-approaches-to-model-merging">Core Approaches to Model Merging</h2>
+<p>The chapter outlines three fundamental approaches to model merging, each with its own technical considerations and trade-offs:</p>
+<blockquote class="blockquote">
+<p><strong>Technical Architecture</strong>: The three primary merging strategies</p>
+<ol type="1">
+<li><strong>Summing</strong>: Direct weight combination</li>
+<li><strong>Layer stacking</strong>: Vertical integration of model components</li>
+<li><strong>Concatenation</strong>: Horizontal expansion (though notably discouraged due to memory implications)</li>
+</ol>
+</blockquote>
+<p>The relative simplicity of these approaches belies their potential impact on model architecture and performance. Particularly interesting is how these techniques interface with the broader challenge of multitask learning.</p>
+</section>
+<section id="multitask-learning-a-new-paradigm" class="level2">
+<h2 class="anchored" data-anchor-id="multitask-learning-a-new-paradigm">Multitask Learning: A New Paradigm</h2>
+<p>Traditional approaches to multitask learning have typically forced practitioners into one of two suboptimal paths:</p>
+<ol type="1">
+<li><strong>Simultaneous Training</strong>
+<ul>
+<li>Requires creation of a comprehensive dataset containing examples for all tasks</li>
+<li>Necessitates careful balancing of task representation</li>
+<li>Often leads to compromise in per-task performance</li>
+</ul></li>
+<li><strong>Sequential Training</strong>
+<ul>
+<li>Fine-tunes the model on each task in sequence</li>
+<li>Risks catastrophic forgetting as new tasks overwrite previous learning</li>
+<li>Requires careful orchestration of task order and learning rates</li>
+</ul></li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>Key Innovation</strong>: Model merging introduces a third path - parallel fine-tuning followed by strategic combination. This approach fundamentally alters the landscape of multitask learning optimisation.</p>
+</blockquote>
+</section>
+<section id="the-parallel-processing-advantage" class="level2">
+<h2 class="anchored" data-anchor-id="the-parallel-processing-advantage">The Parallel Processing Advantage</h2>
+<p>Model merging enables a particularly elegant solution to the multitask learning challenge through parallel processing:</p>
+<ol type="1">
+<li>Individual models can be fine-tuned for specific tasks independently</li>
+<li>Training can occur in parallel, optimising computational resource usage</li>
+<li>Models can be merged post-training, preserving task-specific optimisations</li>
+</ol>
+<p>This approach brings several compelling advantages:</p>
+<blockquote class="blockquote">
+<p><strong>Strategic Benefits</strong>: - Parallel training efficiency - Independent task optimisation - Flexible deployment options - Reduced risk of inter-task interference</p>
+</blockquote>
+</section>
+<section id="practical-implications" class="level2">
+<h2 class="anchored" data-anchor-id="practical-implications">Practical Implications</h2>
+<p>While the implementation details remain somewhat experimental, the potential applications are significant. Organisations can:</p>
+<ul>
+<li>Develop specialised models in parallel</li>
+<li>Optimise individual task performance without compromise</li>
+<li>Maintain flexibility in deployment architecture</li>
+<li>Scale their multitask capabilities more efficiently</li>
+</ul>
+</section>
+<section id="implementation-pathways" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-pathways">Implementation Pathways</h2>
+<p>The chapter concludes with two distinct development approaches:</p>
+<section id="progression-path" class="level3">
+<h3 class="anchored" data-anchor-id="progression-path">Progression Path</h3>
+<ol type="1">
+<li>Begin with the most economical and fastest model</li>
+<li>Validate with a mid-tier model</li>
+<li>Push boundaries with the optimal model</li>
+<li>Map the price-performance frontier</li>
+<li>Select the most appropriate model based on requirements</li>
+</ol>
+</section>
+<section id="distillation-path" class="level3">
+<h3 class="anchored" data-anchor-id="distillation-path">Distillation Path</h3>
+<ol type="1">
+<li>Start with a small dataset and the strongest affordable model</li>
+<li>Generate additional training data using the fine-tuned model</li>
+<li>Train a more cost-effective model using the expanded dataset</li>
+</ol>
+</section>
+</section>
+<section id="final-observations" class="level2">
+<h2 class="anchored" data-anchor-id="final-observations">Final Observations</h2>
+<p>The chapter emphasises that while the technical process of fine-tuning isn’t necessarily complex, the surrounding context and implications are highly nuanced. Success requires careful consideration of business priorities, resource availability, and long-term maintenance capabilities. This holistic perspective is crucial for organisations considering fine-tuning as part of their AI strategy.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

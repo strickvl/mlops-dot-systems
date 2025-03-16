@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2024-07-07">
+<meta name="description" content="I was on the front page of Hacker News for my two last blog posts and I learned various things forom the discussion and scrutiny of my approach to evaluating my finetuned LLMs.">
+
+<title>Alex Strick van Linschoten - All the things I learned while trending on Hacker News</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - All the things I learned while trending on Hacker News">
+<meta property="og:description" content="I was on the front page of Hacker News for my two last blog posts and I learned various things forom the discussion and scrutiny of my approach to evaluating my finetuned LLMs.">
+<meta property="og:image" content="https://mlops.systems/posts/images/isafpr-hackernews.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="399">
+<meta property="og:image:width" content="500">
+<meta name="twitter:title" content="Alex Strick van Linschoten - All the things I learned while trending on Hacker News">
+<meta name="twitter:description" content="I was on the front page of Hacker News for my two last blog posts and I learned various things forom the discussion and scrutiny of my approach to evaluating my finetuned LLMs.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/isafpr-hackernews.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="399">
+<meta name="twitter:image-width" content="500">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">All the things I learned while trending on Hacker News</h1>
+                  <div>
+        <div class="description">
+          I was on the front page of Hacker News for my two last blog posts and I learned various things forom the discussion and scrutiny of my approach to evaluating my finetuned LLMs.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">finetuning</div>
+                <div class="quarto-category">isafpr</div>
+                <div class="quarto-category">evaluation</div>
+                <div class="quarto-category">nlp</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 7, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#temperature-0" id="toc-temperature-0" class="nav-link active" data-scroll-target="#temperature-0">Temperature = 0</a></li>
+  <li><a href="#function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library" id="toc-function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library" class="nav-link" data-scroll-target="#function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library">Function calling vs JSON mode vs prompt vs some schema-forcing library</a></li>
+  <li><a href="#llama3-eos-and-pad-tokens" id="toc-llama3-eos-and-pad-tokens" class="nav-link" data-scroll-target="#llama3-eos-and-pad-tokens">Llama3 EOS and PAD tokens</a></li>
+  <li><a href="#the-one-click-finetuned-models-can-be-run-locally" id="toc-the-one-click-finetuned-models-can-be-run-locally" class="nav-link" data-scroll-target="#the-one-click-finetuned-models-can-be-run-locally">The one-click finetuned models can be run locally</a></li>
+  <li><a href="#others-have-had-similar-success-with-finetuned-models" id="toc-others-have-had-similar-success-with-finetuned-models" class="nav-link" data-scroll-target="#others-have-had-similar-success-with-finetuned-models">Others have had similar success with finetuned models</a></li>
+  <li><a href="#controversial-content-means-openai-tries-less-hard" id="toc-controversial-content-means-openai-tries-less-hard" class="nav-link" data-scroll-target="#controversial-content-means-openai-tries-less-hard">Controversial content means OpenAI tries less hard?</a></li>
+  <li><a href="#what-about-anthropics-claude-models" id="toc-what-about-anthropics-claude-models" class="nav-link" data-scroll-target="#what-about-anthropics-claude-models">What about Anthropic’s Claude models?</a></li>
+  <li><a href="#data-labelling-issues" id="toc-data-labelling-issues" class="nav-link" data-scroll-target="#data-labelling-issues">Data labelling issues</a></li>
+  <li><a href="#you-cant-predict-what-people-want-to-read" id="toc-you-cant-predict-what-people-want-to-read" class="nav-link" data-scroll-target="#you-cant-predict-what-people-want-to-read">You can’t predict what people want to read!</a></li>
+  <li><a href="#github-pages-hosting-holds-up" id="toc-github-pages-hosting-holds-up" class="nav-link" data-scroll-target="#github-pages-hosting-holds-up">Github Pages hosting holds up!</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>My previous two blog posts — <a href="https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html">here</a> and <a href="https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html">here</a> — were trending / on the front page of Hacker News, driving over 20,000 new visitors to this blog. Welcome! I learned a few new tricks (and some mistakes I’d made) during the ensuing discussion so I thought I’d share some of these here. Some of them might trigger some mini side-investigations into certain hypotheses, too, which is even more exciting. Let’s dive in.</p>
+<section id="temperature-0" class="level2">
+<h2 class="anchored" data-anchor-id="temperature-0">Temperature = 0</h2>
+<p>Some commenters rightly pointed out that setting the temperature to 1 for some of the OpenAI inference meant that I was more likely to have less stable and less factually consistent responses. I also heard back from the OpenPipe team that there was maybe no hard and fast rule on this but that I should experiment around for my specific use case.</p>
+<p>There was enough strongly-voiced opinions on this that I might see if I can rerun the evals using <code>0</code> as the temperature to see how much of a difference it makes.</p>
+</section>
+<section id="function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library" class="level2">
+<h2 class="anchored" data-anchor-id="function-calling-vs-json-mode-vs-prompt-vs-some-schema-forcing-library">Function calling vs JSON mode vs prompt vs some schema-forcing library</h2>
+<p>In <a href="https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html">a previous baseline eval for OpenAI’s models</a> I used <code>instructor</code> to coerce the output into Pydantic objects. <a href="https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html">This time round</a> I just used a strongly-worded request in the prompt to request a JSON response and turned on JSON mode (with the <code>response_format={"type": "json_object"}</code> passed into the <code>create</code> method). That was enough to ensure that <a href="https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html#json-validity-test">every response I got back was valid JSON</a>.</p>
+<p>I’ve since been reading about the performance differences between these different responses, and how certain models (like the OpenAI GPT class) do much better with function-calling than with just a prompt and/or JSON mode.</p>
+<p>I’ll be blogging about the differences between these options (and how exactly they work) but I think there’s also enough potential here for me to try this as well in a separate round of reruns of the evals.</p>
+<p>Specifically: what’s the difference in performance between the prompt that I used (which effectively stuffed the schema into the prompt) and using a more formalised function-calling approach? Given what I’ve read, I suspect function-calling will prove superior, but by how much?</p>
+</section>
+<section id="llama3-eos-and-pad-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="llama3-eos-and-pad-tokens">Llama3 EOS and PAD tokens</h2>
+<p>I had some helpful comments suggesting there was maybe something untoward going on with these tokens during my Llama3 local finetune. I did set them in my <code>axolotl</code> config, but it’s well possible that something went wrong there. I’m planning to return to some local finetunes (since my credits on the one-click providers is not infinite and I want to make the local setup work) so I will dive into this soon. Llama3 performed really well so it seems there’s just some small bug here.</p>
+</section>
+<section id="the-one-click-finetuned-models-can-be-run-locally" class="level2">
+<h2 class="anchored" data-anchor-id="the-one-click-finetuned-models-can-be-run-locally">The one-click finetuned models can be run locally</h2>
+<p>I found out that it <strong>is</strong> possible to download the adapters from places like Predibase and OpenPipe and just set things up to run them locally, but it’s just buried a bit in the docs (or not documented at all.)</p>
+<p>Part of the difficulty with documenting how users can do this is that (thanks to CUDA setup intricacies) there isn’t really an easy one-approach-fits-all option. Docker is maybe the closest to this, but at the moment you have to do some of the legwork yourself.</p>
+</section>
+<section id="others-have-had-similar-success-with-finetuned-models" class="level2">
+<h2 class="anchored" data-anchor-id="others-have-had-similar-success-with-finetuned-models">Others have had similar success with finetuned models</h2>
+<p>There were a few other links to successes that others had with finetuning models for structured data extraction posted in the HN thread. See <a href="https://jacobsgill.es/phdobtained">this doctoral dissertation</a>. Also <a href="https://www.nature.com/articles/s41467-024-45563-x">this article in Nature</a>. And of course the OG <a href="https://arxiv.org/abs/2405.00732">LoRA Land paper</a>.</p>
+</section>
+<section id="controversial-content-means-openai-tries-less-hard" class="level2">
+<h2 class="anchored" data-anchor-id="controversial-content-means-openai-tries-less-hard">Controversial content means OpenAI tries less hard?</h2>
+<p>One commenter suggested that the nature of the content might be the reason why OpenAI’s GPT performance wasn’t as good as the finetuned models. My experience of this is that it’s binary — either you get a real response or you get a canned ‘this is too sensitive a topic’ reply — but (s)he suggested that instead of getting rejected I might just get a degraded-in-quality response.</p>
+<p>This would need some further testing to confirm or deny. A nice little experiment for someone.</p>
+</section>
+<section id="what-about-anthropics-claude-models" class="level2">
+<h2 class="anchored" data-anchor-id="what-about-anthropics-claude-models">What about Anthropic’s Claude models?</h2>
+<p>I should probably have done this as well, but I just hit up against the timebox I allocated for the evaluation work. I’ll try to do some experiments with Haiku and the new Sonnet 3.5 to see if a mixture of tool use (aka function calling) and stuffing the prompt with more examples might be able to get us to feature parity with the finetuned models. Watch this space.</p>
+</section>
+<section id="data-labelling-issues" class="level2">
+<h2 class="anchored" data-anchor-id="data-labelling-issues">Data labelling issues</h2>
+<p>One commenter found some inconsistencies in the data labelling around dates. I’ll admit to not really having a good answer around this, but also I didn’t dive into the issues raised too deeply. They showed some examples of where the ‘ground truth’ date assigned to a press release was wrong. There’s of course the possibility I may have made mistakes while doing the labelling, and there might be some cases where press releases were emailed out earlier than when they were published on the website, but that’s much harder to show. I’ll dig into this a bit at some point, though this is lower priority on the ‘next steps’ list.</p>
+</section>
+<section id="you-cant-predict-what-people-want-to-read" class="level2">
+<h2 class="anchored" data-anchor-id="you-cant-predict-what-people-want-to-read">You can’t predict what people want to read!</h2>
+<p>The title I chose was clearly designed to be a bit provocative and/or draw readers in, but it wasn’t hyperbolic. My evals did actually show my finetuned models ‘beating’ GPT-4o. That said, <a href="https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html">the blog before it</a>, setting up the evals I did, was written in a fairly general way and I was really surprised that people enjoyed reading that one so much. It just goes to show that you just need to keep showing up, writing and publishing and you don’t know what people will like. Most of the time I’m writing just for me anyway, so anything on top is just a bonus.</p>
+<p>Alongside this is the understanding that the things that a Hacker News audience enjoys are not necessarily the same things that the wider world and readership enjoys. That’s worth bearing in mind.</p>
+</section>
+<section id="github-pages-hosting-holds-up" class="level2">
+<h2 class="anchored" data-anchor-id="github-pages-hosting-holds-up">Github Pages hosting holds up!</h2>
+<p>My blog is <a href="https://quarto.org/">a Quarto blog</a> hosted on <a href="https://pages.github.com/">Github Pages</a>. As such I don’t pay anything for this hosting. I was pleasantly surprised that Github Pages did well in scaling up in response to the traffic. There was no slowness or downtime on the site. Good to know that just because you’re using open-source software and free tools that you’re not penalised.</p>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
+<p>My next effort will be to dive into the deployment side of these finetuned LLMs along with some of the low-hanging fruit mentioned above.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-12-01">
+<meta name="description" content="We dive into how ZenML builds its docs, how the files and code is structured inside our repository and other fun topics.">
+
+<title>Alex Strick van Linschoten - Advent of ZenML Day 1: /docs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Advent of ZenML Day 1: <code>/docs</code></h1>
+                  <div>
+        <div class="description">
+          We dive into how ZenML builds its docs, how the files and code is structured inside our repository and other fun topics.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">zenml</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">documentation</div>
+                <div class="quarto-category">aoz</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 1, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#stable-diffusion-101" id="toc-stable-diffusion-101" class="nav-link active" data-scroll-target="#stable-diffusion-101">💬🌄 Stable Diffusion 101</a></li>
+  <li><a href="#core-takeaways-how-does-it-work" id="toc-core-takeaways-how-does-it-work" class="nav-link" data-scroll-target="#core-takeaways-how-does-it-work">🛠 Core Takeaways: How does it work?</a>
+  <ul class="collapse">
+  <li><a href="#fundamentals-still-count" id="toc-fundamentals-still-count" class="nav-link" data-scroll-target="#fundamentals-still-count">Fundamentals still count</a></li>
+  <li><a href="#the-tricks-are-the-way" id="toc-the-tricks-are-the-way" class="nav-link" data-scroll-target="#the-tricks-are-the-way">The tricks <em>are</em> the way</a></li>
+  <li><a href="#what-happens-when-we-train-the-diffusion-model" id="toc-what-happens-when-we-train-the-diffusion-model" class="nav-link" data-scroll-target="#what-happens-when-we-train-the-diffusion-model">💪 What happens when we train the diffusion model</a></li>
+  <li><a href="#what-happens-when-we-generate-an-image" id="toc-what-happens-when-we-generate-an-image" class="nav-link" data-scroll-target="#what-happens-when-we-generate-an-image">🎨 What happens when we generate an image</a></li>
+  </ul></li>
+  <li><a href="#how-to-play-practice-for-part-ii" id="toc-how-to-play-practice-for-part-ii" class="nav-link" data-scroll-target="#how-to-play-practice-for-part-ii">🎺 How to play &amp; practice for part II</a></li>
+  <li><a href="#glossary-of-core-terms" id="toc-glossary-of-core-terms" class="nav-link" data-scroll-target="#glossary-of-core-terms">📖 Glossary of Core Terms</a></li>
+  <li><a href="#new-mathematical-symbols" id="toc-new-mathematical-symbols" class="nav-link" data-scroll-target="#new-mathematical-symbols">✖️➗ New Mathematical Symbols</a></li>
+  <li><a href="#enduring-questions" id="toc-enduring-questions" class="nav-link" data-scroll-target="#enduring-questions">❓ Enduring Questions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>(This is part of a series of blog posts in which I read through the ZenML codebase. To read others, see the ones listed for <a href="https://mlops.systems/categories/#aoz">the ‘aoz’ tag</a>.)</em></p>
+<p>Much awaited and anticipated, the <a href="https://www.fast.ai/posts/part2-2022.html">second part of the FastAI course</a> is being taught live again. If part one is about getting solid foundations and learning how to get going in a practical/useful way, part two is about approaching things from the foundations but with research or ‘impractical’ questions kept in mind. The backdrop of the current iteration is the breakthroughs happening in the world of generative computer vision models like <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4">Stable Diffusion</a>, which we’ll explore and deconstruct (and reconstruct?!) over the coming weeks.</p>
+<p>Diving into the details of how things work means that along the way we’re much more likely to encounter (legitimate) specialist vocabulary and techniques as well as a decent dose of jargon. Whereas bringing up the intricacies of particular algorithms, architectures or mathematical methods was unnecessary during part one, it seems like part two is a little bit more of a venue for that kind of material. I will use these blogs as a way of reviewing materials and concepts introduced during the lectures as well as keeping track of the big questions I have.</p>
+<p>In this blog, in particular, I’ll keep a glossary at the bottom for some new terms which were introduced. I may repeat this for subsequent blog reviews, depending on what’s covered in those lessons. I’ll also keep a section containing new mathematical symbols that are introduced. (This blog mainly relates to the core lecture given during week 1. I’ll update it later with some small extras that came up from the 9A and 9B videos, or expand those into separate posts on their own.)</p>
+<p>Stable Diffusion isn’t, in itself, a model that I’m especially interested in, except insofar as it teaches me fundamental principles about the craft of deep learning or about doing research in this field. As such, my plan and current intention is to stick to documenting core mental models or bigger-picture lessons that I’m taking away from the lessons rather than each individual step that Jeremy made along the way. (This seems to be the motivation behind including it in the course at all. Stable Diffusion touches so many topics (big and small) and getting to grips with this one thing will help understand many other things about machine learning and the world of research.)</p>
+<section id="stable-diffusion-101" class="level1">
+<h1>💬🌄 Stable Diffusion 101</h1>
+<p>If you’ve been on the internet at all during the past 6-12 months, you’ll almost certainly have been exposed to examples of images that have been generated using techniques grounded in deep learning. Here is one that I generated just now:</p>
+<p><img src="fastai-lesson-9/sd-dutch-nn.png" title="This used the prompt 'a Dutch male AI researcher trying to understand how neural networks work. looking at a computer screen on his desk'" class="img-fluid"></p>
+<p>These images are generated by passing in a prompt into the model which then uses that to come up with something that represents the text you passed in. (Shoutout to the creators and maintainers of <a href="https://github.com/fastai/diffusion-nbs">the tremendously useful <code>diffusion-nbs</code> notebooks</a>.) The interface between the text and the image is still not as seamless as might be hoped, and a discipline of ‘prompt engineering’ has grown around finding the best ways to coax certain kinds of images out of the model. (See <a href="http://dallery.gallery/wp-content/uploads/2022/07/The-DALL·E-2-prompt-book-v1.02.pdf">this book</a> to learn more about what works with DALL-E 2, for example. Or visit <a href="https://lexica.art">Lexica</a> to search images based on the prompts that were used to create them.)</p>
+<p>There are some obvious interim questions that result from the existence of such models and their outputs, notably what this allows in terms of creativity and how it might transform the kinds of tools we use for image editing and creation. The advances are certainly impressive, but outside the field, (and without being moving on too quickly from the unquestioned achievement of these types of models) what does it mean for the rest of deep learning?</p>
+<p>The first thing that is maybe interesting for the field is the way that these models are multi-modal, or in other words they aren’t stuck in the silo of being text-only, or image-only, and so on. We are able to translate (to a greater or lesser degree) between language and images with these models, which seems like it might open up a whole universe of interactions and behaviours that are interesting to explore.</p>
+<p>At a very (very) high level, what’s going on with stable diffusion is that it starts with generating an image that is more or less purely random noise, and then (with subsequent iterations) slowly reveals an image and coherence that was contained within the random noise. Similar to how Michelangelo said of sculpture (“It is already there, I just have to chisel away the superfluous material”), what happens here is that we have to remove the superfluous noise.</p>
+</section>
+<section id="core-takeaways-how-does-it-work" class="level1">
+<h1>🛠 Core Takeaways: How does it work?</h1>
+<p>Those of you not taking the course live will have to wait a few months for the lectures to be released and in any case I don’t want to parrot the order and progression of how Jeremy explained how Stable Diffusion works. With that said, I was pleasantly surprised by how much I was able to follow along given what is a fairly technically involved topic. (Note to self: the fundamentals continue to be important!)</p>
+<section id="fundamentals-still-count" class="level2">
+<h2 class="anchored" data-anchor-id="fundamentals-still-count">Fundamentals still count</h2>
+<p>Even though there are a hundred and one small innovations and technologies which make something like Stable Diffusion possible, in the end we’re still dealing with Deep Learning and we’re still dealing with finding ways of converting things into numbers which can be used by machines to update weights by way of evaluating loss functions. So many of the individual pieces that make up how you build something like Stable Diffusion amount to:</p>
+<ul>
+<li>figure out how to get this non-number-like thing into a numeric representation (ideally a vector of some kind)</li>
+<li>do all the usual deep learning things that we’ve done a thousand times and that we know work</li>
+<li>at the end, maybe find a way to convert the numeric representation that our model learned into some kind of form that is useful to us</li>
+</ul>
+<p>Obviously the details are important and nobody is creating magical generative art with this very high-level hand-wavy explanation, but for someone at the earlier end of their journey into deep learning it is reassuring that the fundamentals continue to have relevance and that those mental models remain useful as a way of thinking about new developments.</p>
+</section>
+<section id="the-tricks-are-the-way" class="level2">
+<h2 class="anchored" data-anchor-id="the-tricks-are-the-way">The tricks <em>are</em> the way</h2>
+<p>The other pleasant surprise was the enduring relevance of ‘tricks’. In chapter one of the FastAI book, Jeremy &amp; Sylvain showcase a number of examples where clever approaches are taken to solve problems with Deep Learning:</p>
+<ul>
+<li>a malware classification program is made by converting malware code into an image which is used to train a model</li>
+<li>a fraud detection algorithm is trained by converting images of computer mouse movements</li>
+<li>…and so on</li>
+</ul>
+<p>Even amongst the Delft FastAI study group, Kurian trained <a href="https://kurianbenoy.com/ml-blog/fastai/fastaicourse/2022/05/01/AudioCNNDemo.html">a classifier to detect genre in music samples</a> using a similar method (i.e.&nbsp;using images as an intermediary form for the samples which were used in training). The book emphasises:</p>
+<blockquote class="blockquote">
+<p>“In general, you’ll find that a small number of general approaches in deep learning can go a long way, if you’re a bit creative in how you represent your data! You shouldn’t think of approaches like the ones described here as”hacky workarounds,” because actually they often (as here) beat previously state-of-the-art results. These really are the right ways to think about these problem domains.”</p>
+</blockquote>
+<p>Most of these ‘tricks’ seem to relate to either performance improvements (i.e.&nbsp;how can we get this training to happen faster, or with fewer compute needs) or ways of getting your problem domain into a form that we can use deep learning techniques on them. In the case of Stable Diffusion, one of the problems we have to address is how to work in this multi-modal manner, where text is used to represent a particular idea (which in turn needs a vector/numeric representation) but where we also want to represent that same idea in image form.</p>
+<p>At the same time, we have the whole autoencoder part of the story — whereby we use an encoder to turn a large image into a (smaller-sized) latent representation which can be used in training, and then we use a decoder to turn a noisy latent into a full-sized image — which seems to mainly be about making the training process more efficient.</p>
+<p>Each of these techniques come with their own complexities and histories, but it’s just notable to me how the story of the development of machine learning techniques seems somehow to be a succession of these small incremental innovations that progressively accrue. That’s not to say that there aren’t big breakthroughs in either understanding why things work the way they do, or in the more tactical method space, but it just seemed very apparent in the unpacking of Stable Diffusion that a great deal of creative stitching together of ideas had taken place.</p>
+<p>The historian in me is fascinated by the different pathways that the field has explored, or the reasons why certain techniques emerged when they did, or how hardware improvements gave tried-and-rejected techniques a new lease of life, but I’m guessing that probably doesn’t help much with the work of research.</p>
+</section>
+<section id="what-happens-when-we-train-the-diffusion-model" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-when-we-train-the-diffusion-model">💪 What happens when we train the diffusion model</h2>
+<p>A diffusion model is a neural network that we train. The way it works is that it removes noise from an image (passed in as input along with a text prompt) such that the output more closely resembles the prompt. When we are training our network, we pass in the vectorised words along with the latent forms of the images (since those are much smaller file sizes and thus faster / more efficient to train). We use the encoder to get a latent representation of the image that we use for training.</p>
+<p>For the text caption, we want a way to represent the association of images with text captions in vector space. In other words, if there are various phrases that all represent more or less the same image if you were to translate those phrases into an image, then those should be similar when represented as a vector. The technique or trick for this is to use ‘contrastive loss’, a particular kind of loss function which allows us to calculate the relative similarity of two vectors. This contrastive loss is what gives us the first two letters of <a href="https://openai.com/blog/clip/">‘CLIP’</a>, a neural network developed by OpenAI.</p>
+<p>The CLIP model takes some text and outputs an embedding, i.e.&nbsp;some features in vector form that our unet can use for training along with the images in their latent representation form.</p>
+</section>
+<section id="what-happens-when-we-generate-an-image" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-when-we-generate-an-image">🎨 What happens when we generate an image</h2>
+<p>When generating our image we can use the neural network we trained to progressively remove noise from our candidate image. We start off with a more or less completely noisy image, then apply the unet to it and it returns the noise that it calculates is sitting on top of a latent representation that approximates the vectorised version of our prompt. We take a fraction of that, remove it, and repeat a few times. (Currently that can take as many as 50 iterations before we reach a really impressive image, but new techniques are in review which would dramatically reduce the need for so many iterations.)</p>
+<p>Note that it is during the inference stage where we need the decoder part of our (VAE) encoder to turn a latent tensor representation of an image into a fully-fledged large picture.</p>
+</section>
+</section>
+<section id="how-to-play-practice-for-part-ii" class="level1">
+<h1>🎺 How to play &amp; practice for part II</h1>
+<p>I also wanted to briefly take a second to reflect on what might be useful as ways to get practically involved during the coming weeks. In part one, the instruction was fairly simple: “train lots of models”. In part two, the practicality is initially still there, it seems, but there will be other areas of emphasis. The things that seem to make sense to me currently are:</p>
+<ul>
+<li>continue to blog as a way of reflecting and developing my understanding</li>
+<li>understand and digest the core concepts that are introduced</li>
+<li>whenever the ‘code everything from scratch’ part of the course starts, make sure to at least attempt this on my own alongside whatever is being showcased in lectures</li>
+<li>discuss areas where concepts are unclear during the weekly <a href="https://www.meetup.com/delft-fast-ai-study-group/">Delft FastAI study group</a> calls that I organise</li>
+</ul>
+<p>I suspect that the discipline of the coding will be most instructive, once we get to it, though by extension probably also one that comes with the most struggle.</p>
+<p>Following a session of the Delft Study Group, I gathered some more suggestions for how to get the most out of this part 2:</p>
+<ul>
+<li>get hands-on as much as possible</li>
+<li>‘the details matter’ and try to go above and beyond with the course and you’ll be rewarded</li>
+<li>blog and explain what you’re learning</li>
+<li>answer questions on the forums as a way of cementing your learning</li>
+<li>don’t let yourself get blocked by ideas that you don’t understand along the way. Keep following along with the course and more likely than not these things will clear themselves up</li>
+</ul>
+</section>
+<section id="glossary-of-core-terms" class="level1">
+<h1>📖 Glossary of Core Terms</h1>
+<p>(Listed alphabetically, not in the order of exposition. Also these reflect my current understanding which is not always complete, so I’ll keep this updated as my understanding grows.)</p>
+<ul>
+<li><strong>Analytic derivatives</strong> — This is a faster way of calculating the gradients for our image, such that we calculate the whole set at once. This is what PyTorch uses under the hood in conjunction with a GPU to speed up the training process.</li>
+<li><strong>Autoencoder (model)</strong> — This is a combination of an encoder and a decoder. This model is a neural network with a series of layers that progressively ‘compress’ an image (through convolutions) until the point where it is much smaller. At this point the representation is called a ‘latent’. Then (in the full autoencoder) the image is progressively scaled back up into its full version.</li>
+<li><strong>CLIP</strong> — This is a model that turns text into images, powered by ‘contrastive loss’. It was developed by OpenAI.</li>
+<li><strong>Contrastive loss</strong> — This is a loss function that allows us to compare the similarity of two vectors. We multiply them together and sum up all the values. (This process is also known as the dot product.) If the two vectors are similar, we would expect the number to be large. Contrastive loss is used in CLIP.</li>
+<li><strong>Convolutional layer</strong> — This is a key part of computer vision and it is a way of representing images at different resolutions. Images are either scaled up or down through a convolutional layer (which seems to be some way of averaging the values of an image). Convolutional is the C in CNN.</li>
+<li><strong>Decoder</strong> — This is the part of an autoencoder that takes a latent representation and scales it back up (i.e.&nbsp;‘decompresses’ it) to its full representation.</li>
+<li><strong>Differential equations</strong> — This is a part of mathematics which is really important for Stable Diffusion and whose language forms the context and backdrop for discussions around this technique, but it is a fairly different set of vocabulary from what we use for deep learning.</li>
+<li><strong>Diffusion sampler</strong> — This is the part of the process which relates to adding or subtracting noise from an image.</li>
+<li><strong>Dot product</strong> — This is the process by which we multiply two vectors by each other and sum up the values. It is used when we are calculating contrastive loss, but it is a common linear algebra calculation.</li>
+<li><strong>Embedding</strong> — This is a representation of something as a vector, particularly useful for deep learning. In particularly, it’s useful for areas like text where we might, for example have semantic fields that we want to represent as being similar to each other, but we need to do so in such a way as is comprehensible and processable by a machine. Embeddings allow us to do this in vector space.</li>
+<li><strong>Encoder</strong> — This is one part of an autoencoder that takes a full sized image and passes it through a series of convolutions such that at the end we have a significantly reduced tensor that is known as a latent.</li>
+<li><strong>Finite differentiation</strong> — This is one way of calculating the gradients for our image, but it is done pixel by pixel. It is quite slow. (Contrast with analytic derivative.)</li>
+<li><strong>Guidance + guidance scale</strong> — This is the prompt that we pass into our Stable Diffusion model. The guidance scale is what we can pass in to our generation function call to specify how much we want the prompt to be strictly followed.</li>
+<li><strong>Latent representation(s)</strong> — This is the intermediate product in the middle of an autoencoder. It is what is produced by an encoder, and it is what is consumed by a decoder. It is sort of a compressed version of all the important pieces of information relating to a particular image, for example.</li>
+<li><strong>Momentum</strong> — This is a technique used by optimizers in which if we increase the same parameters (or weights) several times in a row, then it seems likely that we’ll do that again so we can increase the learning rate for those parameters so that we don’t have to make so many iterations.</li>
+<li><strong>Negative prompts</strong> — You can pass in a negative prompt along with your prompt and it is a way somehow of ensuring that the resulting image does not correspond to whatever was in the negative prompt. (Think of it as ‘subtracting’ from the main prompt, which seems to be what is going on under the hood, in vector space).</li>
+<li><strong>Noise</strong> — Noise is random data, with no meaning as such. It is important in the world of Stable Diffusion because the work of generating the image is the work of removing noise.</li>
+<li><strong>Perceptual loss</strong> — This is another kind of loss function that may play a role in Stable Diffusion going forward int he course.</li>
+<li><strong>Pipeline</strong> — This is the concept that is used by the <a href="https://github.com/huggingface/diffusers">HuggingFace Diffusers library</a>, out of which our images are generated.</li>
+<li><strong>Score function</strong> — This is another way of stating the gradients for our image. I.e. the representation of what needs adjusting (and by how much) in order to remove noise from our image.</li>
+<li><strong>Step</strong> — This is one iteration of the inference process.</li>
+<li><strong>Textual Inversion</strong> — This is the process of creating a new embedding for a single specific concept or item. (i.e.&nbsp;the Indian watercolour example in the course)</li>
+<li><strong>Time step</strong> — This is a concept from the way the original Stable Diffusion creators thought about things. It represents a way to go from a value to an amount of noise that gets added to an image.</li>
+<li><strong>VAE</strong> — This is the specific kind of autoencoder used in Stable Diffusion.</li>
+</ul>
+</section>
+<section id="new-mathematical-symbols" class="level1">
+<h1>✖️➗ New Mathematical Symbols</h1>
+<ul>
+<li>∑ — means to sum up</li>
+<li>∇ — we use this symbol instead of something else (d something?) in representing the gradient because we are talking about the gradients of many pixel values and not just a single one</li>
+<li>β — (beta) — used in relation to the time steps to represent the amount of noise or variance. I think this is used instead of the letter σ (sigma), but I might be wrong on that.</li>
+</ul>
+</section>
+<section id="enduring-questions" class="level1">
+<h1>❓ Enduring Questions</h1>
+<p>Some of the questions which I have in my mind following the class include:</p>
+<ul>
+<li>These ‘generative’ models intersect with the field of art and creativity, at least nominally, but to what extent can we even say that they are generating something versus simply repeating things that they’ve already seen? (see also, <a href="https://dl.acm.org/doi/10.1145/3442188.3445922">the ‘stochastic parrots’ paper</a>)</li>
+<li>SKILL: are there tricks or best practices when deciphering jargon-rich papers down to their core and, in doing so, being able to see the parts of the paper that are new (versus the parts that are just standard practice)?</li>
+<li>SKILL: what does it mean to be ‘impractical’ i.e.&nbsp;do research in this field? What is involved and how is it generally or most usefully done?</li>
+<li>What are the useful or fundamental innovations involved in Stable Diffusion?</li>
+<li>What are the parts of ML/DL and/or Stable Diffusion that we do because of time or hardware or cost limitations as opposed to the things that we do because they are the right way to approach this particular problem? (provoked by the whole detour down into autoencoders that seems mainly to be there to improve iteration speed.)</li>
+<li>What’s the bigger takeaway for the field as a whole? In other words, what things can we think about doing now with these new techniques?</li>
+<li>Why does the whole ‘time steps’ conversion stage happen at all? i.e.&nbsp;why can’t we just choose a random number to represent how much or little noise we apply to an image for our training data.</li>
+<li>The autoencoder / compression step seems like an amazing technique all to its own. Is it really lossless, or is some information lost along the way?</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
