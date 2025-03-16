@@ -9,6 +9,7 @@
     "listing": "/index.html",
     "items": [
       "/posts/saba.html",
+      "/posts/2025-03-16-learnings-building-llms.html",
       "/posts/2025-02-21-beeminder-mcp.html",
       "/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html",
       "/posts/2025-02-11-starting-the-hugging-face-agents-course.html",
