@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-05-31">
+<meta name="description" content="There are many pieces involved when deploying a model. This post covers the ones that relate to my object detection model and I explain how I’m going to put together the pipelines that will drive a continuous training loop once it’s all up.">
+
+<title>Alex Strick van Linschoten - It takes a tribe: how I’m thinking about putting my object detection model into production</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - It takes a tribe: how I’m thinking about putting my object detection model into production">
+<meta property="og:description" content="There are many pieces involved when deploying a model.">
+<meta property="og:image" content="https://mlops.systems/posts/production-introduction/blemish-pipelines.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="737">
+<meta property="og:image:width" content="797">
+<meta name="twitter:title" content="Alex Strick van Linschoten - It takes a tribe: how I’m thinking about putting my object detection model into production">
+<meta name="twitter:description" content="There are many pieces involved when deploying a model.">
+<meta name="twitter:image" content="https://mlops.systems/posts/production-introduction/blemish-pipelines.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="737">
+<meta name="twitter:image-width" content="797">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">It takes a tribe: how I’m thinking about putting my object detection model into production</h1>
+                  <div>
+        <div class="description">
+          There are many pieces involved when deploying a model. This post covers the ones that relate to my object detection model and I explain how I’m going to put together the pipelines that will drive a continuous training loop once it’s all up.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">redactionmodel</div>
+                <div class="quarto-category">computervision</div>
+                <div class="quarto-category">mlops</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 31, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tldr-what-will-you-learn" id="toc-tldr-what-will-you-learn" class="nav-link active" data-scroll-target="#tldr-what-will-you-learn">🚦 TL;DR: What will you learn?</a></li>
+  <li><a href="#what-is-in-production-for-the-redaction-model" id="toc-what-is-in-production-for-the-redaction-model" class="nav-link" data-scroll-target="#what-is-in-production-for-the-redaction-model">🚀 What is ‘in production’ for the redaction model?</a></li>
+  <li><a href="#handling-failure-and-success" id="toc-handling-failure-and-success" class="nav-link" data-scroll-target="#handling-failure-and-success">⚖️ Handling failure and success</a></li>
+  <li><a href="#basic-mlops-building-blocks" id="toc-basic-mlops-building-blocks" class="nav-link" data-scroll-target="#basic-mlops-building-blocks">🧱 Basic MLOps building blocks</a>
+  <ul class="collapse">
+  <li><a href="#code-standardisation" id="toc-code-standardisation" class="nav-link" data-scroll-target="#code-standardisation">⎂ Code standardisation</a></li>
+  <li><a href="#code-versioning" id="toc-code-versioning" class="nav-link" data-scroll-target="#code-versioning">📸 Code Versioning</a></li>
+  <li><a href="#data-model-and-artifact-versioning" id="toc-data-model-and-artifact-versioning" class="nav-link" data-scroll-target="#data-model-and-artifact-versioning">🧳 Data, Model and Artifact Versioning</a></li>
+  <li><a href="#testing" id="toc-testing" class="nav-link" data-scroll-target="#testing">🧪 Testing</a></li>
+  <li><a href="#data-validation" id="toc-data-validation" class="nav-link" data-scroll-target="#data-validation">👁 Data Validation</a></li>
+  <li><a href="#experiment-tracking" id="toc-experiment-tracking" class="nav-link" data-scroll-target="#experiment-tracking">📝 Experiment Tracking</a></li>
+  <li><a href="#monitoring" id="toc-monitoring" class="nav-link" data-scroll-target="#monitoring">📺 Monitoring</a></li>
+  <li><a href="#automated-model-deployment" id="toc-automated-model-deployment" class="nav-link" data-scroll-target="#automated-model-deployment">🏁 Automated Model Deployment</a></li>
+  <li><a href="#dag-cards-model-cards-data-cards-all-the-cards" id="toc-dag-cards-model-cards-data-cards-all-the-cards" class="nav-link" data-scroll-target="#dag-cards-model-cards-data-cards-all-the-cards">🃏 DAG Cards, Model Cards, Data Cards, All the Cards</a></li>
+  </ul></li>
+  <li><a href="#mlops-maturity-models" id="toc-mlops-maturity-models" class="nav-link" data-scroll-target="#mlops-maturity-models">👴 MLOps Maturity Models</a></li>
+  <li><a href="#redaction-project-workflow-1-annotation" id="toc-redaction-project-workflow-1-annotation" class="nav-link" data-scroll-target="#redaction-project-workflow-1-annotation">✍️ Redaction Project Workflow #1: Annotation</a></li>
+  <li><a href="#redaction-project-workflow-2-continuous-training-continuous-deployment" id="toc-redaction-project-workflow-2-continuous-training-continuous-deployment" class="nav-link" data-scroll-target="#redaction-project-workflow-2-continuous-training-continuous-deployment">🐙 Redaction Project Workflow #2: Continuous Training, Continuous Deployment</a></li>
+  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts">Final Thoughts</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/#category=redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
+<p>So we’ve trained our model… now what? Are we done?</p>
+<p>If we’re just exercising our curiosity or have a tight focus for our work, then we might well be done with our work. Our responsibility within a larger team might only be for this specific step of training the model, for example. For many cases, however, we’re going to want to do something with our model, perhaps making it available to others via some web interface or an online API.</p>
+<p>The next blog posts in this series will focus on the challenges and practicalities of getting a model ‘in production’. I’ll sidestep the nuances of exactly what we mean by ‘in production’ for the moment, but suffice it to say that the end goal is to have a way to not only make our model available to other consumers but also to deal with re-training and/or re-deploying new models to take the place of older or stale models. There is a whole spectrum of variety in this context that goes by the name “MLOps”. This blog post will try to provide a high level overview of some of the basic elements relevant to getting my redaction model into production.</p>
+<p><img src="production-introduction/blemish-pipelines.png" title="Keep reading to learn more about the different parts of my object detection workflows." class="img-fluid"></p>
+<section id="tldr-what-will-you-learn" class="level2">
+<h2 class="anchored" data-anchor-id="tldr-what-will-you-learn">🚦 TL;DR: What will you learn?</h2>
+<ul>
+<li>🤖 Deploying a model and automating everything on the way requires a decent number of steps and tools to do it properly.</li>
+<li>👀 I take you through the core steps you need to think about when working with a continuously deployed object detection model.</li>
+<li>💪 I end by outlining the specific pieces I will need to build as I get my own model out into the world and ‘in production’.</li>
+</ul>
+</section>
+<section id="what-is-in-production-for-the-redaction-model" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-in-production-for-the-redaction-model">🚀 What is ‘in production’ for the redaction model?</h2>
+<p>“Production” relates heavily to the use case. An image classification model used across the United States to identify dents on rental cars is going to have a very different profile to a privately hosted language model being used as part of an internal company chatbot interface. In the case of our redaction model, there are two main scenarios that I’m interested in supporting:</p>
+<ul>
+<li>an online API which can power other services building on top of the functionality the model enables, albeit document-by-document. A user could upload a specific document and they’d receive specific predictions and results for just that document.</li>
+<li>an offline-first model which handles large volumes of input data and that does not require internet connectivity. For example, legal teams trying to get a sense of what kinds of documents are redacted as part of a case (and to what extent) could run an extended inference process over an entire set of documents.</li>
+</ul>
+<p>These two scenarios have different requirements. Of the two, the online version is perhaps slightly more complex given the more complex serving needs and potential guarantees around speed of execution and so on. The second use offline / on-prem scenario has its own challenges around making sure that inference is fast enough to be able to work over massive document collections, but I’m not sure I’d consider that an MLOps challenge so I will mostly be focusing on the online deployment in this series.</p>
+</section>
+<section id="handling-failure-and-success" class="level2">
+<h2 class="anchored" data-anchor-id="handling-failure-and-success">⚖️ Handling failure and success</h2>
+<p>One way to think about what’s required to get a model in production is to think of the answers to the following two questions:</p>
+<ul>
+<li>what could go wrong with my deployed online model?</li>
+<li>what are the possible consequences if everything went really <em>well</em>?</li>
+</ul>
+<p>In terms of the redaction model, there are lots of potential complications:</p>
+<ul>
+<li>our model could be slow and therefore users wouldn’t want to hang around for inference to take place</li>
+<li>the data on which our model was originally trained could start to show its age and so maybe our model wouldn’t perform as well on newer documents being released (perhaps with a different style or method of redaction)</li>
+<li>some software bug or managed infrastructure outage could bring our hosting down and we’d have to redeploy everything</li>
+<li>there could be a legal or ethical challenge to our deployed model, and we’d perhaps be required to show the exact process used that resulted in a particular model</li>
+<li>maybe the way we choose to make our model available is expensive and/or unreliable</li>
+<li>and so on…</li>
+</ul>
+<p>If things went really well, we have a different set of problems: perhaps a million people would be interested in using the service at the same time. This scalability problem could bring down the model inference service completely. Or perhaps the model would be adopted for use in a legal setting and people would start to trust its predictions blindly without taking into account the fact that its performance was starting to decline the further away we got from when it was originally trained. Maybe some legal institution would start using it to make decisions making assumptions about the accuracy of the model’s predictions, or maybe even the various government departments responsible for <em>creating</em> and <em>applying</em> the redactions in the first place would use it as a way of more efficiently or voluminously adding redactions, an unintended consequence that could potentially be harmful.</p>
+<p>All the above scenarios and more are some of the reasons why MLOps exists. We care about having repeatable and robust processes for getting our models out in the world because the use cases are themselves often complex. We also care that our models are actually a net positive when released into the world rather than just some process that happens after model training is completed from which we’re completely disconnected.</p>
+</section>
+<section id="basic-mlops-building-blocks" class="level2">
+<h2 class="anchored" data-anchor-id="basic-mlops-building-blocks">🧱 Basic MLOps building blocks</h2>
+<p><img src="production-introduction/mlops-landscape.png" title="A somewhat notorious image offering an the overview of some of the MLOps tooling available to users." class="img-fluid"></p>
+<p>These are some of the tools available to those trying to put their models into production. This <a href="https://landscape.lfai.foundation">‘landscape’</a> showcases both the explosion of options for various parts of the full lifecycle as well as the way that this space hasn’t yet settled on a set of best-in-class tools. For my redaction project, there are a few basics that will seek to have in place in order to meet the needs of the use case(s):</p>
+<section id="code-standardisation" class="level3">
+<h3 class="anchored" data-anchor-id="code-standardisation">⎂ Code standardisation</h3>
+<p>Perhaps not even worth mentioning, but having some standards around how the code looks and having processes to enforce this is important. Using <a href="https://pre-commit.com"><code>pre-commit</code></a> alongside tools like <a href="https://black.readthedocs.io"><code>black</code></a>, <a href="https://pycqa.github.io/isort/"><code>isort</code></a>, <a href="https://github.com/terrencepreilly/darglint"><code>darglint</code></a>, <a href="http://www.pydocstyle.org"><code>pydocstyle</code></a> and so on will take you a long way in this direction.</p>
+<p>This would be especially important if I were working as part of a team. These tools would ensure some kinds of standards and baseline uniformity within the codebase. In my case, I’m doing everything on my own so it matters less, but these tools all help me collaborate with my future self, several months from now, perhaps when I need to fix some bug or add a new feature. Having code that reads clearly and cleanly goes a long way to getting started on that work.</p>
+</section>
+<section id="code-versioning" class="level3">
+<h3 class="anchored" data-anchor-id="code-versioning">📸 Code Versioning</h3>
+<p>Versioning your code with a tool like <code>git</code> is also another basic requirement of any process involving software. I’d almost say this barely requires mentioning, but I know that the use of regular atomic git commits is by no means standard practice in the world of data science so it bears restating here.</p>
+<p>We version our code because we want to be able to go back to earlier points in our code’s history. If we wanted to see the difference between the code used to train our model today and the code used last week, we’d require a tool like <code>git</code> to help us with that. (Code versioning tools also help tremendously when collaborating with a larger team or to an open-source community project.)</p>
+<p>There are various options for what tool to use but the vast majority of people use <code>git</code> for this as of 2022.</p>
+</section>
+<section id="data-model-and-artifact-versioning" class="level3">
+<h3 class="anchored" data-anchor-id="data-model-and-artifact-versioning">🧳 Data, Model and Artifact Versioning</h3>
+<p>Last week I wrote about <a href="https://dvc.org/">DVC</a> and the ways it can be used as a lightweight way to add data versioning to a project. Since data is as important to a model as the code used to train it, we want ways to step backwards and forwards with our data. This will not only enable us to debug and retrain older models but it will help in general with managing our assets such that we don’t just have a sprawling series of folders with names like <code>training_data_FINAL_july_2021</code> or <code>validation_data_minus_synthetic_FINAL_FINAL_march_2020</code>.</p>
+<p>Not only does this make sense from the perspective of productivity, but for sensitive or popular ML applications there are <a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai">increasing legal requirements</a> around this kind of flexibility to introspect how you trained your models.</p>
+<p>DVC is commonly used for this kind of use case, but there are other alternatives such as <a href="https://www.pachyderm.com">Pachyderm</a> or <a href="https://lakefs.io">LakeFS</a> that might be worth considering if you have larger amounts of data.</p>
+</section>
+<section id="testing" class="level3">
+<h3 class="anchored" data-anchor-id="testing">🧪 Testing</h3>
+<p>This testing is primarily around ensuring that the code does what you think it’s doing, but we also care about preventing regressions in one part of the codebase when you change something somewhere else.</p>
+<p>There isn’t much in the way of rocket science to testing, but it is a whole world unto its own. For my project, there is a decent amount of code that handles somewhat complicated conversions between different kinds of image formats, multiple competing ideas for how bounding boxes or <code>BBox</code>es should be handled as data structures and so on. Having a way to be sure that my code is actually doing what I intended is a surefire way to letting me sleep better at night if I intend my model to be used by others.</p>
+</section>
+<section id="data-validation" class="level3">
+<h3 class="anchored" data-anchor-id="data-validation">👁 Data Validation</h3>
+<p>Just like our code needs to have some kinds of checks and balances, so does the lifeblood of our project: our data. I recently finished <a href="https://mlops.systems/#category=datavalidation">a three-part series</a> on data validation in the context of this project, and both <a href="https://greatexpectations.io">Great Expectations</a> and <a href="https://evidentlyai.com">Evidently</a> are excellent options worth considering, depending on your exact requirements.</p>
+</section>
+<section id="experiment-tracking" class="level3">
+<h3 class="anchored" data-anchor-id="experiment-tracking">📝 Experiment Tracking</h3>
+<p>{% twitter https://twitter.com/bernhardsson/status/1526635195243409408 %}</p>
+<p>When starting a project from scratch, you want to iterate quickly, trying out lots of training options or combinations of features and/or data. Not only do you want to be able to replicate the precise combination of data and code used to train a particular model, but you also want to be able to compare these various efforts with one another.</p>
+<p>Experiment trackers like <a href="https://wandb.ai">Weights &amp; Biases</a>, <a href="https://mlflow.org">MLflow</a>, <a href="https://www.tensorflow.org/tensorboard/">Tensorboard</a> and <a href="https://neptune.ai">Neptune</a> enable you to compare the results of your models as well as practically any combination of the hyperparameters used to train them. I’ve <a href="https://mlops.systems/redactionmodel/computervision/tools/2022/03/03/model-improvements.html">used</a> <a href="https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html">charts</a> from my own (Weights &amp; Biases-powered) experiment tracker to showcase the different results obtained as part of my process. Not only is it useful for outward-facing engagement with users, stakeholders or other third-parties, but it can be useful to step back from your experiments and evaluate where your model is performing well and how you might improve it.</p>
+</section>
+<section id="monitoring" class="level3">
+<h3 class="anchored" data-anchor-id="monitoring">📺 Monitoring</h3>
+<p>There’s a lot of potential complexity packed into the simple term ‘monitoring’. (I’d recommend you check out Shreya Shankar’s <a href="https://www.shreya-shankar.com/tags/machine-learning/">four-part series on monitoring</a> if you’re curious to learn more.) For our purposes, this will mainly involve making sure our model doesn’t drift or become stale. We’ll need to make sure that the data used to periodically (re)train or fine-tune our model is somewhat within the original parameters of the original training data. We’ll also want to be monitoring the kinds of predictions that our deployed model is making to make sure that they’re more or less within the reasonable ranges of values that we’d expect. If we start to regularly diverge from these kinds of boundary values it probably should prompt an examination of what’s going on and why we’re overstepping. This is an essential part of what it means to robustly deploy a model in production; you need to know when things are going wrong.</p>
+</section>
+<section id="automated-model-deployment" class="level3">
+<h3 class="anchored" data-anchor-id="automated-model-deployment">🏁 Automated Model Deployment</h3>
+<p>Automation is a big part of what people generally consider to be ‘mature’ MLOps practices. It is useful to have an automated way to take your model from when training is complete to having it deployed and user-facing. Perhaps you know you need to retrain or fine-tune your model once a week because the data context is continually changing. Perhaps (or likely!) you have rigorous monitoring processes and in the event of a failure or series of non-sensical / out-of-bounds predictions you want a way to revert the model used in production to something more stable.</p>
+<p>This is where the process of putting a model in production resembles the processes and values of DevOps most closely. For my redaction model, I’ll want to have a way to handle the two cases mentioned above as a starting point along with more complex versions of those cases. I’ll also want to automate the process of converting my IceVision VFNet model into something that can be used in the offline ‘on-prem’ use case I described at the beginning of this post.</p>
+</section>
+<section id="dag-cards-model-cards-data-cards-all-the-cards" class="level3">
+<h3 class="anchored" data-anchor-id="dag-cards-model-cards-data-cards-all-the-cards">🃏 DAG Cards, Model Cards, Data Cards, All the Cards</h3>
+<p>The basic idea is that you write some notes on the context surrounding your data, or your model or the pipelines you’re using as part of your overall workflow. Your processes and artifacts will likely change with the project, and I know from bitter experience that it’s easy to forget the reasoning behind why you chose to do one thing or another. So you write notes to describe what you were thinking when you created or modified this or that asset. You describe the decisions you made and what tradeoffs and downstream effects this might have. Not only is this a good practice that benefits FutureYou™️ and your project, but anything developed in the open will maybe have users or contributors and they’ll also benefit from these notes.</p>
+<p>This is the only part of my ‘requirements’ that is (at least currently) <a href="https://towardsdatascience.com/dag-card-is-the-new-model-card-70754847a111">a bit more of a ‘fad’</a> and I wouldn’t say was commonly found. Even five years from now, I imagine that we’ll have more sophisticated or standardised ways of achieving what cards bring, but for now they resonate strongly with some processes I used when working as a historian, archivist and researcher in <a href="https://foreignpolicy.com/2009/10/16/see-you-soon-if-were-still-alive/">my previous life</a>. Some tools like the Huggingface Model Hub offer this <a href="https://huggingface.co/docs/hub/model-repos#what-are-model-cards-and-why-are-they-useful">as a built-in standard</a>.</p>
+</section>
+</section>
+<section id="mlops-maturity-models" class="level2">
+<h2 class="anchored" data-anchor-id="mlops-maturity-models">👴 MLOps Maturity Models</h2>
+<p>The pieces I described above relate to my particular use case. Different project will require different levels of automation, or even potentially other additional stages or toolkits. There is a vast spectrum of options and decisions to be made and now is probably a good time to mention that various players have tried to define what it means to do the whole ‘putting a model into production and keeping it healthy’ thing in a good way. These “MLOps Maturity Models” are not completely without value, but remember that what works for Google may not be (or <a href="https://blog.bradfieldcs.com/you-are-not-google-84912cf44afb">is probably not</a>) applicable to you as an individual working on a small side-project. I wrote <a href="https://blog.zenml.io/mlops-maturity-models/">an overview of the two most commonly cited maturity models</a> (from Microsoft and Google) over on the ZenML blog and I encourage you to give that a read if you want to learn more.</p>
+<p>But what does this all mean for my project? What specifically will it all look like and how am I implementing it? I’ll get into some of the details in the coming weeks, but for now let me just outline my two main workflows.</p>
+</section>
+<section id="redaction-project-workflow-1-annotation" class="level2">
+<h2 class="anchored" data-anchor-id="redaction-project-workflow-1-annotation">✍️ Redaction Project Workflow #1: Annotation</h2>
+<p><img src="production-introduction/annotation-pipeline.png" title="The two parts of my annotation workflow." class="img-fluid"></p>
+<p>There are two main pieces to this pipeline that happens before we train our model. My model is still thirsty for annotations and data, so from the very beginning I want to integrate the annotation process in as part of how I set up the workflows. This way, I make it as easy as possible to annotate data and use that data for subsequent training or fine-tuning.</p>
+<ul>
+<li>Ingestion / Import</li>
+</ul>
+<p>Here I will check a series of pre-defined URLs to see if there are any new PDF files available for download. If new files are available (and we’ve confirmed that we haven’t already downloaded them, I can download those files. Those PDFs then get converted into image files and the metadata for each image gets saved centrally so we have that to hand when annotating the files. This point is a good one to save a checkpoint version of our data using DVC.</p>
+<ul>
+<li>Annotation</li>
+</ul>
+<p>We only want to annotate images that haven’t been annotated, so that check is the first to be performed before spinning up Prodigy to randomly select pages from the PDFs (now in the format of image files) to be annotated. 10% of the images that are annotated get saved in a separate ‘test data’ location. This test data is <em>never</em> used in training and is simply held out for a more realistic final validation of the project. We version the annotations file whenever we are done annotating for the day.</p>
+</section>
+<section id="redaction-project-workflow-2-continuous-training-continuous-deployment" class="level2">
+<h2 class="anchored" data-anchor-id="redaction-project-workflow-2-continuous-training-continuous-deployment">🐙 Redaction Project Workflow #2: Continuous Training, Continuous Deployment</h2>
+<p><img src="production-introduction/continuous-training-pipeline.png" title="The core parts of the continuous training and deployment pipeline." class="img-fluid"></p>
+<p>This longer pipeline contains the core value and most compute-intensive processes like training. We take the data from the raw state as annotations and go all the way to deployment.</p>
+<ul>
+<li>Annotation Checker</li>
+</ul>
+<p>We first check to see if there are any new annotations available since we last ran the pipeline. We will probably need some kind of threshold number of annotations which will make it worth our while to trigger the retraining process.</p>
+<ul>
+<li>Data Validation</li>
+</ul>
+<p>We’ll use Great Expectations to validate the incoming new annotation data.</p>
+<ul>
+<li>Synthetic Data Generation</li>
+</ul>
+<p>If / as we hit certain thresholds, we might want to generate more synthetic data and add it to the dataset.</p>
+<ul>
+<li>Training</li>
+</ul>
+<p>We train or fine-tune the model for a certain number of epochs. We log our experiment metadata with Weights &amp; Biases.</p>
+<ul>
+<li>Deployment Trigger / Decision</li>
+</ul>
+<p>At this point we need to decide whether to deploy the model or not, based on some evaluation criteria. Our decision will determine the path of the rest of the workflow.</p>
+<ul>
+<li>Deployment</li>
+</ul>
+<p>We take the trained model and make it available for online inference. We save a version of the model using DVC, and we also package it up for use in on-prem / offline settings.</p>
+<ul>
+<li>Inference &amp; Monitoring</li>
+</ul>
+<p>This step is crucial. We monitor the performance of our deployed model along with the predictions it is making. We want to be able to catch any cases where we notice the predictions to start to drift, or be aware of sluggish response times from our server and so on.</p>
+</section>
+<section id="final-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="final-thoughts">Final Thoughts</h2>
+<p>Nice work on making it all the way to the end! We took a long tour through the various considerations you need to bear in mind when deploying a model, and finished off with a preview of the kinds of things I’ll be building over the coming weeks to actually put my own object detection model in production.</p>
+<p>If you have parts of this that you’d like me to cover in more detail, or questions based on what you read here today, please leave a comment below!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

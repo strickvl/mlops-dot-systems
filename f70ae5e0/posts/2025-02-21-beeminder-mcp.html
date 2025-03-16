@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-02-21">
+<meta name="description" content="I built a Model Context Protocol (MCP) server for Beeminder to connect AI assistants with my personal goal tracking data. Here’s how I implemented this integration using Claude Desktop, what I learned about MCP development, and my vision for AI-powered personal productivity workflows.">
+
+<title>Alex Strick van Linschoten - Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data">
+<meta property="og:description" content="I built a Model Context Protocol (MCP) server for Beeminder to connect AI assistants with my personal goal tracking data.">
+<meta property="og:image" content="https://mlops.systems/posts/images/mcp-bm.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="1936">
+<meta property="og:image:width" content="1624">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data">
+<meta name="twitter:description" content="I built a Model Context Protocol (MCP) server for Beeminder to connect AI assistants with my personal goal tracking data.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/mcp-bm.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="1936">
+<meta name="twitter:image-width" content="1624">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data</h1>
+                  <div>
+        <div class="description">
+          I built a Model Context Protocol (MCP) server for Beeminder to connect AI assistants with my personal goal tracking data. Here’s how I implemented this integration using Claude Desktop, what I learned about MCP development, and my vision for AI-powered personal productivity workflows.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">anthropic</div>
+                <div class="quarto-category">claude</div>
+                <div class="quarto-category">miniproject</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 21, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>I spent the morning <a href="https://github.com/strickvl/mcp-beeminder">building an MCP server</a> for <a href="https://www.beeminder.com">Beeminder</a>, bridging the gap between AI assistants and my personal goal tracking data. This project emerged from a practical need — ok, desire :) — to interact more effectively with my Beeminder data through AI interfaces like Claude Desktop and Cursor.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mcp-bm.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The MCP-Beeminder mashup in action!</figcaption><p></p>
+</figure>
+</div>
+<section id="understanding-beeminder" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-beeminder">Understanding Beeminder</h2>
+<p>For those unfamiliar with <a href="https://www.beeminder.com">Beeminder</a>, it’s a tool that combines self-tracking with commitment devices to help users achieve their goals. The platform draws what they call a “Bright Red Line” – a visual commitment path that shows exactly where you need to be to stay on track. What makes Beeminder unique is its approach to accountability: users pledge real money to stay on their path, and there’s a seven-day “akrasia horizon” that prevents immediate goal changes, helping to overcome moments of impulsivity.</p>
+<p>I’ve <a href="https://www.google.com/search?q=site%3Aalexstrick.com+beeminder">written a <em>lot</em> about Beeminder</a> over on my personal blog in the past so do go check that out if you’re interested to learn more about how I use it. I can attest that if it clicks with you, you’ll find it incredibly valuable. I have used in the past to write books, learn languages, <a href="https://www.alexstrick.com/blog/2016/8/phd-tools-beeminder">finish my PhD</a> and many many other things.</p>
+</section>
+<section id="the-role-of-mcp" class="level2">
+<h2 class="anchored" data-anchor-id="the-role-of-mcp">The Role of MCP</h2>
+<p>The <a href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a> serves as a standardised way for AI assistants to interact with various data sources and tools. Think of it as a universal adapter that allows AI systems to directly access and manipulate data in your applications. Instead of copying and pasting information between your AI assistant and Beeminder, MCP creates a secure, direct connection.</p>
+<p>This standardisation is particularly valuable because it means you can build one interface that works across multiple AI platforms. Whether you’re using Claude Desktop, Cursor, or <a href="https://modelcontextprotocol.io/clients">other MCP-compatible tools</a>, the same server provides consistent access to your Beeminder data.</p>
+</section>
+<section id="building-the-server" class="level2">
+<h2 class="anchored" data-anchor-id="building-the-server">Building the Server</h2>
+<p>The development process was surprisingly straightforward, largely due to two factors: the well-documented MCP specification from Anthropic and an <a href="https://github.com/ianm199/beeminder_api_client">existing Python client</a> for Beeminder’s API by <a href="https://github.com/ianm199"><span class="citation" data-cites="ianm118">@ianm118</span></a>. Most of the implementation work involved mapping Beeminder’s API endpoints to MCP’s expected interfaces and ensuring proper error handling.</p>
+<p>And obviously, much of the code was actually written by Claude itself. After providing the initial structure, writing a couple of tools the way I wanted them and providing documentation, I found that Claude could generate the remainder of the code, requiring only minor adjustments and debugging from me.</p>
+</section>
+<section id="using-the-beeminder-mcp-server" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-beeminder-mcp-server">Using the Beeminder MCP Server</h2>
+<p>Having an MCP server for Beeminder opens up several practical possibilities. You can have natural conversations with AI assistants about your goals, analyse patterns in your data, and even update your tracking information – all while the AI has direct access to your actual Beeminder account. This direct connection means the AI can provide more contextual and accurate assistance, whether you’re adjusting goal parameters or analysing your progress trends.</p>
+<p>I’ve found that sometimes Claude needs a bit of coaxing to display the information it’s getting back from the Beeminder API in appropriate formats, which is to say, in table format. I will probably update my Claude settings so that it knows it should use tables (either Markdown or React components) to display Beeminder results that would benefit from such a presentation.</p>
+</section>
+<section id="looking-forward" class="level2">
+<h2 class="anchored" data-anchor-id="looking-forward">Looking Forward</h2>
+<p>Now that I have my Beeminder MCP server, I also want one for <a href="https://www.omnigroup.com/omnifocus">Omnifocus</a>, my task management app of choice. That’ll probably have to wait since it doesn’t appear that they offer a REST API, but it’ll be great when I can mash up the results of those two tool queries as that’s what I currently do manually as part of my process.</p>
+<p>The ease of building this MCP server suggests an interesting future where more of our tools and services become directly accessible to AI assistants. The real value isn’t in any single connection, but in the potential for creating a network of interconnected tools that AI can help us manage more effectively.</p>
+<p>If you’re interested in trying this out yourself, you can find the code and setup instructions in the <a href="https://github.com/strickvl/mcp-beeminder">GitHub repository</a>. While this implementation focuses on Beeminder, the same principles could be applied to create MCP servers for other services and tools.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

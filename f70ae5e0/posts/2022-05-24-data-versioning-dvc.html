@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-05-24">
+<meta name="description" content="I show you why you probably want to be versioning your data alongside your code. I introduce the basic functionality of DVC, the industry-standard tool for data versioning. I also explain specifically how I’m using DVC for my computer vision project.">
+
+<title>Alex Strick van Linschoten - More Data, More Problems: Using DVC to handle data versioning for a computer vision problem</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - More Data, More Problems: Using DVC to handle data versioning for a computer vision problem">
+<meta property="og:description" content="I show you why you probably want to be versioning your data alongside your code. I introduce the basic functionality of DVC, the industry-standard tool for data versioning.">
+<meta property="og:image" content="https://mlops.systems/posts/dvc/dvclogo.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="281">
+<meta property="og:image:width" content="500">
+<meta name="twitter:title" content="Alex Strick van Linschoten - More Data, More Problems: Using DVC to handle data versioning for a computer vision problem">
+<meta name="twitter:description" content="I show you why you probably want to be versioning your data alongside your code. I introduce the basic functionality of DVC, the industry-standard tool for data versioning.">
+<meta name="twitter:image" content="https://mlops.systems/posts/dvc/dvclogo.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="281">
+<meta name="twitter:image-width" content="500">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">More Data, More Problems: Using DVC to handle data versioning for a computer vision problem</h1>
+                  <div>
+        <div class="description">
+          I show you why you probably want to be versioning your data alongside your code. I introduce the basic functionality of DVC, the industry-standard tool for data versioning. I also explain specifically how I’m using DVC for my computer vision project.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">redactionmodel</div>
+                <div class="quarto-category">computervision</div>
+                <div class="quarto-category">mlops</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 24, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tldr-data-versioning-for-computer-vision" id="toc-tldr-data-versioning-for-computer-vision" class="nav-link active" data-scroll-target="#tldr-data-versioning-for-computer-vision">🚦 TL;DR: Data Versioning for Computer Vision</a></li>
+  <li><a href="#why-do-we-need-data-versioning-isnt-git-enough" id="toc-why-do-we-need-data-versioning-isnt-git-enough" class="nav-link" data-scroll-target="#why-do-we-need-data-versioning-isnt-git-enough">🤔 Why do we need data versioning? Isn’t <code>git</code> enough?</a></li>
+  <li><a href="#dvc-use-cases" id="toc-dvc-use-cases" class="nav-link" data-scroll-target="#dvc-use-cases">👩‍💻 DVC Use Cases</a></li>
+  <li><a href="#how-to-get-started-with-dvc" id="toc-how-to-get-started-with-dvc" class="nav-link" data-scroll-target="#how-to-get-started-with-dvc">🚀 How to get started with DVC</a></li>
+  <li><a href="#when-to-use-dvc" id="toc-when-to-use-dvc" class="nav-link" data-scroll-target="#when-to-use-dvc">🛠 When to use DVC</a></li>
+  <li><a href="#how-im-using-dvc-in-my-redaction-project" id="toc-how-im-using-dvc-in-my-redaction-project" class="nav-link" data-scroll-target="#how-im-using-dvc-in-my-redaction-project">📄 How I’m using DVC in my redaction project</a></li>
+  <li><a href="#appendix-how-to-switch-from-git-lfs-to-dvc" id="toc-appendix-how-to-switch-from-git-lfs-to-dvc" class="nav-link" data-scroll-target="#appendix-how-to-switch-from-git-lfs-to-dvc">🏃 Appendix: How to switch from <code>git-lfs</code> to DVC</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/#category=redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
+<p>If you’ve been following along as I train an object detection model to detect redactions, you’ll know that there have been a few iterations in how I go about doing this. For the most part, though, the dataset has remained relatively static. I downloaded a huge tranche of publicly-released government documents right at the beginning and aside from <a href="https://mlops.systems/tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html">my experiments</a> in <a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">synthetic data creation</a> I haven’t really been adding to this data.</p>
+<p>When it comes to turning this model into something that can work <em>in production</em>, it won’t be enough to have a big bucket of image files that I train on. I’ll need to have a bit more control and fine-grained segmentation of the ways this data is being used. In short, if I want to be able to reproduce my workflows then I need some kind of data versioning.</p>
+<section id="tldr-data-versioning-for-computer-vision" class="level2">
+<h2 class="anchored" data-anchor-id="tldr-data-versioning-for-computer-vision">🚦 TL;DR: Data Versioning for Computer Vision</h2>
+<ul>
+<li>⛽️ We version our data because it is the fuel for our model development and experimentation process.</li>
+<li>💻 Data versioning tools like DVC allow you to apply the same mental model you have for <code>git</code> to your data.</li>
+<li>⋔ The ability to ‘branch’ off your data gives you the flexibility to experiment just as the same is true for branching off your code to try out some new behaviour.</li>
+<li><a href="https://dvc.org/">DVC</a> is probably the leading tool that allows you to version your data and flexibly access all the previous ‘commits’ and checkpoints you make along the way.</li>
+</ul>
+</section>
+<section id="why-do-we-need-data-versioning-isnt-git-enough" class="level2">
+<h2 class="anchored" data-anchor-id="why-do-we-need-data-versioning-isnt-git-enough">🤔 Why do we need data versioning? Isn’t <code>git</code> enough?</h2>
+<p>If the lifeblood of traditional software engineering is code then the equivalent for machine learning is data. We solve the problem of checkpointing what our code looked like at a particular moment with <code>git</code> and online hubs like Github. Until recently there weren’t many equivalent options for data. We’re trying to solve the problem that often occurs if you’re asked to reproduce the data that was used to train a particular iteration of a model from some point in the past. Without some kind of data version control this is more or less impossible, particularly if your data is constantly changing.</p>
+<p>Even in my case for this redaction project, I wasn’t ingesting new data all the time but I <em>was</em> removing bad annotations or updating those annotations as I conducted error analysis or <a href="https://mlops.systems/redactionmodel/computervision/tools/debugging/jupyter/2022/03/12/fiftyone-computervision.html">used tools like FiftyOne</a> to understand why my model wasn’t performing as well as I’d have liked.</p>
+<p>Luckily there’s a pretty great tool in this space that seems to be more or less unchallenged for what it does in the data versioning domain: <a href="https://dvc.org">Data Version Control</a> or <a href="https://dvc.org">DVC</a>.</p>
+</section>
+<section id="dvc-use-cases" class="level2">
+<h2 class="anchored" data-anchor-id="dvc-use-cases">👩‍💻 DVC Use Cases</h2>
+<p>DVC does many things, but for our purposes at this moment its core value is that it helps us version our data. It also handles the case where we have large files or a dataset that changes a lot and where we might end up having problems with storing all the versions of this data.</p>
+<p>The core behaviour we want to use with a data versioning tool is to access our data at one particular moment. Just like you incrementally annotate your code updates using <code>git</code>, with sometimes atomic progressions as you do your work, so it is with DVC that you can checkpoint your data as you make changes.</p>
+<p>At the beginning this was a slight mental adjustment for me. When working on a project it is now second nature to regularly make <code>git</code> commits along the way, but I wasn’t in the habit of making regular data commits as a second step. In the long-run, this requires a bit of a mental shift but this is exactly what will enable the benefits that using a tool like DVC brings.</p>
+<p>In particular, being able to experiment with data in a way that you can always roll-back from feels pretty liberating once you’ve covered your back with DVC. Just as you can use create <code>git</code> branches for your code, so you can create branches for your versioned data. <a href="https://dvc.org/doc/command-reference/checkout">Checking out</a> the precise data used for some zany experiment you did is pretty painless. If you realise that the experiment is a dead-end and it’s not helping you move forward, just rewind and reset your data back to a useable state from before you had that crazy idea to create a million synthetic images :)</p>
+<p>One other thing: DVC is built on top of <code>git</code> and it follows many of the mental models you might have about how versioning works. In this way, DVC luckily is smart about how it allows you to make incremental changes to your data. When it calculates the <code>diff</code> of your dataset before and after, it really is able to do some atomic updates and logging of what changed rather than just storing all the files multiple times over. This helps prevent you building up a really huge data cache and it helps the whole process be efficient.</p>
+<p>{% include info.html text=“I’ve mentioned this for other tools like Evidently before so I should also note that the DVC online community (https://dvc.org/community) is a pretty friendly and helpful place to hang out and learn about data versioning or to troubleshoot your problems. Nobody will tell you to RTFM here and their community events are generally beginner-friendly in my experience. This makes a big difference so they should be commended for the efforts they take to foster this kind community atmosphere. ❤️” %}</p>
+</section>
+<section id="how-to-get-started-with-dvc" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-get-started-with-dvc">🚀 How to get started with DVC</h2>
+<p>The basics are mostly similar to how you’d use a tool like <code>git</code>:</p>
+<ul>
+<li>You <a href="https://dvc.org/doc/command-reference/init"><code>init</code></a> your repository. This add some DVC superpowers on top of what you already have with <code>git</code>.</li>
+<li>You <a href="https://dvc.org/doc/command-reference/add">specify which files</a> you want to have DVC manage and track. It would make a lot of sense, for example, to have DVC handle tracking your models, your image files and your data annotations (if those exist as separate files).</li>
+<li>You can optionally also <a href="https://dvc.org/doc/command-reference/remote">specify a <code>remote</code> location</a> where you want these files to be stored. (DVC supports several types of remote storage: local file system, SSH, Amazon S3, Google Cloud Storage, HTTP, HDFS, among others.)</li>
+</ul>
+<p>(To get a taste of the full workflow when using DVC for data tracking I’d recommend something like the basic tutorial they have <a href="https://dvc.org/doc/use-cases/versioning-data-and-model-files/tutorial">here</a>. They also <a href="https://dvc.org/blog/end-to-end-computer-vision-api-part-1-data-versioning-and-ml-pipelines">recently added a three-part tutorial</a> specific to computer vision that you might want to check out.)</p>
+<p>If you want to use DVC programmatically using their Python API, you can get some information on this <a href="https://dvc.org/doc/api-reference">in their docs here</a>. Unfortunately, these docs are incomplete and you’ll have to experiment a bit if you want to do anything beyond the simple functionality they themselves list. I’m told it behaves very similarly to how <a href="https://gitpython.readthedocs.io/en/stable/intro.html">a tool like GitPython</a> works, where you can just use the equivalent <code>add()</code> or <code>checkout()</code> function call that corresponds to a DVC CLI command, but given the lack of documentation it’s a bit harder to get a full sense of what is possible.</p>
+<p>{% include alert.html text=“DVC includes a lot of extra functionality around experiment tracking and pipelining of your code. You can safely ignore all that and just use DVC for data versioning. No shame in that :)” %}</p>
+</section>
+<section id="when-to-use-dvc" class="level2">
+<h2 class="anchored" data-anchor-id="when-to-use-dvc">🛠 When to use DVC</h2>
+<p>It probably is a good practice to use something like DVC from the start of most projects. If you know you’re never going to need to update the data you use, or if you will only ever generate one model, then maybe you have no need for data versioning. But realistically, when are you going to do that? Generally speaking you’ll be iterating a lot and you’ll be trying things out, so perhaps just start using DVC at the start of any new project: a <code>git init</code> can just as easily be followed by a <code>dvc init</code>…</p>
+<p>DVC will thrive in long-lived projects where you go down certain rabbit-holes, trying out different approaches and techniques. If you have a decent amount of data — and you probably do if you’re bringing deep learning to the table — then you can leverage how DVC makes it easy to store your data in the remote infrastructure of your choice with <a href="https://dvc.org/doc/command-reference/remote"><code>dvc remote</code></a>.</p>
+</section>
+<section id="how-im-using-dvc-in-my-redaction-project" class="level2">
+<h2 class="anchored" data-anchor-id="how-im-using-dvc-in-my-redaction-project">📄 How I’m using DVC in my redaction project</h2>
+<p>For my purposes, the things I’m tracking with DVC include:</p>
+<ul>
+<li>the models I train</li>
+<li>the PDF documents I downloaded from public sources that form the basis of the data in this project</li>
+<li>the images that I extracted from the PDF documents</li>
+<li>the annotations I make on the images using <a href="https://cocodataset.org/">the standard COCO Dataset format</a>.</li>
+</ul>
+<p>This covers the core data that I expect to be working with for this project. I keep all this data synced to a remote Amazon S3 bucket which allows me to easily get set up on a new remote machine if needed.</p>
+<p>I’ll next be writing about how to move towards a ‘production-ready’ system in the coming weeks, but one thing I’ll hope to be adding to the current way I do things is to add some kind of <a href="https://github.com/PAIR-code/datacardsplaybook">‘data cards’</a>. I think a combination of manual comments and annotations alongside some auto-generated data profiles would be a useful thing to get a sense of for every checkpoint we make, particularly as the data grows and is augmented.</p>
+<p>Let me know if you’re using DVC to version your data for computer vision projects! I’m curious if there are any tricks I’m missing out…</p>
+</section>
+<section id="appendix-how-to-switch-from-git-lfs-to-dvc" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-how-to-switch-from-git-lfs-to-dvc">🏃 Appendix: How to switch from <code>git-lfs</code> to DVC</h2>
+<p>When I first started this project, <a href="https://git-lfs.github.com"><code>git-lfs</code></a> or Git Large File Storage seemed the best option that didn’t constrain my choices. It allowed me to store any large files I had inside my repository and allowed for some sort of versioning. Over time this ended up being less robust, especially in the context of an ML workflow, so I decided to switch to using DVC backed by an Amazon S3 bucket.</p>
+<p>I didn’t find any useful information on the DVC website or forums on how to make this switch so I’m including my notes on how I switched over myself.</p>
+<p>{% include alert.html text=“Lots of caution is advised when doing this for your own project or work. I hit some major roadblocks along the way while doing this owing to some quirks of how I’d set ‘git-lfs’ up in the beginning. Please take all necessary backups and snapshots of your data in case something goes wrong along the way!” %}</p>
+<p>Some resources I consulted to understand how to do this:</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/35011366/move-git-lfs-tracked-files-under-regular-git/54119191#54119191">This Stackoverflow thread</a></li>
+<li><a href="https://github.com/git-lfs/git-lfs/issues/3026">A Github issue</a> on the same topic</li>
+<li><a href="https://gist.github.com/everttrollip/198ed9a09bba45d2663ccac99e662201">A super useful Gist</a> I reached via the previous Github issue that ended up guiding me most of the way</li>
+</ul>
+<p>This is what I did, step by step:</p>
+<ul>
+<li>Commit and push everything to Git / Github / <code>git-lfs</code></li>
+<li>Create a branch, something like <code>fix/remove-lfs</code></li>
+<li>Remove the hooks using <code>git las uninstall</code></li>
+<li>Go into the <code>.gitattributes</code> file and delete whatever tracking you don’t want <code>git-lfs</code> to handle from now on. For me, this involved removing lines referring to <code>.pth</code> (model) files and <code>.jpg</code> (image) files.</li>
+<li>Get a list of all the files that <code>git-lfs</code> currently is storing using the following command: <code>git lfs ls-files &gt; files.txt</code></li>
+<li>Modify the file to remove the beginnings of each line that we don’t need. At the end we want our <code>files.txt</code> to contain just a series of paths to our files. I did it with a simple Python script:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"filenames.txt"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">""</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"files.txt"</span>, <span class="st">"r"</span>) <span class="im">as</span> f2:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f2:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"filenames.txt"</span>, <span class="st">"a"</span>) <span class="im">as</span> f:</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            f.write(line.split(<span class="st">" "</span>)[<span class="op">-</span><span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Run <code>run git rm --cached</code> for each file that <code>git-lfs</code> is storing. I did this with a simple bash command that uses the file I’d created in the previous step:</li>
+</ul>
+<pre class="shell"><code>while read line; do git rm --cached "$line"; done &lt; files.txt</code></pre>
+<ul>
+<li>Initialise the DVC repository with <code>dvc init</code></li>
+<li>Add whatever data sources you want tracked (<code>dvc add FOLDERNAME</code>)</li>
+<li>Allow for autostaging with DVC with the <code>dvc config core.autostage true</code> command</li>
+<li>Commit everything</li>
+<li>Check that no <code>git-lfs</code> files are left with the <code>git lfs ls-files</code> command. Whatever you uncached in previous steps should not show up any more.</li>
+<li>Remove any lfs with <code>rm -rf .git/lfs</code></li>
+<li>Merge your branch into <code>main</code>
+<ul>
+<li>(if you’re using <code>git-lfs</code> as a team, now is probably the time when other collaborators can uninstall git-lfs as specified above)</li>
+</ul></li>
+<li>If needed, add your DVC remote storage with <code>dvc remote add …</code> (<a href="https://dvc.org/doc/command-reference/remote">consult the docs</a> for exactly how to set this up for your specific needs)</li>
+<li><code>dvc push</code> to get your files synced with your remote storage</li>
+</ul>
+<p>At this point you should be fully transitioned over. As I mentioned above, there are a ton of weird edge cases and quirks to this process and you probably shouldn’t follow this list blindly. I’m mainly writing this up for my own records as much as anything else, so perhaps it’s helpful for someone else seeking to transition but maybe it should be taken less as a direct list of instructions than an inspiration or general template. (I wish DVC would provide some official-ish guidance on this process through their documentation. I imagine that it’s a fairly common path for someone to outgrow <code>git-lfs</code> and want to get going with DVC but currently there are no instructions for how to think this through.)</p>
+<p>UPDATE: <em>I originally made reference to ‘continuous training’ in the title of this blogpost but I didn’t actually get into this specific use case in what I covered, so I took that out of the title and we’ll save the specifics for a subsequent post!</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

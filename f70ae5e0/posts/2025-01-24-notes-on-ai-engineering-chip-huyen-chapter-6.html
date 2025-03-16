@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-01-24">
+
+<title>Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 6">
+<meta property="og:description" content="This chapter was all about RAG and agents.">
+<meta property="og:image" content="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="882">
+<meta property="og:image:width" content="1400">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Notes on ‘AI Engineering’ (Chip Huyen) chapter 6">
+<meta name="twitter:description" content="This chapter was all about RAG and agents.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="882">
+<meta name="twitter:image-width" content="1400">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Notes on ‘AI Engineering’ (Chip Huyen) chapter 6</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">books-i-read</div>
+                <div class="quarto-category">llm</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">agents</div>
+                <div class="quarto-category">rag</div>
+                <div class="quarto-category">evaluation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 24, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chapter-structure-and-framing" id="toc-chapter-structure-and-framing" class="nav-link active" data-scroll-target="#chapter-structure-and-framing">Chapter Structure and Framing</a></li>
+  <li><a href="#retrieval-augmented-generation-rag" id="toc-retrieval-augmented-generation-rag" class="nav-link" data-scroll-target="#retrieval-augmented-generation-rag">Retrieval-Augmented Generation (RAG)</a>
+  <ul class="collapse">
+  <li><a href="#core-concepts-and-context-windows" id="toc-core-concepts-and-context-windows" class="nav-link" data-scroll-target="#core-concepts-and-context-windows">Core Concepts and Context Windows</a></li>
+  <li><a href="#retrieval-architecture-and-algorithms" id="toc-retrieval-architecture-and-algorithms" class="nav-link" data-scroll-target="#retrieval-architecture-and-algorithms">Retrieval Architecture and Algorithms</a></li>
+  <li><a href="#cost-considerations-and-trade-offs" id="toc-cost-considerations-and-trade-offs" class="nav-link" data-scroll-target="#cost-considerations-and-trade-offs">Cost Considerations and Trade-offs</a></li>
+  <li><a href="#retrieval-optimisation-techniques" id="toc-retrieval-optimisation-techniques" class="nav-link" data-scroll-target="#retrieval-optimisation-techniques">Retrieval Optimisation Techniques</a></li>
+  <li><a href="#evaluation-framework" id="toc-evaluation-framework" class="nav-link" data-scroll-target="#evaluation-framework">Evaluation Framework</a></li>
+  </ul></li>
+  <li><a href="#agents" id="toc-agents" class="nav-link" data-scroll-target="#agents">Agents</a>
+  <ul class="collapse">
+  <li><a href="#foundational-definition" id="toc-foundational-definition" class="nav-link" data-scroll-target="#foundational-definition">Foundational Definition</a></li>
+  <li><a href="#tool-types-and-capabilities" id="toc-tool-types-and-capabilities" class="nav-link" data-scroll-target="#tool-types-and-capabilities">Tool Types and Capabilities</a></li>
+  <li><a href="#planning-architecture" id="toc-planning-architecture" class="nav-link" data-scroll-target="#planning-architecture">Planning Architecture</a></li>
+  <li><a href="#plan-execution-patterns" id="toc-plan-execution-patterns" class="nav-link" data-scroll-target="#plan-execution-patterns">Plan Execution Patterns</a></li>
+  <li><a href="#planning-optimisation" id="toc-planning-optimisation" class="nav-link" data-scroll-target="#planning-optimisation">Planning Optimisation</a></li>
+  <li><a href="#function-calling-implementation" id="toc-function-calling-implementation" class="nav-link" data-scroll-target="#function-calling-implementation">Function Calling Implementation</a></li>
+  <li><a href="#planning-granularity" id="toc-planning-granularity" class="nav-link" data-scroll-target="#planning-granularity">Planning Granularity</a></li>
+  <li><a href="#tool-selection-and-evaluation" id="toc-tool-selection-and-evaluation" class="nav-link" data-scroll-target="#tool-selection-and-evaluation">Tool Selection and Evaluation</a></li>
+  <li><a href="#memory-systems" id="toc-memory-systems" class="nav-link" data-scroll-target="#memory-systems">Memory Systems</a></li>
+  <li><a href="#evaluation-and-failure-modes" id="toc-evaluation-and-failure-modes" class="nav-link" data-scroll-target="#evaluation-and-failure-modes">Evaluation and Failure Modes</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>This chapter was all about RAG and agents. It’s only 50 pages, so clearly there’s only so much of the details she can get into, but it was pretty good nonetheless and there were a few things in here I’d never really read. Also Chip does a good job bringing the RAG story into the story about agents, particularly in terms of how she defines agents. (Note that <a href="https://huyenchip.com/2025/01/07/agents.html">the second half of this chapter</a>, on agents, is available <a href="https://huyenchip.com/2025/01/07/agents.html">on Chip’s blog</a> as a free excerpt!)</p>
+<p>As always, what follows is just my notes on the things that seemed interesting to me (and a high-level overview of the main points of the chapter just for future reference). YMMV!</p>
+<section id="chapter-structure-and-framing" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-structure-and-framing">Chapter Structure and Framing</h2>
+<p>This chapter undertakes the ambitious task of unifying two major paradigms in AI engineering: Retrieval-Augmented Generation (RAG) and Agents. At first glance, combining these topics might seem surprising given their scope and complexity. However, Chip creates a compelling framework that positions both as sophisticated approaches to <em>context construction</em>.</p>
+<p>The unifying thesis presents RAG as a specialised case of the agent pattern, where the retriever functions as a tool at the model’s disposal. Both patterns serve to transcend context limitations and maintain current information, though agents ultimately offer broader capabilities. This framing provides an elegant theoretical bridge between these technologies while acknowledging their distinct characteristics.</p>
+</section>
+<section id="retrieval-augmented-generation-rag" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval-augmented-generation-rag">Retrieval-Augmented Generation (RAG)</h2>
+<section id="core-concepts-and-context-windows" class="level3">
+<h3 class="anchored" data-anchor-id="core-concepts-and-context-windows">Core Concepts and Context Windows</h3>
+<p>The discussion begins with a fundamental examination of RAG’s purpose: enhancing model outputs with query-specific context to produce more grounded and useful results. Chip introduces a fascinating variation on Parkinson’s Law:</p>
+<blockquote class="blockquote">
+<p><strong>Context Expansion Law</strong>: Application context tends to expand to fill the context limits supported by the model.</p>
+</blockquote>
+<p>This observation challenges the common assumption that RAG might become obsolete with infinite context models. Chip argues that larger context windows don’t necessarily solve the fundamental challenges RAG addresses, particularly noting that models often struggle with information buried in the middle of large context windows.</p>
+</section>
+<section id="retrieval-architecture-and-algorithms" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-architecture-and-algorithms">Retrieval Architecture and Algorithms</h3>
+<p>The retrieval architecture discussion introduces two primary paradigms:</p>
+<blockquote class="blockquote">
+<p><strong>Sparse Retrieval</strong>: Term-based approaches that rely on explicit matching of terms between queries and documents. The primary example is the <strong>TFIDF</strong> (Term Frequency-Inverse Document Frequency) algorithm, which evaluates term importance based on frequency patterns.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Dense Retrieval</strong>: Embedding-based approaches that transform text into vector representations, requiring specialised vector databases for storage and sophisticated nearest-neighbour search algorithms for retrieval.</p>
+</blockquote>
+</section>
+<section id="cost-considerations-and-trade-offs" class="level3">
+<h3 class="anchored" data-anchor-id="cost-considerations-and-trade-offs">Cost Considerations and Trade-offs</h3>
+<p>A striking revelation emerges regarding the cost structure of RAG systems: vector database expenses often consume between one-fifth to half of a company’s total model API spending. This cost burden becomes particularly acute for systems requiring frequent embedding updates due to changing data. Chip notes that both vector storage and vector search queries can be surprisingly expensive operations.</p>
+</section>
+<section id="retrieval-optimisation-techniques" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-optimisation-techniques">Retrieval Optimisation Techniques</h3>
+<p><img src="images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/chunks-for-chunks.png" class="img-fluid"></p>
+<p>The chapter presents several sophisticated approaches to optimisation:</p>
+<p><strong>Chunking Strategies</strong>: While the section is brief, it addresses the critical trade-offs in how documents are segmented for retrieval.</p>
+<p><strong>Query Rewriting</strong>: A powerful but potentially complex technique that enhances initial queries with contextual information. For example, transforming a query like “how about her?” into “how about Aunt Mabel from the previous question?” Chip notes this can introduce latency issues and suggests careful consideration before implementation.</p>
+<p><strong>Contextual Retrieval</strong>: Introduces the innovative “chunks-for-chunks” approach, where each retrieved chunk triggers additional retrievals for supplementary context. This might include retrieving related tags or associated metadata to enrich the initial results.</p>
+<p><strong>Hybrid Search</strong>: Combines term-based and embedding-based retrieval, typically implementing a re-ranking process. A common pattern involves using term-based retrieval (like Elasticsearch) to obtain an initial set of ~50 (or however many!) documents, followed by embedding-based re-ranking to identify the most relevant subset.</p>
+</section>
+<section id="evaluation-framework" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-framework">Evaluation Framework</h3>
+<p>The evaluation framework centres on two primary metrics:</p>
+<blockquote class="blockquote">
+<p><strong>Context Precision</strong>: The percentage of retrieved documents that are relevant to the query. Generally easier to measure and optimise.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Context Recall</strong>: The percentage of all relevant documents that are successfully retrieved. More challenging to measure as it requires comprehensive dataset annotation.</p>
+</blockquote>
+</section>
+</section>
+<section id="agents" class="level2">
+<h2 class="anchored" data-anchor-id="agents">Agents</h2>
+<section id="foundational-definition" class="level3">
+<h3 class="anchored" data-anchor-id="foundational-definition">Foundational Definition</h3>
+<p>Chip provides a clear definition of an agent:</p>
+<blockquote class="blockquote">
+<p><strong>Agent Definition</strong>: An entity capable of perceiving its environment and acting upon it, characterised by: - The environment it operates in (defined by use case) - The set of actions it can perform (augmented by tools)</p>
+</blockquote>
+</section>
+<section id="tool-types-and-capabilities" class="level3">
+<h3 class="anchored" data-anchor-id="tool-types-and-capabilities">Tool Types and Capabilities</h3>
+<p>The chapter delineates three primary categories of tools:</p>
+<p><strong>Knowledge Augmentation Tools</strong>: - RAG systems - Web search capabilities - API calls for information retrieval</p>
+<p><strong>Capability Extension Tools</strong>: - Code interpreters - Terminal access - Function execution capabilities These have been shown to significantly boost model performance compared to prompting or fine-tuning alone.</p>
+<p><strong>Write Actions</strong>: - Data manipulation capabilities - Storage and deletion operations</p>
+</section>
+<section id="planning-architecture" class="level3">
+<h3 class="anchored" data-anchor-id="planning-architecture">Planning Architecture</h3>
+<p>The planning process emerges as a four-stage cycle:</p>
+<ol type="1">
+<li><strong>Plan Generation</strong>: Task decomposition and strategy development</li>
+<li><strong>Initial Reflection</strong>: Plan evaluation and potential revision</li>
+<li><strong>Execution</strong>: Implementation of planned actions, often involving specific function calls</li>
+<li><strong>Final Reflection</strong>: Outcome evaluation and error correction</li>
+</ol>
+<p>Chip includes an interesting debate about foundation models as planners, noting Yan LeCun’s assertion that autoregressive models cannot truly plan, though this remains a point of discussion in the field.</p>
+</section>
+<section id="plan-execution-patterns" class="level3">
+<h3 class="anchored" data-anchor-id="plan-execution-patterns">Plan Execution Patterns</h3>
+<p><img src="images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" class="img-fluid"></p>
+<p>The execution of agent plans reveals a fascinating interplay between computational patterns and practical implementation. Chip identifies several fundamental execution patterns that form the backbone of agent behaviour, each offering distinct advantages and trade-offs in different scenarios.</p>
+<blockquote class="blockquote">
+<p><strong>Execution Paradigms</strong>: The core patterns through which agents transform plans into actions, ranging from simple sequential execution to complex conditional logic.</p>
+</blockquote>
+<p>The primary execution patterns include:</p>
+<p><strong>Sequential Execution</strong>: The most straightforward pattern, where actions are performed one after another in a predetermined order. This approach offers predictability and simplicity but may not maximise efficiency when actions could be performed concurrently.</p>
+<p><strong>Parallel Execution</strong>: Enables multiple actions to be performed simultaneously when dependencies permit. While this pattern can significantly improve performance, it introduces complexity in managing concurrent operations and handling potential conflicts.</p>
+<p><strong>Conditional Execution</strong>: Implements decision points through <code>if</code> statements, allowing agents to adapt their execution path based on intermediate results or environmental conditions. This pattern introduces crucial flexibility but requires careful handling of branch logic and state management.</p>
+<p><strong>Iterative Execution</strong>: Utilises <code>for</code> loops to handle repetitive tasks or process collections of items. This pattern is particularly powerful when dealing with datasets or when similar actions need to be performed multiple times with variations.</p>
+<blockquote class="blockquote">
+<p><strong>Pattern Selection</strong>: The choice of execution pattern often emerges from the intersection of task requirements, system constraints, and performance goals.</p>
+</blockquote>
+<p>The effectiveness of these patterns depends heavily on the underlying system architecture and the specific requirements of the task at hand. For instance, parallel execution might offer theoretical performance benefits but could introduce unnecessary complexity for simple, linear tasks. Similarly, conditional execution provides valuable flexibility but requires robust error handling and state management to maintain system reliability.</p>
+<p>Chip emphasises that these patterns aren’t mutually exclusive - sophisticated agent systems often combine multiple patterns to create more complex and capable execution strategies. This hybrid approach allows for the development of highly adaptable agents that can handle a wide range of tasks while maintaining system stability and performance.</p>
+</section>
+<section id="planning-optimisation" class="level3">
+<h3 class="anchored" data-anchor-id="planning-optimisation">Planning Optimisation</h3>
+<p>The chapter provides several practical tips for improving agent planning:</p>
+<ol type="1">
+<li>Enhance system prompts with more examples</li>
+<li>Provide better tool descriptions and parameter documentation</li>
+<li>Simplify complex functions through refactoring</li>
+<li>Consider using stronger models or fine-tuning for plan generation</li>
+</ol>
+</section>
+<section id="function-calling-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="function-calling-implementation">Function Calling Implementation</h3>
+<p>The function calling architecture requires:</p>
+<ol type="1">
+<li>Tool inventory creation, including:
+<ul>
+<li>Function names and entry points</li>
+<li>Parameter specifications</li>
+<li>Comprehensive documentation</li>
+</ul></li>
+<li>Tool usage specification (required vs.&nbsp;optional)</li>
+<li>Version control for function names, parameters, and documentation</li>
+</ol>
+</section>
+<section id="planning-granularity" class="level3">
+<h3 class="anchored" data-anchor-id="planning-granularity">Planning Granularity</h3>
+<p>Chip introduces an important discussion of planning levels, analogous to temporal planning horizons (yearly plans vs.&nbsp;daily tasks). This presents a fundamental trade-off:</p>
+<blockquote class="blockquote">
+<p><strong>Planning Trade-off</strong>: Higher-level plans are easier to generate but harder to execute, while detailed plans are harder to generate but easier to execute.</p>
+</blockquote>
+</section>
+<section id="tool-selection-and-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="tool-selection-and-evaluation">Tool Selection and Evaluation</h3>
+<p>The chapter provides a systematic approach to tool selection:</p>
+<ol type="1">
+<li>Conduct ablation studies to measure performance impact</li>
+<li>Monitor tool usage patterns and error rates</li>
+<li>Analyze tool call distribution</li>
+<li>Consider model-specific tool preferences (noting that GPT-4 tends to use a wider tool set than ChatGPT)</li>
+</ol>
+</section>
+<section id="memory-systems" class="level3">
+<h3 class="anchored" data-anchor-id="memory-systems">Memory Systems</h3>
+<p>The memory architecture comprises two core functions:</p>
+<blockquote class="blockquote">
+<p><strong>Memory Functions</strong>: - Memory management - Memory retrieval</p>
+</blockquote>
+<p>The system supports three types of memory:</p>
+<ul>
+<li>Internal knowledge</li>
+<li>Short-term memory</li>
+<li>Long-term memory</li>
+</ul>
+<p>These systems prove crucial for:</p>
+<ul>
+<li>Managing information overflow</li>
+<li>Maintaining session persistence</li>
+<li>Ensuring model consistency</li>
+<li>Preserving data structural integrity</li>
+</ul>
+</section>
+<section id="evaluation-and-failure-modes" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-and-failure-modes">Evaluation and Failure Modes</h3>
+<p>The comprehensive evaluation framework considers:</p>
+<ul>
+<li>Planning effectiveness</li>
+<li>Tool execution accuracy</li>
+<li>System latency</li>
+<li>Overall efficiency</li>
+<li>Memory system performance</li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The unifying thread of context construction provides a compelling framework for understanding these technologies not as separate entities, but as complementary approaches to extending model capabilities.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

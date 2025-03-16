@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-10-24">
+<meta name="description" content="Notes and some personal exploration following through the lesson 10 course materials from FastAI part 2. We cover the basics of loading in our data and generating our matrix.">
+
+<title>Alex Strick van Linschoten - From the foundation up: Fashion-MNIST basics from Lesson 10</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - From the foundation up: Fashion-MNIST basics from Lesson 10">
+<meta property="og:description" content="Notes and some personal exploration following through the lesson 10 course materials from FastAI part 2. We cover the basics of loading in our data and generating our matrix.">
+<meta property="og:image" content="https://mlops.systems/posts/images/fashion-mnist-part-2/fashion-mnist-cover.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="140">
+<meta property="og:image:width" content="150">
+<meta name="twitter:title" content="Alex Strick van Linschoten - From the foundation up: Fashion-MNIST basics from Lesson 10">
+<meta name="twitter:description" content="Notes and some personal exploration following through the lesson 10 course materials from FastAI part 2. We cover the basics of loading in our data and generating our matrix.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/fashion-mnist-part-2/fashion-mnist-cover.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="140">
+<meta name="twitter:image-width" content="150">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">From the foundation up: Fashion-MNIST basics from Lesson 10</h1>
+                  <div>
+        <div class="description">
+          Notes and some personal exploration following through the lesson 10 course materials from FastAI part 2. We cover the basics of loading in our data and generating our matrix.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">computervision</div>
+                <div class="quarto-category">fastai</div>
+                <div class="quarto-category">parttwo</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 24, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#downloading-mnist" id="toc-downloading-mnist" class="nav-link active" data-scroll-target="#downloading-mnist">Downloading MNIST</a></li>
+  <li><a href="#unzip-the-files-and-separate-out-the-data" id="toc-unzip-the-files-and-separate-out-the-data" class="nav-link" data-scroll-target="#unzip-the-files-and-separate-out-the-data">Unzip the files and separate out the data</a></li>
+  <li><a href="#load-the-data-into-memory" id="toc-load-the-data-into-memory" class="nav-link" data-scroll-target="#load-the-data-into-memory">Load the data into memory</a></li>
+  <li><a href="#plot-some-examples-using-matplotlib" id="toc-plot-some-examples-using-matplotlib" class="nav-link" data-scroll-target="#plot-some-examples-using-matplotlib">Plot some examples using <code>matplotlib</code></a></li>
+  <li><a href="#chunking-with-iterators-and-generators" id="toc-chunking-with-iterators-and-generators" class="nav-link" data-scroll-target="#chunking-with-iterators-and-generators">Chunking with iterators and generators</a></li>
+  <li><a href="#define-a-matrix-class" id="toc-define-a-matrix-class" class="nav-link" data-scroll-target="#define-a-matrix-class">Define a matrix class</a></li>
+  <li><a href="#find-the-shape-min-and-max-values" id="toc-find-the-shape-min-and-max-values" class="nav-link" data-scroll-target="#find-the-shape-min-and-max-values">Find the shape, min and max values</a></li>
+  <li><a href="#generate-some-random-numbers" id="toc-generate-some-random-numbers" class="nav-link" data-scroll-target="#generate-some-random-numbers">Generate some random numbers</a></li>
+  <li><a href="#profile-our-code" id="toc-profile-our-code" class="nav-link" data-scroll-target="#profile-our-code">Profile our code</a></li>
+  <li><a href="#things-jeremy-says-to-do" id="toc-things-jeremy-says-to-do" class="nav-link" data-scroll-target="#things-jeremy-says-to-do">“Things Jeremy says to do”</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>In lesson 10 of the FastAI course, we began by examining some new research that had just been released (<a href="https://arxiv.org/abs/2210.09276">the iMagic paper</a>) along with one of the key insights (‘progressive distillation’) of the paper. I’ll maybe return to that in a separate blogpost but I wanted to focus on the second half of the lesson where we start the work of actually building up our library of tools to replicate all the pieces of Stable Diffusion.</p>
+<p>To make things more complicated, we’re allowed to use only a basic set of building blocks (at least in the first iteration) so as to really understand how things are working. This includes:</p>
+<ul>
+<li>Python</li>
+<li>The Python standard library</li>
+<li>matplotlib</li>
+<li>Jupyter notebooks and nbdev</li>
+</ul>
+<p>This notebook will showcase some of my experimentation and learnings around the things we went through in this lesson. I’ve also compiled a table showing the various pieces we got to in the lesson, pairing the specific task we were trying to do along with the associated skill or part of the Python standard library.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Task</th>
+<th>Skill / Library</th>
+<th>Docs link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Download Fashion MNIST</strong></td>
+<td>urllib.requests.urlretrieve</td>
+<td><a href="https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve">link</a></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Unzip &amp; separate out the parts</strong></td>
+<td>gzip</td>
+<td><a href="https://docs.python.org/3/library/gzip.html">link</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>pickle</td>
+<td><a href="https://docs.python.org/3/library/pickle.html">link</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>destructuring</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Turn the list into a matrix</strong></td>
+<td>chunking into a list of lists</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>yield / next (generators)</td>
+<td><a href="https://docs.python.org/3/reference/expressions.html#yieldexpr">link</a></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><strong>Plot out the image using matplotlib</strong></td>
+<td>matplotlib</td>
+<td><a href="https://matplotlib.org">link</a></td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td><strong>Define a matrix class</strong></td>
+<td><code>__init__</code></td>
+<td><a href="https://docs.python.org/3/reference/datamodel.html?highlight=init#object.__init__">link</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td><code>__getitem__</code></td>
+<td><a href="https://docs.python.org/3/reference/datamodel.html?highlight=init#object.__getitem__">link</a></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td><strong>Access tensor values</strong></td>
+<td>Pytorch Tensor</td>
+<td><a href="https://pytorch.org/docs/stable/tensors.html">link</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>map</td>
+<td><a href="https://docs.python.org/3/library/functions.html#map">link</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>tensor().reshape()</td>
+<td><a href="https://pytorch.org/docs/stable/generated/torch.Tensor.reshape.html#torch.Tensor.reshape">link</a></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td><strong>Find the shape, min and max values</strong></td>
+<td>tensor().shape</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>tensor().min()</td>
+<td><a href="https://pytorch.org/docs/stable/generated/torch.min.html#torch.min">link</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>tensor().max()</td>
+<td><a href="https://pytorch.org/docs/stable/generated/torch.max.html#torch.max">link</a></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td><strong>Generate some random numbers</strong></td>
+<td>random.random</td>
+<td><a href="https://docs.python.org/3/library/random.html#random.random">link</a></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td><strong>Profile your code</strong></td>
+<td>%timeit</td>
+<td><a href="https://docs.python.org/3/library/timeit.html">link1</a> / <a href="https://ipython.org/ipython-doc/dev/interactive/magics.html#magic-timeit">link2</a></td>
+</tr>
+</tbody>
+</table>
+<p>At the bottom of the post, I’ll also include my collation of the “Things Jeremy says to do” which has <a href="https://forums.fast.ai/t/podcast-writeup-summaries-things-jeremy-says-to-do-qs/66194">a bit of a precedent on the fastai forums</a> so I thought I’d share them as well.</p>
+<section id="downloading-mnist" class="level1">
+<h1>Downloading MNIST</h1>
+<p>We start by downloading our dataset. I’m going to replicate the work we do in class while using Zalando’s alternative version of MNIST, entitled <a href="https://github.com/zalandoresearch/fashion-mnist">Fashion-MNIST</a>. I previously used it on this blog (<a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/11/fashion-mnist-pixel-similarity.html">here</a>, for example, but also elsewhere) while working through part 1 of the course, albeit at a much higher level using PyTorch to do similar things that we’ll be doing this time round. It’s comparable but also different, so I’m looking forward to working through whatever challenges are raised.</p>
+<p>The URLs are specified <a href="https://github.com/zalandoresearch/fashion-mnist">on the Github Repo</a>, so I’ll include those as constants here first:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>BASE_URL <span class="op">=</span> <span class="st">"http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>TRAINING_IMAGES <span class="op">=</span> BASE_URL <span class="op">+</span> <span class="st">"train-images-idx3-ubyte.gz"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>TRAINING_IMAGES_LABELS <span class="op">=</span> BASE_URL <span class="op">+</span> <span class="st">"train-labels-idx1-ubyte.gz"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>TEST_IMAGES <span class="op">=</span> BASE_URL <span class="op">+</span> <span class="st">"t10k-images-idx3-ubyte.gz"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>TEST_IMAGES_LABELS <span class="op">=</span> BASE_URL <span class="op">+</span> <span class="st">"t10k-labels-idx1-ubyte.gz"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We now want a place where we can save them, so we’ll use <code>pathlib</code> to create a <code>data</code> directory in our current working directory, but only if it doesn’t already exist. We also set up the final locations of the data for when we download it:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create local path directory if it doesn't exist</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>LOCAL_PATH <span class="op">=</span> Path(<span class="st">"data"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># check whether the path exists; create it if it doesn't exist</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> LOCAL_PATH.exists():</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    LOCAL_PATH.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>training_images_path <span class="op">=</span> LOCAL_PATH <span class="op">/</span> <span class="st">"train-images-idx3-ubyte.gz"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>training_images_labels_path <span class="op">=</span> LOCAL_PATH <span class="op">/</span> <span class="st">"train-labels-idx1-ubyte.gz"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>test_images_path <span class="op">=</span> LOCAL_PATH <span class="op">/</span> <span class="st">"t10k-images-idx3-ubyte.gz"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>test_images_labels_path <span class="op">=</span> LOCAL_PATH <span class="op">/</span> <span class="st">"t10k-labels-idx1-ubyte.gz"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There’s probably a more elegant way to do this where we loop over a list, but the way I set up the URLs and the filenames didn’t lend itself to that approach so here I just download them one by one, but only if they don’t already exist.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the raw data if it doesn't exist</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlretrieve</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> training_images_path.exists():</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    urlretrieve(TRAINING_IMAGES, training_images_path)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> training_images_labels_path.exists():</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    urlretrieve(TRAINING_IMAGES_LABELS, training_images_labels_path)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> test_images_path.exists():</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    urlretrieve(TEST_IMAGES, test_images_path)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> test_images_labels_path.exists():</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    urlretrieve(TEST_IMAGES_LABELS, test_images_labels_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here you can see that we have downloaded four files as expected:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>ls <span class="op">-</span>l data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>total 60328
+-rw-r--r--  1 strickvl  staff   4422102 22 Oct 16:12 t10k-images-idx3-ubyte.gz
+-rw-r--r--  1 strickvl  staff      5148 22 Oct 16:12 t10k-labels-idx1-ubyte.gz
+-rw-r--r--  1 strickvl  staff  26421880 22 Oct 16:12 train-images-idx3-ubyte.gz
+-rw-r--r--  1 strickvl  staff     29515 22 Oct 16:12 train-labels-idx1-ubyte.gz</code></pre>
+</div>
+</div>
+</section>
+<section id="unzip-the-files-and-separate-out-the-data" class="level1">
+<h1>Unzip the files and separate out the data</h1>
+<p>In the lesson, Jeremy downloads a pre-made MNIST file which contains a tuple of tuples. With Fashion-MNIST, we have four separate files representing our training and test data and our labels for each. Now our task is to unzip those files and grab the data as arrays.</p>
+<p>Note that there are convenience functions provided for both MNIST and Fashion-MNIST to do much of what we do below, since most people want the data as numpy arrays, not Python arrays.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import relevant standard library packages</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gzip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We have one elephant in the room which is this <code>parse_idx</code> function that I’m showing below in a collapsed cell. This was one part that I didn’t want to get too lost in so I simply went to the source code of one of these helper functions, <a href="https://github.com/datapythonista/mnist/blob/master/mnist/__init__.py">specifically that written by <code>datapythonista</code></a> for MNIST.</p>
+<p>This still all is standard library imports so I think technically I’m ok including this code here since the MNIST download Jeremy used in the lesson comes pre-parsed, it seems. After inspecting the data in the files, it seems that we have a series of bytes that need to be parsed somehow if they’re going to be used as an array. The original function returned a numpy array, but I modified it slightly such that it returns a nested array instead. I consider this not a very interesting part of the process so I’m hiding it away.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#collapse-hide</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># taken from https://github.com/datapythonista/mnist/blob/master/mnist/__init__.py</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> operator</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> array</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tempfile</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_idx(fd):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Parse an IDX file, and return it as an array of arrays.</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">    fd : file</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">        File descriptor of the IDX file to parse</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">    endian : str</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">        Byte order of the IDX file. See [1] for available options</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">    data : array</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">        Numpy array with the dimensions and the data in the IDX file</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">    1. https://docs.python.org/3/library/struct.html</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">        #byte-order-size-and-alignment</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    DATA_TYPES <span class="op">=</span> {<span class="bn">0x08</span>: <span class="st">'B'</span>,  <span class="co"># unsigned byte</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                  <span class="bn">0x09</span>: <span class="st">'b'</span>,  <span class="co"># signed byte</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>                  <span class="bn">0x0b</span>: <span class="st">'h'</span>,  <span class="co"># short (2 bytes)</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                  <span class="bn">0x0c</span>: <span class="st">'i'</span>,  <span class="co"># int (4 bytes)</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>                  <span class="bn">0x0d</span>: <span class="st">'f'</span>,  <span class="co"># float (4 bytes)</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>                  <span class="bn">0x0e</span>: <span class="st">'d'</span>}  <span class="co"># double (8 bytes)</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    header <span class="op">=</span> fd.read(<span class="dv">4</span>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(header) <span class="op">!=</span> <span class="dv">4</span>:</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> IdxDecodeError(<span class="st">'Invalid IDX file, '</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'file empty or does not contain a full header.'</span>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    zeros, data_type, num_dimensions <span class="op">=</span> struct.unpack(<span class="st">'&gt;HBB'</span>, header)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> zeros <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> IdxDecodeError(<span class="st">'Invalid IDX file, '</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'file must start with two zero bytes. '</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Found 0x</span><span class="sc">%02x</span><span class="st">'</span> <span class="op">%</span> zeros)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        data_type <span class="op">=</span> DATA_TYPES[data_type]</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">KeyError</span>:</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> IdxDecodeError(<span class="st">'Unknown data type '</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'0x</span><span class="sc">%02x</span><span class="st"> in IDX file'</span> <span class="op">%</span> data_type)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    dimension_sizes <span class="op">=</span> struct.unpack(<span class="st">'&gt;'</span> <span class="op">+</span> <span class="st">'I'</span> <span class="op">*</span> num_dimensions,</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>                                    fd.read(<span class="dv">4</span> <span class="op">*</span> num_dimensions))</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> array.array(data_type, fd.read())</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    data.byteswap()  <span class="co"># looks like array.array reads data as little endian</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    expected_items <span class="op">=</span> functools.<span class="bu">reduce</span>(operator.mul, dimension_sizes)</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(data) <span class="op">!=</span> expected_items:</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> IdxDecodeError(<span class="st">'IDX file has wrong number of items. '</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Expected: </span><span class="sc">%d</span><span class="st">. Found: </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (expected_items,</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>                                                          <span class="bu">len</span>(data)))</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There’s one final piece of the process which comes from the fact that the array (i.e.&nbsp;the <code>data</code> local variable inside the <code>parse_idx</code> function) that gets returned is a single array (i.e.&nbsp;all the pixel values for all 60,000 images just listed one after another). We’ll want to split these up into separate chunks:</p>
+<ul>
+<li>splitting each image into a separate array of 784 values (because our images are 28x28 size)</li>
+<li>then splitting each image into an array of arrays giving us our 28x28 matrix.</li>
+</ul>
+<p>I’ll include the code that we use for this in the class, a <code>chunks</code> function, but I’ll return to how it works once everything is loaded.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chunk things together</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chunks(x, size):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(x), size): </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> x[i:i <span class="op">+</span> size]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-the-data-into-memory" class="level1">
+<h1>Load the data into memory</h1>
+<p>We use the chunks function here to turn our array of 47,040,000 values into matrices. To start with, something like <code>x_train</code> will have 60,000 separate arrays of 784 pixels, as we can see when we get the lengths of the initial array and then the length of the first item.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># unzip the files and extract the images </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gzip.<span class="bu">open</span>(training_images_path, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    pixels <span class="op">=</span> <span class="bu">list</span>(parse_idx(f))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    x_train <span class="op">=</span> <span class="bu">list</span>(chunks(pixels, <span class="dv">784</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gzip.<span class="bu">open</span>(training_images_labels_path, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> <span class="bu">list</span>(parse_idx(f))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gzip.<span class="bu">open</span>(test_images_path, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    pixels <span class="op">=</span> <span class="bu">list</span>(parse_idx(f))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    x_valid <span class="op">=</span> <span class="bu">list</span>(chunks(pixels, <span class="dv">784</span>))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gzip.<span class="bu">open</span>(test_images_labels_path, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    y_valid <span class="op">=</span> <span class="bu">list</span>(parse_idx(f))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(x_train), <span class="bu">len</span>(x_train[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>(60000, 784)</code></pre>
+</div>
+</div>
+<p>The labels are in a slightly different format, containing single integer values indicating which item the image refers to. We can check and show that we have 60,000 of those values, as we’d expect, and we can even see what values those refer to with a simple conversion:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>60000</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>y_train[<span class="dv">0</span>:<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>[9, 0, 0, 3, 0, 2, 7, 2, 5, 5]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this list is taken from the README of the Fashion-MNIST repository</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://github.com/zalandoresearch/fashion-mnist</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>index_to_label <span class="op">=</span> {</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>: <span class="st">"T-shirt/top"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: <span class="st">"Trouser"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>: <span class="st">"Pullover"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"Dress"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"Coat"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"Sandal"</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>: <span class="st">"Shirt"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="dv">7</span>: <span class="st">"Sneaker"</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="dv">8</span>: <span class="st">"Bag"</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="dv">9</span>: <span class="st">"Ankle boot"</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">map</span>(<span class="kw">lambda</span> x: index_to_label[x], y_train[<span class="dv">0</span>:<span class="dv">10</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>['Ankle boot',
+ 'T-shirt/top',
+ 'T-shirt/top',
+ 'Dress',
+ 'T-shirt/top',
+ 'Pullover',
+ 'Sneaker',
+ 'Pullover',
+ 'Sandal',
+ 'Sandal']</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-some-examples-using-matplotlib" class="level1">
+<h1>Plot some examples using <code>matplotlib</code></h1>
+<p>We can plot out one or two of our images to confirm that we’re seeing the right images and that everything’s as expected:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl, matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is the first image, which should be an ankle boot as per the labels above.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mpl.rcParams[<span class="st">'image.cmap'</span>] <span class="op">=</span> <span class="st">'gray'</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>plt.imshow(<span class="bu">list</span>(chunks(x_train[<span class="dv">0</span>], <span class="dv">28</span>)))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-10-24-foundations-mnist-basics_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This is the fourth image, which should be a dress as per the labels above:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mpl.rcParams[<span class="st">'image.cmap'</span>] <span class="op">=</span> <span class="st">'gray'</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plt.imshow(<span class="bu">list</span>(chunks(x_train[<span class="dv">3</span>], <span class="dv">28</span>)))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-10-24-foundations-mnist-basics_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Everything looks good!</p>
+</section>
+<section id="chunking-with-iterators-and-generators" class="level1">
+<h1>Chunking with iterators and generators</h1>
+<p>I promised I’d return to the <code>chunks</code> function defined above. There’s a way to define it in a simpler fashion without using generators that goes something like this:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chunks(x, size):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> []</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(x), size):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        subarray <span class="op">=</span> x[i:i <span class="op">+</span> size]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        result.append(subarray)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Functionally this does almost the same thing as what we have above, but this simpler version is less ideal because we’re iteratively building up our array in memory on the fly.</p>
+<p>The advantage of using a generator (which we create when we use <code>yield</code>) is that it only grabs the number of items we need at once, so it’s far more memory efficient. (In other words, instead of grabbing all 60,000 images at once, we only make one image (i.e.&nbsp;784 items / pixels) available at any one time.) With our generator, we can see the next set of items by calling <code>next</code> until we reach a <code>StopIterationError</code>.</p>
+<p>In our implementation, we don’t get so many of those benefits since we’re still going to store everything in memory anyway. We wrap all our chunk generator functions in <code>list()</code> which causes the interpreter to unfurl or unwrap our chunks into an array of arrays.</p>
+</section>
+<section id="define-a-matrix-class" class="level1">
+<h1>Define a matrix class</h1>
+<p>In standard Python if we want to index into one of our array image we’d normally have to do something like <code>image[0][15]</code> whereas in machine learning we generally prefer to do something like <code>image[0, 15]</code>. So our next step in manually implementing these things would be to create a <code>Matrix</code> class that allows us to do this.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Matrix:</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, vals):</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vals <span class="op">=</span> vals</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, vals):</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.vals[vals[<span class="dv">0</span>]][vals[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> <span class="bu">list</span>(chunks(x_train[<span class="dv">3</span>], <span class="dv">28</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>Matrix(img)[<span class="dv">0</span>, <span class="dv">10</span>], img[<span class="dv">0</span>][<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>(175, 175)</code></pre>
+</div>
+</div>
+<p>Now we have a function that does what we want. You can see we used the built-in <code>__getitem__</code> function which we over-wrote. This is what Python uses under the hood when you use square brackets to get values from an array, so by overwriting it we can achieve the behaviour we’re looking for.</p>
+<p>In reality, this implementation probably leaves a bit to be desired, so now that we’ve implemented it from scratch, we can discard our own version and just use a <code>tensor</code> object from PyTorch:</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> tensor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> tensor(<span class="bu">list</span>(chunks(x_train[<span class="dv">3</span>], <span class="dv">28</span>)))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>t.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>torch.Size([28, 28])</code></pre>
+</div>
+</div>
+<p>Now that we know it works, we can map all our values and turn them into tensor objects.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x_train, y_train, x_valid, y_valid <span class="op">=</span> <span class="bu">map</span>(tensor, (x_train, y_train, x_valid, y_valid))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>x_train.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>torch.Size([60000, 784])</code></pre>
+</div>
+</div>
+<p>As mentioned above, using tensors comes with a bunch of extra benefits.</p>
+</section>
+<section id="find-the-shape-min-and-max-values" class="level1">
+<h1>Find the shape, min and max values</h1>
+<p>Our <code>x_train</code> is in the shape [60000, 784] and our y_train is just 60,000 individual values. So we still need to chunk our images into 28x28 matrices.</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>y_train.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>torch.Size([60000])</code></pre>
+</div>
+</div>
+<p>For the chunking process, instead of our own function we can use PyTorch’s <code>reshape</code> method. Note that we pass in the desired new shape, so in our case that could be <code>(60000,28,28)</code>. It is more common, however, to use and see the number -1 for the first value, which implies that PyTorch should figure out what the value for that first dimension should be. In our case, we have 60,000 items so that’s how big it should be and these two options are both equivalent.</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_imgs = x_train.reshape((60000,28,28))</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>train_imgs <span class="op">=</span> x_train.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">28</span>))</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>train_imgs.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>torch.Size([60000, 28, 28])</code></pre>
+</div>
+</div>
+<p>We can find out the minimum and maximum value found inside one of our images by using Python’s <code>min</code>, but this is an inbuilt method on the tensor object as well so we can use that now:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>train_imgs[<span class="dv">0</span>].<span class="bu">min</span>(), train_imgs[<span class="dv">0</span>].<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>(tensor(0), tensor(255))</code></pre>
+</div>
+</div>
+<p>As expected, our pixel values represent the 256 shades of grey available. Our labels represent the 10 possible clothing types listed above, so we’d expect our minimum and maximum to be zero and nine respectively:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>y_train.<span class="bu">min</span>(), y_train.<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>(tensor(0), tensor(9))</code></pre>
+</div>
+</div>
+</section>
+<section id="generate-some-random-numbers" class="level1">
+<h1>Generate some random numbers</h1>
+<p>We finished out the lesson with a brief discussion of random number generators, how to implement them and how this might be important for deep learning work. As we learned, there is no way for computers to generate truly random numbers. People go to interesting lengths to create their own random numbers, such as <a href="https://www.cloudflare.com/en-gb/learning/ssl/lava-lamp-encryption/">the infamous lava lamp wall</a> at Cloudflare, but we are left with being able to create only pseudo-random numbers.</p>
+<p>In the class we see a way based on the Wichmann Hill algorithm used before Python 2.3, which goes as follows:</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>rnd_state <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> seed(a):</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> rnd_state</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    a, x <span class="op">=</span> <span class="bu">divmod</span>(a, <span class="dv">30268</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    a, y <span class="op">=</span> <span class="bu">divmod</span>(a, <span class="dv">30306</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    a, z <span class="op">=</span> <span class="bu">divmod</span>(a, <span class="dv">30322</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    rnd_state <span class="op">=</span> <span class="bu">int</span>(x)<span class="op">+</span><span class="dv">1</span>, <span class="bu">int</span>(y)<span class="op">+</span><span class="dv">1</span>, <span class="bu">int</span>(z)<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rand():</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> rnd_state</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    x, y, z <span class="op">=</span> rnd_state</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> (<span class="dv">171</span> <span class="op">*</span> x) <span class="op">%</span> <span class="dv">30269</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> (<span class="dv">172</span> <span class="op">*</span> y) <span class="op">%</span> <span class="dv">30307</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> (<span class="dv">170</span> <span class="op">*</span> z) <span class="op">%</span> <span class="dv">30323</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    rnd_state <span class="op">=</span> x,y,z</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x<span class="op">/</span><span class="dv">30269</span> <span class="op">+</span> y<span class="op">/</span><span class="dv">30307</span> <span class="op">+</span> z<span class="op">/</span><span class="dv">30323</span>) <span class="op">%</span> <span class="fl">1.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We have two functions. It’s important to note that the <code>seed</code> is an important part of these pseudo-random number generators. The seed gives us a number that our generator starts with. Note also how we use global state to store the <code>rnd_state</code> variable, and how we are continually updating our values in that state as we generate. Also note that the process of generating the values is fairly simple, but also eminently reproducible.</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>seed(<span class="dv">2349873456787298</span>) <span class="co"># some number I came up with by mashing my keyboard numbers</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>rnd_state</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>(24775, 23862, 14675)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rand(),rand(),rand()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>(0.6580068826155674, 0.669616116835976, 0.9249613879702964)</code></pre>
+</div>
+</div>
+<p>We now have a function which generates pseudo-random numbers, but as we’ll see, it’s not the fastest bit of code around…</p>
+</section>
+<section id="profile-our-code" class="level1">
+<h1>Profile our code</h1>
+<p>Python has a handy <a href="https://docs.python.org/3/library/timeit.html"><code>timeit</code> module</a> which allows you to calculate how long your code takes to run. What’s more, it’ll run your code hundreds or thousands of times to get average run times. Here we can see how fast our pseudo-random number generator takes to run, on average:</p>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>timeit <span class="op">-</span>n <span class="dv">10</span> <span class="bu">list</span>(chunks([rand() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">7840</span>)], <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4.05 ms ± 500 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>If we compare it against PyTorch’s random number generator, we can see a distinct difference, however:</p>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>timeit <span class="op">-</span>n <span class="dv">10</span> torch.randn(<span class="dv">784</span>,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>56.1 µs ± 23.5 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>Now we’re talking about microseconds vs miliseconds, which is a big difference, so we should probably stick to how PyTorch does it.</p>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>torch.randn??</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Docstring:</span>
+randn(*size, *, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False) -&gt; Tensor
+Returns a tensor filled with random numbers from a normal distribution
+with mean `0` and variance `1` (also called the standard normal
+distribution).
+.. math::
+    \text{out}_{i} \sim \mathcal{N}(0, 1)
+The shape of the tensor is defined by the variable argument :attr:`size`.
+Args:
+    size (int...): a sequence of integers defining the shape of the output tensor.
+        Can be a variable number of arguments or a collection like a list or tuple.
+Keyword args:
+    generator (:class:`torch.Generator`, optional): a pseudorandom number generator for sampling
+    out (Tensor, optional): the output tensor.
+    dtype (:class:`torch.dtype`, optional): the desired data type of returned tensor.
+        Default: if ``None``, uses a global default (see :func:`torch.set_default_tensor_type`).
+    layout (:class:`torch.layout`, optional): the desired layout of returned Tensor.
+        Default: ``torch.strided``.
+    device (:class:`torch.device`, optional): the desired device of returned tensor.
+        Default: if ``None``, uses the current device for the default tensor type
+        (see :func:`torch.set_default_tensor_type`). :attr:`device` will be the CPU
+        for CPU tensor types and the current CUDA device for CUDA tensor types.
+    requires_grad (bool, optional): If autograd should record operations on the
+        returned tensor. Default: ``False``.
+Example::
+    &gt;&gt;&gt; torch.randn(4)
+    tensor([-2.1436,  0.9966,  2.3426, -0.6366])
+    &gt;&gt;&gt; torch.randn(2, 3)
+    tensor([[ 1.5954,  2.8929, -1.0923],
+            [ 1.1719, -0.4709, -0.1996]])
+<span class="ansi-red-fg">Type:</span>      builtin_function_or_method
+</pre>
+</div>
+</div>
+</div>
+<p>PyTorch has <a href="https://pytorch.org/docs/stable/notes/randomness.html">an interesting document entitled ‘Reproducibility’</a> in which they state the things that you can try to do to make your code as non-deterministic (i.e.&nbsp;non-random) as possible. This is important if you want to be able to reproduce your work. At the top, however, and as I learned during the Sunday Delft FastAI Study Group discussion, it’s not as simple as setting seed values; sometimes even the hardware used needs to be identical in order to achieve reproducibility:</p>
+<blockquote class="blockquote">
+<p>“Completely reproducible results are not guaranteed across PyTorch releases, individual commits, or different platforms. Furthermore, results may not be reproducible between CPU and GPU executions, even when using identical seeds.”</p>
+</blockquote>
+<p>But why do we care about random values in deep learning to start with? We care because we are often doing things like augmentations in parallel. Augmentations are randomly generated, so if all the parallel processes use the same random number sequences then all the processes will generate the same augmented images.</p>
+<p>We saw the nice example in the lesson of how our function runs into exactly this problem:</p>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.fork():</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'In parent: </span><span class="sc">{</span>rand()<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'In child: </span><span class="sc">{</span>rand()<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    os._exit(os.EX_OK)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>In parent: 0.17354408428968426
+In child: 0.17354408428968426</code></pre>
+</div>
+</div>
+<p>We create two forked processes, which are identical copies of each other. Then we call our pseudo-random number generator. You would expect that these two values would be different, but because we’ve copied the entire state then we get identical values. What we’d need to do is to set a new seed at the beginning of each process.</p>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.fork():</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    seed(<span class="dv">0</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'In parent: </span><span class="sc">{</span>rand()<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    seed(<span class="dv">1</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'In child: </span><span class="sc">{</span>rand()<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    os._exit(os.EX_OK)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>In parent: 0.01693090619965683
+In child: 0.02258025041320865</code></pre>
+</div>
+</div>
+</section>
+<section id="things-jeremy-says-to-do" class="level1">
+<h1>“Things Jeremy says to do”</h1>
+<p>I thought I’d gather some of the core ‘things Jeremy says to do’ comments from the video lecture for this part of the lecture.</p>
+<ul>
+<li>show the function signature with <code>shift-Tab</code></li>
+<li>use <code>?</code> and <code>??</code> at the end of a method or function to show the docs and the source code respectively</li>
+<li>read all the docs for every Python function you use
+<ul>
+<li>look at all the arguments it takes</li>
+<li>practice with that function inside a notebook</li>
+</ul></li>
+<li>(sometimes) read the full source code</li>
+<li>pause the video when something in Jeremy’s code is unfamiliar and experiment around with it in a notebook
+<ul>
+<li>read the docs and example code for those new concepts</li>
+</ul></li>
+<li>(at some point) read through all the docs for the <code>Tensor</code> object / concept</li>
+</ul>
+<p>Note that there’s a bit more when it comes to the imagic demonstration which I’ll try to cover in a separate blogpost.</p>
+<p>In any case, there was a lot in this lecture. This week is all about matrix multiplication which I’m looking forward to getting to implement myself!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
