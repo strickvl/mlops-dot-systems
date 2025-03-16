@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-01-22">
+<meta name="description" content="Reflections on the sixth and seventh chapters of Patrick Viafore’s book, ‘Robust Python’. We slowly wind down our discussion of type hints in Python code and think through using mypy and how to introduce type hints to a legacy codebase.">
+
+<title>Alex Strick van Linschoten - Using mypy for Python type checking</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Using mypy for Python type checking">
+<meta property="og:description" content="Reflections on the sixth and seventh chapters of Patrick Viafore's book, 'Robust Python'.">
+<meta property="og:image" content="https://mlops.systems/posts/robust-python/robust-python-cover.jpeg">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Using mypy for Python type checking">
+<meta name="twitter:description" content="Reflections on the sixth and seventh chapters of Patrick Viafore's book, 'Robust Python'.">
+<meta name="twitter:image" content="https://mlops.systems/posts/robust-python/robust-python-cover.jpeg">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Using mypy for Python type checking</h1>
+                  <div>
+        <div class="description">
+          Reflections on the sixth and seventh chapters of Patrick Viafore’s book, ‘Robust Python’. We slowly wind down our discussion of type hints in Python code and think through using <code>mypy</code> and how to introduce type hints to a legacy codebase.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">robustpython</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">books-i-read</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 22, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>The final two chapters of part one of Patrick Viafore’s ‘<a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8">Robust Python</a>’ cover more practical advice on how to actually use and implement type checking in either a new project or a legacy codebase.</p>
+<p><a href="http://www.mypy-lang.org"><code>mypy</code></a> is the most commonly used option for type checking in Python and it does most of what you probably need it for. You can run it via the command line, inline as part of your IDE, or as part of a CI/CD pipeline. At work we do all three.</p>
+<p>You can configure <code>mypy</code> to your heart’s desire either with inline comments in your code, or via a configuration file. A configuration file is probably the way to go, particularly if you’re versioning your code and sharing these kinds of settings across a team.</p>
+<p>Chapter 6 goes into detail about some of the specific options or settings you can tweak to make <code>mypy</code> more or less sensitive to certain kinds of errors. For example, in <a href="https://mlops.systems/robustpython/python/books-i-read/2022/01/08/robust-python-4.html">a previous post</a> we mentioned how you can implicitly accept <code>None</code> as a type with the <code>Optional</code> type annotation wrapper. But maybe you don’t want to allow this behaviour because it’s generally not a great idea: if so, you can use the <code>—strict-optional</code> flag to get notified whenever you’re using that particular construction.</p>
+<p><code>mypy</code> also allows for the export of its results to html and xml, and you can run it in the background as a daemon which (particularly for large code bases) might speed it up.</p>
+<p>We also learn about some alternatives to <code>mypy</code>, namely Pyre and Pyright. <a href="https://pyre-check.org">Pyre</a> runs as a daemon in the background and allows you to run queries relating to type usage in your codebase. It also includes a static code analyser called <a href="https://pyre-check.org/docs/pysa-basics/">Pysa</a> that runs a kind of security analysis on your code called ‘taint analysis’. A quick summary of this would be to say that you can specify specific kinds of security flaws that you want to address and/or prevent being part of your codebase.</p>
+<p><a href="https://github.com/microsoft/pyright">Pyright</a> is interesting since it has a useful VS Code integration (via the <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance">Pylance extension</a>). You get all sorts of autocompletion and tooltip goodness by using Pyright/Pylance.</p>
+<p>Finally, chapter 7 thinks through how you might want to approach actually using type checking and type hints in a larger codebase, perhaps one that already exists. It’s useful this was included as I imagine these sorts of practicalities are much more of a blocker to adoption than any technical issues. After a brief discussion of tradeoffs, we learn about some different options for where you might want to start with introducing types to a legacy codebase.</p>
+<ul>
+<li>Focusing on the pain points — i.e.&nbsp;where the lack of type hints has already seen bugs emerge in the past</li>
+<li>or perhaps adding them to new code only</li>
+<li>or perhaps type annotating the pieces of the codebase that actually drive the product or business’ profits</li>
+<li>or maybe whatever is complex to understand</li>
+</ul>
+<p>All of these are options and it will definitely depend on your particular situation.</p>
+<p>We also learn about two tools that might help get you started with type annotation: <a href="https://github.com/instagram/MonkeyType">MonkeyType</a> and <a href="https://google.github.io/pytype/">Pytype</a>. Both auto-generate type hints for your codebase. MonkeyType does so dynamically, so it only generates type hints for parts of your code that it accesses while running the code. Pytype does so by static analysis. Both deliver some kind of output that you can then use (perhaps) as the basis of some annotations of your codebase. My instinct is that these two tools feel like they might lead to some faulty assumptions or errors if you rely on them too much and that in fact it would be better to just methodically go through your code and incrementally add type hints as suggested above.</p>
+<p>This concludes the type hints part of the book. I feel like I really got a solid overview of why type hints are used in large or complex Python codebases as well as how to implement this practically. I will be writing separately about how we use <code>mypy</code> and type hinting at ZenML as I think it offers an interesting case study on some of the benefits and tradeoffs that we’ve observed on a day-to-day basis.</p>
+<p>Next up in Robust Python: defining your own types with <code>Enums</code>, data classes, classes and how this fits into libraries like Pydantic.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-04-06">
+<meta name="description" content="I show how adding synthetic data has improved my redaction model’s performance. Once I trained with the synthetic images added, I realised a more targeted approach would do even better.">
+
+<title>Alex Strick van Linschoten - ‘I guess this is what data-centric AI is!’: Performance boosts after training with synthetic data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - ‘I guess this is what data-centric AI is!’: Performance boosts after training with synthetic data">
+<meta property="og:description" content="I show how adding synthetic data has improved my redaction model's performance. Once I trained with the synthetic images added, I realised a more targeted approach would do even better.">
+<meta property="og:image" content="https://mlops.systems/posts/synthetic-data-results/hard-synthetic-performance-boost.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="430">
+<meta property="og:image:width" content="600">
+<meta name="twitter:title" content="Alex Strick van Linschoten - ‘I guess this is what data-centric AI is!’: Performance boosts after training with synthetic data">
+<meta name="twitter:description" content="I show how adding synthetic data has improved my redaction model's performance. Once I trained with the synthetic images added, I realised a more targeted approach would do even better.">
+<meta name="twitter:image" content="https://mlops.systems/posts/synthetic-data-results/hard-synthetic-performance-boost.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="430">
+<meta name="twitter:image-width" content="600">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">‘I guess this is what data-centric AI is!’: Performance boosts after training with synthetic data</h1>
+                  <div>
+        <div class="description">
+          I show how adding synthetic data has improved my redaction model’s performance. Once I trained with the synthetic images added, I realised a more targeted approach would do even better.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">redactionmodel</div>
+                <div class="quarto-category">computervision</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 6, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-failed-attempt-to-train-with-synthetic-data" id="toc-a-failed-attempt-to-train-with-synthetic-data" class="nav-link active" data-scroll-target="#a-failed-attempt-to-train-with-synthetic-data">A failed attempt to train with synthetic data</a></li>
+  <li><a href="#performance-boosts-after-adding-synthetic-data" id="toc-performance-boosts-after-adding-synthetic-data" class="nav-link" data-scroll-target="#performance-boosts-after-adding-synthetic-data">Performance boosts after adding synthetic data</a></li>
+  <li><a href="#hard-examples-creating-targeted-synthetic-data" id="toc-hard-examples-creating-targeted-synthetic-data" class="nav-link" data-scroll-target="#hard-examples-creating-targeted-synthetic-data">‘Hard examples’: creating targeted synthetic data</a></li>
+  <li><a href="#reflections-on-experimenting-with-synthetic-data" id="toc-reflections-on-experimenting-with-synthetic-data" class="nav-link" data-scroll-target="#reflections-on-experimenting-with-synthetic-data">Reflections on experimenting with synthetic data</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/#category=redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
+<p>A clean and focused dataset is probably at the top of the list of things that would be nice to have when starting to tackle a machine learning problem. For object detection, there are some <a href="https://huggingface.co/datasets?task_categories=task_categories:object-detection&amp;sort=downloads">useful starting points</a>, but for many use cases you’re probably going to have to start from scratch. This is what I’ve been doing <a href="https://mlops.systems/#category=redactionmodel">for the past few months</a>: working to bootstrap my way into a dataset that allows me to get decent performance training a model that can recognise redactions made on documents.</p>
+<p>As part of that journey so far, some of the big things that I’ve taken time to do include:</p>
+<ul>
+<li><a href="https://mlops.systems/redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html">manually annotating</a> 1000+ images</li>
+<li>using a model-in-the-loop to help bootstrap that annotation process by <a href="https://mlops.systems/python/fastai/tools/redactionmodel/2022/01/16/midway-report-redaction-project.html">pre-filling annotation suggestions</a> on an image that I could then correct</li>
+<li><a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">creating synthetic images</a> to increase the size of my dataset used in training</li>
+<li>spending time <a href="https://mlops.systems/redactionmodel/computervision/tools/debugging/jupyter/2022/03/12/fiftyone-computervision.html">looking at what the model found difficult</a>, or what it got wrong</li>
+</ul>
+<p>At the end of my synthetic data creation blogpost, I mentioned that the next step would be to test the effect of adding in the new synthetic examples. Well… the results are in!</p>
+<section id="a-failed-attempt-to-train-with-synthetic-data" class="level2">
+<h2 class="anchored" data-anchor-id="a-failed-attempt-to-train-with-synthetic-data">A failed attempt to train with synthetic data</h2>
+<p>I wasn’t sure exactly how much synthetic data would be appropriate or performant to use, so created a loose experiment where I started with 20% of the total images and increasing up until I reached 50%. (I figured that more than 50% synthetic data probably wasn’t a great idea and would probably not help my model perform out in the real world.)</p>
+<p><img src="synthetic-data-results/synthetic-early-results.png" title="Results from the first phase using synthetic data" class="img-fluid"></p>
+<p>As you can see above: my initial experiment did not show great results. In fact, in several places, if I added synthetic data my model actually performed <em>worse</em>. This was a strong repudiation of my intuition of what would happen. After all, the whole point of adding the synthetic data was to get the model more of a chance to learn / train and thus improve its ability to recognise redaction object in documents.</p>
+<p>I dug into the data that I’d generated and the data I’d been using to train, and discovered a nasty bug which was tanking the performance. A week of debugging mislabelled bounding boxes in evenings after work and I was back with results that finally made sense.</p>
+</section>
+<section id="performance-boosts-after-adding-synthetic-data" class="level2">
+<h2 class="anchored" data-anchor-id="performance-boosts-after-adding-synthetic-data">Performance boosts after adding synthetic data</h2>
+<p><img src="synthetic-data-results/synthetic-mid-results.png" title="Results from the first phase using synthetic data" class="img-fluid"></p>
+<p>In this chart, at the bottom you can see how training the model without the synthetic data (<code>no-synthetic-batch16</code>) performed. Ok, not great. Then the next best performing (<code>combined-75real-25synthetic-randomsplit</code>)was when 25% of the total number of images was synthetic, and the rest were real manually annotated images. At the top, with around an 81% COCO score, was the model where I used 50% synthetic and 50% real images. This seemed to fit what my intuition said would happen.</p>
+<p>More synthetic data helped. I guessed that if I had millions of labelled images then the synthetic data would perhaps have been less useful, but starting from scratch it was really supporting the process.</p>
+<p>I was curious what would happen when I returned to <a href="https://voxel51.com">FiftyOne</a> to carry out some error analysis on the new model’s performance. Even before I had reached those results, I had a hunch that the synthetic images I’d created were perhaps too generic. I think they probably were helping boost some baseline performance of my model, but I knew they weren’t helping with the hard parts of detecting redactions.</p>
+</section>
+<section id="hard-examples-creating-targeted-synthetic-data" class="level2">
+<h2 class="anchored" data-anchor-id="hard-examples-creating-targeted-synthetic-data">‘Hard examples’: creating targeted synthetic data</h2>
+<p>As a reminder, this is the kind of image that is ‘hard’ for my model (or even a human) to be able to identify all the redactions:</p>
+<p><img src="synthetic-data-results/hard-detection.png" title="White boxes on white backgrounds are hard to identify as redactions" class="img-fluid"></p>
+<p>The <a href="https://voxel51.com">FiftyOne</a> visualisations of what was and wasn’t working validated my hunch: yes, synthetic data helped somewhat, but the model’s low performance seemed much more vulnerable to misrecognition of the hard examples. Even with a 50/50 split between synthetic data and real manually annotated data, the hard examples were still hard! (And the converse was also true: the model was <em>already</em> pretty good at identifying ‘easy’ redactions (e.g.&nbsp;of the black box type).</p>
+<p>If we look back at the example of a ‘hard’ redaction above, two things stood out:</p>
+<ol type="1">
+<li>They’re hard, even for a human! This was borne out in the way I needed to take special care not to forget or mislabel when I was adding manual annotations.</li>
+<li>There are <em>lots</em> of redactions on a single page/image.</li>
+</ol>
+<p>The second point was probably important, not only in the sense that there were more chances of getting something wrong on a single page, but also in the sense that the redactions were (relatively) small. The detection of small objects is almost its own field in the world of computer vision and I don’t know too much about it, but I do know it’s somewhat an unsolved problem. That said, finding a way to boost the performance of the models on these ‘hard’ examples (there were a few other types of hard image) seemed like it might tackle a significant shortcoming of my model.</p>
+<p>I decided to try creating a separate batch of synthetic image data, this time fully tailored to tackling some of the hardness mentioned above: it would have many small redactions on a single page, they would all be white boxes and there might also be things like tables with white box-like shapes coexisting next to redactions.</p>
+<p>Luckily, the work I’d done previously on creating synthetic data helped me get started quickly. I returned to <a href="https://borbpdf.com"><code>borb</code></a>, an open-source tool for quickly creating PDF documents that allows for a pretty flexible prototyping of layouts with all sorts of bells and whistles added. These were some of the documents I generated:</p>
+<p><img src="synthetic-data-results/hard-synthetic.gif" class="img-fluid"></p>
+<p>The hard images were hard, and I had created some synthetic chimeras that (I believed) approximated some of the features of the original hard images. I did not want to overbalance my training data, however, and took care not to create too many of this type of image.</p>
+<p>My script — as with <a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">the previous synthetic data</a> — also required me to create the annotation files at the same time as creating the document. With <code>borb</code> it was <em>relatively</em> trivial to get the bounding box data for objects created, and there was even in-built functionality to create and apply redactions onto a document. (I’m moving fairly quickly over the mechanics of how this all worked, but it’s not too far distant from how I described it in my previous post so I’d refer you there <a href="https://mlops.systems/redactionmodel/computervision/python/tools/2022/02/10/synthetic-image-data.html">for more details</a>).</p>
+<p>Once the images were created and added to my datasets, it was time to retrain the model and see what benefit it brought.</p>
+<p><img src="synthetic-data-results/hard-synthetic-performance-boost.png" title="~3.5% boost when adding hard synthetic images into training data!" class="img-fluid"></p>
+<p>As you can see, the model jumped up from around 80.5 to 84% when I aded the hard synthetic examples in. That’s a pretty nice jump as far as I’m concerned, especially given that I only added in 300 images to the training data. I still had a little over a thousand of the original basic synthetic images that I was using, but this result showed me that tackling the badly performing parts of the model head-on seemed to have a positive outcome.</p>
+<p>At this point, I did some more experiments around the edges, applying other things I knew would probably boost the performance even more, notably first checking what would happen if I increased the image size from 512 to 640. I got up to an 86% COCO score with that improvement alone.</p>
+<p>In a final twist, I second-guessed myself and wondered whether the original synthetic data was even helping at all… I removed the thousand or so ‘basic’ synthetic images from the data and retrained the model. To my surprise, I achieved more or less the same COCO score as I had <em>with</em> the basic synthetic images. I’m taking this as a strong suggestion that my basic synthetic images aren’t actually helping as much as I’d thought, and that probably a smaller number of them as a % of the total would be beneficial.</p>
+</section>
+<section id="reflections-on-experimenting-with-synthetic-data" class="level2">
+<h2 class="anchored" data-anchor-id="reflections-on-experimenting-with-synthetic-data">Reflections on experimenting with synthetic data</h2>
+<p>So, what can I conclude from this whole excursion into the world of synthetic image creation as a way of boosting model performance?</p>
+<ul>
+<li>adding synthetic data really can help!</li>
+<li>the world of synthetic data creation is a <em>huge</em> rabbit hole and potentially you can get lost trying to create the perfect synthetic versions of your original data. (I mean this both in the sense of ‘there’s lots to learn’ as well as ‘you can spend or lose a <em>ton</em> of time here’.)</li>
+<li>Targeted synthetic data designed to clear up issues where the model has been identified as underperforming is probably best. (Conversely, and I’ll be careful how much I generalise here, middle-of-the-road synthetic data that doesn’t resemble the original dataset may not be worth your time.)</li>
+<li>Knowing your original data and domain really well helps. A lot. My intuition about what things the model would stumble on was fuelled by this knowledge of the documents and the domain, as well as by the experience of having done manual annotations for many hours.</li>
+</ul>
+<p>There are probably many (many) more things I can do to continually tinker away at this model to improve it:</p>
+<ul>
+<li>continue down the path of more error analysis, which would fuel more targeted addition of annotations, and so on.</li>
+<li>create better versions of synthetic data with more variation to encompass the various kinds of documents out in the real world.</li>
+<li>more self-training with the model in the loop to fuel my manual annotation process.</li>
+<li>further increases to the image size (perhaps in conjunction with progressive resizing).</li>
+<li>increasing the backbone from <code>resnet50</code> to <code>resnet101</code>.</li>
+</ul>
+<p>In general, improving the quality of the data used to train my model seems to have been (by far) the best way to improve my model performance. Hyper-parameter tuning of the sort that is often referenced in courses or in blog posts does not seem to have had much of a benefit.</p>
+<p>It is probably (mostly) good enough for my use case and for where I want to be heading with this project. There are other things that need addressing around the edges, notably parts of the project that could be made more robust and ‘production-ready’. More about that in due course, but for now please do comment below if you have suggestions for things that I haven’t thought of that might improve my model performance!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

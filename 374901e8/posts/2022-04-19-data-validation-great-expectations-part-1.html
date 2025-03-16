@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-04-19">
+<meta name="description" content="An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring. I introduce and simplify the high-level concepts you need to use the Great Expectations library.">
+
+<title>Alex Strick van Linschoten - How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)">
+<meta property="og:description" content="An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring.">
+<meta property="og:image" content="https://mlops.systems/posts/great_expectations/g_e_logo.jpeg">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)">
+<meta name="twitter:description" content="An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring.">
+<meta name="twitter:image" content="https://mlops.systems/posts/great_expectations/g_e_logo.jpeg">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</h1>
+                  <div>
+        <div class="description">
+          An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring. I introduce and simplify the high-level concepts you need to use the Great Expectations library.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">redactionmodel</div>
+                <div class="quarto-category">computervision</div>
+                <div class="quarto-category">datavalidation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 19, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#data-validation-and-computer-vision" id="toc-data-validation-and-computer-vision" class="nav-link active" data-scroll-target="#data-validation-and-computer-vision">Data validation and computer vision</a></li>
+  <li><a href="#big-picture-what-might-this-look-like-for-my-project" id="toc-big-picture-what-might-this-look-like-for-my-project" class="nav-link" data-scroll-target="#big-picture-what-might-this-look-like-for-my-project">Big picture: what might this look like for my project?</a></li>
+  <li><a href="#tradeoffs" id="toc-tradeoffs" class="nav-link" data-scroll-target="#tradeoffs">Tradeoffs</a></li>
+  <li><a href="#what-kind-of-validation-does-great-expectations-offer" id="toc-what-kind-of-validation-does-great-expectations-offer" class="nav-link" data-scroll-target="#what-kind-of-validation-does-great-expectations-offer">What kind of validation does Great Expectations offer?</a></li>
+  <li><a href="#a-simple-example-of-using-great-expectations-for-data-validation" id="toc-a-simple-example-of-using-great-expectations-for-data-validation" class="nav-link" data-scroll-target="#a-simple-example-of-using-great-expectations-for-data-validation">A simple example of using Great Expectations for data validation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/#category=redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>
+<p><strong>Data validation is a process of verifying that data is accurate and consistent. It plays a crucial role in end-to-end machine learning pipelines.</strong></p>
+<p><strong>There is a lack of validation tools in Computer Vision (CV) due the complexity of the data used by the domain.</strong></p>
+<p><strong>In this series of articles, I will show you how to leverage the <a href="https://greatexpectations.io">Great Expectations</a> open-source library to validate object detection data. This will help you to feed your model with data less prone to break your model performance.</strong></p>
+<p>When something goes wrong with a newly trained or newly deployed version of your model, where do you look first? Where does your gut tell you the bug or issue is likely to be found? For me, knee deep into my redaction model project, I immediately think of my data. For sure, I could probably have more in the way of testing to be sure my code is working how I expect it to work, but issues with the data are far more likely to be silent killers. Issues with data are unlikely to raise a loud exception and suddenly bring my training to a stop. Instead, my training will continue, but I’ll either get really unsatisfactory results or I’ll get results that are underperforming the real potential of the data I’m feeding into my model. That’s the scary part: I most likely won’t even know that my data is broken or faulty.</p>
+<iframe src="https://giphy.com/embed/YTJXDIivNMPuNSMgc0" width="442" height="480" frameborder="0" class="giphy-embed" allowfullscreen="">
+</iframe>
+<p>For software engineers, testing your code is a tried-and-tested way to find some confidence in what you’re trying to accomplish. (I am exploring some of these best practices in <a href="https://mlops.systems/#category=robustpython">my review series</a> about Patrick Viafore’s excellent <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8"><em>Robust Python</em></a>book, which covers testing along with typing and various other patterns.) For critical systems, testing is one of the things that allows you to sleep soundly. For those living in the world of machine learning or data science, data validation is like writing tests for your data. You can be confident that your data looks and has the shape of what you feel it should when you address the data quality issue head-on.</p>
+<p>If you think of your model training workflow as a pipeline, there are certain places where it makes sense to do some kind of data validation:</p>
+<ul>
+<li>at the very beginning, when you’re seeing your data for the first time: a lot of exploration and basic analysis really helps at this point. It will help you build up intuition for the general patterns and boundaries of the data you’re going to use to train your model.</li>
+<li>any time you do some kind of conversion: perhaps you have to — as I do with my project — convert from one image annotation format into another and you’re juggling x and y coordinates constantly, or maybe you’re using different image formats at different points?</li>
+<li>prior to training your model: ‘garbage in, garbage out’ as the saying goes… You probably want to make sure that you only have high quality data passing through into your model training pipeline step.</li>
+<li>as part of a continuous training loop: perhaps you’ve trained and deployed a model, but now a few months have passed, you have more data and you want to retrain your model. Are you confident that the new data retains the same characteristics and qualities of your original data?</li>
+</ul>
+<p>As you can see, there are many different approaches that you might take. To discuss where you might want to validate your data is to discuss where your processes might be flawed in some way. For most projects of any size or significance, you probably will find that taking the care with your data inputs will pay dividends.</p>
+<section id="data-validation-and-computer-vision" class="level1">
+<h1>Data validation and computer vision</h1>
+<p>It often seems like computer vision exists in a world unto its own, particularly when it comes to the data used to train models. These idiosyncrasies amount to a strong case for some kind of data validation:</p>
+<ul>
+<li>image data isn’t always easily introspectable, especially on the aggregate level (i.e.&nbsp;what is the ‘average’ of a series of images, or how to think of the standard deviation of your images?)</li>
+<li>for something like object detection, the annotations are stored in a separate location from the images to which they correspond, leaving the door open for a creeping data drift between the original image locations and what is listed in the annotations.</li>
+<li>For massive data sets, the original data will likely not be stored in the environment where you’re doing some fine-tuning with new data.</li>
+<li>Different model architectures require different kinds of pre-processing for your data and sometimes annotations need converting into slightly different formats (perhaps for your evaluation metric)</li>
+<li>The pure images (or image-adjacent objects like medical scans) contain a lot of sub-surface metadata that isn’t easily accessed and isn’t automatically used as criteria for comparison or error detection.</li>
+</ul>
+<p>In short, there are lots of ways that training a computer vision model can go wrong, and implementing even basic safeguards against this can give you confidence in the data you’re using. Unfortunately, the landscape of tooling for data validation in the computer vision space feels like it’s lagging behind what exists for tabular data, for example, but that’s almost certainly because it’s just a harder problem. The big data validation libraries don’t really cater towards computer vision as a core domain, and (as you’ll see below) you’ll probably have to crowbar your data into the formats they expect.</p>
+</section>
+<section id="big-picture-what-might-this-look-like-for-my-project" class="level1">
+<h1>Big picture: what might this look like for my project?</h1>
+<p>As I outlined above, there are lots of different places where you might want to use some kind of data validation strategy. At the level of code, you might want to make your input and output validation a bit more solid by using type annotations and a type checker like <code>mypy</code>. You can add tests to ensure that edge cases are being handled, and that your assumptions about your code behaviour are proven. You also have your tests to ensure that changes in one function or area of your codebase don’t break something somewhere else.</p>
+<p>At the level of your data, you can of course use simple <code>assert</code> statements within the functional meat of your codebase. For example, at the point where you’re ingesting data pre-training you could assert that each image is of a certain format and size, and perhaps even that annotations associated with that image ‘make sense’ as per the context of whatever problem you’re solving. You can handle some of these assertions and checks with simple conditionals, perhaps, earlier on in the process when you are ingesting or pre-processing your data.</p>
+<p>A significant benefit of having these simple assertions inside your core functions is that you are handling the ways things can go wrong at the same time as you’re writing the functionality itself. A disadvantage is that your code can easily become cluttered with all this non-core behaviour. It feels a little like the validation can become an afterthought in this scenario. For this reason, it seems to make sense to me that you’d want to have one or more dedicated checkpoints where your data undergoes some kind of validation process. In the context of a pipeline, this means you probably will want one or more steps where this happens.</p>
+</section>
+<section id="tradeoffs" class="level1">
+<h1>Tradeoffs</h1>
+<p>For tiny throwaway projects, or for proof-of-concept experimentation, it might not make sense to start off by working up a massive data validation suite. A really rigorous validation process early on might slow you down more than is useful. Instead, simple <code>assert</code> statements coupled with type annotations on your functions might be the way to go for safeguards and will-this-be-readable-in-the-future sanity checks.</p>
+<p>Ideally, you’ll want to create some kind of end-to-end pipeline or workflow at the beginning of your process, since this will allow you to iterate faster in a manner that’s meaningful for whatever you’re trying to solve. With a basic pipeline in place, data validation can be added as a stage of its own without too much disruption once you have an initial working prototype. As with most things in life, investing for the longer term is going to take a bit more upfront effort but that shouldn’t be too much an issue as long as your project has that kind of a horizon to it.</p>
+</section>
+<section id="what-kind-of-validation-does-great-expectations-offer" class="level1">
+<h1>What kind of validation does Great Expectations offer?</h1>
+<p><a href="https://greatexpectations.io">Great Expectations</a> is an open-source data validation tool. It is somewhat agnostic as to what specific use case you have, but I don’t think it’d be wrong to say that it isn’t primarily developed for those working on computer vision problems; tabular data seems to be a much cosier fit.</p>
+<p>I stated above that Great Expectations could be used as if you were adding tests for your data. At a very high level, you can think of it as a fancier way of adding assertions about your data. The ‘expectations’ in the title are like those assertion statements, only in this case there are dozens of different pre-made ‘expectations’ you can choose from. For example, you could assert that you expect that the values of a particular column of a Pandas DataFrame be between 0 and 100, and that if they exceeded those boundaries then it would be only a very small proportion that did so.</p>
+<p>Your expectations make up a ‘suite’, and you run your suite of expectations against a batch or data asset. There are another 10 or 20 concepts or terms that I’d need to define and connect together in a mental map before we covered everything about how Great Expectations works. Unfortunately, this is one of the things I found most confusing about getting to know the library through its documentation. From the outside, it appears that they had one set of terminology, but now it’s partially changed to a different set of terms or abstractions. Presumably for reasons of backwards compatibility, some of the old abstractions remain in the documentation and explanations, which makes it not always clear to understand how the various pieces fit together.</p>
+<p><img src="great_expectations/great_expecations_abstractions.png" title="My initial attempt at understanding how all the abstractions of Great Expectations related to one another…" class="img-fluid"></p>
+<p>You can read <a href="https://docs.greatexpectations.io/docs/glossary">the glossary</a> over at their documentation site if you want to learn more, but for now everything I explained above should suffice.</p>
+<p>There seem to be two main ways of setting up and using Great Expectations. One is heavily interactive and driven by executing cells in a series of notebooks. The other is as you’d expect — code-based using a Python library, backed by some external configuration files and templates. I didn’t find the notebook-based configuration and setup very compelling, but it is the one emphasised in the documentation and in online materials, so I will give it due attention in the next part of this blog series. For now, it might suffice to show a very simple version of how the code-based use works:</p>
+</section>
+<section id="a-simple-example-of-using-great-expectations-for-data-validation" class="level1">
+<h1>A simple example of using Great Expectations for data validation</h1>
+<p>The first thing I did was to convert my annotations data into a Pandas DataFrame. You can use Pandas, SQL and Apache Spark as sources for your data to be validated through Great Expectations, and luckily my COCO annotations file was just a JSON file so it was easily converted. While doing the conversion, I made sure to add some extra metadata along the way: a column noting whether an image or a redaction was horizontal or vertical in its orientation, for example, or splitting the <code>bbox</code> array into its four constituent parts.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> great_expectations <span class="im">as</span> ge</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>annotations_df <span class="op">=</span> ge.from_pandas(pd.DataFrame(annotations))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="op">=</span> [<span class="st">'area'</span>, <span class="st">'iscrowd'</span>, <span class="st">'image_id'</span>, <span class="st">'category_id'</span>, <span class="st">'id'</span>, <span class="st">'synthetically_generated'</span>, <span class="st">'category_name'</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> feature_columns:</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    annotations_df.expect_column_to_exist(col)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>annotations_df.expect_column_values_to_be_in_set(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"category_name"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"content"</span>, <span class="st">"redaction"</span>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Great Expectations wraps the Pandas library, so importing the data was easy. Then adding the expectations (methods beginning with <code>expect…</code>) was trivial. Below you can see the result from the second of the expectations. All of the column values were in that set, so the test passed.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"success"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"result"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"element_count"</span><span class="fu">:</span> <span class="dv">6984</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"missing_count"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"missing_percent"</span><span class="fu">:</span> <span class="fl">0.0</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"unexpected_count"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"unexpected_percent"</span><span class="fu">:</span> <span class="fl">0.0</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"unexpected_percent_total"</span><span class="fu">:</span> <span class="fl">0.0</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"unexpected_percent_nonmissing"</span><span class="fu">:</span> <span class="fl">0.0</span><span class="fu">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"partial_unexpected_list"</span><span class="fu">:</span> <span class="ot">[]</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"meta"</span><span class="fu">:</span> <span class="fu">{},</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"exception_info"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"raised_exception"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"exception_traceback"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"exception_message"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the second part of this series, I’ll explore how the interactive way of using Great Expectations works, and I’ll also show the web results interface for your expectations suite. It’s much fancier than the dictionary / object that was output above, and what’s even better is that you can have Great Expectations make some of its own guesses about what the right expectations for your particular dataset might be.</p>
+<p>I hope for now that I’ve made the case for why data validation is probably worth doing, and started you thinking about how that might apply to a computer vision use case.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
