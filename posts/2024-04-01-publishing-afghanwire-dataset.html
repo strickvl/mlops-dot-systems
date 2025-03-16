@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2024-04-01">
+<meta name="description" content="I’m publishing a unique new dataset of Afghan newspaper and magazine articles from the 2006-2009 period. This collection of over 7990 articles were originally translated from Dari and Pashto and published by Afghanwire, a media monitoring organisation that I co-founded and ran in Kabul at the time.">
+
+<title>Alex Strick van Linschoten - Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009">
+<meta property="og:description" content="I'm publishing a unique new dataset of Afghan newspaper and magazine articles from the 2006-2009 period.">
+<meta property="og:image" content="https://mlops.systems/posts/images/afghanwire-website.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="681">
+<meta property="og:image:width" content="600">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009">
+<meta name="twitter:description" content="I'm publishing a unique new dataset of Afghan newspaper and magazine articles from the 2006-2009 period.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/afghanwire-website.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="681">
+<meta name="twitter:image-width" content="600">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</h1>
+                  <div>
+        <div class="description">
+          I’m publishing a unique new dataset of Afghan newspaper and magazine articles from the 2006-2009 period. This collection of over 7990 articles were originally translated from Dari and Pashto and published by Afghanwire, a media monitoring organisation that I co-founded and ran in Kabul at the time.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">afghanistan</div>
+                <div class="quarto-category">datalabelling</div>
+                <div class="quarto-category">datasets</div>
+                <div class="quarto-category">nlp</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">isafpr</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 1, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link active" data-scroll-target="#dataset-overview">Dataset Overview</a></li>
+  <li><a href="#potential-applications" id="toc-potential-applications" class="nav-link" data-scroll-target="#potential-applications">Potential Applications</a></li>
+  <li><a href="#accessing-the-dataset" id="toc-accessing-the-dataset" class="nav-link" data-scroll-target="#accessing-the-dataset">Accessing the Dataset</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>I am excited to announce the release of a new dataset on the Hugging Face Hub: <a href="https://huggingface.co/datasets/strickvl/afghanwire">the Afghanwire Dataset</a>. This dataset is a comprehensive collection of translated Afghan media articles from the period of May 2006 to September 2009, created by the Afghanwire media agency, which I co-founded together with Felix Kuehn.</p>
+<p><img src="images/afghanwire-dataset.png" title="Screenshot of the Afghanwire dataset on the Hugging Face datasets hub" class="img-fluid"></p>
+<p>During the years that Afghanwire was active, our team of Afghan translators worked diligently to translate articles from Dari and Pashto media sources into English. The dataset includes translated newspaper and magazine articles, as well as summaries of radio and television content. As most of the original media from this period is no longer available online, and certainly not in English, this dataset represents the largest publicly available trove of translated Afghan media for the 2006-2009 period.</p>
+<p>The primary motivation for releasing this dataset is to serve as a historical artefact, preserving the voices and perspectives of Afghan civil society during a critical period in the country’s history. By making these translated articles accessible to researchers, historians, and the general public, we aim to shift the focus from foreign powers and military forces to the diverse opinions and discussions within Afghan society.</p>
+<section id="dataset-overview" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-overview">Dataset Overview</h2>
+<p>The <a href="https://huggingface.co/datasets/strickvl/afghanwire">Afghanwire Dataset</a> consists of 7,990 translated articles, covering a wide range of topics and sourced from media outlets across Afghanistan. The dataset is provided as a single large collection, with no predefined splits. Each article is accompanied by metadata such as the publication date, author (if available), translator, topic, and language.</p>
+<p>One of the strengths of this dataset is its geographical diversity. Although the Afghanwire office was based in Kabul, efforts were made to obtain newspapers and magazines from the provinces to ensure a representative collection. This inclusivity is particularly valuable for regions like Dai Kundi province, whose media coverage might have otherwise been lost and that we sought to represent.</p>
+</section>
+<section id="potential-applications" class="level2">
+<h2 class="anchored" data-anchor-id="potential-applications">Potential Applications</h2>
+<p>While the primary purpose of the Afghanwire Dataset is to serve as a historical resource, it also presents opportunities for various Natural Language Processing (NLP) tasks. These include:</p>
+<ul>
+<li>Named Entity Recognition (NER) for entities that may be underrepresented in standard or smaller models.</li>
+<li>Sentiment analysis to gauge public opinion on various issues during the covered period.</li>
+<li>Topic modelling to identify the main themes and concerns in Afghan media discourse.</li>
+<li>Comparative analysis with other datasets or media sources to identify unique perspectives or biases.</li>
+</ul>
+</section>
+<section id="accessing-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="accessing-the-dataset">Accessing the Dataset</h2>
+<p>The Afghanwire Dataset is now available on the Hugging Face Hub under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) license. Researchers and interested parties can <a href="https://huggingface.co/datasets/strickvl/afghanwire">access the dataset here</a>.</p>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
+<p>I’ve had these files sitting on my hard drive for over a decade now. The website is barely accessible via archive.org snapshots (see here, <a href="https://web.archive.org/web/20090227154008/http://www.afghanwire.com:80/">for example</a>) but since the newsletter and most articles were behind a login screen (though no paywall 🤟) the only source of the data was a database dump we made before we switched off the servers. (As a side note, this was a raw MySQL dump compatible with v4.1.21 which is actually so old that you can’t find Docker images to support it. I was saved by <a href="https://github.com/andrebossi/mysql4">this amazing repo</a> from <code>@andrebossi</code> which gave me everything I needed to rescue the data and port it out into Parquet files.)</p>
+<p>I hope that researchers, historians and other interested parties find this a useful collection of the voices of Afghan civil society during a critical period in the country’s history. By making these translated articles accessible to a wider audience, as always I hope to foster a deeper understanding of the complex issues and diverse perspectives that shaped Afghanistan during the 2006-2009 period.</p>
+<p>I would like to express my gratitude to the dedicated team of translators at Afghanwire, particularly Hamid Stanikzai, Atif Mohammadzai, Abdul Hassib Rahimi, and Hamid Safi, for their tireless efforts in selecting and translating these articles. Their work has made this dataset possible and ensures that the voices of Afghan civil society will not be forgotten.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

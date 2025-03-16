@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2022-03-21">
+<meta name="description" content="I’m reading Elton Stoneman’s ‘Learn Docker in a Month of Lunches’ and blogging as I learn along the way. In chapters 1-3 we learn about the context for Docker as well as some basic commands for running and building containers.">
+
+<title>Alex Strick van Linschoten - Starting Docker In A Month Of Lunches</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Starting Docker In A Month Of Lunches">
+<meta property="og:description" content="I'm reading Elton Stoneman's 'Learn Docker in a Month of Lunches' and blogging as I learn along the way.">
+<meta property="og:image" content="https://mlops.systems/posts/diamol/diamol-cover.jpg">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Starting Docker In A Month Of Lunches">
+<meta name="twitter:description" content="I'm reading Elton Stoneman's 'Learn Docker in a Month of Lunches' and blogging as I learn along the way.">
+<meta name="twitter:image" content="https://mlops.systems/posts/diamol/diamol-cover.jpg">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Starting Docker In A Month Of Lunches</h1>
+                  <div>
+        <div class="description">
+          I’m reading Elton Stoneman’s ‘Learn Docker in a Month of Lunches’ and blogging as I learn along the way. In chapters 1-3 we learn about the context for Docker as well as some basic commands for running and building containers.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">dockerinamonthoflunches</div>
+                <div class="quarto-category">books-i-read</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 21, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#core-docker-commands" id="toc-core-docker-commands" class="nav-link active" data-scroll-target="#core-docker-commands">Core Docker Commands</a></li>
+  <li><a href="#building-your-own-images-with-dockerfiles" id="toc-building-your-own-images-with-dockerfiles" class="nav-link" data-scroll-target="#building-your-own-images-with-dockerfiles">Building your own images with Dockerfiles</a>
+  <ul class="collapse">
+  <li><a href="#dockerfile-layout" id="toc-dockerfile-layout" class="nav-link" data-scroll-target="#dockerfile-layout">Dockerfile layout</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>As far as software engineers go, I’m still barely a spring chicken, six months into my job with <a href="https://zenml.io/">ZenML</a>. Working at a startup is fairly fast-paced and the ability to get going quickly with any number of libraries and tools is a requirement of the work. The number of things I could study, learn or practice is vastly larger than the amount of time I have. Accordingly, it helps to try to pick things that will be long-lasting, teach a cross-cutting skill or that are somehow fundamental.</p>
+<p>Two closely-connected technologies that I’ve realised I can no longer avoid are <a href="https://www.docker.com/">Docker</a> and <a href="https://kubernetes.io/">Kubernetes</a>. I have some high-level knowledge of both, having worked with Docker images on Ekko and having encountered Kubernetes in recent months, but it’s become clear in the last few weeks that they aren’t going away. More than that, it seems that not having a better (practical) grasp of some of the ins and outs of both is holding me back from grasping more complex decisions that are being made at work.</p>
+<p>[<em>Side-note: I’m very curious about <a href="https://podman.io/">Podman</a> as a Docker-adjacent alternative, but I need to understand Docker better first before I can make comparisons. I’d also note that I’m pretty sure that there are lots of cases where Kubernetes is overkill, and where it doesn’t make much sense to add all that complexity, particularly for smaller teams and projects. It’s nevertheless a feature of life in the MLOps space, it seems, so I must understand it.</em>]</p>
+<p>I’ve had my eye on two Manning books by <a href="https://blog.sixeyed.com/">Elton Stoneman</a> for a while, and now seems the perfect time to dive in. <a href="https://www.amazon.com/Learn-Docker-Month-Lunches-Stoneman-ebook/dp/B097824MVJ/ref=tmm_kin_swatch_0?qid=&amp;sr=&amp;tag=soumet-20&amp;_encoding=UTF8">Learn Docker in a Month of Lunches</a> and <a href="https://www.amazon.com/gp/product/B0978175TP/ref=dbs_a_def_rwt_bibl_vppi_i1?tag=soumet-20">Learn Kubernetes in a Month of Lunches</a> are very practical introductions to their subjects, come with good reviews and feedback and were published relatively recently. I’m especially happy that both books are extremely hands-on and even though I won’t in any way be an expert in either technology by the end, I’ll at least have some experience of having encountered the core use cases of both and maybe have a strong idea of what I do and don’t know.</p>
+<p>I’m not sure whether I’ll complete each one in exactly a month, but I’ll try to fast-track my reading. The chapters are written in such a way as to be digestible (including exercises) in around an hour. Stoneman says in the introduction to the Kubernetes book that it’s best to start with the Docker one, which I suppose makes sense given that one builds on the other.</p>
+<p>Just like <a href="https://mlops.systems/#category=robustpython">my posts as I read through Robust Python</a> (which I haven’t stopped doing), I’ll write up various things that I learn along the way, mainly as notes for myself but perhaps it will have value beyond this limited goal. So far I’ve read through the first three chapters of the Docker book, so what follows are some notes on the key points from that.</p>
+<section id="core-docker-commands" class="level1">
+<h1>Core Docker Commands</h1>
+<p>The book has you running a lot of examples. Two commands mentioned (specific to this book) to help clean up the images and containers that you were using:</p>
+<pre class="shell"><code># clean up containers and application packages
+docker container rm -f $(docker container ls -aq)
+
+# to reclaim disk space
+docker image rm -f $(docker image ls -f reference='dial/*' -q)</code></pre>
+<p>Some core commands for interacting with a container:</p>
+<pre class="shell"><code># run a container
+docker container run CONTAINERNAME
+
+# run an interactive container with a connected terminal session
+docker container run --interactive --tty CONTAINERNAME
+
+# list running containers
+docker container ls
+# list all containers with any status
+docker container ls --all 
+
+# list processes running in a container
+# CONTAINERNAME could be part of the container ID as well
+docker container top CONTAINERNAME
+
+# show logs for a container
+docker container logs CONTAINERNAME
+
+# view all details about a container
+docker container inspect CONTAINERNAME
+
+# get stats on a particular container
+docker container stats CONTAINERNAME
+
+# special flags
+# --detach starts the container in the background
+# --publish publishes a port from the container to the computer
+
+# delete containers
+# the force flag shuts it down if still running
+docker container rm --force CONTAINERNAME
+
+# the nuclear option
+docker container rm --force $(docker container ls --all --quiet)</code></pre>
+</section>
+<section id="building-your-own-images-with-dockerfiles" class="level1">
+<h1>Building your own images with Dockerfiles</h1>
+<p>Some commands which are useful for making your own images:</p>
+<pre class="shell"><code># gets the image from DockerHub registry
+docker image pull IMAGENAME</code></pre>
+<p>Key mental models for Docker images:</p>
+<ul>
+<li>images are made up of ‘layers’</li>
+<li>Docker images are stored as lots of small files, brought together as one image when you build with a <code>Dockerfile</code>.</li>
+<li>each layer of an image corresponds to a line in your <code>Dockerfile</code></li>
+<li>layers are successively built on top of each other</li>
+<li>the order of the layers determines the cache invalidation. If something changes in a lower layer, then all subsequent layers are regenerated. It’s for this reason that it pays to be careful about the order in which you write the commands that make up your <code>Dockerfile</code>.</li>
+</ul>
+<p>It seems to be considered a good practice (at least where I am right now in the book) to pass in environment variables from the outside into your Docker image. This way you can keep configuration separate from how you actually run it. So you’d have a command something like this:</p>
+<pre class="shell"><code>docker container run --env EPOCHS=30 SOMEUSER/CONTAINERNAME</code></pre>
+<p>which would pass the <code>EPOCHS</code> environment variable into the runtime of the Docker image if it had been set up with something like this as a line inside the <code>Dockerfile</code>:</p>
+<pre><code>ENV EPOCHS="1"</code></pre>
+<p>Note that only the environment variables that you specifically select to be passed into the container get passed in.</p>
+<section id="dockerfile-layout" class="level2">
+<h2 class="anchored" data-anchor-id="dockerfile-layout">Dockerfile layout</h2>
+<p><code>Dockerfile</code>s seem to have some commonalities in terms of the structure:</p>
+<ul>
+<li>you start with a base image on which you’re building. These seem usually or often to be a base image containing a runtime for whatever language your application uses</li>
+<li>Then there’s often environment variables afterwards</li>
+<li>Then you can specify a <code>WORKDIR</code> which is the working directory for the application</li>
+<li>Then you can <code>COPY</code> files from your local filesystem into that working directory</li>
+<li>Then at the end you specify which <code>CMD</code> needs to be run in order to execute the application.</li>
+</ul>
+<p>Once you’re done with writing your <code>Dockerfile</code>, use the following command to build your image:</p>
+<pre class="shell"><code>docker image build --tag SOMENAME .</code></pre>
+<p>Note that final <code>.</code> trailing that command. The <code>.</code> states that the current directory is the ‘context’ and thus is used for when you’re copying in files using the <code>COPY</code> command.</p>
+<p>You can view the layers of your Docker image with the <code>docker image history IMAGENAME</code> command (which will output them to the terminal).</p>
+<p>To see how much disk space your containers and images are taking up, type <code>docker system df</code>.</p>
+<p>When you rebuild an image, you can specify this with a <code>:v2</code> after the name, as in this command:</p>
+<pre class="shell"><code>docker image build -t web-app:v2 .</code></pre>
+<p>When it comes to optimising your <code>Dockerfile</code>, bear the following in mind:</p>
+<blockquote class="blockquote">
+<p>“Any Dockerfile you write should be optimised so that the instructions are ordered by how frequently they change — with instructions that are unlikely to change at the start of the Dockerfile, and instructions most likely to change at the end. The goal is for most builds to only need to execute the last instruction, using the cache for everything else. That saves time, disk space, and network bandwidth when you start sharing your images.” (pp.&nbsp;42-43)</p>
+</blockquote>
+<p>Some command tips and tricks:</p>
+<ul>
+<li>combine multiple commands onto the same line</li>
+<li>put the <code>CMD</code> instruction early on as it’s unlikely to change</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
