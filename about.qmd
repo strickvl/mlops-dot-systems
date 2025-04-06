@@ -32,3 +32,6 @@ I have a PhD in History and authored several books based on my research work in
 Afghanistan. I have [a different long-standing blog](https://www.alexstrick.com)
 that I will combine with this one at some point, but for now I intend to post
 technical posts here.
+
+I built [Gemini by Example](https://www.geminibyexample.com) as a reference
+resource for the Gemini API / SDK.
