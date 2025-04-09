@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-04-09">
+<meta name="description" content="Some initial fast impressions of Google Deepmind’s new iteration of Gemini Deep Research that uses their 2.5 Pro model.">
+
+<title>Alex Strick van Linschoten - First impressions of the new Gemini Deep Research (with 2.5 Pro)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - First impressions of the new Gemini Deep Research (with 2.5 Pro)">
+<meta property="og:description" content="Some initial fast impressions of Google Deepmind's new iteration of Gemini Deep Research that uses their 2.5 Pro model.">
+<meta property="og:image" content="https://mlops.systems/posts/images/cover-gdr.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="1027">
+<meta property="og:image:width" content="1660">
+<meta name="twitter:title" content="Alex Strick van Linschoten - First impressions of the new Gemini Deep Research (with 2.5 Pro)">
+<meta name="twitter:description" content="Some initial fast impressions of Google Deepmind's new iteration of Gemini Deep Research that uses their 2.5 Pro model.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/cover-gdr.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="1027">
+<meta name="twitter:image-width" content="1660">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">First impressions of the new Gemini Deep Research (with 2.5 Pro)</h1>
+                  <div>
+        <div class="description">
+          Some initial fast impressions of Google Deepmind’s new iteration of Gemini Deep Research that uses their 2.5 Pro model.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">agents</div>
+                <div class="quarto-category">google</div>
+                <div class="quarto-category">tools</div>
+                <div class="quarto-category">openai</div>
+                <div class="quarto-category">research</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 9, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Google released an updated iteration of their Deep Research tool that uses the new 2.5 Pro model. This was taken from a post originally made on Twitter, so please excuse the terseness.</p>
+<p>First impressions:</p>
+<ul>
+<li>a bit too eager to jump into a deep research task even when I just ask a clarifying question</li>
+<li>quite verbose, just like the OpenAI version. Not sure why both play this up a lot. It looks impressive but in practice I think we need more entry points into this. The ‘Executive Summary’ and other concluding headers are nice touches but I feel maybe there should be some more adherence to user requests for short reports. (I get that as UI it’s maybe weird to think for 10 mins and then spit out a very concise version, but it might actually be more useful.)</li>
+<li>I continue to be annoyed about how these Gemini DR reports handle footnotes (i.e.&nbsp;as endnotes whacked on at the end of the report). Almost a deal-breaker IMO.</li>
+<li>It’s almost like GDR tries to show how scholarly and serious it is by giving you these walls of prose (vs OpenAI DR which throws in a lot more bullet points). Not sure one is better than the other but would appreciate a bit more flexibility!</li>
+<li>The portability of these reports has always been <em>not great</em>. Yes you can export them to Google Docs but markdown (+ other options) would have been much better. In practice, this means that whenever I use GDR the report stays stuck there and I’m far less likely to share it with anyone, whereas the OpenAI DR reports I drop parts/all into a Github Gist etc.</li>
+<li>These reports <em>have</em> been getting better and better, all things considered. I’ve been following along and using GDR from the early days (even pre-OpenAI DR) and this latest version is the best version of it so far (as you’d hope!)</li>
+<li>(It’s also a little bit annoying that GDR has removed any way to use the older versions of GDR with Gemini Pro 2.0 and 1.5 etc. Makes it harder to actually compare these things.)</li>
+<li>Please let’s get an ipad version of the Gemini iPad app soon, too? Feels a bit regressive to have to use GDR on the web interface always.</li>
+<li>For serious research (as opposed to simply generating a nice report on some area where you don’t know much about already), all these tools remain hamstrung by the quality of the sources. In areas where I am (or very recently used to be) a leading scholar / researcher, the difference between what I’d expect (in terms of taste / discernment for picking out these sources) is especially egregious. Make the models better, yes, but have better filters + retrieval.</li>
+</ul>
+<p>So yeah, these tools are getting good! Kudos to the teams who are implementing this stuff. Hard to make it perform reproducibly well on so many open-ended uses. But more work to be done!</p>
+<p>IMO the really great implementations of this ‘deep research’ pattern will all be in-house where you can have control over:</p>
+<ul>
+<li>source selection (i.e.&nbsp;high-quality inputs only, not just some random things on the internet)</li>
+<li>how long it spends thinking about a particular area / loop of the research (or decides to backtrack and dig deeper etc)</li>
+<li>output types / templates / length</li>
+<li>different modalities of Q&amp;A (sometimes you want reports, other times you want a quick question answered, other times you want visual guides etc etc.)</li>
+<li>different models for different kinds of tasks</li>
+<li>possibly you have little sub-research agents / processes which will go off and work on some hypothesis, possibly involving actual datasets / analysis of tabular data etc, something clearly missing from the current versions we have</li>
+</ul>
+<p>A few other things:</p>
+<ul>
+<li>GDR’s ‘clarification step’ (which I’ve heard them discuss on podcasts etc) is not as good or useful as the OpenAI DR clarification questions. In practice, because it’s buried under a concealment button that you have to click etc, and where the entire UI seems to be screaming at you to ‘Start Research’, you basically never update or amend the research plan. And when you do, it’s really not clear what’s changed because you don’t get some feedback or diff that your comments were understood; you just get an entire new research plan (again buried under the concealment button)</li>
+<li>Going forward we’re probably going to want / need ways of navigating the layers to this research. A global overview report will have subsections that (should you wish) can be expanded into their own more detailed or granular reports. This is how research works, after all. Not just endless new reports all trailed one after another pointed in the same direction.</li>
+</ul>
+<p>The other thing that I think we’re <em>really</em> going to need to work on is research taste. Like the LLMs that power them, GDR and OpenAI DR offer a level of research taste developed to the mean. (I know people are thinking about this since it came up on Dwarkesh’s podcast with the AI 2027 guys, but they were focused on scientific research.)</p>
+<p>I think there’s not a single answer for this which is, again, why I see the end result as people bringing these things in-house where they get to develop and refine what makes their particular flavour of research unique. (In the human-generated research world this is very much the case, where certain institutions (or even particular authors) are known for how deep they go, or what kinds of sources they prefer, or how they choose to feature or highlight the primary sources they access, and so on.) There are many possible variations of how this manifest, and I hope that we’re headed into a world where all the AI ‘deep researchers’ will be unique and quirky in all the best senses of that word.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

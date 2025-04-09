@@ -10,7 +10,59 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sat, 15 Mar 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 08 Apr 2025 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>First impressions of the new Gemini Deep Research (with 2.5 Pro)</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Google released an updated iteration of their Deep Research tool that uses the new 2.5 Pro model. This was taken from a post originally made on Twitter, so please excuse the terseness.</p>
+<p>First impressions:</p>
+<ul>
+<li>a bit too eager to jump into a deep research task even when I just ask a clarifying question</li>
+<li>quite verbose, just like the OpenAI version. Not sure why both play this up a lot. It looks impressive but in practice I think we need more entry points into this. The ‘Executive Summary’ and other concluding headers are nice touches but I feel maybe there should be some more adherence to user requests for short reports. (I get that as UI it’s maybe weird to think for 10 mins and then spit out a very concise version, but it might actually be more useful.)</li>
+<li>I continue to be annoyed about how these Gemini DR reports handle footnotes (i.e.&nbsp;as endnotes whacked on at the end of the report). Almost a deal-breaker IMO.</li>
+<li>It’s almost like GDR tries to show how scholarly and serious it is by giving you these walls of prose (vs OpenAI DR which throws in a lot more bullet points). Not sure one is better than the other but would appreciate a bit more flexibility!</li>
+<li>The portability of these reports has always been <em>not great</em>. Yes you can export them to Google Docs but markdown (+ other options) would have been much better. In practice, this means that whenever I use GDR the report stays stuck there and I’m far less likely to share it with anyone, whereas the OpenAI DR reports I drop parts/all into a Github Gist etc.</li>
+<li>These reports <em>have</em> been getting better and better, all things considered. I’ve been following along and using GDR from the early days (even pre-OpenAI DR) and this latest version is the best version of it so far (as you’d hope!)</li>
+<li>(It’s also a little bit annoying that GDR has removed any way to use the older versions of GDR with Gemini Pro 2.0 and 1.5 etc. Makes it harder to actually compare these things.)</li>
+<li>Please let’s get an ipad version of the Gemini iPad app soon, too? Feels a bit regressive to have to use GDR on the web interface always.</li>
+<li>For serious research (as opposed to simply generating a nice report on some area where you don’t know much about already), all these tools remain hamstrung by the quality of the sources. In areas where I am (or very recently used to be) a leading scholar / researcher, the difference between what I’d expect (in terms of taste / discernment for picking out these sources) is especially egregious. Make the models better, yes, but have better filters + retrieval.</li>
+</ul>
+<p>So yeah, these tools are getting good! Kudos to the teams who are implementing this stuff. Hard to make it perform reproducibly well on so many open-ended uses. But more work to be done!</p>
+<p>IMO the really great implementations of this ‘deep research’ pattern will all be in-house where you can have control over:</p>
+<ul>
+<li>source selection (i.e.&nbsp;high-quality inputs only, not just some random things on the internet)</li>
+<li>how long it spends thinking about a particular area / loop of the research (or decides to backtrack and dig deeper etc)</li>
+<li>output types / templates / length</li>
+<li>different modalities of Q&amp;A (sometimes you want reports, other times you want a quick question answered, other times you want visual guides etc etc.)</li>
+<li>different models for different kinds of tasks</li>
+<li>possibly you have little sub-research agents / processes which will go off and work on some hypothesis, possibly involving actual datasets / analysis of tabular data etc, something clearly missing from the current versions we have</li>
+</ul>
+<p>A few other things:</p>
+<ul>
+<li>GDR’s ‘clarification step’ (which I’ve heard them discuss on podcasts etc) is not as good or useful as the OpenAI DR clarification questions. In practice, because it’s buried under a concealment button that you have to click etc, and where the entire UI seems to be screaming at you to ‘Start Research’, you basically never update or amend the research plan. And when you do, it’s really not clear what’s changed because you don’t get some feedback or diff that your comments were understood; you just get an entire new research plan (again buried under the concealment button)</li>
+<li>Going forward we’re probably going to want / need ways of navigating the layers to this research. A global overview report will have subsections that (should you wish) can be expanded into their own more detailed or granular reports. This is how research works, after all. Not just endless new reports all trailed one after another pointed in the same direction.</li>
+</ul>
+<p>The other thing that I think we’re <em>really</em> going to need to work on is research taste. Like the LLMs that power them, GDR and OpenAI DR offer a level of research taste developed to the mean. (I know people are thinking about this since it came up on Dwarkesh’s podcast with the AI 2027 guys, but they were focused on scientific research.)</p>
+<p>I think there’s not a single answer for this which is, again, why I see the end result as people bringing these things in-house where they get to develop and refine what makes their particular flavour of research unique. (In the human-generated research world this is very much the case, where certain institutions (or even particular authors) are known for how deep they go, or what kinds of sources they prefer, or how they choose to feature or highlight the primary sources they access, and so on.) There are many possible variations of how this manifest, and I hope that we’re headed into a world where all the AI ‘deep researchers’ will be unique and quirky in all the best senses of that word.</p>
+
+
+
+ ]]></description>
+  <category>agents</category>
+  <category>google</category>
+  <category>tools</category>
+  <category>openai</category>
+  <category>research</category>
+  <guid>https://mlops.systems/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</guid>
+  <pubDate>Tue, 08 Apr 2025 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/cover-gdr.png" medium="image" type="image/png" height="89" width="144"/>
+</item>
 <item>
   <title>Learnings from a week of building with local LLMs</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4764,261 +4816,6 @@
   <guid>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</guid>
   <pubDate>Mon, 24 Jun 2024 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/eval-preview.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>One-click LLM finetuning with Predibase, OpenPipe and OpenAI</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2024-06-17-one-click-finetuning.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>The <a href="https://mlops.systems/posts/2024-06-15-isafpr-first-finetune.html">last post in this series</a> showed that finetuning an LLM needn’t be particularly difficult. I used <code>axolotl</code> to produce finetuned versions of Llama3, Mistral and TinyLlama models. During the course we were given a bunch of credits by various companies in the LLM and finetuning space. Among those were credits from some finetuning-as-a-service companies and I thought now might be a good time to try out these services now that I’ve done the process manually a few times.</p>
-<p>I picked three to try out: Predibase, OpenPipe and OpenAI. All were surprisingly similar in the approach they took. I’ll give a few details on the experience for each and how they compare to each other. With all the services, the process was roughly the same as when I did it manually:</p>
-<ol type="1">
-<li>Upload custom data</li>
-<li>Select some hyperparameters</li>
-<li>Start the finetuning</li>
-<li>Try the model</li>
-</ol>
-<p>The step I had the most trouble with was the custom data upload, since each provider wanted the data in a different format. Converting the data from the Pydantic models I had previously created was not a huge deal, but I wasn’t sure about the tradeoffs that I was making (or that were being made for me) by converting my data into these formats.</p>
-<section id="predibase" class="level2">
-<h2 class="anchored" data-anchor-id="predibase">Predibase</h2>
-<p>I started with <a href="https://predibase.com/">Predibase</a> since I had enjoyed the talk Travis Addair had given during the course. Predibase is famous for their work on LORA adapters, particularly their demonstration of <a href="https://predibase.com/blog/lora-land-fine-tuned-open-source-llms-that-outperform-gpt-4">Lora Land</a> where they gave some examples of how finetuned LORA models / adapters could outperform GPT-4.</p>
-<p>Predibase requires that the data you upload has certain column names depending on the task you select for the finetuning. At the moment they have instruction tuning and text completion as their two tasks, but it wasn’t clear to me which to select. (They also have <a href="https://colab.research.google.com/drive/1r505Aq_SWZdaSkBIs3ovh4F8c36DHwAh?usp=sharing">a Colab notebook</a> to help with constructing splits from your data.)</p>
-<p>Once your data is ready and validated, you can select the model you want to finetune along with a few other hyperparameters. This is the full extent of what you can set from the web UI:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/predibase-hyperparameters.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Screenshot of Predibase website and the hyperparameters you can set</figcaption><p></p>
-</figure>
-</div>
-<p>There’s also a helpful dataset preview pane to give a final sanity check for your data, to make sure that the inputs and outputs look what you’d expect:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/predibase-dataset-preview.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Screenshot of Predibase website and the dataset preview pane</figcaption><p></p>
-</figure>
-</div>
-<p>As you’ll read in a little bit, this feature helps catch potentially costly errors before you start the finetuning process.</p>
-<p>Once you click the button to start the training, there isn’t a great deal of information available to you beyond (eventually) a loss curve that you can see. I chose to finetune Qwen2 in Predibase and this took about 53 minutes using an A-100 GPU accelerator.</p>
-<p>Once your model is ready, you can prompt the model in the UI, or using their REST API / Python SDK. They give code snippets prefilled with some dummy text that you can easily try out locally. Let’s show that here, but before you can run your inference query you have to first deploy the model. I hadn’t expected this extra step, and it takes a while to spin up since it’s deploying the adaptor along with the base model it was finetuned alongside. My Qwen2 model has a context window of 131072 tokens and supposedly would cost $3.90 per hour that it was up (as a dedicated deployment).</p>
-<p>Let’s show the results we got:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">pr1 <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"""2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release</span></span>
-<span id="cb1-2"><span class="st" style="color: #20794D;">      KABUL, Afghanistan (Nov. 7, 2011) — A combined Afghan and coalition</span></span>
-<span id="cb1-3"><span class="st" style="color: #20794D;">      security force conducted an operation in search of a Haqqani facilitator</span></span>
-<span id="cb1-4"><span class="st" style="color: #20794D;">      in Argo district, Badakshan province. The facilitator coordinates suicide</span></span>
-<span id="cb1-5"><span class="st" style="color: #20794D;">      attacks with other insurgent leaders in the area. During the operation, a</span></span>
-<span id="cb1-6"><span class="st" style="color: #20794D;">      local national male failed to comply with repeated verbal warnings and</span></span>
-<span id="cb1-7"><span class="st" style="color: #20794D;">      displayed hostile intent toward the security force. The security force</span></span>
-<span id="cb1-8"><span class="st" style="color: #20794D;">      engaged the individual, resulting in his death. The security force</span></span>
-<span id="cb1-9"><span class="st" style="color: #20794D;">      confiscated a shotgun and intelligence linking the local national to the</span></span>
-<span id="cb1-10"><span class="st" style="color: #20794D;">      Haqqani network. The security force also detained two suspected insurgents during the operation."""</span></span>
-<span id="cb1-11"></span>
-<span id="cb1-12">prompt <span class="op" style="color: #5E5E5E;">=</span> <span class="ss" style="color: #20794D;">f"""You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']</span></span>
-<span id="cb1-13"></span>
-<span id="cb1-14"><span class="ss" style="color: #20794D;">### Instruction:</span></span>
-<span id="cb1-15"></span>
-<span id="cb1-16"><span class="ss" style="color: #20794D;">PRESS RELEASE TEXT: '</span><span class="sc" style="color: #5E5E5E;">{</span>pr1<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">'</span></span>
-<span id="cb1-17"></span>
-<span id="cb1-18"><span class="ss" style="color: #20794D;">### Response:</span></span>
-<span id="cb1-19"><span class="ss" style="color: #20794D;">"""</span></span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;">import</span> os</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;">from</span> predibase <span class="im" style="color: #00769E;">import</span> Predibase</span>
-<span id="cb2-3"></span>
-<span id="cb2-4">pb <span class="op" style="color: #5E5E5E;">=</span> Predibase(api_token<span class="op" style="color: #5E5E5E;">=</span>os.getenv(<span class="st" style="color: #20794D;">"PREDIBASE_API_KEY"</span>))</span>
-<span id="cb2-5"><span class="co" style="color: #5E5E5E;"># pb = Predibase(api_token="")</span></span>
-<span id="cb2-6"></span>
-<span id="cb2-7">lorax_client <span class="op" style="color: #5E5E5E;">=</span> pb.deployments.client(<span class="st" style="color: #20794D;">"isafpr"</span>)</span>
-<span id="cb2-8"><span class="bu" style="color: null;">print</span>(lorax_client.generate(prompt, max_new_tokens<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">100</span>).generated_text)</span></code></pre></div>
-</div>
-<p>Unfortunately my Predibase model deployment was still ‘initializing’ after a couple of hours of spinning up. I didn’t want to leave that dedicated deployment up and running overnight, so I just deleted the deployment and I’ll try to get this going at a later date. So no inference sample to show you for this one. I’m very curious to see how Qwen2 did, though!</p>
-</section>
-<section id="openai" class="level2">
-<h2 class="anchored" data-anchor-id="openai">OpenAI</h2>
-<p>I was actually surprised that this is even a thing that people do or that is offered by OpenAI. Currently you’re able to finetune three versions of GPT3.5 as well as <code>babbage-002</code> and <code>davinci-002</code>. In the OpenAI presentation during the course they mentioned that they were working to make it possible to finetune GPT4 as well, but no timeline was given on this.</p>
-<p>So why would someone want to finetune GPT3.5? I think there are some problems that are sufficiently complex or of a specific nature where the OpenAI GPT family shines where you might want to squeeze out a final last bit of performance and where the open LLMs just aren’t there yet.</p>
-<p>The OpenAI models are sort of the antithesis of an ‘open’ model and nothing about the finetuning process lent itself to disabusing you of that idea. This was the UI to fill in in order to finetune a model and as you can see there aren’t really too many options available to you.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/openai-finetuning-ui.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">OpenAI Finetuning UI</figcaption><p></p>
-</figure>
-</div>
-<p>Supposedly the data you upload (options for train as well as a separate test set here) will never be used by OpenAI to train their models but you have to just trust them on that front.</p>
-<p><img src="https://mlops.systems/posts/images/openai-finetuning-ui-2.png" class="img-fluid" alt="UI medatada during finetuning 1"> <img src="https://mlops.systems/posts/images/openai-finetuning-ui-3.png" class="img-fluid" alt="UI medatada during finetuning 2"></p>
-<p>As with Predibase, during finetuning you don’t have access to any logs or even too much feedback during training. You get a loss curve and a few scraps of metadata and that’s it. The training took around 90 minutes to run and then you’re able to prompt the model to see how it works, using the standard OpenAI interface and methods you’re used to:</p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;">from</span> openai <span class="im" style="color: #00769E;">import</span> OpenAI</span>
-<span id="cb3-2"><span class="im" style="color: #00769E;">from</span> rich <span class="im" style="color: #00769E;">import</span> <span class="bu" style="color: null;">print</span></span>
-<span id="cb3-3"><span class="im" style="color: #00769E;">import</span> json</span>
-<span id="cb3-4"><span class="im" style="color: #00769E;">import</span> os</span>
-<span id="cb3-5"></span>
-<span id="cb3-6">client <span class="op" style="color: #5E5E5E;">=</span> OpenAI(api_key<span class="op" style="color: #5E5E5E;">=</span>os.getenv(<span class="st" style="color: #20794D;">"OPENAI_API_KEY"</span>))</span>
-<span id="cb3-7"></span>
-<span id="cb3-8">response <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
-<span id="cb3-9">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"ft:gpt-3.5-turbo-SOME_EXTRA_STUFF_HERE_FOR_MY_MODEL"</span>,</span>
-<span id="cb3-10">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb3-11">        {</span>
-<span id="cb3-12">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"system"</span>,</span>
-<span id="cb3-13">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']."</span></span>
-<span id="cb3-14">        },</span>
-<span id="cb3-15">        {</span>
-<span id="cb3-16">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb3-17">            <span class="st" style="color: #20794D;">"content"</span>: pr1</span>
-<span id="cb3-18">        }</span>
-<span id="cb3-19">    ],</span>
-<span id="cb3-20">    temperature<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">0</span></span>
-<span id="cb3-21">)</span>
-<span id="cb3-22"></span>
-<span id="cb3-23"><span class="bu" style="color: null;">print</span>(json.loads(response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content))</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-    <span style="color: #008000; text-decoration-color: #008000">'name'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'start_date'</span>: <span style="color: #008000; text-decoration-color: #008000">'2011-11-07'</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'event_type'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'captureandkill'</span><span style="font-weight: bold">]</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'province'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'badakhshan'</span><span style="font-weight: bold">]</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'target_group'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'haqqani'</span><span style="font-weight: bold">]</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'killq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'captureq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'killcaptureraid'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'airstrike'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'noshotsfired'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
-<span style="font-weight: bold">}</span>
-</pre>
-</div>
-</div>
-<p>They also give you an interface to see the response of the base model side-by-side against the finetuned model:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/openai-finetuning-ui-4.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Side-by-side UI of base model and finetuned model inference</figcaption><p></p>
-</figure>
-</div>
-<p>As you can see, it’s done pretty well! It stuck to the JSON structure, and the extracted metadata looks good. Of course, since this is a GPT3.5 model, there’s no way to now download this model and run it locally. You’re hostage to OpenAI, to being online, etc etc. Not a scenario I’d like to be in, so I don’t think I’ll pursue this much further and rather use my OpenAI credits for other purposes.</p>
-<p>All that said, I do think there might be some scenarios where only the OpenAI models are reliable enough to use (be that in terms of accuracy or with sufficient guardrails) and there were people in the course who were in this boat.</p>
-</section>
-<section id="openpipe" class="level2">
-<h2 class="anchored" data-anchor-id="openpipe">OpenPipe</h2>
-<p>This was the last one-click provider I tried. As with the others, you upload your data first. When I tried this, I got a fairly opaque error message but I guess the format I’d used was incompatible. OpenPipe uses the same format as OpenAI does, it turns out, but it handles the train/test split itself so you just have to set your data up in a single file (unlike with OpenAI where they can take two separate files).</p>
-<p>The interface for finetuning your model was somehow the most threadbare of all:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/openpipe-finetuning-ui.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">OpenPipe finetuning UI</figcaption><p></p>
-</figure>
-</div>
-<p>Moreover, the selection of base models on which to finetune were also pretty slim: Llama3, Mistral, Mixtral and two OpenAI GPT3.5 models. I was surprised by the estimate of how much it’d cost to finetune the model (around $30 USD) but by limiting the number of options available to the user the path forward really was pretty easy.</p>
-<p>You get no single morsel of information during the finetuning process and for me it took a while for the job to even start working, but after an hour or two (I can’t be sure as I left my desk) you get a model out the other end. At this point you can export the weights or just try out the model with a Python call.</p>
-<p>Helpfully, the web UI gives you code snippets you can use for Python, Javascript and cURL, and the snippets even have your prompt pre-filled with an example from your dataset. This was a nice touch.</p>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;"># pip install openpipe</span></span>
-<span id="cb4-2"></span>
-<span id="cb4-3"><span class="im" style="color: #00769E;">from</span> openpipe <span class="im" style="color: #00769E;">import</span> OpenAI</span>
-<span id="cb4-4"><span class="im" style="color: #00769E;">from</span> rich <span class="im" style="color: #00769E;">import</span> <span class="bu" style="color: null;">print</span></span>
-<span id="cb4-5"><span class="im" style="color: #00769E;">import</span> json</span>
-<span id="cb4-6"><span class="im" style="color: #00769E;">import</span> os</span>
-<span id="cb4-7"></span>
-<span id="cb4-8">client <span class="op" style="color: #5E5E5E;">=</span> OpenAI(</span>
-<span id="cb4-9">  openpipe<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"api_key"</span>: os.getenv(<span class="st" style="color: #20794D;">"OPENPIPE_API_KEY"</span>)}</span>
-<span id="cb4-10">)</span>
-<span id="cb4-11"></span>
-<span id="cb4-12">completion <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
-<span id="cb4-13">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openpipe:MY_MODEL_ID_WAS_HERE"</span>,</span>
-<span id="cb4-14">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb4-15">        {</span>
-<span id="cb4-16">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"system"</span>,</span>
-<span id="cb4-17">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']."</span></span>
-<span id="cb4-18">        },</span>
-<span id="cb4-19">        {</span>
-<span id="cb4-20">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb4-21">            <span class="st" style="color: #20794D;">"content"</span>: pr1</span>
-<span id="cb4-22">        }</span>
-<span id="cb4-23">    ],</span>
-<span id="cb4-24">    temperature<span class="op" style="color: #5E5E5E;">=</span><span class="dv" style="color: #AD0000;">0</span>,</span>
-<span id="cb4-25">    openpipe<span class="op" style="color: #5E5E5E;">=</span>{</span>
-<span id="cb4-26">        <span class="st" style="color: #20794D;">"tags"</span>: {</span>
-<span id="cb4-27">            <span class="st" style="color: #20794D;">"prompt_id"</span>: <span class="st" style="color: #20794D;">"counting"</span>,</span>
-<span id="cb4-28">            <span class="st" style="color: #20794D;">"any_key"</span>: <span class="st" style="color: #20794D;">"any_value"</span></span>
-<span id="cb4-29">        }</span>
-<span id="cb4-30">    },</span>
-<span id="cb4-31">)</span>
-<span id="cb4-32"></span>
-<span id="cb4-33"><span class="bu" style="color: null;">print</span>(json.loads(completion.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content))</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-    <span style="color: #008000; text-decoration-color: #008000">'name'</span>: <span style="color: #008000; text-decoration-color: #008000">'3 killed and 2 captured in Badakhshan'</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'start_date'</span>: <span style="color: #008000; text-decoration-color: #008000">'2011-11-07'</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'event_type'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'captureandkill'</span><span style="font-weight: bold">]</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'province'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'badakhshan'</span><span style="font-weight: bold">]</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'target_group'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'haqqani'</span><span style="font-weight: bold">]</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'killq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'captureq'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'killcaptureraid'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'airstrike'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'noshotsfired'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_killed'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>,
-    <span style="color: #008000; text-decoration-color: #008000">'min_leaders_captured'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0</span>
-<span style="font-weight: bold">}</span>
-</pre>
-</div>
-</div>
-<p>Again you can see we have a really nice result here: JSON is good and the content is solid too. This was a finetune of Llama3 so clearly the problem I noted <a href="https://mlops.systems/posts/2024-06-15-isafpr-first-finetune.html#finetuning-our-model">in the previous blog post</a> was a problem with how I’d set up my local finetune and not with Llama3 itself.</p>
-<p>I liked how OpenPipe automatically deployed my model for me once the finetune was complete. Moreover, there was no extra cost associated with this. (Since their base models are limited, I assume this means that they have lost of customers’ LORA adapters all connected to these base models and that’s how they’re able to keep all these deployments up and cost-effective.)</p>
-<p>There was one final trick that OpenPipe had up its sleeve: an ‘evals’ interface. The interface is pretty simple again, but the gist is that you get to select OpenAI models to compare your finetune against a test dataset and get a comparison. You can select multiple models to run at the same time and the cost is pretty reasonable.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/openpipe-eval-ui.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Openpipe eval UI</figcaption><p></p>
-</figure>
-</div>
-<p>The evaluation is parallelised and you get a nice table with the aggregate results:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/openpipe-eval-results.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Openpipe eval results</figcaption><p></p>
-</figure>
-</div>
-<p>You also (in the datasets tab) get a table with the individual responses for the test data:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/openpipe-eval-datasets.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Openpipe eval datasets</figcaption><p></p>
-</figure>
-</div>
-<p>Looking at the results you quickly become aware that this specific evaluation didn’t really make much sense. Comparing the same prompt between the finetuned model and GPT4 could never have been fair since my prompt never asks for the result back in a certain format, or that it should be JSON and so on.</p>
-<p>Moreover, you can see that the evaluation prompt itself doesn’t do a good job of picking up that the finetuned model really did a great job on the whole and so the aggregate comparison scores don’t really make much sense here.</p>
-<p>That said, I found this feature a useful ‘nice-to-have’ and I can see how someone might find this helpful if they either wanted to run a quick experiment or weren’t particularly technically savvy.</p>
-</section>
-<section id="final-thoughts" class="level2">
-<h2 class="anchored" data-anchor-id="final-thoughts">Final thoughts</h2>
-<p>Overall I found this an interesting experience to do these finetunes in parallel. I suspect that I am not the core audience / market for these services. I was surprised how little customisation they offered, and I actually wonder who is using them. They were easy to use, however, and they do potentially open up the possibility for someone less technical to do something somewhat advanced with LLMs that they wouldn’t otherwise be able to do.</p>
-<p>The moment you want to do something slightly custom, with your prompt template or with the architecture or try something new and cutting-edge, then immediately these services aren’t for you. Similarly, even though I think all of the services offer a Python SDK to replicate what I did in the web UI, I think you essentially have the same limited options available to you if you wanted to trigger these jobs programatically as part of a larger pipeline.</p>
-<p>For the most part you never had the feeling that you were part of a wider ecosystem of these open models, with new techniques coming out all the time and new models as well. These are some of the things I missed from the experience, but as I mentioned before, I’m not the core audience here.</p>
-<p>I do appreciate the opportunity to try these out a few times and the companies for providing credits to do some meaningful attempts at doing something useful. I’ll try these a bit further down the road again and report back if my impression changes or if/when new features are added.</p>
-
-
-</section>
-
- ]]></description>
-  <category>nlp</category>
-  <category>llms</category>
-  <category>miniproject</category>
-  <category>finetuning</category>
-  <category>isafpr</category>
-  <guid>https://mlops.systems/posts/2024-06-17-one-click-finetuning.html</guid>
-  <pubDate>Sun, 16 Jun 2024 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/one-click-finetuning.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>
