@@ -10,7 +10,122 @@
 <atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Tue, 08 Apr 2025 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 19 May 2025 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>How to think about evals</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Today was the first session of Hamel + Shreya’s course, “<a href="maven.com/parlance-labs/evals/">AI Evals for Engineers and PMs</a>”. The first session was all about mental models for thinking about the topic as a whole, mixed in with some teasers of practical examples and advice.</p>
+<p>I’ll try to keep up with blogging about what I learn as we go. Most of the actual content will go up online at some point in the future, I’m assuming, so not much point writing up super detailed notes. (There is also a book coming, which I assume will be great, and about which you can <a href="https://www.youtube.com/watch?v=OJItZndMUII">learn more here</a>.) So in general I’ll try to be doing the following as I blog along:</p>
+<ul>
+<li>highlight things I found interesting or inspiring based on the formal ‘lectures’</li>
+<li>anything that comes up while doing the practical ‘homework’ (there are some optional exercises assigned to ground everything)</li>
+<li>contextualise or situate things that come up in my own experience having worked on a few LLM-driven projects</li>
+</ul>
+<p>Today, fresh out of the first class, I wanted to write about the mental model of the ‘three gulfs’ that they propose, the improvement loop that they suggest is how to measurably improve your applications, and also prompting through the lens of evals. Finally I’ll round off with a bit about what I’ll be exploring this week.</p>
+<section id="the-three-gulfs-specification-generalization-and-comprehension" class="level2">
+<h2 class="anchored" data-anchor-id="the-three-gulfs-specification-generalization-and-comprehension">The Three Gulfs: Specification, Generalization and Comprehension</h2>
+<p>So there’s this image that they shared in the book chapter preview discussion that came up again during the lesson today:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/three-gulfs.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The three gulfs of LLM application development</figcaption><p></p>
+</figure>
+</div>
+<p>(They’ve shared it already in the YouTube discussion + I see it on Twitter being shared so I think I’m not sharing something I ought not to!)</p>
+<p>The course is very practically focused, especially so for application developers, so this diagram is in that context. The diagram offers up a way of thinking about LLM application development that pinpoints the places where you might do your work, and it’s also a way of thinking through things systematically, too.</p>
+<p>I was especially interested in the differentiation between the gulf of specification and the gulf of generalisation, since these can often feel similar, but actually the way to get out of them is actually slightly different. I’ll go into a bit more detail below, but basically with the gulf of specification you might want to be working on your prompts + how specific you are, whereas with the generalisation gulf you might need things like splitting up your tasks or making sure your system is outputting things in a structured way, etc etc.</p>
+<p>Note also that the world of tooling also doesn’t help you in a specific or targeted way to focus on one aspect of this diagram. Too often the tools try to cover the whole picture and probably also muddy the water by eliding the differences between the different tasks and challenges of each island or the gulf in between. All this is pretty abstract, so let’s go through them one by one.</p>
+<section id="the-gulf-of-comprehension-in-practice" class="level3">
+<h3 class="anchored" data-anchor-id="the-gulf-of-comprehension-in-practice">The Gulf of Comprehension in Practice</h3>
+<p>This was seen as sort of the starting point for thinking through LLM Application improvement. At this point your big problem is that you’re trying to understand the data that comes your way from your users. You’re trying to understand the inputs to your application (what your users are typing, assuming that text is the medium of communication / input) and you’re trying to understand what the application or LLM is outputting.</p>
+<p>The challenge comes because you can’t read every single log or morsel of data. You have to filter things down somehow! If this were something more like traditional ML you’d have statistics to help boil down your data, but mostly we’re talking about unstructured text data so it’s much more unwieldy.</p>
+<p>This challenge means that people often get stuck at this point. This is where POC applications live, breathe and eventually die. You have enough sense that things are ‘kinda’ working, but you don’t really know what the failure modes are, so you don’t know how to improve it. You’ve tried out one or two things in a halfway systematic way, but really you have no idea what’s working well and what’s not.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+On Tools vs Process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hamel made the good point that it’s probably not so useful to think about tools too much when thinking at this stage. Generally speaking what’s going on is most often actually a process problem and trying to go straight to ‘what tool do I need’ is probably avoiding the real issue.</p>
+</div>
+</div>
+</section>
+<section id="the-gulf-of-specification-in-practice" class="level3">
+<h3 class="anchored" data-anchor-id="the-gulf-of-specification-in-practice">The Gulf of Specification in Practice</h3>
+<p>This is the place where you are trying to translate intent into precise instructions that the LLM will follow. You’re trying to be explicit and specific in the hope that the LLM will do what you want it to do, and not do the things that you don’t want it to do.</p>
+<p>The obvious manifestation of this is people writing bad prompts. It might seem that it’s also present when you try to have an LLM solve one problem when it’s either unsuited for that task or the task needs to be broken up and so on, but that’s the sister gulf of generalisation. Here, we’re focused on how to improve the specificity of your prompts.</p>
+<p>When you split things up and highlight the fact that prompts are something that you’ll need to work on and to improve, it becomes clear that it’s something you wouldn’t want to outsource or to skimp time on. Really the prompt writing is the thing that you (at certain moments, and where it’s identified as the thing needing focus / improvement) want to be working on in partnership with domain experts.</p>
+<p>For small applications, you might be the same person as the domain expert! For bigger projects, you might be working <em>with</em> domain experts. Just be aware that often the domain expert might not necessarily be detached enough to be able to figure out what needs the focus, or where the weaknesses of a prompt are. That’s what the iterative process / error analysis and everything else that’ll be taught in the course is for (see below and see future posts).</p>
+<p>Another point Hamel made was about why prompts are actually so important: “you have to express your project taste somewhere”. Given that your application might be fully / mostly driven by LLMs, the prompt is actually a really crucial place to express this taste and as such might be thought of as your ‘moat’.</p>
+<p>I know just from having experienced a variety of LLM-driven applications, it’s quite easy to tell the ones where the product team gave their prompts and their specification some real love. It’s the difference between POC junk that will die a slow and lonely death and something that delights and solves real user problems.</p>
+</section>
+<section id="gulf-of-generalisation" class="level3">
+<h3 class="anchored" data-anchor-id="gulf-of-generalisation">Gulf of Generalisation</h3>
+<p>Shreya didn’t really get into the details around the generalisation gulf in practical terms in this lesson, but I think this one can be a sort of place of comfort for the technically-minded to make refuge in. It’s one where there’s a ton of tools and technologies and techniques to play with, and vendors also live in this space and try to claim that their particular product or special sauce is <em>the</em> thing to help you and so on.</p>
+</section>
+</section>
+<section id="the-improvement-loop-for-llm-applications" class="level2">
+<h2 class="anchored" data-anchor-id="the-improvement-loop-for-llm-applications">The Improvement Loop for LLM Applications</h2>
+<p>We also got a high-level overview of the loop that allows you to iteratively improve an LLM application:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/analyze-measure-improve-loop.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The analyse, measure and improve loop; adapted from an image used in the course</figcaption><p></p>
+</figure>
+</div>
+<p>There’s a lot to unpack in all these different stages, and we didn’t really get into the details in the session today but you can see how this offers a really powerful way of thinking through what it means to iteratively improve an LLM application.</p>
+<p>Learning how to implement this in a practical way will be the main thing I want to get good at by the end of this course. The process is made up of a bunch of techniques, but in my experience companies or use cases that struggle with improving what they built also lack the scaffold of this loop to orient themselves.</p>
+</section>
+<section id="prompting-through-the-lens-of-evals" class="level2">
+<h2 class="anchored" data-anchor-id="prompting-through-the-lens-of-evals">Prompting through the lens of evals</h2>
+<p>As we explored above, prompting is sort of the table stakes of improving your LLM application. In order to get good at prompting, it can help to appreciate what they are good at and what they struggle with. So, as Shreya put it, “leverage their strengths and anticipate their weaknesses” (when prompting).</p>
+<p>At this point Shreya got into some points around what kinds of things went into a good prompt but I think I’ll write a separate blog on that and I don’t want to just regurgitate what we listened to. Today was more of a high-level introduction, and in any case it was much more about the outer-loop process instead of the inner loop (where tooling + specific techniques play more of a role.)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/inner-vs-outer-loop.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">A slide from a talk I gave about the inner loop vs the outer loop of GenAI development</figcaption><p></p>
+</figure>
+</div>
+<p>So it’s great that the course gets into the weeds (esp in the course materials, which include the draft of the book Hamel &amp; Shreya are writing) but I think the really useful thing they’re doing is situating the tactical improvements and techniques within the strategic patterns and workflows that teams and individuals should be doing to work on these LLM applications.</p>
+<p>At a high level, what are we talking about:</p>
+<ul>
+<li>how to tease out failure scenarios for these applications and their behaviours</li>
+<li>conversely, how to understand exactly which domains it does well for</li>
+</ul>
+</section>
+<section id="things-i-want-to-think-about-more" class="level2">
+<h2 class="anchored" data-anchor-id="things-i-want-to-think-about-more">Things I want to think about more</h2>
+<p>There was a ton of really rich discussion around prompting in the Discord. I’m interested in exploring more:</p>
+<ul>
+<li>cross-provider prompting decisions (i.e.&nbsp;how prompting an OpenAI model differs from what you do with a Llama model or whatever)</li>
+<li>prompts that work with reasoning models vs non-reasoning models</li>
+<li>the tradeoffs of whether you put your instructions in system prompts vs user instructions</li>
+</ul>
+<p>In general there’s been a bunch of noise recently about so-called ‘leaked’ system prompts from a bunch of LLM API providers and I’ve mainly been struck by just how detailed they are. I consider myself pretty good at improving and iterating on prompts, but I’ll admit I’m not writing these multi-thousand word tomes. I’d like to explore which scenarios it makes sense to do so, and how to calculate at what point it makes sense from a cost or latency perspective to do so.</p>
+<p>As I’m sure you can detect, I’m really enthusiastic about the lesson to come and will work in the meanwhile on some of the readings that have been set as well as the homework task of writing a system prompt for a LLM-powered recipe recommendation application!</p>
+
+
+</section>
+
+ ]]></description>
+  <category>evals-course</category>
+  <category>llms</category>
+  <category>llmops</category>
+  <category>evaluation</category>
+  <guid>https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html</guid>
+  <pubDate>Mon, 19 May 2025 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/maven-course.png" medium="image" type="image/png" height="81" width="144"/>
+</item>
 <item>
   <title>First impressions of the new Gemini Deep Research (with 2.5 Pro)</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4723,99 +4838,6 @@
   <guid>https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html</guid>
   <pubDate>Sun, 30 Jun 2024 22:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/finetuned-model-eval.png" medium="image" type="image/png" height="118" width="144"/>
-</item>
-<item>
-  <title>How to think about creating a dataset for LLM finetuning evaluation</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I <a href="https://mlops.systems/posts/2024-06-17-one-click-finetuning.html">previously</a> experimented with one-click LLM finetuning providers and now is a good time to return to the core of the matter: evaluating how well all these fine-tuned models and experiments are faring. I have a gut feeling that my fine-tuned models did pretty well, but we’re not in the business of gut feeling so I’m hoping to be able to put some real numbers down to either prove or disprove this hypothesis.</p>
-<p>As a quick reminder if you didn’t read <a href="https://mlops.systems/#category=isafpr">any of the previous posts in the series</a>, I’m building a model that can take a press release text like this:</p>
-<blockquote class="blockquote">
-<p>“2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release KABUL, Afghanistan (Nov.&nbsp;7, 2011) — A combined Afghan and coalition security force conducted an operation in search of a Haqqani facilitator in Argo district, Badakshan province. The facilitator coordinates suicide attacks with other insurgent leaders in the area. During the operation, a local national male failed to comply with repeated verbal warnings and displayed hostile intent toward the security force. The security force engaged the individual, resulting in his death. The security force confiscated a shotgun and intelligence linking the local national to the Haqqani network. The security force also detained two suspected insurgents during the operation.”</p>
-</blockquote>
-<p>…and then turn it into structured data (i.e.&nbsp;a JSON object) like this:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><span class="fu" style="color: #4758AB;">{</span></span>
-<span id="cb1-2">    <span class="er" style="color: #AD0000;">'name'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">'</span><span class="dv" style="color: #AD0000;">1</span><span class="er" style="color: #AD0000;">'</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-3">    <span class="er" style="color: #AD0000;">'start_date'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">'</span><span class="dv" style="color: #AD0000;">2011-11-07</span><span class="er" style="color: #AD0000;">'</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-4">    <span class="er" style="color: #AD0000;">'event_type'</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[</span><span class="er" style="color: #AD0000;">'captureandkill'</span><span class="ot" style="color: #003B4F;">]</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-5">    <span class="er" style="color: #AD0000;">'province'</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[</span><span class="er" style="color: #AD0000;">'badakhshan'</span><span class="ot" style="color: #003B4F;">]</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-6">    <span class="er" style="color: #AD0000;">'target_group'</span><span class="fu" style="color: #4758AB;">:</span> <span class="ot" style="color: #003B4F;">[</span><span class="er" style="color: #AD0000;">'haqqani'</span><span class="ot" style="color: #003B4F;">]</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-7">    <span class="er" style="color: #AD0000;">'min_killed'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">1</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-8">    <span class="er" style="color: #AD0000;">'min_captured'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">2</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-9">    <span class="er" style="color: #AD0000;">'killq'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">True</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-10">    <span class="er" style="color: #AD0000;">'captureq'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">True</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-11">    <span class="er" style="color: #AD0000;">'killcaptureraid'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">True</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-12">    <span class="er" style="color: #AD0000;">'airstrike'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">False</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-13">    <span class="er" style="color: #AD0000;">'noshotsfired'</span><span class="fu" style="color: #4758AB;">:</span> <span class="er" style="color: #AD0000;">False</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-14">    <span class="er" style="color: #AD0000;">'min_leaders_killed'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">0</span><span class="fu" style="color: #4758AB;">,</span></span>
-<span id="cb1-15">    <span class="er" style="color: #AD0000;">'min_leaders_captured'</span><span class="fu" style="color: #4758AB;">:</span> <span class="dv" style="color: #AD0000;">0</span></span>
-<span id="cb1-16"><span class="fu" style="color: #4758AB;">}</span></span></code></pre></div>
-<p>I’ve now fine-tuned several models and I want to get a sense of how good these are. I showcased <a href="https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html">some initial baseline evaluations</a> using OpenAI’s <code>gpt-4-turbo</code> but I want to pit model against model now.</p>
-<p>I’m also interested in teasing out some of the edge cases where I know I struggled as a human annotator. (I <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">released the dataset</a> for this project publicly on the Hugging Face Hub and also was responsible for annotating every single item so I know the data intimately.) I can even consider using the hard examples to generate some synthetic data to boost performance on those edge cases, but that’s a task for much later on.</p>
-<p>This blogpost is a prose overview of some of the evaluations I’m adding to my suite of tests (and why I’m adding them). I learned a lot from <a href="https://hamel.dev/blog/posts/evals/">Hamel Husain’s “Your AI Product Needs Evals” blogpost</a> and if you’re interested in this I’d recommend reading it and then actually implementing his suggestions.</p>
-<section id="core-evaluations-for-accuracy" class="level2">
-<h2 class="anchored" data-anchor-id="core-evaluations-for-accuracy">Core evaluations for accuracy</h2>
-<p>The most important measurement to start with is just a pure “did the LLM make a correct prediction or not?” If I was doing all these evaluations manually myself, I’d take a look at the example above, for example, and ask myself “was the start date of the event mentioned in the blogpost really ‘2011-11-07’ as predicted by the model?” and “did the event take place in Badakhshan province?” and “were the Haqqanis the group targeted?”</p>
-<p>It’s fairly straightforward to make these determinations when comparing each property one by one. I can then repeat this over every example in my test slice of my dataset and take an average if I want a single aggregate figure, or I can get individual figures for dates, provinces, target groups and so on (to know if maybe there’s one part of the prediction it struggles with most).</p>
-</section>
-<section id="out-of-domain-data" class="level2">
-<h2 class="anchored" data-anchor-id="out-of-domain-data">Out of domain data</h2>
-<p>The ISAF mission has come to an end, so I don’t have to worry too much about new data and having to adapt to a continuously changing world, but it is possible that some smaller groups weren’t well represented in the training data (for predicting the target group, for example) so I want to know how well my model does with data it hasn’t seen.</p>
-<p>My prompt passes in the schema for the data and I encourage it to follow the schema in its response, but if there’s a new group will it add the new group to the schema? I can write an evaluation to test this.</p>
-<p>Another edge case is the possibility that a press release doesn’t follow the standard format. Having read them all, I know that the vast majority are pretty formulaic, but sometimes there is a special event or incident which caused the author of the press release to depart from the standard formula. I want to know that my model will:</p>
-<ol type="a">
-<li>not just make something up so as to have <em>some</em> kind of JSON response even if the press release is about someone’s birthday party</li>
-<li>even better, produce some sort of error code or blank response when this happens.</li>
-</ol>
-<p>I can use examples of this out of domain data to see what happens, and put a value to how often my model will just hallucinate something out of nothing. This will be important since the name of the game for this model is accuracy.</p>
-</section>
-<section id="gradations-of-some-a-few-many" class="level2">
-<h2 class="anchored" data-anchor-id="gradations-of-some-a-few-many">Gradations of ‘some’, ‘a few’, ‘many’</h2>
-<p>The press releases try to give some information without actually giving too much. Indeed, when I published <a href="https://www.afghanistan-analysts.org/en/special-reports/a-knock-on-the-door-22-months-of-isaf-press-releases/">my report</a> on the press releases back in 2011, ISAF even <a href="https://www.dvidshub.net/news/78455/isaf-responds-use-aan-news-releases-study">issued a press release</a> (!) in which they stated that:</p>
-<blockquote class="blockquote">
-<p>“Release of information in insurgent warfare is not always made public, so studies based on the use of press releases can be both incomplete and problematic. […] Authoritative research cannot be conducted through mere analysis of press releases, since the release of information through such releases is, by design, incomplete.”</p>
-</blockquote>
-<p>So reading the press releases is very much an exercise in reading between the lines. In the press release cited earlier, all the numbers are specific (“a facilitator”, “a male”, “two insurgents”) so it’s easy to put numbers to how many were killed or captured. In many of the press releases, particularly during times where raids were being conducted at a very high tempo, you have to just take assumptions about what their words mean and assign minimum values to those words.</p>
-<p>So ‘a couple’ meant at least two, but ‘a few’ meant 3 or more. Similarly ‘dozens’ means multiple dozens so that meant a minimum value of at least 24. From the original report:</p>
-<blockquote class="blockquote">
-<p>“If a press release said that ‘insurgents’ were detained, without further details, we assigned that incident as having a minimum number of 2 detained (since we could not be sure of more). ‘A couple’ we took to mean 2. ‘Several’ we took to mean at least 3, even though on other occasions ‘several’ was used to refer to 7 or 8. Other terms we classified as denoting at least 3 included: ‘a few’, ‘some’, ‘a group’, ‘a small group’ and ‘multiple’; these terms sometimes were used to refer to far larger numbers but we chose the smaller number (if no other information was available in the press release) in order to come up with a minimally acceptable figure. ‘Numerous’ and ‘a handful’ we took to mean at least 4, and ‘a large number’ at least 5.”</p>
-</blockquote>
-<p>The reports mostly referred to events that had taken place that day or the day before, but occasionally they’d refer to events that took place “last Thursday” or “last week” and so then you’d have to know what day the press release was issued and then make calculations accordingly. For this backwards-referring time assignations, I’m particularly interested (read: concerned!) to know how well my LLMs did. Whatever score we get, it’s probably fixable with a bit of manual parsing and logic, but we need to know if there’s a problem or not first.</p>
-<p>Generally speaking there were province names assigned to incidents (all but 23, to be precise) but when they weren’t, then the LLM has to work back from a village name, potentially, or just specify that an incident took place in southern Afghanistan or Afghanistan as a whole. On a few occasions, the press release actually made an error, stating that village X or Y was in a particular province, when this was incorrect and it was in a different province. So for this, would we expect the LLM to assign the event to the correct province for that village, or just retain the error in the press release?</p>
-<p>Sometimes a press release might refer to an event having taken place “in the provincial capital of X province” but without mentioning that city by name. So the LLM will have to have some knowledge of these things and I want to test how well it performs with this.</p>
-<p>These might seem like tiny errors to get wrong, but for a project like this (where my report was making some strong accusations and drawing certain conclusions based on the data), it wouldn’t do to get things factually wrong. For an internal-facing LLM-powered chatbot, the price of mistakes is minimal, but for a project like this, there are potentially far more serious consequences which is why I’m putting together such detailed evaluations.</p>
-</section>
-<section id="spelling-variation" class="level2">
-<h2 class="anchored" data-anchor-id="spelling-variation">Spelling variation</h2>
-<p>Another issue with some of the press releases is that they use a variety of spellings for the same locations or names of individuals. For some things — province names, for example — it makes sense to standardise on a fixed naming convention but for others it’s not always clear what to do. So our evaluation should ensure that common variations of certain provinces or designations or names are captured correctly by the LLM output.</p>
-</section>
-<section id="complex-stories" class="level2">
-<h2 class="anchored" data-anchor-id="complex-stories">Complex stories</h2>
-<p>Some stories are very complicated and there may be no correct way to assign numbers, for example, to the text that was published. In those cases when annotating I often just left the minimum numbers at zero even though we know that <em>something</em> happened. Would the LLM also make the same call? What is the threshold for deciding not to take a chance on making a guess?</p>
-</section>
-<section id="next-step" class="level2">
-<h2 class="anchored" data-anchor-id="next-step">Next step</h2>
-<p>The obvious next step is to actually code up these evaluation criteria and run those across our fine-tuned LLMs as well as the API-driven proprietary ones. I’ll be working on that over the coming days. Luckily, I did most of the work to identify all of the above when I first wrote the report so there isn’t much ground that needs to be broken so much as just sitting down and getting it done.</p>
-
-
-</section>
-
- ]]></description>
-  <category>llms</category>
-  <category>finetuning</category>
-  <category>isafpr</category>
-  <category>afghanistan</category>
-  <category>datasets</category>
-  <category>evaluation</category>
-  <category>miniproject</category>
-  <guid>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</guid>
-  <pubDate>Mon, 24 Jun 2024 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/eval-preview.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>

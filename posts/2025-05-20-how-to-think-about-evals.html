@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-05-20">
+<meta name="description" content="Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a ‘three gulfs’ mental model (specification, generalisation, and comprehension) for LLM application development and the importance of systematic evaluation and improvement processes.">
+
+<title>Alex Strick van Linschoten - How to think about evals</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - How to think about evals">
+<meta property="og:description" content="Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a 'three gulfs' mental model (specification, generalisation, and comprehension) for LLM application development…">
+<meta property="og:image" content="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/maven-course.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="280">
+<meta property="og:image:width" content="500">
+<meta name="twitter:title" content="Alex Strick van Linschoten - How to think about evals">
+<meta name="twitter:description" content="Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a 'three gulfs' mental model (specification, generalisation, and comprehension) for LLM application development…">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/maven-course.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="280">
+<meta name="twitter:image-width" content="500">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">How to think about evals</h1>
+                  <div>
+        <div class="description">
+          Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a ‘three gulfs’ mental model (specification, generalisation, and comprehension) for LLM application development and the importance of systematic evaluation and improvement processes.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">evals-course</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">llmops</div>
+                <div class="quarto-category">evaluation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 20, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-three-gulfs-specification-generalization-and-comprehension" id="toc-the-three-gulfs-specification-generalization-and-comprehension" class="nav-link active" data-scroll-target="#the-three-gulfs-specification-generalization-and-comprehension">The Three Gulfs: Specification, Generalization and Comprehension</a>
+  <ul class="collapse">
+  <li><a href="#the-gulf-of-comprehension-in-practice" id="toc-the-gulf-of-comprehension-in-practice" class="nav-link" data-scroll-target="#the-gulf-of-comprehension-in-practice">The Gulf of Comprehension in Practice</a></li>
+  <li><a href="#the-gulf-of-specification-in-practice" id="toc-the-gulf-of-specification-in-practice" class="nav-link" data-scroll-target="#the-gulf-of-specification-in-practice">The Gulf of Specification in Practice</a></li>
+  <li><a href="#gulf-of-generalisation" id="toc-gulf-of-generalisation" class="nav-link" data-scroll-target="#gulf-of-generalisation">Gulf of Generalisation</a></li>
+  </ul></li>
+  <li><a href="#the-improvement-loop-for-llm-applications" id="toc-the-improvement-loop-for-llm-applications" class="nav-link" data-scroll-target="#the-improvement-loop-for-llm-applications">The Improvement Loop for LLM Applications</a></li>
+  <li><a href="#prompting-through-the-lens-of-evals" id="toc-prompting-through-the-lens-of-evals" class="nav-link" data-scroll-target="#prompting-through-the-lens-of-evals">Prompting through the lens of evals</a></li>
+  <li><a href="#things-i-want-to-think-about-more" id="toc-things-i-want-to-think-about-more" class="nav-link" data-scroll-target="#things-i-want-to-think-about-more">Things I want to think about more</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Today was the first session of Hamel + Shreya’s course, “<a href="maven.com/parlance-labs/evals/">AI Evals for Engineers and PMs</a>”. The first session was all about mental models for thinking about the topic as a whole, mixed in with some teasers of practical examples and advice.</p>
+<p>I’ll try to keep up with blogging about what I learn as we go. Most of the actual content will go up online at some point in the future, I’m assuming, so not much point writing up super detailed notes. (There is also a book coming, which I assume will be great, and about which you can <a href="https://www.youtube.com/watch?v=OJItZndMUII">learn more here</a>.) So in general I’ll try to be doing the following as I blog along:</p>
+<ul>
+<li>highlight things I found interesting or inspiring based on the formal ‘lectures’</li>
+<li>anything that comes up while doing the practical ‘homework’ (there are some optional exercises assigned to ground everything)</li>
+<li>contextualise or situate things that come up in my own experience having worked on a few LLM-driven projects</li>
+</ul>
+<p>Today, fresh out of the first class, I wanted to write about the mental model of the ‘three gulfs’ that they propose, the improvement loop that they suggest is how to measurably improve your applications, and also prompting through the lens of evals. Finally I’ll round off with a bit about what I’ll be exploring this week.</p>
+<section id="the-three-gulfs-specification-generalization-and-comprehension" class="level2">
+<h2 class="anchored" data-anchor-id="the-three-gulfs-specification-generalization-and-comprehension">The Three Gulfs: Specification, Generalization and Comprehension</h2>
+<p>So there’s this image that they shared in the book chapter preview discussion that came up again during the lesson today:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-05-20-how-to-think-about-evals/three-gulfs.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The three gulfs of LLM application development</figcaption><p></p>
+</figure>
+</div>
+<p>(They’ve shared it already in the YouTube discussion + I see it on Twitter being shared so I think I’m not sharing something I ought not to!)</p>
+<p>The course is very practically focused, especially so for application developers, so this diagram is in that context. The diagram offers up a way of thinking about LLM application development that pinpoints the places where you might do your work, and it’s also a way of thinking through things systematically, too.</p>
+<p>I was especially interested in the differentiation between the gulf of specification and the gulf of generalisation, since these can often feel similar, but actually the way to get out of them is actually slightly different. I’ll go into a bit more detail below, but basically with the gulf of specification you might want to be working on your prompts + how specific you are, whereas with the generalisation gulf you might need things like splitting up your tasks or making sure your system is outputting things in a structured way, etc etc.</p>
+<p>Note also that the world of tooling also doesn’t help you in a specific or targeted way to focus on one aspect of this diagram. Too often the tools try to cover the whole picture and probably also muddy the water by eliding the differences between the different tasks and challenges of each island or the gulf in between. All this is pretty abstract, so let’s go through them one by one.</p>
+<section id="the-gulf-of-comprehension-in-practice" class="level3">
+<h3 class="anchored" data-anchor-id="the-gulf-of-comprehension-in-practice">The Gulf of Comprehension in Practice</h3>
+<p>This was seen as sort of the starting point for thinking through LLM Application improvement. At this point your big problem is that you’re trying to understand the data that comes your way from your users. You’re trying to understand the inputs to your application (what your users are typing, assuming that text is the medium of communication / input) and you’re trying to understand what the application or LLM is outputting.</p>
+<p>The challenge comes because you can’t read every single log or morsel of data. You have to filter things down somehow! If this were something more like traditional ML you’d have statistics to help boil down your data, but mostly we’re talking about unstructured text data so it’s much more unwieldy.</p>
+<p>This challenge means that people often get stuck at this point. This is where POC applications live, breathe and eventually die. You have enough sense that things are ‘kinda’ working, but you don’t really know what the failure modes are, so you don’t know how to improve it. You’ve tried out one or two things in a halfway systematic way, but really you have no idea what’s working well and what’s not.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+On Tools vs Process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hamel made the good point that it’s probably not so useful to think about tools too much when thinking at this stage. Generally speaking what’s going on is most often actually a process problem and trying to go straight to ‘what tool do I need’ is probably avoiding the real issue.</p>
+</div>
+</div>
+</section>
+<section id="the-gulf-of-specification-in-practice" class="level3">
+<h3 class="anchored" data-anchor-id="the-gulf-of-specification-in-practice">The Gulf of Specification in Practice</h3>
+<p>This is the place where you are trying to translate intent into precise instructions that the LLM will follow. You’re trying to be explicit and specific in the hope that the LLM will do what you want it to do, and not do the things that you don’t want it to do.</p>
+<p>The obvious manifestation of this is people writing bad prompts. It might seem that it’s also present when you try to have an LLM solve one problem when it’s either unsuited for that task or the task needs to be broken up and so on, but that’s the sister gulf of generalisation. Here, we’re focused on how to improve the specificity of your prompts.</p>
+<p>When you split things up and highlight the fact that prompts are something that you’ll need to work on and to improve, it becomes clear that it’s something you wouldn’t want to outsource or to skimp time on. Really the prompt writing is the thing that you (at certain moments, and where it’s identified as the thing needing focus / improvement) want to be working on in partnership with domain experts.</p>
+<p>For small applications, you might be the same person as the domain expert! For bigger projects, you might be working <em>with</em> domain experts. Just be aware that often the domain expert might not necessarily be detached enough to be able to figure out what needs the focus, or where the weaknesses of a prompt are. That’s what the iterative process / error analysis and everything else that’ll be taught in the course is for (see below and see future posts).</p>
+<p>Another point Hamel made was about why prompts are actually so important: “you have to express your project taste somewhere”. Given that your application might be fully / mostly driven by LLMs, the prompt is actually a really crucial place to express this taste and as such might be thought of as your ‘moat’.</p>
+<p>I know just from having experienced a variety of LLM-driven applications, it’s quite easy to tell the ones where the product team gave their prompts and their specification some real love. It’s the difference between POC junk that will die a slow and lonely death and something that delights and solves real user problems.</p>
+</section>
+<section id="gulf-of-generalisation" class="level3">
+<h3 class="anchored" data-anchor-id="gulf-of-generalisation">Gulf of Generalisation</h3>
+<p>Shreya didn’t really get into the details around the generalisation gulf in practical terms in this lesson, but I think this one can be a sort of place of comfort for the technically-minded to make refuge in. It’s one where there’s a ton of tools and technologies and techniques to play with, and vendors also live in this space and try to claim that their particular product or special sauce is <em>the</em> thing to help you and so on.</p>
+</section>
+</section>
+<section id="the-improvement-loop-for-llm-applications" class="level2">
+<h2 class="anchored" data-anchor-id="the-improvement-loop-for-llm-applications">The Improvement Loop for LLM Applications</h2>
+<p>We also got a high-level overview of the loop that allows you to iteratively improve an LLM application:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-05-20-how-to-think-about-evals/analyze-measure-improve-loop.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The analyse, measure and improve loop; adapted from an image used in the course</figcaption><p></p>
+</figure>
+</div>
+<p>There’s a lot to unpack in all these different stages, and we didn’t really get into the details in the session today but you can see how this offers a really powerful way of thinking through what it means to iteratively improve an LLM application.</p>
+<p>Learning how to implement this in a practical way will be the main thing I want to get good at by the end of this course. The process is made up of a bunch of techniques, but in my experience companies or use cases that struggle with improving what they built also lack the scaffold of this loop to orient themselves.</p>
+</section>
+<section id="prompting-through-the-lens-of-evals" class="level2">
+<h2 class="anchored" data-anchor-id="prompting-through-the-lens-of-evals">Prompting through the lens of evals</h2>
+<p>As we explored above, prompting is sort of the table stakes of improving your LLM application. In order to get good at prompting, it can help to appreciate what they are good at and what they struggle with. So, as Shreya put it, “leverage their strengths and anticipate their weaknesses” (when prompting).</p>
+<p>At this point Shreya got into some points around what kinds of things went into a good prompt but I think I’ll write a separate blog on that and I don’t want to just regurgitate what we listened to. Today was more of a high-level introduction, and in any case it was much more about the outer-loop process instead of the inner loop (where tooling + specific techniques play more of a role.)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-05-20-how-to-think-about-evals/inner-vs-outer-loop.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">A slide from a talk I gave about the inner loop vs the outer loop of GenAI development</figcaption><p></p>
+</figure>
+</div>
+<p>So it’s great that the course gets into the weeds (esp in the course materials, which include the draft of the book Hamel &amp; Shreya are writing) but I think the really useful thing they’re doing is situating the tactical improvements and techniques within the strategic patterns and workflows that teams and individuals should be doing to work on these LLM applications.</p>
+<p>At a high level, what are we talking about:</p>
+<ul>
+<li>how to tease out failure scenarios for these applications and their behaviours</li>
+<li>conversely, how to understand exactly which domains it does well for</li>
+</ul>
+</section>
+<section id="things-i-want-to-think-about-more" class="level2">
+<h2 class="anchored" data-anchor-id="things-i-want-to-think-about-more">Things I want to think about more</h2>
+<p>There was a ton of really rich discussion around prompting in the Discord. I’m interested in exploring more:</p>
+<ul>
+<li>cross-provider prompting decisions (i.e.&nbsp;how prompting an OpenAI model differs from what you do with a Llama model or whatever)</li>
+<li>prompts that work with reasoning models vs non-reasoning models</li>
+<li>the tradeoffs of whether you put your instructions in system prompts vs user instructions</li>
+</ul>
+<p>In general there’s been a bunch of noise recently about so-called ‘leaked’ system prompts from a bunch of LLM API providers and I’ve mainly been struck by just how detailed they are. I consider myself pretty good at improving and iterating on prompts, but I’ll admit I’m not writing these multi-thousand word tomes. I’d like to explore which scenarios it makes sense to do so, and how to calculate at what point it makes sense from a cost or latency perspective to do so.</p>
+<p>As I’m sure you can detect, I’m really enthusiastic about the lesson to come and will work in the meanwhile on some of the readings that have been set as well as the homework task of writing a system prompt for a LLM-powered recipe recommendation application!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
