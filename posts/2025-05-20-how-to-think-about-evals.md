@@ -6,7 +6,7 @@ categories:
   - llmops
   - evaluation
 date: "2025-05-20"
-description: "TKTKTKT"
+description: "Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a "three gulfs" mental model (specification, generalisation, and comprehension) for LLM application development and the importance of systematic evaluation and improvement processes."
 layout: post
 title: "How to think about evals"
 toc: true
