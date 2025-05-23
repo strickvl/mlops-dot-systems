@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-05-23">
+<meta name="description" content="A systematic 5-step process for analysing LLM application failures through error analysis and clustering techniques to identify and categorise failure modes for iterative improvement.">
+
+<title>Alex Strick van Linschoten - Error analysis to find failure modes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Error analysis to find failure modes">
+<meta property="og:description" content="A systematic 5-step process for analysing LLM application failures through error analysis and clustering techniques to identify and categorise failure modes for iterative improvement.">
+<meta property="og:image" content="https://mlops.systems/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="708">
+<meta property="og:image:width" content="854">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Error analysis to find failure modes">
+<meta name="twitter:description" content="A systematic 5-step process for analysing LLM application failures through error analysis and clustering techniques to identify and categorise failure modes for iterative improvement.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="708">
+<meta name="twitter:image-width" content="854">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Error analysis to find failure modes</h1>
+                  <div>
+        <div class="description">
+          A systematic 5-step process for analysing LLM application failures through error analysis and clustering techniques to identify and categorise failure modes for iterative improvement.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">evals-course</div>
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">llmops</div>
+                <div class="quarto-category">evaluation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 23, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#create-your-initial-dataset" id="toc-create-your-initial-dataset" class="nav-link active" data-scroll-target="#create-your-initial-dataset">1. Create your initial dataset</a></li>
+  <li><a href="#look-at-your-data-open-coding" id="toc-look-at-your-data-open-coding" class="nav-link" data-scroll-target="#look-at-your-data-open-coding">2. Look at your data (‘open coding’)</a></li>
+  <li><a href="#cluster-your-data-axial-coding" id="toc-cluster-your-data-axial-coding" class="nav-link" data-scroll-target="#cluster-your-data-axial-coding">3. Cluster your data (‘axial coding’)</a></li>
+  <li><a href="#label-more-traces-iterate" id="toc-label-more-traces-iterate" class="nav-link" data-scroll-target="#label-more-traces-iterate">4. Label more traces &amp; iterate</a></li>
+  <li><a href="#pitfalls-to-watch-out-for" id="toc-pitfalls-to-watch-out-for" class="nav-link" data-scroll-target="#pitfalls-to-watch-out-for">Pitfalls to watch out for</a></li>
+  <li><a href="#office-hours-discussions" id="toc-office-hours-discussions" class="nav-link" data-scroll-target="#office-hours-discussions">Office hours discussions</a></li>
+  <li><a href="#reflections-what-ill-be-working-on" id="toc-reflections-what-ill-be-working-on" class="nav-link" data-scroll-target="#reflections-what-ill-be-working-on">Reflections &amp; what I’ll be working on</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>I came across this quote in a happy coincidence after attending the second session of the evals course:</p>
+<p><img src="images/2025-05-23-error-analysis-to-find-failure-modes/patchett-quote.png" class="img-fluid"></p>
+<p>It’s obviously a bit abstract, but I thought it was a nice oblique reflection on the topic being discussed. Both the main session and the office hours were mostly focused on the first part of the analyse-measure-improve loop that was introduced <a href="https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html">earlier in the week</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-05-23-error-analysis-to-find-failure-modes/analyze_focus.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Focus on the ‘analyse’ part of the LLM application improvement loop</figcaption><p></p>
+</figure>
+</div>
+<p>It was a very practical session in which we even took time to do some live ‘coding’ (i.e.&nbsp;analysis + clustering) of real data. I’ll try to summarise the points I jotted down in my notebook and end with some reflection on how I will be applying this for an application I’ve been working on.</p>
+<p>A quick reminder of the context: we have an application of some kind, and we want to improve it. LLMs have lots of quirks that make them hard to narrow down exactly how they’re failing, so we’re working through a process that allows you to do just that. This was framed as a five-step process by Hamel + Shreya:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The five parts of the ‘analyse’ loop</figcaption><p></p>
+</figure>
+</div>
+<p>First up, we need to look at some data to better understand the failure modes that our application might suffer from. If this application’s been in production for a while, you might well just have production data. If not, we’ll want to create a synthetic(-ish) dataset that allows us to get over the cold-start hump.</p>
+<section id="create-your-initial-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="create-your-initial-dataset">1. Create your initial dataset</h2>
+<p>This process is fairly technical, but as we were introduced to this process, the aim is to end up with 100 inputs that span across different dimensions of use that your application / system might be exposed to.</p>
+<p>Why 100? No reason. As Hamel explained, it’s just a magic number to get you started. We’re encouraged not to get too focused on the details of the process but rather to trust that we would get to where we wanted if only we had a little faith.</p>
+<p>The idea is that we pass these 100 datapoints into our LLM-driven system in order to see what we get out at the other end, we analyse them iteratively until we’re not learning anything new by doing the iterative process.</p>
+<p>The process is something like the following:</p>
+<ul>
+<li>you want to sample among dimensions or facets of the use that your application could expect to experience, so come up with at least three of these. As a rule of thumb, perhaps think through the lens of features people might use, persona, query complexities or scenarios. It will differ per application, most likely.</li>
+<li>Then generate a number of combinations of these three dimensions. (So as an example: people who want to use a chatbot to buy a product, and these are all non-technical users who actually are non-native English speakers, and who don’t necessarily formulate their queries with full sentences because they’re being passed in by a voice transcription module). Generate 50 of these. (Then filter out the ones that don’t make sense.)</li>
+<li>Then either hand write or use an LLM to help you generate the full 100 realistic queries that would come from any of the particular tuple-combos that we created earlier. (Again, filter out the ones that don’t make sense.)</li>
+</ul>
+</section>
+<section id="look-at-your-data-open-coding" class="level2">
+<h2 class="anchored" data-anchor-id="look-at-your-data-open-coding">2. Look at your data (‘open coding’)</h2>
+<p>At this point you’ll pass all these queries into your system and then you’ll have a pair of the initial query, together with the ‘full trace’ (which encompasses the final response along with all internal tool calls, retrieval and any other context or metadata).</p>
+<p>Here you assemble your traces and you write notes on each one. Basically you are looking at each of the 100 items of data and making observations on what failure modes you observe in the data. In the lesson we did this live through the <a href="https://www.braintrust.dev/">Braintrust</a> interface, but it was emphasised that custom vibe-coded interfaces were also recommended, especially when you have a lot of metadata and tool calling that you might want to present in a certain way to foreground certain elements etc.</p>
+<p>This is where you’ll spend 80% of your time and for 100 traces could take something on the order of an hour. Read each trace. Write some brief descriptive notes about the observed problems or actions where things are going wrong or are unexpected.</p>
+<p>Importantly, you <strong>let the categories emerge from the data</strong> rather than coming in with pre-conceived ideas of what the categories already are.</p>
+<p>For long traces, or ones with complex intermediary steps, focus on either the first upstream failure or the first independent failure that you come across. In the end, this process is an iterative one, so you’ll have a chance to repeat this a few times.</p>
+<p>Note also that we don’t really care about the root cause analysis (i.e.&nbsp;‘why’ things are happening). We’re doing error analysis so what we care about is just the behaviour and patterns that we observe.</p>
+</section>
+<section id="cluster-your-data-axial-coding" class="level2">
+<h2 class="anchored" data-anchor-id="cluster-your-data-axial-coding">3. Cluster your data (‘axial coding’)</h2>
+<p>At this point you have a dataset of inputs, outputs and your notes on these 100 items. At this point you switch to a clustering effort where you are structuring the failure modes + merging them. You bring structure into your unstructured data by grouping similar failure modes into a sort of emergent failure taxonomy.</p>
+<p>The process: you read the notes and then you cluster similar notes.</p>
+<p>It’s possible to get some help from an LLM with this, for suggestions on how to group items, but there’s no way to automate yourself out of this process. You still need to make the final judgement and call, based on your understanding of the context of the application. “Always manually review, refine and define these failure modes yourself.”</p>
+<p>One useful guidance was to try to have failure modes that are binary (i.e.&nbsp;observably yes or no) since this will help later on in the process but also it’s much easier to have clear definitions for yes and no. (The alternative, where you have grades between 1-5, for example, is too easy to be unclear.)</p>
+</section>
+<section id="label-more-traces-iterate" class="level2">
+<h2 class="anchored" data-anchor-id="label-more-traces-iterate">4. Label more traces &amp; iterate</h2>
+<p>And then you’re repeating and iterating! During this process don’t be concerned that your failure mode naming or definitions might start to evolve. This is a known thing that happens when you annotate data, i.e.&nbsp;the criteria drifts as you review new outputs, and it’s actually something you should welcome because it is a reflection of you better understanding your data.</p>
+<p>You’ll want to keep looping between open coding + axial coding stages until you are ‘saturated’ in terms of what you’re learning about the failure modes. You’ll be refining the definitions, merging similar categories, splitting ones that are different.</p>
+</section>
+<section id="pitfalls-to-watch-out-for" class="level2">
+<h2 class="anchored" data-anchor-id="pitfalls-to-watch-out-for">Pitfalls to watch out for</h2>
+<p>We skipped over this section fairly quickly, but there are a bunch of ways in which you can short-change yourself in this process and that are worth being aware of:</p>
+<ul>
+<li>you might have underspecified or been too narrow in how you defined the tuple-combos at the beginning. i.e.&nbsp;your data that you generated didn’t end up covering wide dimensions of usage patterns.</li>
+<li>you might skimp on the work, either only coding a few examples, or half-passing the effort to actually think through what an example or trace really represents</li>
+<li>you might try to automate things too early, delegating your (expert) judgement to a machine that can’t represent your interests, at least not at this stage</li>
+<li>you might skip the iteration loop of going back to the open coding after doing some axial coding</li>
+<li>for complex domains, you might skip including experts as part of this process of annotation</li>
+</ul>
+</section>
+<section id="office-hours-discussions" class="level2">
+<h2 class="anchored" data-anchor-id="office-hours-discussions">Office hours discussions</h2>
+<p>There were a few really interesting questions that were asked during the office hours.</p>
+<p>One was about how to handle ‘complex’ pipelines (i.e.&nbsp;ones with many intermediary stages, possibly with lots of tool calling and iteration / reflection loops). Hamel suggested two ways of approaching this complexity:</p>
+<ul>
+<li>building your own data viewer or annotator was one option since it allows you to customise exactly which bits of the complexity you’re exposed to. It’ll differ per application, but really you should focus on whatever is important to you based on the behaviour of the application, and an off-the-shelf tool — however good — can never be everything to everyone.</li>
+<li>look at the final output instead of getting lost in all the intermediary details. You can see the errors in the output / final behaviour. Since this is an iterative process, if you observe errors in the output, that’s actually good enough. You don’t need to do a root cause analysis. Just code and cluster based on the failure modes you observe. You could also focus on the error type / pattern that seems most important or burning to you.</li>
+</ul>
+<p>In general the emphasis was on finding ways to simplify things and not get lost in all the complexity of your system. This isn’t or won’t be the last time you see your system’s behaviour, so you don’t have to catch everything. Either picking the most glaring errors or sticking with upstream failures can be good ways of achieving this. “Find the one error that’s swamping out other errors.”</p>
+</section>
+<section id="reflections-what-ill-be-working-on" class="level2">
+<h2 class="anchored" data-anchor-id="reflections-what-ill-be-working-on">Reflections &amp; what I’ll be working on</h2>
+<p>I was so struck during today’s session how much overlap there is in this work of evaluation with the work of a professional historian. The things I did when I wrote books, or my PhD, or just research reports, is really similar to this process. It actually made me a bit sad that there are aren’t more ways for people with a humanities background to be involved in the work of LLM application development. Not only are people with humanities backgrounds often trained to be good writers — important in the domain of prompting as we learned on Tuesday — but they have spent their whole career trying to find ways to get their heads around unwieldy unstructured data.</p>
+<p>I have a project which is an agentic workflow / pipeline to ingest primary source or raw data from newspapers or books and iteratively improve and populate a sort of wikipedia based on what gets learned from each source. It’s a sister project to my source translation repo, <a href="https://github.com/strickvl/tinbox"><code>tinbox</code> (‘translator in a box’)</a> and so this one’s called <code>hinbox</code> (i.e.&nbsp;‘historian in a box’). I have a working prototype but it still needs a bit of work before I’m happy going into more detail about it works. I’ll make the repo public soon I hope. Needless to say, I am using this course as a way of developing evals as a way of improving it and iterating on its failure modes.</p>
+<p>I might only get round to doing some deep practical work on that next week or the week after, but I’ll be sure to keep up the notes and reflections on the course sessions here as we go.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
