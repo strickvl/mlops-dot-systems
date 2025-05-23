@@ -98,6 +98,12 @@ One was about how to handle 'complex' pipelines (i.e. ones with many intermediar
 
 In general the emphasis was on finding ways to simplify things and not get lost in all the complexity of your system. This isn't or won't be the last time you see your system's behaviour, so you don't have to catch everything. Either picking the most glaring errors or sticking with upstream failures can be good ways of achieving this. "Find the one error that's swamping out other errors."
 
+Another really interesting prompt from Hamel was to take on the mentality of a detective while working on this analysis stage. Think: "I'm going to find the failure nodes" and this mentality could carry you forward beyond all your doubts or hesitations or unsureness about the process.
+
+And in the end, as both Hamel and Shreya said, it might feel like taking a leap of faith to trust in the process, since it ultimately is quite an open-ended process. Sort of like the well-worn metaphor of driving at night through fog, where you can't see more than ten metres in front of you, but still you are able to make forward progress.
+
+There was also a question about how to generate synthetic inputs when the LLM-driven process to turn the inputs into outputs also involved some human intervention (perhaps human-in-the-loop responses etc). Two suggestions for this: possibly you could have a synthetic persona who could play the role that a human might have played in those cases, but alternative you could just find five real humans and ask them to run through the scenarios or workflows a dozen times each in order to get you enough data generated that you get past the cold-start problem.
+
 ## Reflections & what I'll be working on
 
 I was so struck during today's session how much overlap there is in this work of evaluation with the work of a professional historian. The things I did when I wrote books, or my PhD, or just research reports, is really similar to this process. It actually made me a bit sad that there are aren't more ways for people with a humanities background to be involved in the work of LLM application development. Not only are people with humanities backgrounds often trained to be good writers — important in the domain of prompting as we learned on Tuesday — but they have spent their whole career trying to find ways to get their heads around unwieldy unstructured data.
