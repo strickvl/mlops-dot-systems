@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-05-30">
+<meta name="description" content="Lessons learned from working on an entity extraction system for historical research that automatically processes documents to create structured knowledge databases, developed as a practical testbed for systematic AI evaluation techniques.">
+
+<title>Alex Strick van Linschoten - Building hinbox: An agentic research tool for historical document analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Building hinbox: An agentic research tool for historical document analysis">
+<meta property="og:description" content="Lessons learned from working on an entity extraction system for historical research that automatically processes documents to create structured knowledge databases, developed as a practical testbed…">
+<meta property="og:image" content="https://mlops.systems/posts/images/hinbox/frontpage.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="653">
+<meta property="og:image:width" content="1132">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Building hinbox: An agentic research tool for historical document analysis">
+<meta name="twitter:description" content="Lessons learned from working on an entity extraction system for historical research that automatically processes documents to create structured knowledge databases, developed as a practical testbed…">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/hinbox/frontpage.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="653">
+<meta name="twitter:image-width" content="1132">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Building hinbox: An agentic research tool for historical document analysis</h1>
+                  <div>
+        <div class="description">
+          Lessons learned from working on an entity extraction system for historical research that automatically processes documents to create structured knowledge databases, developed as a practical testbed for systematic AI evaluation techniques.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">agents</div>
+                <div class="quarto-category">evals-course</div>
+                <div class="quarto-category">evaluation</div>
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">hinbox</div>
+                <div class="quarto-category">research</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 30, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-build-this-personal-research-history-meets-the-age-of-agents" id="toc-why-build-this-personal-research-history-meets-the-age-of-agents" class="nav-link active" data-scroll-target="#why-build-this-personal-research-history-meets-the-age-of-agents">Why Build This? Personal Research History Meets the Age of Agents</a>
+  <ul class="collapse">
+  <li><a href="#the-academic-reality-check" id="toc-the-academic-reality-check" class="nav-link" data-scroll-target="#the-academic-reality-check">The Academic Reality Check</a></li>
+  </ul></li>
+  <li><a href="#beyond-academic-applications" id="toc-beyond-academic-applications" class="nav-link" data-scroll-target="#beyond-academic-applications">Beyond Academic Applications</a>
+  <ul class="collapse">
+  <li><a href="#the-agentic-moment" id="toc-the-agentic-moment" class="nav-link" data-scroll-target="#the-agentic-moment">The ‘Agentic’ Moment</a></li>
+  </ul></li>
+  <li><a href="#what-can-hinbox-do-now" id="toc-what-can-hinbox-do-now" class="nav-link" data-scroll-target="#what-can-hinbox-do-now">What can <code>hinbox</code> do now?</a></li>
+  <li><a href="#how-i-built-it" id="toc-how-i-built-it" class="nav-link" data-scroll-target="#how-i-built-it">How I built it</a></li>
+  <li><a href="#whats-up-next" id="toc-whats-up-next" class="nav-link" data-scroll-target="#whats-up-next">What’s up next?</a>
+  <ul class="collapse">
+  <li><a href="#the-real-work-systematic-evaluation-and-improvement" id="toc-the-real-work-systematic-evaluation-and-improvement" class="nav-link" data-scroll-target="#the-real-work-systematic-evaluation-and-improvement">The Real Work: Systematic Evaluation and Improvement</a></li>
+  <li><a href="#context-for-future-technical-content" id="toc-context-for-future-technical-content" class="nav-link" data-scroll-target="#context-for-future-technical-content">Context for Future Technical Content</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>I’ve been working on a project called <a href="https://github.com/strickvl/hinbox"><code>hinbox</code></a> - a flexible entity extraction system designed to help historians and researchers build structured knowledge databases from collections of primary source documents. At its core, <code>hinbox</code> processes historical documents, academic papers, books and news articles to automatically extract and organize information about people, organizations, locations, and events.</p>
+<p>The tool works by ingesting batches of documents and intelligently identifying entities across sources. What makes it interesting is the iterative improvement aspect: as you feed more documents into the system, entity profiles become richer and more comprehensive. When <code>hinbox</code> encounters a person or organization it’s seen before, it updates their profile with new information rather than creating duplicates. I’ve been testing it extensively with Guantánamo Bay media sources - a domain where I have deep expertise from my previous career as a historian - which allows me to rigorously evaluate the quality of its extractions.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hinbox/organizations-view.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The organisations view</figcaption><p></p>
+</figure>
+</div>
+<p>Right now, <code>hinbox</code> isn’t ready for broader use. The prompt engineering needs significant refinement, and the entity merging logic requires more sophisticated iteration loops. But that’s actually the point - I’ve been participating in Hamel and Shreya’s <a href="https://mlops.systems/#category=evals-course">AI evals course</a>, and I wanted a concrete project where I could apply the systematic evaluation and improvement techniques we’re learning.</p>
+<p>This project originally came together over a few intense days about two months ago, then sat dormant while work <a href="https://www.linkedin.com/feed/update/urn:li:activity:7333405837433999360/?updateEntityUrn=urn%3Ali%3Afs_updateV2%3A%28urn%3Ali%3Aactivity%3A7333405837433999360%2CFEED_DETAIL%2CEMPTY%2CDEFAULT%2Cfalse%29">got</a> <a href="https://www.linkedin.com/feed/update/urn:li:activity:7332696687515205650/?updateEntityUrn=urn%3Ali%3Afs_updateV2%3A%28urn%3Ali%3Aactivity%3A7332696687515205650%2CFEED_DETAIL%2CEMPTY%2CDEFAULT%2Cfalse%29">busy</a>. I’ve recently resurrected it specifically to serve as a practical laboratory for the evals course exercises. There’s something powerful about having a real application with measurable outputs where you can experiment with different approaches to prompt optimization, model selection, and systematic error analysis.</p>
+<p>The broader vision is creating a tool that could genuinely help researchers working with large document collections - transforming the traditional manual process of reading, noting, and cross-referencing into something more systematic and scalable. But first, it needs to work reliably, which is where the evals work comes in.</p>
+<section id="why-build-this-personal-research-history-meets-the-age-of-agents" class="level2">
+<h2 class="anchored" data-anchor-id="why-build-this-personal-research-history-meets-the-age-of-agents">Why Build This? Personal Research History Meets the Age of Agents</h2>
+<p>This project connects directly to something I’ve done before - but under very different circumstances. In the mid-2000s, I founded and ran a media monitoring startup in Afghanistan (RIP <a href="https://mlops.systems/posts/2024-04-01-publishing-afghanwire-dataset.html">AfghanWire</a>). We had a team of Afghan translators processing daily newspapers and news sources, translating everything into English. Then came my part: reading these translations and manually building what essentially became a structured knowledge database.</p>
+<p>The process was methodical but exhausting. Each article mentioning a person required checking our existing profiles - did we know this individual? If not, I’d create a new entry and research their background. If yes, I’d update their existing profile with new information. Over time, we developed detailed profiles for hundreds of key figures in Afghan politics, civil society, and security. The more articles we processed, the richer and more interconnected our database became. We were building a living encyclopaedia of contemporary Afghanistan, one translated news story at a time.</p>
+<p>The startup eventually ran out of funding, but the intellectual framework stuck with me. We’d created something genuinely valuable - contextual intelligence that helped outsiders understand the complex landscape of Afghan media and politics. The manual approach worked, but it was incredibly time-intensive and didn’t scale beyond what a small team could handle.</p>
+<section id="the-academic-reality-check" class="level3">
+<h3 class="anchored" data-anchor-id="the-academic-reality-check">The Academic Reality Check</h3>
+<p>Since then, I’ve continued working as a researcher (I have a PhD in War Studies from King’s College London and have written several critically-acclaimed books credentials blah blah sorry). This experience has reinforced how common the core challenge actually is across academic and research contexts. Historical research often involves exactly this pattern: you have access to substantial primary source collections - maybe 20,000 newspaper issues covering a decade, or thousands of diplomatic cables, or extensive archival materials - but limited time and resources to systematically extract insights.</p>
+<p>The traditional academic approach involves months of careful reading, taking notes in physical notebooks, slowly building up understanding through manual cross-referencing. It’s thorough but painfully slow. Most researchers don’t have the luxury of unlimited time to spend four hours daily reading through source materials, even though that’s often what the work requires.</p>
+</section>
+</section>
+<section id="beyond-academic-applications" class="level2">
+<h2 class="anchored" data-anchor-id="beyond-academic-applications">Beyond Academic Applications</h2>
+<p>The potential applications extend well beyond historical research. Intelligence analysis, scientific literature review, market research, legal discovery - anywhere you need to build structured knowledge from unstructured document collections. There’s clearly demand for these capabilities, evidenced by the popularity of “second brain” concepts and personal knowledge management tools like Obsidian and Roam.</p>
+<p>But most existing PKM tools require manual curation. They’re great for organising knowledge you’ve already processed, less effective for bootstrapping that initial extraction from raw sources. What interests me is the hybrid approach: automated extraction that creates draft profiles and connections, which humans can then review, edit, and approve. Not pure automation, but intelligent assistance that handles the tedious first pass.</p>
+<section id="the-agentic-moment" class="level3">
+<h3 class="anchored" data-anchor-id="the-agentic-moment">The ‘Agentic’ Moment</h3>
+<p>We’re entering what feels like a genuinely different phase of AI capability - the emergence of reliable vertical agents that can handle specific, complex workflows end-to-end. <code>hinbox</code> represents my attempt to explore what this might look like in practice for research applications. Rather than building with heavy agentic frameworks (which I haven’t found necessary yet and which fall in and out of favour too often for my tastes), I’m focusing on the core extraction and synthesis challenge.</p>
+<p>This feels like the right moment to experiment with these capabilities. The models are sophisticated enough to handle nuanced entity recognition and relationship mapping, but the tooling is still flexible enough that you can build custom solutions for specific domains. It’s an interesting testing ground for understanding both the current state of the art and the practical challenges of deploying AI in knowledge-intensive workflows.</p>
+<p>The goal isn’t necessarily to “solve” automated research (though that would be nice), but to build something concrete where I can systematically evaluate different approaches to prompt engineering, model selection, and error correction. Sometimes the best way to understand emerging capabilities is to push them against real problems you actually care about solving.</p>
+</section>
+</section>
+<section id="what-can-hinbox-do-now" class="level2">
+<h2 class="anchored" data-anchor-id="what-can-hinbox-do-now">What can <code>hinbox</code> do now?</h2>
+<p>The system centres around domain-specific configuration - you define the research area you’re interested in through a set of configuration files that specify your extraction targets and prompts. For my testing, I’ve been using Guantánamo Bay historical sources as the test domain since I can rigorously evaluate the quality of extractions in an area where I have deep expertise.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hinbox/organization-profile.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">An example organisation profile</figcaption><p></p>
+</figure>
+</div>
+<p>Setting up a new research domain is straightforward: the system generates template configuration files with placeholders for all the necessary prompts. You customise these prompts to focus on the entities most relevant to your research - perhaps emphasising military personnel and legal proceedings for Guantánamo sources, or traders and agricultural cooperatives for Palestinian food history research.</p>
+<p>Once configured, <code>hinbox</code> processes your document collection article by article, extracting people, organisations, locations, and events according to your specifications. The interesting part is the intelligent merging: rather than creating duplicate entries, the system attempts to recognise when newly extracted entities match existing profiles and updates them accordingly. This iterative enrichment means profiles become more comprehensive as you process additional sources.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hinbox/processing-logs.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Data processing logs</figcaption><p></p>
+</figure>
+</div>
+<p>The system supports both cloud-based models (Gemini Flash 2.x has been particularly effective) and local processing through Ollama - crucial for researchers working with sensitive historical materials that can’t be sent to external APIs. Local models like <code>gemma3:27b</code> have proven surprisingly capable for this kind of structured extraction work.</p>
+<p>After processing, you get a web-based frontend for exploring the extracted knowledge base. Profiles include source attribution and version history, so you can track how understanding of particular entities evolved as new documents were processed. The entire output can be shared as a self-contained package - useful for collaborative research or creating supplementary materials for publications.</p>
+</section>
+<section id="how-i-built-it" class="level2">
+<h2 class="anchored" data-anchor-id="how-i-built-it">How I built it</h2>
+<p>This project became a practical testbed for several development tools I’d been wanting to explore seriously. Claude Code and Cursor proved invaluable for rapid iteration - the kind of back-and-forth refinement that complex NLP applications require would have taken significantly longer with traditional development approaches.</p>
+<p><a href="https://fastht.ml/">FastHTML</a> deserves particular mention for the frontend work. Building research interfaces without wrestling with JavaScript complexity felt genuinely liberating. The ability to create dynamic, interactive visualisations using primarily Python aligns well with how most researchers already think about data manipulation and presentation.</p>
+<p>The current data architecture uses Parquet files throughout - a choice that might raise eyebrows but serves the development phase well. Direct file inspection and manipulation proved more valuable than database abstraction during rapid prototyping. Eventually, I’ll likely add SQLite backend options, but the current approach prioritises iteration speed over architectural elegance.</p>
+<p>The entity merging logic required the most sophistication. The system combines simple string matching with embedding-based similarity search, then uses an LLM as final arbiter when potential matches are identified. A candidate profile gets compared against existing entities first through name similarity, then through vector comparison of full profile text. If similarity exceeds certain thresholds, both profiles are sent to the model with instructions to determine whether they represent the same entity and how to merge them if so.</p>
+<p>This multi-stage approach handles the nuanced judgment calls that pure algorithmic matching struggles with - distinguishing between John Smith the journalist and John Smith the military contractor, or recognising that “Captain Rodriguez” from one article is the same person as “Maria Rodriguez” from another. The complexity here suggests this merging pipeline will be a primary focus for systematic evaluation and improvement as the project matures.</p>
+</section>
+<section id="whats-up-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-up-next">What’s up next?</h2>
+<p>This blog post represents the softest possible launch - really more of a “here’s what I’m working on” update than any kind of formal announcement. <code>hinbox</code> isn’t ready for broad adoption yet, though I’d certainly welcome contributions and feedback from anyone interested in the problem space.</p>
+<p>The immediate technical improvements are fairly straightforward. Right now, everything runs synchronously - each article gets processed sequentially to avoid the complexity of concurrent profile updates. Adding parallel processing would require implementing proper queuing or database locking mechanisms. Similarly, moving from Parquet files to a SQLite backend would provide better data management and enable more sophisticated querying patterns. Both changes would improve performance but add architectural complexity I haven’t needed while focusing on core functionality.</p>
+<p>I’m also eager to expand beyond newspaper articles to different document types - academic papers, book chapters, research reports, archival materials. Each format likely requires prompt refinements and possibly different extraction strategies. If this is going to be genuinely useful across research domains, it needs to handle the full spectrum of source materials historians and researchers actually work with.</p>
+<section id="the-real-work-systematic-evaluation-and-improvement" class="level3">
+<h3 class="anchored" data-anchor-id="the-real-work-systematic-evaluation-and-improvement">The Real Work: Systematic Evaluation and Improvement</h3>
+<p>But the most interesting next phase involves applying systematic evaluation techniques from the AI evals course I mentioned earlier. This is where the project becomes genuinely educational rather than just another NLP application. I’ll be implementing structured approaches to:</p>
+<ul>
+<li><strong>Error analysis</strong>: Understanding exactly where and why entity extraction fails</li>
+<li><strong>Prompt optimization</strong>: Systematic testing rather than intuitive iteration<br>
+</li>
+<li><strong>Model comparison</strong>: Rigorous evaluation across different architectures and providers</li>
+<li><strong>Merging accuracy</strong>: Quantifying the quality of entity deduplication decisions</li>
+</ul>
+<p>The goal is documenting this improvement process in detail through subsequent blog posts. Rather than abstract discussions of evaluation methodology, I want to show concrete examples of how these techniques apply to a real system with measurable outputs. What does systematic prompt engineering actually look like in practice? How do you design effective test suites for complex agentic pipelines? When do local models outperform cloud APIs for specific tasks?</p>
+</section>
+<section id="context-for-future-technical-content" class="level3">
+<h3 class="anchored" data-anchor-id="context-for-future-technical-content">Context for Future Technical Content</h3>
+<p>Honestly, the main reason for writing this overview wasn’t to launch anything - it was to establish context. I wanted a reference point for future technical posts that dive deep into evaluation methodology and iterative improvement without needing to repeatedly explain what hinbox is or why I’m working on it. The interesting content will be showing how systematic AI development practices apply to concrete research problems.</p>
+<p>This feels like the right kind of project for exploring these questions: complex enough to surface real challenges, focused enough to enable rigorous evaluation, and personally meaningful enough to sustain the extended iteration cycles that proper system improvement requires. Plus, having worked extensively in the domain I’m testing makes it much easier to distinguish between genuine improvements and superficial metrics optimisation.</p>
+<p>More technical deep-dives coming soon as the evals work progresses. The real learning happens in the systematic refinement process, not the initial build.</p>
+<hr>
+<p><em>The hinbox repository is available on <a href="https://github.com/strickvl/hinbox">GitHub</a> for anyone interested in following along or contributing. All feedback welcome as this evolves from prototype to something genuinely useful for research applications.</em></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
