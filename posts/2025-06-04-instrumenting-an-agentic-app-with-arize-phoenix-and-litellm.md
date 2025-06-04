@@ -8,9 +8,9 @@ categories:
   - miniproject
   - hinbox
 date: "2025-06-04"
-description: "I tried (and failed) to get Phoenix to work with litellm to instrument my LLM calls, grouping spans together as traces."
+description: "Trying to get Phoenix to work with litellm to instrument my LLM calls, grouping spans together as traces."
 layout: post
-title: "Failing to instrument an agentic app with Arize Phoenix and litellm"
+title: "Trying to instrument an agentic app with Arize Phoenix and litellm"
 toc: true
 image: "images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png"
 include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
@@ -287,3 +287,128 @@ I looked at [the documentation for using base OTEL](https://arize.com/docs/phoen
 I was wondering if [their 'Sessions' primitive](https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-sessions) was the way forward here, but they're pretty clear in stating that a `Session` is a "sequence of traces".
 
 So I'm at a bit of a dead end with Phoenix for now. I might return to Braintrust or Langfuse since these seem to have better support for what I'm trying to do (i.e. group spans together underneath a trace). I'm really reluctant to try to instrument `hinbox` with Phoenix when I'm unable even to get this basic grouping working properly with some dummy code.
+
+## Update: solution from the Arize team
+
+I posted this blog on the Arize slack and they got back to me with a solution:
+
+```python
+import litellm
+from phoenix.otel import register
+
+tracer_provider = register(
+    project_name="hinbox",  # Default is 'default'
+    auto_instrument=True,  # Auto-instrument your app based on installed OI dependencies
+    set_global_tracer_provider=False,
+)
+tracer = tracer_provider.get_tracer(__name__)
+
+
+@tracer.llm
+def query_llm(prompt: str):
+    completion_response = litellm.completion(
+        model="openrouter/google/gemma-3n-e4b-it:free",
+        messages=[
+            {
+                "content": prompt,
+                "role": "user",
+            }
+        ],
+    )
+    return completion_response.choices[0].message.content
+
+
+@tracer.agent
+def query_agent(prompt: str):
+    return "I am an agent."
+
+
+@tracer.chain
+def my_llm_application():
+    query1 = query_llm("What's the capital of China? Just give me the name.")
+    query2 = query_llm("What's the capital of Japan? Just give me the name.")
+    agent1 = query_agent("Who are you?")
+    return (query1, query2, agent1)
+
+
+if __name__ == "__main__":
+    print(my_llm_application())
+```
+
+And you can see how this looks in the Phoenix Cloud dashboard:
+
+![Grouped spans](images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/arize-updated-solution-grouped.png)
+
+Judging from the code it seems like the way the span is constructed simply depends on how you assemble the hierarchy of spans. For instance, if I wanted to consider the top-level entity for this 'trace' (i.e. a grouping of spans) then I could use this code:
+
+```python
+import litellm
+from phoenix.otel import register
+
+tracer_provider = register(
+    project_name="hinbox",  # Default is 'default'
+    auto_instrument=True,  # Auto-instrument your app based on installed OI dependencies
+    set_global_tracer_provider=False,
+    # batch=True,
+)
+tracer = tracer_provider.get_tracer(__name__)
+
+
+@tracer.llm
+def query_llm(prompt: str):
+    completion_response = litellm.completion(
+        model="openrouter/google/gemma-3n-e4b-it:free",
+        messages=[
+            {
+                "content": prompt,
+                "role": "user",
+            }
+        ],
+    )
+    return completion_response.choices[0].message.content
+
+
+@tracer.agent
+def query_agent(prompt: str):
+    return "I am an agent."
+
+
+@tracer.tool(name="query_embedding", description="Query embedding")
+def query_embedding(prompt: str):
+    return [0.1, 0.2, 0.3]
+
+
+@tracer.agent
+def my_llm_application():
+    query1 = query_llm("What's the capital of China? Just give me the name.")
+    query2 = query_llm("What's the capital of Japan? Just give me the name.")
+    agent1 = query_agent("Who are you?")
+    embedding1 = query_embedding("What's the capital of China? Just give me the name.")
+    return (query1, query2, agent1, embedding1)
+
+
+if __name__ == "__main__":
+    print(my_llm_application())
+```
+
+And now instead of this trace being of kind 'chain', it's now of kind 'agent', which some internal spans also being of kind 'agent'. In a conversation in the Arize Slack I got the following clarification:
+
+> "Traces as the concept under "signals" is basically a unique identifier of spans (think "span" of time). See https://opentelemetry.io/docs/concepts/signals/traces/
+> In most cases if you filter spans by "roots" (e.g. spans that don't have parents) and or look at the collective set of "traces" they will roughly look the same.
+> Most of the time this is the view you want when looking at telemetry. Spans are too noisy to be looking at in isolation.
+> While the two tabs feel largely overlapping, it's a bit intentional as there's actually no real object called a trace - it's just a series of spans.
+> You will see these abstractions in most observability platform."
+
+The line that:
+
+> "there's actually no real object called a trace - it's just a series of spans"
+
+Was extremely clarifying, actually. It explains the fuzziness between the spans and traces tab in the Phoenix dashboard.
+
+I also got some clarification around the missing `@tracer.embbeding` and `@tracer.reranker` decorators:
+
+> "We emit spans for embedding text to vectors (like "adda"), guardrailing via thinks like guardrals or content moderation, and reranking things via things like cohere.
+> However it's sorta rare for people to manually write these. We will have decorators for them but right now they are typically emitted from autoinstrumentors like langgraph where there are common patterns for these things.
+> We will have decorators for them very soon - but things like reranking are much more complex than things like tool calling so we are codifying these primitives now."
+
+So there you have it! Some clarity. I'll have to play around to see whether I go with the Langfuse route or the Phoenix route and which feels most ergonomic in the `hinbox` codebase. Appreciate the quick feedback from the Phoenix team, though!
