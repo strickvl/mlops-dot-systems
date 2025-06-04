@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-06-04">
+<meta name="description" content="I tried (and failed) to get Phoenix to work with litellm to instrument my LLM calls, grouping spans together as traces.">
+
+<title>Alex Strick van Linschoten - Failing to instrument an agentic app with Arize Phoenix and litellm</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Failing to instrument an agentic app with Arize Phoenix and litellm">
+<meta property="og:description" content="I tried (and failed) to get Phoenix to work with litellm to instrument my LLM calls, grouping spans together as traces.">
+<meta property="og:image" content="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:image:height" content="769">
+<meta property="og:image:width" content="1299">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Failing to instrument an agentic app with Arize Phoenix and litellm">
+<meta name="twitter:description" content="I tried (and failed) to get Phoenix to work with litellm to instrument my LLM calls, grouping spans together as traces.">
+<meta name="twitter:image" content="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:image-height" content="769">
+<meta name="twitter:image-width" content="1299">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mlops.systems/index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Failing to instrument an agentic app with Arize Phoenix and litellm</h1>
+                  <div>
+        <div class="description">
+          I tried (and failed) to get Phoenix to work with litellm to instrument my LLM calls, grouping spans together as traces.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">llms</div>
+                <div class="quarto-category">agents</div>
+                <div class="quarto-category">evals-course</div>
+                <div class="quarto-category">evaluation</div>
+                <div class="quarto-category">miniproject</div>
+                <div class="quarto-category">hinbox</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 4, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#basic-logging-with-litellm-phoenix" id="toc-basic-logging-with-litellm-phoenix" class="nav-link active" data-scroll-target="#basic-logging-with-litellm-phoenix">Basic logging with litellm + phoenix</a></li>
+  <li><a href="#batchspanprocessor-for-production-usage" id="toc-batchspanprocessor-for-production-usage" class="nav-link" data-scroll-target="#batchspanprocessor-for-production-usage"><code>BatchSpanProcessor</code> for production usage</a></li>
+  <li><a href="#using-the-litellm-callbacks-as-an-alternative" id="toc-using-the-litellm-callbacks-as-an-alternative" class="nav-link" data-scroll-target="#using-the-litellm-callbacks-as-an-alternative">Using the litellm callbacks as an alternative</a></li>
+  <li><a href="#one-trace-multiple-spans" id="toc-one-trace-multiple-spans" class="nav-link" data-scroll-target="#one-trace-multiple-spans">One trace, multiple spans</a>
+  <ul class="collapse">
+  <li><a href="#llm-tracing-tools-naming-conventions-june-2025" id="toc-llm-tracing-tools-naming-conventions-june-2025" class="nav-link" data-scroll-target="#llm-tracing-tools-naming-conventions-june-2025">LLM Tracing Tools’ Naming Conventions (June 2025)</a></li>
+  <li><a href="#grouping-spans-under-a-single-trace" id="toc-grouping-spans-under-a-single-trace" class="nav-link" data-scroll-target="#grouping-spans-under-a-single-trace">Grouping spans under a single trace</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>It’s important to instrument your AI applications! I hope this can more or less be taken as given just as you’d expect a non-AI-infused app to capture logs. When you’re evaluating your LLM-powered system, you need to have capture the inputs and outputs both at an end-to-end level in terms of the way the user experiences things as well as with more fine-grained granularity for all the internal workings.</p>
+<p>My goal with this blog is to first demonstrate how Phoenix and <code>litellm</code> can work together, and then to make sure that we are able to group all spans together under a single trace.</p>
+<p>I’ll write the blog as I work so at this point I’m not sure exactly how this will turn out.</p>
+<section id="basic-logging-with-litellm-phoenix" class="level2">
+<h2 class="anchored" data-anchor-id="basic-logging-with-litellm-phoenix">Basic logging with litellm + phoenix</h2>
+<p>As a reminder, here’s how we make an LLM call with <code>litellm</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> litellm</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>completion_response <span class="op">=</span> litellm.completion(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(completion_response.choices[<span class="dv">0</span>].message.content)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># prints 'Beijing'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The Phoenix docs explain how to set up basic logging for litellm:</p>
+<ul>
+<li>install the following pip packages:
+<ul>
+<li><code>arize-phoenix-otel</code></li>
+<li><code>openinference-instrumentation-litellm</code></li>
+<li>(<code>litellm</code>, obviously)</li>
+</ul></li>
+<li>set up the necessary environment variables with API key etc to ensure that traces get sent to the right account and endpoint</li>
+</ul>
+<p>Let’s assume we’re using the hosted Phoenix Cloud version for now. Then we can rerun our example, with some slight tweaks:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> litellm</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> phoenix.otel <span class="im">import</span> register</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># configure the Phoenix tracer</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>tracer_provider <span class="op">=</span> register(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    project_name<span class="op">=</span><span class="st">"hinbox"</span>,  <span class="co"># Default is 'default'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    auto_instrument<span class="op">=</span><span class="va">True</span>,  <span class="co"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>completion_response <span class="op">=</span> litellm.completion(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(completion_response.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So we first register the Phoenix tracer, specify the project (already set up in Phoenix Cloud) and then run our litellm <code>completion</code> as previously. In the terminal we see he following logs:</p>
+<pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
+|  Phoenix Project: hinbox
+|  Span Processor: SimpleSpanProcessor
+|  Collector Endpoint: https://app.phoenix.arize.com/v1/traces
+|  Transport: HTTP + protobuf
+|  Transport Headers: {'api_key': '****', 'authorization': '****'}
+|  
+|  Using a default SpanProcessor. `add_span_processor` will overwrite this default.
+|  
+|  ⚠️ WARNING: It is strongly advised to use a BatchSpanProcessor in production environments.
+|  
+|  `register` has set this TracerProvider as the global OpenTelemetry default.
+|  To disable this behavior, call `register` with `set_global_tracer_provider=False`.
+
+Beijing</code></pre>
+<p>So immediately there are a lot of things to consider. It seems that we’ll want to use the <code>BatchSpanProcessor</code> that it suggests, and also it seems like I might not want to set this as the global tracing provider, too.</p>
+<p>In Phoenix Cloud, I see this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/first-phoenix.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Basic Phoenix tracing interface</figcaption><p></p>
+</figure>
+</div>
+<p>As you can see, we’ve captured the input and output messages for the completion, it’s tracked the latency of the call (1.16s, which seems pretty slow actually!). There is also some sort of an annotation interface though I’ll explore that down the line maybe. I immediately notice that I’m missing things like the system attributes for where the call was made, also metadata like the temperature and other settings. I’d also like to see things like token counts (which you <em>can</em> get in Phoenix but they’re sort of buried) as well as the estimated cost of the call(s) and so on. We can see about adding some of that down the line.</p>
+</section>
+<section id="batchspanprocessor-for-production-usage" class="level2">
+<h2 class="anchored" data-anchor-id="batchspanprocessor-for-production-usage"><code>BatchSpanProcessor</code> for production usage</h2>
+<p>Let’s next move on to adding <code>BatchSpanProcessor</code> as the message suggested, which is as simple as adding <code>batch=True</code> to the tracer provider registration code. What this does is make sure that spans are processed in batches before they’re exported to Arize. This takes away some of the network costs that you incur when sending the spans one by one. I’ve also made sure to turn off the registration of this tracing provider as the global one:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> litellm</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> phoenix.otel <span class="im">import</span> register</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># configure the Phoenix tracer</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>tracer_provider <span class="op">=</span> register(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    project_name<span class="op">=</span><span class="st">"hinbox"</span>,  <span class="co"># Default is 'default'</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    auto_instrument<span class="op">=</span><span class="va">True</span>,  <span class="co"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    set_global_tracer_provider<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    batch<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>completion_response <span class="op">=</span> litellm.completion(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(completion_response.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And I get this in the terminal:</p>
+<pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
+|  Phoenix Project: hinbox
+|  Span Processor: BatchSpanProcessor
+|  Collector Endpoint: https://app.phoenix.arize.com/v1/traces
+|  Transport: HTTP + protobuf
+|  Transport Headers: {'api_key': '****', 'authorization': '****'}
+|  
+|  Using a default SpanProcessor. `add_span_processor` will overwrite this default.
+
+Beijing</code></pre>
+<p>It’s actually somehow a bit annoying to still see a message about the fact that I’m using a default <code>SpanProcessor</code>. It’s unclear to me why I need to care that this is a default one. The message is taking up real estate in the logs and it seems important (otherwise why would they have included it?) but it’s also unclear to me what the alternative is and why I’d want to overwrite the default. I think for now I’ll leave it.</p>
+</section>
+<section id="using-the-litellm-callbacks-as-an-alternative" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-litellm-callbacks-as-an-alternative">Using the litellm callbacks as an alternative</h2>
+<p>If we stray away from the official supported way to handle tracing with Phoenix, there’s also <a href="https://docs.litellm.ai/docs/observability/phoenix_integration">the community-supported in-built litellm option</a>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> litellm</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>litellm.callbacks <span class="op">=</span> [<span class="st">"arize_phoenix"</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>completion_response <span class="op">=</span> litellm.completion(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    metadata<span class="op">=</span>{<span class="st">"PROJECT_NAME"</span>: <span class="st">"hinbox"</span>},</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(completion_response.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This achieves a similar result, though I was unable to get the trace to land anywhere other than the <code>default</code> project. <a href="https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-otel">Arize’s docs</a> mention a <code>PHOENIX_PROJECT_NAME</code> environment variable but it seems this isn’t respected or used by the <code>litellm</code> implementation. Indeed when I look at <a href="https://github.com/BerriAI/litellm/blob/main/litellm/integrations/arize/arize_phoenix.py">the implementation</a>, I don’t see this being used anywhere, so it seems that the community-driven implementation isn’t really the way forward.</p>
+<p>I just wanted to mention it, however, since some of the ‘callback’ integrations for tracing in litellm are really nicely implemented (like the one for Langfuse, e.g.) so I wanted to try it out at least.</p>
+</section>
+<section id="one-trace-multiple-spans" class="level2">
+<h2 class="anchored" data-anchor-id="one-trace-multiple-spans">One trace, multiple spans</h2>
+<p>For anything beyond a simple LLM call, which means most real-world LLM applications, we’ll want to be capturing multiple spans as part of a single trace.</p>
+<section id="llm-tracing-tools-naming-conventions-june-2025" class="level3">
+<h3 class="anchored" data-anchor-id="llm-tracing-tools-naming-conventions-june-2025">LLM Tracing Tools’ Naming Conventions (June 2025)</h3>
+<p>Side-note: I dug into how some of the major LLM tracing providers name their primitives. I was reassured that we seem to have coalesced around ‘trace -&gt; span’ and that the OpenTelemetry way seems to have been adopted by most.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/tracing_nomenclature.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Tracing nomenclature (June 2025)</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="grouping-spans-under-a-single-trace" class="level3">
+<h3 class="anchored" data-anchor-id="grouping-spans-under-a-single-trace">Grouping spans under a single trace</h3>
+<p>I updated the code such that we now have a function that makes two separate LLM calls. I’d want them to both be registered as spans under the same trace:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> litellm</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> phoenix.otel <span class="im">import</span> register</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>tracer_provider <span class="op">=</span> register(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    project_name<span class="op">=</span><span class="st">"hinbox"</span>,  <span class="co"># Default is 'default'</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    auto_instrument<span class="op">=</span><span class="va">True</span>,  <span class="co"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    set_global_tracer_provider<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    batch<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> query_llm(prompt: <span class="bu">str</span>):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    completion_response <span class="op">=</span> litellm.completion(</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        model<span class="op">=</span><span class="st">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        messages<span class="op">=</span>[</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                <span class="st">"content"</span>: prompt,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> completion_response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_llm_application():</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    query1 <span class="op">=</span> query_llm(<span class="st">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    query2 <span class="op">=</span> query_llm(<span class="st">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (query1, query2)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(my_llm_application())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But these just get registered as two separate traces/calls. The key bit of the documentation is <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/instrument-python">the ‘Using Phoenix Decorator’ section</a>, it seems. If I add a decorator on top of my function and get the specific tracer, it seems I <em>am</em> able to start to group things together:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> litellm</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> phoenix.otel <span class="im">import</span> register</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>tracer_provider <span class="op">=</span> register(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    project_name<span class="op">=</span><span class="st">"hinbox"</span>,  <span class="co"># Default is 'default'</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    auto_instrument<span class="op">=</span><span class="va">True</span>,  <span class="co"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    set_global_tracer_provider<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    batch<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>tracer <span class="op">=</span> tracer_provider.get_tracer(<span class="va">__name__</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> query_llm(prompt: <span class="bu">str</span>):</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    completion_response <span class="op">=</span> litellm.completion(</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        model<span class="op">=</span><span class="st">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        messages<span class="op">=</span>[</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                <span class="st">"content"</span>: prompt,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> completion_response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="at">@tracer.llm</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_llm_application():</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    query1 <span class="op">=</span> query_llm(<span class="st">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    query2 <span class="op">=</span> query_llm(<span class="st">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (query1, query2)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(my_llm_application())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This works and I see this in the Phoenix Cloud dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Grouped traces under a single span</figcaption><p></p>
+</figure>
+</div>
+<p>See how it’s taken the function name as the name of the span. And it’s grouped those two LLM calls that happen within the function as we wanted. We can also update the decorator to denote different kinds of spans that we want to capture:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/open_inference_span_kinds.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The kinds of spans you can choose from</figcaption><p></p>
+</figure>
+</div>
+<p>I’m immediately a bit confused by the interface again, because when you click on the ‘Traces’ tab in Phoenix Cloud you actually still just see ‘spans’:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/traces_spans_phoenix.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Spans in the Traces tab</figcaption><p></p>
+</figure>
+</div>
+<p>In the documentation it isn’t clear to me how to create a trace that includes an <code>llm</code> span and an <code>embedding</code> span, for example. What’s even more frustrating is that the <code>tracer</code> decorator object doesn’t implement <em>all</em> the span types, just <code>agent</code>, <code>chain</code> and <code>llm</code> it seems. I tried something <a href="https://gist.github.com/strickvl/3e682c28278eeb850e9bf195a2b2cb44">like this</a> but it just ended up producing 3 separate traces in Phoenix Cloud.</p>
+<p>I looked at <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/custom-spans">the documentation for using base OTEL</a> instead of the Phoenix decorators, but there was also nothing in there on how to denote the trace instead of just the span.</p>
+<p>I was wondering if <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-sessions">their ‘Sessions’ primitive</a> was the way forward here, but they’re pretty clear in stating that a <code>Session</code> is a “sequence of traces”.</p>
+<p>So I’m at a bit of a dead end with Phoenix for now. I might return to Braintrust or Langfuse since these seem to have better support for what I’m trying to do (i.e.&nbsp;group spans together underneath a trace). I’m really reluctant to try to instrument <code>hinbox</code> with Phoenix when I’m unable even to get this basic grouping working properly with some dummy code.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

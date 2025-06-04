@@ -9,6 +9,7 @@
     "listing": "/index.html",
     "items": [
       "/posts/saba.html",
+      "/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html",
       "/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html",
       "/posts/2025-05-23-error-analysis-to-find-failure-modes.html",
       "/posts/2025-05-20-how-to-think-about-evals.html",
