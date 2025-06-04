@@ -233,7 +233,7 @@
   <media:content url="https://mlops.systems/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" medium="image" type="image/png" height="105" width="144"/>
 </item>
 <item>
-  <title>Failing to instrument an agentic app with Arize Phoenix and litellm</title>
+  <title>Trying to instrument an agentic app with Arize Phoenix and litellm</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</link>
   <description><![CDATA[ 
@@ -486,9 +486,122 @@ Beijing</code></pre>
 <p>I looked at <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/custom-spans">the documentation for using base OTEL</a> instead of the Phoenix decorators, but there was also nothing in there on how to denote the trace instead of just the span.</p>
 <p>I was wondering if <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-sessions">their ‘Sessions’ primitive</a> was the way forward here, but they’re pretty clear in stating that a <code>Session</code> is a “sequence of traces”.</p>
 <p>So I’m at a bit of a dead end with Phoenix for now. I might return to Braintrust or Langfuse since these seem to have better support for what I’m trying to do (i.e.&nbsp;group spans together underneath a trace). I’m really reluctant to try to instrument <code>hinbox</code> with Phoenix when I’m unable even to get this basic grouping working properly with some dummy code.</p>
-
-
 </section>
+</section>
+<section id="update-solution-from-the-arize-team" class="level2">
+<h2 class="anchored" data-anchor-id="update-solution-from-the-arize-team">Update: solution from the Arize team</h2>
+<p>I posted this blog on the Arize slack and they got back to me with a solution:</p>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb9-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb9-3"></span>
+<span id="cb9-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb9-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb9-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb9-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb9-8">)</span>
+<span id="cb9-9">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
+<span id="cb9-10"></span>
+<span id="cb9-11"></span>
+<span id="cb9-12"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb9-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb9-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb9-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb9-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb9-17">            {</span>
+<span id="cb9-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb9-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb9-20">            }</span>
+<span id="cb9-21">        ],</span>
+<span id="cb9-22">    )</span>
+<span id="cb9-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb9-24"></span>
+<span id="cb9-25"></span>
+<span id="cb9-26"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb9-27"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb9-28">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
+<span id="cb9-29"></span>
+<span id="cb9-30"></span>
+<span id="cb9-31"><span class="at" style="color: #657422;">@tracer.chain</span></span>
+<span id="cb9-32"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb9-33">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb9-34">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb9-35">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
+<span id="cb9-36">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1)</span>
+<span id="cb9-37"></span>
+<span id="cb9-38"></span>
+<span id="cb9-39"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb9-40">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>And you can see how this looks in the Phoenix Cloud dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/arize-updated-solution-grouped.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Grouped spans</figcaption><p></p>
+</figure>
+</div>
+<p>Judging from the code it seems like the way the span is constructed simply depends on how you assemble the hierarchy of spans. For instance, if I wanted to consider the top-level entity for this ‘trace’ (i.e.&nbsp;a grouping of spans) then I could use this code:</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb10-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb10-3"></span>
+<span id="cb10-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb10-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb10-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb10-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb10-8">    <span class="co" style="color: #5E5E5E;"># batch=True,</span></span>
+<span id="cb10-9">)</span>
+<span id="cb10-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
+<span id="cb10-11"></span>
+<span id="cb10-12"></span>
+<span id="cb10-13"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb10-14"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-15">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb10-16">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb10-17">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb10-18">            {</span>
+<span id="cb10-19">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb10-20">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb10-21">            }</span>
+<span id="cb10-22">        ],</span>
+<span id="cb10-23">    )</span>
+<span id="cb10-24">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb10-25"></span>
+<span id="cb10-26"></span>
+<span id="cb10-27"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb10-28"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-29">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
+<span id="cb10-30"></span>
+<span id="cb10-31"></span>
+<span id="cb10-32"><span class="at" style="color: #657422;">@tracer.tool</span>(name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"query_embedding"</span>, description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Query embedding"</span>)</span>
+<span id="cb10-33"><span class="kw" style="color: #003B4F;">def</span> query_embedding(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-34">    <span class="cf" style="color: #003B4F;">return</span> [<span class="fl" style="color: #AD0000;">0.1</span>, <span class="fl" style="color: #AD0000;">0.2</span>, <span class="fl" style="color: #AD0000;">0.3</span>]</span>
+<span id="cb10-35"></span>
+<span id="cb10-36"></span>
+<span id="cb10-37"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb10-38"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb10-39">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb10-40">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb10-41">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
+<span id="cb10-42">    embedding1 <span class="op" style="color: #5E5E5E;">=</span> query_embedding(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb10-43">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1, embedding1)</span>
+<span id="cb10-44"></span>
+<span id="cb10-45"></span>
+<span id="cb10-46"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb10-47">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>And now instead of this trace being of kind ‘chain’, it’s now of kind ‘agent’, which some internal spans also being of kind ‘agent’. In a conversation in the Arize Slack I got the following clarification:</p>
+<blockquote class="blockquote">
+<p>“Traces as the concept under”signals” is basically a unique identifier of spans (think “span” of time). See https://opentelemetry.io/docs/concepts/signals/traces/ In most cases if you filter spans by “roots” (e.g.&nbsp;spans that don’t have parents) and or look at the collective set of “traces” they will roughly look the same. Most of the time this is the view you want when looking at telemetry. Spans are too noisy to be looking at in isolation. While the two tabs feel largely overlapping, it’s a bit intentional as there’s actually no real object called a trace - it’s just a series of spans. You will see these abstractions in most observability platform.”</p>
+</blockquote>
+<p>The line that:</p>
+<blockquote class="blockquote">
+<p>“there’s actually no real object called a trace - it’s just a series of spans”</p>
+</blockquote>
+<p>Was extremely clarifying, actually. It explains the fuzziness between the spans and traces tab in the Phoenix dashboard.</p>
+<p>I also got some clarification around the missing <code>@tracer.embbeding</code> and <code>@tracer.reranker</code> decorators:</p>
+<blockquote class="blockquote">
+<p>“We emit spans for embedding text to vectors (like”adda”), guardrailing via thinks like guardrals or content moderation, and reranking things via things like cohere. However it’s sorta rare for people to manually write these. We will have decorators for them but right now they are typically emitted from autoinstrumentors like langgraph where there are common patterns for these things. We will have decorators for them very soon - but things like reranking are much more complex than things like tool calling so we are codifying these primitives now.”</p>
+</blockquote>
+<p>So there you have it! Some clarity. I’ll have to play around to see whether I go with the Langfuse route or the Phoenix route and which feels most ergonomic in the <code>hinbox</code> codebase. Appreciate the quick feedback from the Phoenix team, though!</p>
+
+
 </section>
 
  ]]></description>
