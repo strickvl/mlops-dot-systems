@@ -11,3 +11,4 @@ posts/saba.ipynb
 .DS_Store
 .ipynb_checkpoints/
 
+.venv
