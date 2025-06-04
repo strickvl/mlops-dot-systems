@@ -12,6 +12,227 @@
 <generator>quarto-1.2.269</generator>
 <lastBuildDate>Tue, 03 Jun 2025 22:00:00 GMT</lastBuildDate>
 <item>
+  <title>Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I <a href="https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">previously tried (and failed)</a> to setup LLM tracing for hinbox using Arize Phoenix and litellm. Since this is sort of a priority for being able to follow along with the <a href="https://maven.com/parlance-labs/evals">Hamel / Shreya evals course</a> with my practical application, I’ll take another stab using a tool with which I’m familiar: <a href="https://www.braintrust.dev/">Braintrust</a>. Let’s start simple and then if it works the way we want we can set things up for <code>hinbox</code> as well.</p>
+<section id="simple-braintrust-tracing-with-litellm-callbacks" class="level2">
+<h2 class="anchored" data-anchor-id="simple-braintrust-tracing-with-litellm-callbacks">Simple Braintrust tracing with litellm callbacks</h2>
+<p>Callbacks are listed <a href="https://docs.litellm.ai/docs/observability/braintrust">in the litellm docs</a> as the way to do tracing with Braintrust. So we can do something like this:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"braintrust"</span>]</span>
+<span id="cb1-4"></span>
+<span id="cb1-5">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb1-6">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb1-7">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb1-8">        {</span>
+<span id="cb1-9">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb1-10">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb1-11">        }</span>
+<span id="cb1-12">    ],</span>
+<span id="cb1-13">    metadata<span class="op" style="color: #5E5E5E;">=</span>{</span>
+<span id="cb1-14">        <span class="co" style="color: #5E5E5E;"># "project_id": "1235-a70e-4571-abcd-234235",</span></span>
+<span id="cb1-15">        <span class="st" style="color: #20794D;">"project_name"</span>: <span class="st" style="color: #20794D;">"hinbox"</span>,</span>
+<span id="cb1-16">    },</span>
+<span id="cb1-17">)</span>
+<span id="cb1-18"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
+<p>You can pass in a <code>project_id</code> or a <code>project_name</code> and the traces will be routed there. Here’s what it looks like in the Braintrust dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Our first trace logged in Braintrust</figcaption><p></p>
+</figure>
+</div>
+<p>Note how you can’t see which model was used for the LLM call, nor any cost estimates. The docs mention that you <em>can</em> pass metadata into Braintrust using the <code>metadata</code> property:</p>
+<blockquote class="blockquote">
+<p>“<code>braintrust_*</code> - any metadata field starting with <code>braintrust_</code> will be passed as metadata to the logging request” (<a href="https://docs.litellm.ai/docs/observability/braintrust#full-api-spec">link</a>)</p>
+</blockquote>
+<p>This seems a bit rudimentary, however. If we take a look at the full tracing documentation on the Braintrust docs we can see that they seem to recommend wrapping the <code>OpenAI</code> client object instead:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;">import</span> os</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="im" style="color: #00769E;">from</span> braintrust <span class="im" style="color: #00769E;">import</span> init_logger, traced, wrap_openai</span>
+<span id="cb2-4"><span class="im" style="color: #00769E;">from</span> openai <span class="im" style="color: #00769E;">import</span> OpenAI</span>
+<span id="cb2-5"></span>
+<span id="cb2-6">logger <span class="op" style="color: #5E5E5E;">=</span> init_logger(project<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>)</span>
+<span id="cb2-7">client <span class="op" style="color: #5E5E5E;">=</span> wrap_openai(OpenAI(api_key<span class="op" style="color: #5E5E5E;">=</span>os.environ[<span class="st" style="color: #20794D;">"OPENAI_API_KEY"</span>]))</span>
+<span id="cb2-8"></span>
+<span id="cb2-9"></span>
+<span id="cb2-10"><span class="co" style="color: #5E5E5E;"># @traced automatically logs the input (args) and output (return value)</span></span>
+<span id="cb2-11"><span class="co" style="color: #5E5E5E;"># of this function to a span. To ensure the span is named `answer_question`,</span></span>
+<span id="cb2-12"><span class="co" style="color: #5E5E5E;"># you should name the function `answer_question`.</span></span>
+<span id="cb2-13"><span class="at" style="color: #657422;">@traced</span></span>
+<span id="cb2-14"><span class="kw" style="color: #003B4F;">def</span> answer_question(body: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">str</span>:</span>
+<span id="cb2-15">    prompt <span class="op" style="color: #5E5E5E;">=</span> [</span>
+<span id="cb2-16">        {<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"system"</span>, <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"You are a helpful assistant."</span>},</span>
+<span id="cb2-17">        {<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>, <span class="st" style="color: #20794D;">"content"</span>: body},</span>
+<span id="cb2-18">    ]</span>
+<span id="cb2-19"></span>
+<span id="cb2-20">    result <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb2-21">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"gpt-3.5-turbo"</span>,</span>
+<span id="cb2-22">        messages<span class="op" style="color: #5E5E5E;">=</span>prompt,</span>
+<span id="cb2-23">    )</span>
+<span id="cb2-24">    <span class="cf" style="color: #003B4F;">return</span> result.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb2-25"></span>
+<span id="cb2-26"></span>
+<span id="cb2-27"><span class="kw" style="color: #003B4F;">def</span> main():</span>
+<span id="cb2-28">    input_text <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span></span>
+<span id="cb2-29">    result <span class="op" style="color: #5E5E5E;">=</span> answer_question(input_text)</span>
+<span id="cb2-30">    <span class="bu" style="color: null;">print</span>(result)</span>
+<span id="cb2-31"></span>
+<span id="cb2-32"></span>
+<span id="cb2-33"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb2-34">    main()</span></code></pre></div>
+<p>This indeed does label the span as <code>answer_question</code> but it doesn’t do much else. Even the model name isn’t captured here. Instrumenting a series of calls to handle ‘deeply nested code’ (as <a href="https://www.braintrust.dev/docs/guides/traces/customize#deeply-nested-code">their docs</a> puts it) even didn’t log the things it was supposed to:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"></span>
+<span id="cb3-2"><span class="im" style="color: #00769E;">import</span> os</span>
+<span id="cb3-3"><span class="im" style="color: #00769E;">import</span> random</span>
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="im" style="color: #00769E;">from</span> braintrust <span class="im" style="color: #00769E;">import</span> current_span, init_logger, start_span, traced, wrap_openai</span>
+<span id="cb3-6"><span class="im" style="color: #00769E;">from</span> openai <span class="im" style="color: #00769E;">import</span> OpenAI</span>
+<span id="cb3-7"></span>
+<span id="cb3-8">logger <span class="op" style="color: #5E5E5E;">=</span> init_logger(project<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>)</span>
+<span id="cb3-9">client <span class="op" style="color: #5E5E5E;">=</span> wrap_openai(OpenAI(api_key<span class="op" style="color: #5E5E5E;">=</span>os.environ[<span class="st" style="color: #20794D;">"OPENAI_API_KEY"</span>]))</span>
+<span id="cb3-10"></span>
+<span id="cb3-11"></span>
+<span id="cb3-12"><span class="at" style="color: #657422;">@traced</span></span>
+<span id="cb3-13"><span class="kw" style="color: #003B4F;">def</span> run_llm(<span class="bu" style="color: null;">input</span>):</span>
+<span id="cb3-14">    model <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"gpt-4o"</span> <span class="cf" style="color: #003B4F;">if</span> random.random() <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="fl" style="color: #AD0000;">0.5</span> <span class="cf" style="color: #003B4F;">else</span> <span class="st" style="color: #20794D;">"gpt-4o-mini"</span></span>
+<span id="cb3-15">    result <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb3-16">        model<span class="op" style="color: #5E5E5E;">=</span>model, messages<span class="op" style="color: #5E5E5E;">=</span>[{<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>, <span class="st" style="color: #20794D;">"content"</span>: <span class="bu" style="color: null;">input</span>}]</span>
+<span id="cb3-17">    )</span>
+<span id="cb3-18">    current_span().log(metadata<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"randomModel"</span>: model})</span>
+<span id="cb3-19">    <span class="cf" style="color: #003B4F;">return</span> result.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb3-20"></span>
+<span id="cb3-21"></span>
+<span id="cb3-22"><span class="at" style="color: #657422;">@traced</span></span>
+<span id="cb3-23"><span class="kw" style="color: #003B4F;">def</span> some_logic(<span class="bu" style="color: null;">input</span>):</span>
+<span id="cb3-24">    <span class="cf" style="color: #003B4F;">return</span> run_llm(<span class="st" style="color: #20794D;">"You are a magical wizard. Answer the following question: "</span> <span class="op" style="color: #5E5E5E;">+</span> <span class="bu" style="color: null;">input</span>)</span>
+<span id="cb3-25"></span>
+<span id="cb3-26"></span>
+<span id="cb3-27"><span class="kw" style="color: #003B4F;">def</span> simple_handler(input_text: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb3-28">    <span class="cf" style="color: #003B4F;">with</span> start_span() <span class="im" style="color: #00769E;">as</span> span:</span>
+<span id="cb3-29">        output <span class="op" style="color: #5E5E5E;">=</span> some_logic(input_text)</span>
+<span id="cb3-30">        span.log(<span class="bu" style="color: null;">input</span><span class="op" style="color: #5E5E5E;">=</span>input_text, output<span class="op" style="color: #5E5E5E;">=</span>output, metadata<span class="op" style="color: #5E5E5E;">=</span><span class="bu" style="color: null;">dict</span>(user_id<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"test_user"</span>))</span>
+<span id="cb3-31">        <span class="bu" style="color: null;">print</span>(output)</span>
+<span id="cb3-32"></span>
+<span id="cb3-33"></span>
+<span id="cb3-34"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb3-35">    question <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span></span>
+<span id="cb3-36">    simple_handler(question)</span></code></pre></div>
+<p>This is adapted from the example they pasted in their docs as their one isn’t even a functional code example on its own.</p>
+<p>It is seeming increasingly clear that Braintrust isn’t going to be the right choice, at least as long as I want to keep using <code>litellm</code>. I know that Langfuse has a very nice integration with <code>litellm</code>, so I think I’ll pivot over to that now.</p>
+</section>
+<section id="basic-tracing-with-langfuse-and-litellm" class="level2">
+<h2 class="anchored" data-anchor-id="basic-tracing-with-langfuse-and-litellm">Basic tracing with Langfuse and <code>litellm</code></h2>
+<p>Simple tracing is easy:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb4-2"></span>
+<span id="cb4-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"langfuse"</span>]</span>
+<span id="cb4-4"></span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb4-7">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb4-8">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb4-9">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb4-10">            {</span>
+<span id="cb4-11">                <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb4-12">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb4-13">            }</span>
+<span id="cb4-14">        ],</span>
+<span id="cb4-15">    )</span>
+<span id="cb4-16">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb4-17"></span>
+<span id="cb4-18"></span>
+<span id="cb4-19"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb4-20">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb4-21">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb4-22">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb4-23"></span>
+<span id="cb4-24"></span>
+<span id="cb4-25"><span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>We specify <code>langfuse</code> for the callback and each llm call is logged as a separate trace + span. Here you can see what this looks like in the dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/langfuse-dashboard.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Basic trace and span in Langfuse dashboard</figcaption><p></p>
+</figure>
+</div>
+<p>The <a href="https://docs.litellm.ai/docs/observability/langfuse_integration">litellm docs</a> include information on how to specify custom metadata and grouping instructions for Langfuse. Notably, we can specify (as of June 2025, at least!) things like a <code>session_id</code>, tags, a <code>trace_name</code> and/or <code>trace_id</code> as well as custom trace metadata and so on. So we can get most of what we want to specify in the following way:</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb5-2"></span>
+<span id="cb5-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"langfuse"</span>]</span>
+<span id="cb5-4"></span>
+<span id="cb5-5"></span>
+<span id="cb5-6"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>, trace_id: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb5-7">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb5-8">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb5-9">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb5-10">            {</span>
+<span id="cb5-11">                <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb5-12">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb5-13">            }</span>
+<span id="cb5-14">        ],</span>
+<span id="cb5-15">        metadata<span class="op" style="color: #5E5E5E;">=</span>{</span>
+<span id="cb5-16">            <span class="st" style="color: #20794D;">"trace_id"</span>: trace_id,</span>
+<span id="cb5-17">            <span class="st" style="color: #20794D;">"trace_name"</span>: <span class="st" style="color: #20794D;">"my_llm_application"</span>,</span>
+<span id="cb5-18">            <span class="st" style="color: #20794D;">"project"</span>: <span class="st" style="color: #20794D;">"hinbox"</span>,</span>
+<span id="cb5-19">        },</span>
+<span id="cb5-20">    )</span>
+<span id="cb5-21">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb5-22"></span>
+<span id="cb5-23"></span>
+<span id="cb5-24"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb5-25">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(</span>
+<span id="cb5-26">        <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb5-27">        <span class="st" style="color: #20794D;">"my_llm_application_run_789"</span>,</span>
+<span id="cb5-28">    )</span>
+<span id="cb5-29">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(</span>
+<span id="cb5-30">        <span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>,</span>
+<span id="cb5-31">        <span class="st" style="color: #20794D;">"my_llm_application_run_789"</span>,</span>
+<span id="cb5-32">    )</span>
+<span id="cb5-33">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb5-34"></span>
+<span id="cb5-35"></span>
+<span id="cb5-36"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb5-37">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>This looks like this in the Langfuse dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/langfuse_grouped_spans.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Spans grouped into traces</figcaption><p></p>
+</figure>
+</div>
+<p>This is honestly most of what I’m looking for in terms of my tracing. If I were to use a non-OpenRouter model, moreover, I’d also get full costs in the Langfuse dashboard, e.g.:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/costs-langfuse.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">LLM costs in Langfuse dashboard</figcaption><p></p>
+</figure>
+</div>
+<p>As such, I can monitor costs from within OpenRouter and have the option to keep track of costs in Langfuse by passing custom metadata should I wish.</p>
+<p>I’ll make a separate blog where I actually go into how I set up + instrumented <code>hinbox</code> for this kind of tracing while continuing to use <code>litellm</code>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>llms</category>
+  <category>agents</category>
+  <category>evals-course</category>
+  <category>evaluation</category>
+  <category>miniproject</category>
+  <category>hinbox</category>
+  <guid>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</guid>
+  <pubDate>Tue, 03 Jun 2025 22:00:00 GMT</pubDate>
+  <media:content url="https://mlops.systems/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" medium="image" type="image/png" height="105" width="144"/>
+</item>
+<item>
   <title>Failing to instrument an agentic app with Arize Phoenix and litellm</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</link>
@@ -2852,47 +3073,6 @@ On Tools vs Process
   <guid>https://mlops.systems/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</guid>
   <pubDate>Sun, 12 Jan 2025 23:00:00 GMT</pubDate>
   <media:content url="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" medium="image" type="image/png" height="119" width="144"/>
-</item>
-<item>
-  <title>Prompt Content: Notes on ‘Prompt Engineering for LLMs’ ch 5</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Chapter 5 of ‘<a href="https://www.amazon.com/Prompt-Engineering-LLMs-Model-Based-Applications/dp/1098156153?tag=soumet-20">Prompt Engineering for LLMs</a>’ tackles the kinds of things you might want to include in your prompt. (Chapter 6 thinks through the order, structuring and weighting of these different pieces of content, so this is purely about the ‘what’ and not the ‘how’).</p>
-<p>We split the kinds of content up into static and dynamic content. For static you can think of fixed instructions (‘always respond politely, and in the first person’) whereas dynamic content is assembled on the fly and is (potentially) custom to each user or query. The classic example of dynamic content insertion is your bog standard RAG app.</p>
-<p>This was a very tactical chapter and I think the rest of the book will keep this up. Most of what gets discussed usually has a little bitesize example to illustrate which I found helpful. This illustration was used to illustrate the differences between static and dynamic context inclusion.</p>
-<p><img src="https://mlops.systems/posts/images/2025-01-12-chapter-5/ch6-eg.png" class="img-fluid"></p>
-<p>For static content, the book explores two types: lists of instructions and few-shot prompting. For instructions, we get some useful rules of thumb:</p>
-<ul>
-<li>ask for positives vs negatives and does instead of don’ts.</li>
-<li>give reasons for the things you’re asking</li>
-<li>avoid absolutes</li>
-</ul>
-<p>(and use the system message for these kinds of instruction as most LLMs have been trained to follow them)</p>
-<p>For few-shot prompting, we dive into all the tradeoffs around how many does ‘few’ mean, what order they should be included, how to get a representative sample and so on. We also consider the tradeoffs and biases that can be subtly introduced with few-shot prompts: issues around scaling the # of examples and accidental picking up of spurious patterns.</p>
-<p>One thing I’ve often done is to have a ‘best examples first, then the edge cases’ pattern for how I include these examples but we learn how this can bias the LLM to be unduly pessimistic and cautious. (All this stuff is really super tactical / in the weeds, but it’s what I was hoping for…)</p>
-<p>TL;DR: use static prompting where it’s appropriate. use few-shot prompts as well, but be SUPER careful about how these get used and make sure to run evals to see if there are not better orders and amounts of those few-shot examples.</p>
-<p>For dynamic context, the chapter first thinks through how we might think through which dynamic examples or context to include. This will be influenced by latency requirements, cost considerations + how much can be prepared ahead of time as well as thinking about how to decide which parts of a theoretically infinite amount of extra context you could provide.</p>
-<p>The bulk of the dynamic context discussion focuses around RAG, and we even get a tiny POC RAG implementation using FAISS as vector storage. We read about the tradeoffs of choosing lexical retrieval (e.g.&nbsp;ElasticSearch + some naive algorithm like Jaccard similarity) vs neural search (e.g.&nbsp;embeddings-driven retrieval with cosine similarity).</p>
-<p>Finally, the chapter closes with a discussion of summarization. What if, e.g., you have so much context that you want to include but you hit the limit? Then you might want to compress it somehow. We read about hierarchical summarisation (which sometimes has to be recursive if there’s too much context).</p>
-<p>We also get a nice warning about the ‘rumour problem’ which I’ve personally experienced when you summarise a summary (and maybe you summarise a summary of a summary) and things get lost or misrepresented along the way. But for just one level of summarisation that shouldn’t be too big an issue with modern LLMs.</p>
-<p>We also get into general vs specific summaries. In other words, when you ask the LLM to summarise some text, do you do it with a certain task in mind or do you get a general summary? A general summary is more flexible and can be used in many places, but while specific summaries might give better results for a specific task, you might end up having to rerun your summarization for different tasks.</p>
-<p>Next up: chapter six which tackles exactly how you put all these pieces of context and content together in your prompt.</p>
-
-
-
- ]]></description>
-  <category>llm</category>
-  <category>prompt-engineering</category>
-  <category>books-i-read</category>
-  <category>RAG</category>
-  <guid>https://mlops.systems/posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html</guid>
-  <pubDate>Sat, 11 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-01-12-chapter-5/cover.png" medium="image" type="image/png" height="114" width="144"/>
 </item>
 </channel>
 </rss>
