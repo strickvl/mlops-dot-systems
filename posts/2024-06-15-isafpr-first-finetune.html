@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-06-15">
 <meta name="description" content="I finetuned my first LLM(s) for the task of extracting structured data from ISAF press releases. Initial tests suggest that it worked pretty well out of the box.">
 
-<title>Alex Strick van Linschoten - Finetuning my first LLM(s) for structured data extraction with axolotl</title>
+<title>Finetuning my first LLM(s) for structured data extraction with axolotl – Alex Strick van Linschoten</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,9 +20,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -49,69 +51,47 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -120,25 +100,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Alex Strick van Linschoten - Finetuning my first LLM(s) for structured data extraction with axolotl">
+<meta property="og:title" content="Finetuning my first LLM(s) for structured data extraction with axolotl – Alex Strick van Linschoten">
 <meta property="og:description" content="I finetuned my first LLM(s) for the task of extracting structured data from ISAF press releases. Initial tests suggest that it worked pretty well out of the box.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/first-finetune.png">
-<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
 <meta property="og:image:height" content="752">
 <meta property="og:image:width" content="931">
-<meta name="twitter:title" content="Alex Strick van Linschoten - Finetuning my first LLM(s) for structured data extraction with axolotl">
+<meta name="twitter:title" content="Finetuning my first LLM(s) for structured data extraction with axolotl – Alex Strick van Linschoten">
 <meta name="twitter:description" content="I finetuned my first LLM(s) for the task of extracting structured data from ISAF press releases. Initial tests suggest that it worked pretty well out of the box.">
 <meta name="twitter:image" content="https://alexstrick.com/posts/images/first-finetune.png">
 <meta name="twitter:creator" content="@strickvl">
@@ -147,57 +129,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Alex Strick van Linschoten</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html">
- <span class="menu-text">Technical</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../personal.html">
- <span class="menu-text">Personal</span></a>
+    <a class="nav-link" href="../personal.html"> 
+<span class="menu-text">Personal</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../til.html">
- <span class="menu-text">TIL</span></a>
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">RSS</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
@@ -212,8 +195,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
   </li>
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -288,6 +272,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
+
 <p>We previously <a href="https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html">looked into how well</a> the top LLMs could do when given press releases and asked to extract structured data from them. I was glad that this clearly wasn’t a task they struggled with, but it was by no means a simple task for them and some basic evaluations that I performed showed that there was room for improvement.</p>
 <p>Since writing that post I also heard from readers to say that perhaps I wasn’t using the OpenAI API in a way that would get the best results. In particular, function calling would give a better accuracy over the raw prompting that I was using. I’ll probably return to that in a separate post when I compare how well we’re doing with finetuning.</p>
 <p>As a quick reminder, we’re hoping to create something that will allow us to go from an unstructured text (a press release, in our case) to a structured output that accurately extracts certain pieces of metadata from the text. Please give <a href="https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html">the first post</a> in the series a read if you want more of the context of what we’re doing.</p>
@@ -297,8 +282,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In my previous posts I’ve already showed how I converted my dataset into <a href="https://github.com/pydantic/pydantic">Pydantic</a> models. This helps ensure a uniformity to the data I’ll be using in my finetuning. We’ll actually want to convert the labelled data into JSON strings from the Pydantic models, but as an interim datastructure Pydantic is useful for the validation.</p>
 <section id="loading-the-datasets" class="level2">
 <h2 class="anchored" data-anchor-id="loading-the-datasets">Loading the datasets</h2>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<div id="cell-2" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -308,35 +293,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the dataset to a pandas DataFrame</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>train_df <span class="op">=</span> pd.DataFrame(train_dataset)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.DataFrame(test_dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.DataFrame(test_dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"4b0282eaaa0f458cbeeaf3eb2eae9d5d","version_major":2,"version_minor":0}
+{"model_id":"4b0282eaaa0f458cbeeaf3eb2eae9d5d","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"34595eba125f4fa8b243759c8392f415","version_major":2,"version_minor":0}
+{"model_id":"34595eba125f4fa8b243759c8392f415","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"97c9b72c11614da2aa24d90dc13f3d9c","version_major":2,"version_minor":0}
+{"model_id":"97c9b72c11614da2aa24d90dc13f3d9c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"bd396a8ddbea43febdd1e2ca132890c1","version_major":2,"version_minor":0}
+{"model_id":"bd396a8ddbea43febdd1e2ca132890c1","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3aad0332bcc54088872aa9de9c7acc7c","version_major":2,"version_minor":0}
+{"model_id":"3aad0332bcc54088872aa9de9c7acc7c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-3" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train_dataset</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>Dataset({
     features: ['name', 'eventrefnumber', 'text', 'StartDate', 'eventtype', 'province', 'citydistrict', 'village', 'targetgroup', 'commander', 'position', 'minkilled', 'mincaptured', 'capturedcharacterisation', 'killedcharacterisation', 'killq', 'captureq', 'killcaptureraid', 'airstrike', 'noshotsfired', 'dataprocessed', 'flagged', 'glossarymeta', 'minleaderskilled', 'minfacilitatorskilled', 'minleaderscaptured', 'minfacilitatorscaptured', 'leaderq'],
@@ -344,8 +329,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 })</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>test_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-4" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>test_dataset</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>Dataset({
     features: ['name', 'eventrefnumber', 'text', 'StartDate', 'eventtype', 'province', 'citydistrict', 'village', 'targetgroup', 'commander', 'position', 'minkilled', 'mincaptured', 'capturedcharacterisation', 'killedcharacterisation', 'killq', 'captureq', 'killcaptureraid', 'airstrike', 'noshotsfired', 'dataprocessed', 'flagged', 'glossarymeta', 'minleaderskilled', 'minfacilitatorskilled', 'minleaderscaptured', 'minfacilitatorscaptured', 'leaderq'],
@@ -359,8 +344,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="setting-up-our-pydantic-models-with-validation" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-our-pydantic-models-with-validation">Setting up our Pydantic models with validation</h2>
 <p>There’s a decent amount of code in the next cell, and definitely read the previous posts to understand what all the pieces are about, but in a nutshell we’re setting ourselves up to extract structured data from the text. This Pydantic model is what will hold the data we’re interested in.</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> enum <span class="im">import</span> Enum</span>
+<div id="cell-6" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> enum <span class="im">import</span> Enum</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Set, Annotated, Optional</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field, validator, ValidationInfo</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> date</span>
@@ -549,11 +534,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span> Config:</span>
-<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>        arbitrary_types_allowed <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>        arbitrary_types_allowed <span class="op">=</span> <span class="va">True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here’s what a couple of examples of our training data looks like as Pydantic models when we pass them in:</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span>
+<div id="cell-8" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>events: List[IsafEvent] <span class="op">=</span> []</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -586,7 +571,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        )</span>
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(events[:<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(events[:<span class="dv">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
     <span style="color: #800080; text-decoration-color: #800080; font-weight: bold">IsafEvent</span><span style="font-weight: bold">(</span>
@@ -644,9 +629,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>So this is data that we’ve already labelled. You can see the text that we’ll provide as input to our model, and then you can see the various fields that we’re hoping our model can learn to extract. As a JSON string, the prediction that we’re hoping our model will output would look like this:</p>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>json_str <span class="op">=</span> events[<span class="dv">0</span>].model_dump_json(exclude<span class="op">=</span>{<span class="st">"text"</span>})</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json_str)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-10" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>json_str <span class="op">=</span> events[<span class="dv">0</span>].model_dump_json(exclude<span class="op">=</span>{<span class="st">"text"</span>})</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json_str)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">"name"</span>:<span style="color: #008000; text-decoration-color: #008000">"Several insurgents killed in </span>
 <span style="color: #008000; text-decoration-color: #008000">Helmand"</span>,<span style="color: #008000; text-decoration-color: #008000">"start_date"</span>:<span style="color: #008000; text-decoration-color: #008000">"2011-02-18"</span>,<span style="color: #008000; text-decoration-color: #008000">"event_type"</span>:<span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">"insurgentskilled"</span><span style="font-weight: bold">]</span>,<span style="color: #008000; text-decoration-color: #008000">"province"</span>:<span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">"helmand"</span><span style="font-weight: bold">]</span>,<span style="color: #008000; text-decoration-color: #008000">"target_group"</span>:<span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">""</span><span style="font-weight: bold">]</span>,<span style="color: #008000; text-decoration-color: #008000">"mi</span>
@@ -665,7 +650,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="writing-alpaca-sharegpt-format-jsonl" class="level2">
 <h2 class="anchored" data-anchor-id="writing-alpaca-sharegpt-format-jsonl">Writing Alpaca / ShareGPT format JSONL</h2>
 <p>In the course, Hamel shared an example from work he’d done with Honeycomb to output in a particular format. He <a href="https://github.com/parlance-labs/ftcourse/blob/master/04_prep_data.ipynb">shared his notebooks</a> and I found this useful as an initial example to move forward with. He uses the ShareGPT template to format his data, and I followed that format for my data. This looks something like this:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"conversations"</span><span class="fu">:</span> <span class="ot">[</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"from"</span><span class="fu">:</span> <span class="st">"system"</span><span class="fu">,</span></span>
@@ -680,11 +665,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"</span><span class="ch">\n</span><span class="st">{</span><span class="ch">\"</span><span class="st">breakdowns</span><span class="ch">\"</span><span class="st">: [</span><span class="ch">\"</span><span class="st">http.method</span><span class="ch">\"</span><span class="st">], </span><span class="ch">\"</span><span class="st">calculations</span><span class="ch">\"</span><span class="st">: [{</span><span class="ch">\"</span><span class="st">op</span><span class="ch">\"</span><span class="st">: </span><span class="ch">\"</span><span class="st">COUNT</span><span class="ch">\"</span><span class="st">}], </span><span class="ch">\"</span><span class="st">time_range</span><span class="ch">\"</span><span class="st">: 7200}"</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can see that a single entry is part of a <code>conversations</code> key, and then you have a series of messages with <code>system</code>, <code>human</code> and <code>gpt</code> roles. I followed this closely for my data, but with a base model I’m pretty sure this isn’t strictly necessary. (The second option is what I’ll show a bit later).</p>
 <p>Writing the data is a case of wrangling the data so it fits the format above, and doing it separately for our train and test datasets. You’ll note that in the system call I stuff in the event types, provinces and target groups as a way to provide some context to the model. This was something that Hamel did in his example.</p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div id="cell-12" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
@@ -758,12 +743,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.DataFrame(dataset[<span class="st">"test"</span>])</span>
 <span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>write_data_to_jsonl(train_df, train_target_file_path)</span>
-<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>write_data_to_jsonl(test_df, test_target_file_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>write_data_to_jsonl(test_df, test_target_file_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The first line of the training file looks like this now:</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(train_target_file_path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.readline())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-14" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(train_target_file_path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.readline())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">"conversations"</span>: <span style="font-weight: bold">[{</span><span style="color: #008000; text-decoration-color: #008000">"from"</span>: <span style="color: #008000; text-decoration-color: #008000">"system"</span>, <span style="color: #008000; text-decoration-color: #008000">"value"</span>: <span style="color: #008000; text-decoration-color: #008000">"You are an expert at identifying events in a press release. You are</span>
 <span style="color: #008000; text-decoration-color: #008000">precise and always make sure you are correct, drawing inference from the text of the press release. event_types = </span>
@@ -794,8 +779,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The basic idea is that instead of following a format like the one above, we can essentially create our own that’s custom to our own needs. You want this kind of freedom because to follow one of the standard templates is sometimes to shoot yourself in the food with artifacts of those templates that you don’t need in your output.</p>
 <p>The key is to specify <code>train_on_inputs</code> as false in our <code>axolotl</code> config which will allow us to mask certain segments of our input data. This means that our model won’t learn the inputs but only the outputs (which we’ll specify).</p>
 <p>All that we have to do is set up the JSONL output in a way that makes sense for our use case:</p>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>template_free_train_target_file_path <span class="op">=</span> (</span>
+<div id="cell-16" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>template_free_train_target_file_path <span class="op">=</span> (</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../data/templatefree_isaf_press_releases_ft_train.jsonl"</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>template_free_test_target_file_path <span class="op">=</span> (</span>
@@ -863,12 +848,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>write_data_to_jsonl(train_df, template_free_train_target_file_path)</span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>write_data_to_jsonl(test_df, template_free_test_target_file_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>write_data_to_jsonl(test_df, template_free_test_target_file_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And you can now see the difference in the format of the JSONL dataset we’ve constructured:</p>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(template_free_train_target_file_path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.readline())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-18" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(template_free_train_target_file_path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.readline())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">"segments"</span>: <span style="font-weight: bold">[{</span><span style="color: #008000; text-decoration-color: #008000">"label"</span>: false, <span style="color: #008000; text-decoration-color: #008000">"text"</span>: <span style="color: #008000; text-decoration-color: #008000">"&lt;s&gt;You are an expert at identifying events in a press release. You are </span>
 <span style="color: #008000; text-decoration-color: #008000">precise and always make sure you are correct, drawing inference from the text of the press release. event_types = </span>
@@ -897,92 +882,168 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="finetuning-our-model" class="level1">
 <h1>Finetuning our model</h1>
 <p>With our datasets ready, finetuning our model is a simple matter of running the following two commands:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preprocess the data ahead of training</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preprocess the data ahead of training</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="va">CUDA_VISIBLE_DEVICES</span><span class="op">=</span><span class="st">""</span> <span class="ex">python</span> <span class="at">-m</span> axolotl.cli.preprocess configs/tiny-llama/lora.yml</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># train the model</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">accelerate</span> launch <span class="at">-m</span> axolotl.cli.train configs/tiny-llama/lora.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">accelerate</span> launch <span class="at">-m</span> axolotl.cli.train configs/tiny-llama/lora.yml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>axolotl</code> handles everything else. You’ll note that we’re using a pre-prepared config file which is quite long but I’m basically using a default config with only a few changes. We can use <a href="https://github.com/sharkdp/bat"><code>bat</code></a> to view the config file:</p>
-<div class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bat <span class="op">/</span>home<span class="op">/</span>strickvl<span class="op">/</span>coding<span class="op">/</span>isafpr_finetune<span class="op">/</span>configs<span class="op">/</span>tiny<span class="op">-</span>llama<span class="op">/</span>lora.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-20" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bat <span class="op">/</span>home<span class="op">/</span>strickvl<span class="op">/</span>coding<span class="op">/</span>isafpr_finetune<span class="op">/</span>configs<span class="op">/</span>tiny<span class="op">-</span>llama<span class="op">/</span>lora.yml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>───────┬────────────────────────────────────────────────────────────────────────
-       │ File: /home/strickvl/coding/isafpr_finetune/configs/tiny-llama/lora.yml
-───────┼────────────────────────────────────────────────────────────────────────
-   1   │ base_model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
-   2   │ model_type: LlamaForCausalLM
-   3   │ tokenizer_type: LlamaTokenizer
-   4   │ 
-   5   │ load_in_8bit: false
-   6 + │ # I'm training on 4090 GPUs
-   7 + │ # so I'm using 4-bit precision to save on memory
-   8   │ load_in_4bit: true
-   9   │ strict: false
-  10   │ 
-  11   │ data_seed: 42
-  12   │ seed: 42
-  13   │ 
-  14   │ datasets:
-  15 ~ │   - path: data/templatefree_isaf_press_releases_ft_train.jsonl
-  16 ~ │     type: input_output
-  17   │ dataset_prepared_path:
-  18 ~ │ val_set_size: 0.1
-  19   │ output_dir: ./outputs/tiny-llama/lora-out
-  20   │ hub_model_id: strickvl/isafpr-tiny-llama-lora
-  21   │ 
-  22   │ sequence_len: 4096
-  23   │ sample_packing: true
-  24   │ eval_sample_packing: false
-  25   │ pad_to_sequence_len: true
-  26   │ 
-  27   │ adapter: lora
-  28   │ lora_model_dir:
-  29   │ lora_r: 32
-  30   │ lora_alpha: 16
-  31   │ lora_dropout: 0.05
-  32   │ lora_target_linear: true
-  33   │ lora_fan_in_fan_out:
-  34   │ 
-  35   │ wandb_project: isaf_pr_ft
-  36   │ wandb_entity: strickvl
-  37   │ wandb_watch:
-  38   │ wandb_name:
-  39   │ wandb_log_model:
-  40   │ 
-  41   │ gradient_accumulation_steps: 4
-  42   │ micro_batch_size: 2
-  43   │ num_epochs: 4
-  44   │ optimizer: adamw_bnb_8bit
-  45   │ lr_scheduler: cosine
-  46   │ learning_rate: 0.0002
-  47   │ 
-  48   │ train_on_inputs: false
-  49   │ group_by_length: false
-  50   │ bf16: auto
-  51   │ fp16:
-  52   │ tf32: false
-  53   │ 
-  54   │ gradient_checkpointing: true
-  55   │ early_stopping_patience:
-  56   │ resume_from_checkpoint:
-  57   │ local_rank:
-  58   │ logging_steps: 1
-  59   │ xformers_attention:
-  60   │ flash_attention: true
-  61   │ 
-  62   │ warmup_steps: 10
-  63   │ evals_per_epoch: 4
-  64   │ saves_per_epoch: 1
-  65   │ debug:
-  66   │ deepspeed:
-  67   │ weight_decay: 0.0
-  68   │ fsdp:
-  69   │ fsdp_config:
-  70   │ special_tokens:
-───────┴────────────────────────────────────────────────────────────────────────</code></pre>
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(68,68,68)">───────┬────────────────────────────────────────────────────────────────────────</span>
+
+       <span style="color:rgb(68,68,68)">│ </span>File: <span class="ansi-bold">/home/strickvl/coding/isafpr_finetune/configs/tiny-llama/lora.yml</span>
+
+<span style="color:rgb(68,68,68)">───────┼────────────────────────────────────────────────────────────────────────</span>
+
+<span style="color:rgb(68,68,68)">   1</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">base_model</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T</span>
+
+<span style="color:rgb(68,68,68)">   2</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">model_type</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">LlamaForCausalLM</span>
+
+<span style="color:rgb(68,68,68)">   3</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">tokenizer_type</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">LlamaTokenizer</span>
+
+<span style="color:rgb(68,68,68)">   4</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">   5</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">load_in_8bit</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">false</span>
+
+<span style="color:rgb(68,68,68)">   6</span> <span class="ansi-green-fg">+</span> <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(108,108,108)">#</span><span style="color:rgb(108,108,108)"> I'm training on 4090 GPUs</span>
+
+<span style="color:rgb(68,68,68)">   7</span> <span class="ansi-green-fg">+</span> <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(108,108,108)">#</span><span style="color:rgb(108,108,108)"> so I'm using 4-bit precision to save on memory</span>
+
+<span style="color:rgb(68,68,68)">   8</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">load_in_4bit</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">true</span>
+
+<span style="color:rgb(68,68,68)">   9</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">strict</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">false</span>
+
+<span style="color:rgb(68,68,68)">  10</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  11</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">data_seed</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">42</span>
+
+<span style="color:rgb(68,68,68)">  12</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">seed</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">42</span>
+
+<span style="color:rgb(68,68,68)">  13</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  14</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">datasets</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  15</span> <span class="ansi-yellow-fg">~</span> <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,255,255)">  </span><span style="color:rgb(255,255,255)">-</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(255,95,95)">path</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">data/templatefree_isaf_press_releases_ft_train.jsonl</span>
+
+<span style="color:rgb(68,68,68)">  16</span> <span class="ansi-yellow-fg">~</span> <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,255,255)">    </span><span style="color:rgb(255,95,95)">type</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">input_output</span>
+
+<span style="color:rgb(68,68,68)">  17</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">dataset_prepared_path</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  18</span> <span class="ansi-yellow-fg">~</span> <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">val_set_size</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">0</span><span style="color:rgb(175,135,255)">.</span><span style="color:rgb(175,135,255)">1</span>
+
+<span style="color:rgb(68,68,68)">  19</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">output_dir</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">./outputs/tiny-llama/lora-out</span>
+
+<span style="color:rgb(68,68,68)">  20</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">hub_model_id</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">strickvl/isafpr-tiny-llama-lora</span>
+
+<span style="color:rgb(68,68,68)">  21</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  22</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">sequence_len</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">4096</span>
+
+<span style="color:rgb(68,68,68)">  23</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">sample_packing</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">true</span>
+
+<span style="color:rgb(68,68,68)">  24</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">eval_sample_packing</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">false</span>
+
+<span style="color:rgb(68,68,68)">  25</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">pad_to_sequence_len</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">true</span>
+
+<span style="color:rgb(68,68,68)">  26</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  27</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">adapter</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">lora</span>
+
+<span style="color:rgb(68,68,68)">  28</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lora_model_dir</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  29</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lora_r</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">32</span>
+
+<span style="color:rgb(68,68,68)">  30</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lora_alpha</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">16</span>
+
+<span style="color:rgb(68,68,68)">  31</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lora_dropout</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">0</span><span style="color:rgb(175,135,255)">.</span><span style="color:rgb(175,135,255)">05</span>
+
+<span style="color:rgb(68,68,68)">  32</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lora_target_linear</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">true</span>
+
+<span style="color:rgb(68,68,68)">  33</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lora_fan_in_fan_out</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  34</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  35</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">wandb_project</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">isaf_pr_ft</span>
+
+<span style="color:rgb(68,68,68)">  36</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">wandb_entity</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">strickvl</span>
+
+<span style="color:rgb(68,68,68)">  37</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">wandb_watch</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  38</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">wandb_name</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  39</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">wandb_log_model</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  40</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  41</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">gradient_accumulation_steps</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">4</span>
+
+<span style="color:rgb(68,68,68)">  42</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">micro_batch_size</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">2</span>
+
+<span style="color:rgb(68,68,68)">  43</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">num_epochs</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">4</span>
+
+<span style="color:rgb(68,68,68)">  44</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">optimizer</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">adamw_bnb_8bit</span>
+
+<span style="color:rgb(68,68,68)">  45</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">lr_scheduler</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">cosine</span>
+
+<span style="color:rgb(68,68,68)">  46</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">learning_rate</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">0</span><span style="color:rgb(175,135,255)">.</span><span style="color:rgb(175,135,255)">0002</span>
+
+<span style="color:rgb(68,68,68)">  47</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  48</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">train_on_inputs</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">false</span>
+
+<span style="color:rgb(68,68,68)">  49</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">group_by_length</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">false</span>
+
+<span style="color:rgb(68,68,68)">  50</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">bf16</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(215,215,135)">auto</span>
+
+<span style="color:rgb(68,68,68)">  51</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">fp16</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  52</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">tf32</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">false</span>
+
+<span style="color:rgb(68,68,68)">  53</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  54</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">gradient_checkpointing</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">true</span>
+
+<span style="color:rgb(68,68,68)">  55</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">early_stopping_patience</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  56</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">resume_from_checkpoint</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  57</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">local_rank</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  58</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">logging_steps</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">1</span>
+
+<span style="color:rgb(68,68,68)">  59</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">xformers_attention</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  60</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">flash_attention</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">true</span>
+
+<span style="color:rgb(68,68,68)">  61</span>   <span style="color:rgb(68,68,68)">│</span> 
+
+<span style="color:rgb(68,68,68)">  62</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">warmup_steps</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">10</span>
+
+<span style="color:rgb(68,68,68)">  63</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">evals_per_epoch</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">4</span>
+
+<span style="color:rgb(68,68,68)">  64</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">saves_per_epoch</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">1</span>
+
+<span style="color:rgb(68,68,68)">  65</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">debug</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  66</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">deepspeed</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  67</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">weight_decay</span><span style="color:rgb(255,255,255)">:</span><span style="color:rgb(255,255,255)"> </span><span style="color:rgb(175,135,255)">0</span><span style="color:rgb(175,135,255)">.</span><span style="color:rgb(175,135,255)">0</span>
+
+<span style="color:rgb(68,68,68)">  68</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">fsdp</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  69</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">fsdp_config</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">  70</span>   <span style="color:rgb(68,68,68)">│</span> <span style="color:rgb(255,95,95)">special_tokens</span><span style="color:rgb(255,255,255)">:</span>
+
+<span style="color:rgb(68,68,68)">───────┴────────────────────────────────────────────────────────────────────────</span>
+</pre>
+</div>
 </div>
 </div>
 <p>You can check out some of the trainings I did with the following links:</p>
-<table class="table">
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th style="text-align: left;">Name</th>
@@ -1019,53 +1080,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Now that we have 4 models, we can try some out to see how they fare with some data they haven’t yet seen (from the test set). I used the code from <a href="https://github.com/parlance-labs/ftcourse/blob/master/06_sanity_check.ipynb">Hamel’s Sanity Check notebook</a> to generate some predictions and evaluate them:</p>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Union</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> peft <span class="im">import</span> AutoPeftModelForCausalLM</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoTokenizer</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prompt(press_release):</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"""You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="ss">### Instruction:</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="ss">PRESS RELEASE TEXT: "</span><span class="sc">{</span>press_release<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="ss">### Response:</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prompt_tok(</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    model: AutoPeftModelForCausalLM,</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    tokenizer: AutoTokenizer,</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    press_release: <span class="bu">str</span>,</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    return_ids: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Union[<span class="bu">str</span>, torch.Tensor]:</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    _p <span class="op">=</span> prompt(press_release)</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    input_ids <span class="op">=</span> tokenizer(_p, return_tensors<span class="op">=</span><span class="st">"pt"</span>, truncation<span class="op">=</span><span class="va">True</span>).input_ids.cuda()</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    out_ids <span class="op">=</span> model.generate(input_ids<span class="op">=</span>input_ids, max_new_tokens<span class="op">=</span><span class="dv">5000</span>, do_sample<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    ids <span class="op">=</span> out_ids.detach().cpu().numpy()</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> return_ids:</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out_ids</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tokenizer.batch_decode(ids, skip_special_tokens<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>][<span class="bu">len</span>(_p) :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Union</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> peft <span class="im">import</span> AutoPeftModelForCausalLM</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoTokenizer</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prompt(press_release):</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"""You are an expert at identifying events in a press release. You are precise and always make sure you are correct, drawing inference from the text of the press release. event_types = ['airstrike', 'detention', 'captureandkill', 'insurgentskilled', 'exchangeoffire', 'civiliancasualty'], provinces = ['badakhshan', 'badghis', 'baghlan', 'balkh', 'bamyan', 'day_kundi', 'farah', 'faryab', 'ghazni', 'ghor', 'helmand', 'herat', 'jowzjan', 'kabul', 'kandahar', 'kapisa', 'khost', 'kunar', 'kunduz', 'laghman', 'logar', 'nangarhar', 'nimroz', 'nuristan', 'paktya', 'paktika', 'panjshir', 'parwan', 'samangan', 'sar_e_pul', 'takhar', 'uruzgan', 'wardak', 'zabul'], target_groups = ['taliban', 'haqqani', 'criminals', 'aq', 'hig', 'let', 'imu', 'judq', 'iju', 'hik', 'ttp', 'other']</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="ss">### Instruction:</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ss">PRESS RELEASE TEXT: "</span><span class="sc">{</span>press_release<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ss">### Response:</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prompt_tok(</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    model: AutoPeftModelForCausalLM,</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    tokenizer: AutoTokenizer,</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    press_release: <span class="bu">str</span>,</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    return_ids: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Union[<span class="bu">str</span>, torch.Tensor]:</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    _p <span class="op">=</span> prompt(press_release)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    input_ids <span class="op">=</span> tokenizer(_p, return_tensors<span class="op">=</span><span class="st">"pt"</span>, truncation<span class="op">=</span><span class="va">True</span>).input_ids.cuda()</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    out_ids <span class="op">=</span> model.generate(input_ids<span class="op">=</span>input_ids, max_new_tokens<span class="op">=</span><span class="dv">5000</span>, do_sample<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    ids <span class="op">=</span> out_ids.detach().cpu().numpy()</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> return_ids:</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out_ids</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tokenizer.batch_decode(ids, skip_special_tokens<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>][<span class="bu">len</span>(_p) :]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>tinyllama_templatefree_model_id <span class="op">=</span> <span class="st">"strickvl/isafpr-tiny-llama-lora-templatefree"</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoPeftModelForCausalLM.from_pretrained(tinyllama_templatefree_model_id).cuda()</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(tinyllama_templatefree_model_id)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>tokenizer.pad_token <span class="op">=</span> tokenizer.eos_token</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>press_release_sample1 <span class="op">=</span> <span class="st">"""2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release KABUL, Afghanistan (Nov. 7, 2011) — A combined Afghan and coalition security force conducted an operation in search of a Haqqani facilitator in Argo district, Badakshan province. The facilitator coordinates suicide attacks with other insurgent leaders in the area. During the operation, a local national male failed to comply with repeated verbal warnings and displayed hostile intent toward the security force. The security force engaged the individual, resulting in his death. The security force confiscated a shotgun and intelligence linking the local national to the Haqqani network. The security force also detained two suspected insurgents during the operation."""</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> prompt_tok(model, tokenizer, press_release_sample1)</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>out_dict <span class="op">=</span> json.loads(out)</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-23" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>tinyllama_templatefree_model_id <span class="op">=</span> <span class="st">"strickvl/isafpr-tiny-llama-lora-templatefree"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoPeftModelForCausalLM.from_pretrained(tinyllama_templatefree_model_id).cuda()</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(tinyllama_templatefree_model_id)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>tokenizer.pad_token <span class="op">=</span> tokenizer.eos_token</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>press_release_sample1 <span class="op">=</span> <span class="st">"""2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release KABUL, Afghanistan (Nov. 7, 2011) — A combined Afghan and coalition security force conducted an operation in search of a Haqqani facilitator in Argo district, Badakshan province. The facilitator coordinates suicide attacks with other insurgent leaders in the area. During the operation, a local national male failed to comply with repeated verbal warnings and displayed hostile intent toward the security force. The security force engaged the individual, resulting in his death. The security force confiscated a shotgun and intelligence linking the local national to the Haqqani network. The security force also detained two suspected insurgents during the operation."""</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> prompt_tok(model, tokenizer, press_release_sample1)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>out_dict <span class="op">=</span> json.loads(out)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out_dict)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Asking to truncate to max_length but no maximum length is provided and the model has no predefined maximum length. Default to no truncation.</code></pre>
 </div>
@@ -1097,46 +1158,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The model has certainly learned to output JSON, and it’s done an <em>ok</em> job at parsing the contents of the text, but it has also made errors. It’s said that this was an airstrike whereas no airstrike is mentioned in the text.</p>
 <p>This is only a finetune of <a href="https://github.com/jzhang38/TinyLlama">Tiny-Llama</a>, a much smaller version of a Llama model (with v2 architecture). Let’s maybe check out how our Mistral finetune did in comparison:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mistral_templatefree_model_id <span class="op">=</span> <span class="st">"strickvl/isafpr-mistral-lora-templatefree"</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mistral_model <span class="op">=</span> AutoPeftModelForCausalLM.from_pretrained(</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    mistral_templatefree_model_id</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>).cuda()</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>mistral_tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(mistral_templatefree_model_id)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>mistral_tokenizer.pad_token <span class="op">=</span> mistral_tokenizer.eos_token</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>mistral_out <span class="op">=</span> prompt_tok(mistral_model, mistral_tokenizer, press_release_sample1)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mistral_out)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>mistral_out_dict <span class="op">=</span> json.loads(mistral_out)</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mistral_out_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-25" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mistral_templatefree_model_id <span class="op">=</span> <span class="st">"strickvl/isafpr-mistral-lora-templatefree"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mistral_model <span class="op">=</span> AutoPeftModelForCausalLM.from_pretrained(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    mistral_templatefree_model_id</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>).cuda()</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>mistral_tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(mistral_templatefree_model_id)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>mistral_tokenizer.pad_token <span class="op">=</span> mistral_tokenizer.eos_token</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>mistral_out <span class="op">=</span> prompt_tok(mistral_model, mistral_tokenizer, press_release_sample1)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mistral_out)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>mistral_out_dict <span class="op">=</span> json.loads(mistral_out)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mistral_out_dict)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'name'</span><span class="fu">:</span> <span class="er">'</span><span class="dv">1</span><span class="er">'</span><span class="fu">,</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="er">'start_date'</span><span class="fu">:</span> <span class="er">'</span><span class="dv">2011-11-07</span><span class="er">'</span><span class="fu">,</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="er">'event_type'</span><span class="fu">:</span> <span class="ot">[</span><span class="er">'captureandkill'</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="er">'province'</span><span class="fu">:</span> <span class="ot">[</span><span class="er">'badakhshan'</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="er">'target_group'</span><span class="fu">:</span> <span class="ot">[</span><span class="er">'haqqani'</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_killed'</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_captured'</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="er">'killq'</span><span class="fu">:</span> <span class="er">True</span><span class="fu">,</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="er">'captureq'</span><span class="fu">:</span> <span class="er">True</span><span class="fu">,</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="er">'killcaptureraid'</span><span class="fu">:</span> <span class="er">True</span><span class="fu">,</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="er">'airstrike'</span><span class="fu">:</span> <span class="er">False</span><span class="fu">,</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="er">'noshotsfired'</span><span class="fu">:</span> <span class="er">False</span><span class="fu">,</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_leaders_killed'</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_leaders_captured'</span><span class="fu">:</span> <span class="dv">0</span></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'name'</span><span class="fu">:</span> <span class="er">'</span><span class="dv">1</span><span class="er">'</span><span class="fu">,</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="er">'start_date'</span><span class="fu">:</span> <span class="er">'</span><span class="dv">2011-11</span><span class="er">-07'</span><span class="fu">,</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="er">'event_type'</span><span class="fu">:</span> <span class="ot">[</span><span class="er">'captureandkill'</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="er">'province'</span><span class="fu">:</span> <span class="ot">[</span><span class="er">'badakhshan'</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="er">'target_group'</span><span class="fu">:</span> <span class="ot">[</span><span class="er">'haqqani'</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_killed'</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_captured'</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="er">'killq'</span><span class="fu">:</span> <span class="er">True</span><span class="fu">,</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="er">'captureq'</span><span class="fu">:</span> <span class="er">True</span><span class="fu">,</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="er">'killcaptureraid'</span><span class="fu">:</span> <span class="er">True</span><span class="fu">,</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="er">'airstrike'</span><span class="fu">:</span> <span class="er">False</span><span class="fu">,</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="er">'noshotsfired'</span><span class="fu">:</span> <span class="er">False</span><span class="fu">,</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_leaders_killed'</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="er">'min_leaders_captured'</span><span class="fu">:</span> <span class="dv">0</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I actually had to cheat a bit to get this output. I was getting an out-of-memory (OOM) error when trying to run the inference locally, so I ran the inference using Modal’s compute platform. You can see the script where I ran the one-off inference <a href="https://github.com/strickvl/isafpr_finetune/blob/main/notebooks/sanity_check.py">here</a>. Note that I had to pass in my Hugging Face write token ahead of running the script since Mistral is a gated model. (So the final command was <code>HF_TOKEN="hf_MY_TOKEN_VALUE_WENT_HERE" modal run notebooks/sanity_check.py</code>)</p>
 <p>The output it produced, however, is pretty spot on. Actually I noticed that it outperformed the original data since it was able to correctly identify the event type as <code>captureandkill</code> and specify the boolean <code>killcaptureraid</code> as <code>True</code> even though in the ground truth dataset it seems I mislabelled the data and stated that the <code>killcaptureraid</code> value was <code>False</code>.</p>
 <p>One thing you might also have noticed is that the <code>name</code> attribute was predicted as being <code>1</code>. Actually, this is not really a problem. When I was labelling the dataset there were sometimes press releases that I needed to split up into separate reports, so I’d give them a numerical name where these were split up. The name is really just a summary of the event, but there are a non-trivial number of events which have numbers as their <code>name</code>, so it’s probably not even a useful field to be training on or trying to predict. Rather, if this was really necessary I could train a model to summarise the content as a headline, but for my specific use case I’m not sure it’s even useful to have this information at all.</p>
 <p>I tried getting my Llama3 model to make its predictions, but all I got out was an endless stream of JSON content.</p>
 <p><img src="images/llama3-inference.png" class="img-fluid"></p>
 <p>I suspect it has something to do with the presence or absence of an <code>&lt;s&gt;</code> tag, which I was using for EOS or ‘end of stream’. I recall there were some error messages during training around these lines, so potentially I’ll want to look into that. I also ran into the same problem as with the Mistral model, i.e having to run it on Modal, and was only able to make it work by specifying a different datatype when loading the model:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoPeftModelForCausalLM.from_pretrained(</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>        model_id,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        torch_dtype<span class="op">=</span>torch.bfloat16,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        device_map<span class="op">=</span><span class="st">"auto"</span>,</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    ).cuda()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoPeftModelForCausalLM.from_pretrained(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>        model_id,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        torch_dtype<span class="op">=</span>torch.bfloat16,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        device_map<span class="op">=</span><span class="st">"auto"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    ).cuda()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Thanks to <a href="https://drchrislevy.github.io/">Chris Levy</a> over on the course forum for suggesting this approach. While this works for getting it to run on Modal, I still am looking for a way to get my Mistral and Llama3 models to run locally, so I’ll probably have to investigate how to optimise the model’s memory usage further.</p>
 </section>
 <section id="next-steps" class="level1">
@@ -1160,141 +1221,409 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+
 
 
 

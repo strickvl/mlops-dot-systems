@@ -1,9 +1,0 @@
----
-title: "Today I Learned (TIL)"
-listing:
-  contents: til
-  sort: "date desc"
-  type: grid
-  categories: cloud
-  feed: true
----

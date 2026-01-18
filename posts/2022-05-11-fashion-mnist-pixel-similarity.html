@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2022-05-11">
 <meta name="description" content="I read part of chapter four of the fastai course book, learning about a naive approach to image classification (sort of!)">
 
-<title>Alex Strick van Linschoten - A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset</title>
+<title>A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset – Alex Strick van Linschoten</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,9 +19,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -48,69 +50,47 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -119,24 +99,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Alex Strick van Linschoten - A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset">
+<meta property="og:title" content="A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset – Alex Strick van Linschoten">
 <meta property="og:description" content="I read part of chapter four of the fastai course book, learning about a naive approach to image classification (sort of!)">
 <meta property="og:image" content="https://alexstrick.com/posts/fashion-mnist/fashion-mnist-small.png">
-<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
 <meta property="og:image:height" content="296">
 <meta property="og:image:width" content="300">
-<meta name="twitter:title" content="Alex Strick van Linschoten - A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset">
+<meta name="twitter:title" content="A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset – Alex Strick van Linschoten">
 <meta name="twitter:description" content="I read part of chapter four of the fastai course book, learning about a naive approach to image classification (sort of!)">
 <meta name="twitter:image" content="https://alexstrick.com/posts/fashion-mnist/fashion-mnist-small.png">
 <meta name="twitter:creator" content="@strickvl">
@@ -145,57 +127,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Alex Strick van Linschoten</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html">
- <span class="menu-text">Technical</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../personal.html">
- <span class="menu-text">Personal</span></a>
+    <a class="nav-link" href="../personal.html"> 
+<span class="menu-text">Personal</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../til.html">
- <span class="menu-text">TIL</span></a>
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">RSS</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
@@ -210,8 +193,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
   </li>
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -258,10 +242,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<div class="cell" data-execution_count="1">
-<details>
+
+<div id="9976ac80-48c6-473e-8096-01759c7321ba" class="cell" data-execution_count="1">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">-</span>Uqq fastbook nbdev torch</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">-</span>Uqq fastbook nbdev torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> fastbook</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fastbook.setup_book()</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -273,53 +258,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>matplotlib.rc(<span class="st">'image'</span>, cmap<span class="op">=</span><span class="st">'Greys'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>matplotlib.rc(<span class="st">'image'</span>, cmap<span class="op">=</span><span class="st">'Greys'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <section id="get-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="get-the-data">Get the data</h2>
 <p>First thing to do: we’ll download the MNIST dataset for us to use as our example.</p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> untar_data(URLs.MNIST_SAMPLE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d96f1cff-1eb2-4a68-8916-3069abd238f2" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> untar_data(URLs.MNIST_SAMPLE)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what does this do?</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Path.BASE_PATH <span class="op">=</span> path</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b5333473-45e6-4685-8a83-c995fe00c38f" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what does this do?</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Path.BASE_PATH <span class="op">=</span> path</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>path.ls()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d061587a-122c-46b4-a344-98a7d4b003be" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>path.ls()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>(#3) [Path('valid'),Path('labels.csv'),Path('train')]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see what's inside the training folder</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(path <span class="op">/</span> <span class="st">'train'</span>).ls()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="21d0c840-1c51-46d1-9a4f-233a1c9ad962" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see what's inside the training folder</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(path <span class="op">/</span> <span class="st">'train'</span>).ls()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>(#2) [Path('train/7'),Path('train/3')]</code></pre>
 </div>
 </div>
 <p>3 and 7 are the labels or targets of our dataset. We are trying to predict whether, given a particular image, we are looking at a 3 or a 7.</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>threes <span class="op">=</span> (path <span class="op">/</span> <span class="st">'train'</span><span class="op">/</span><span class="st">'3'</span>).ls().<span class="bu">sorted</span>()</span>
+<div id="79d0ecdb-8dc5-415b-8c3b-64bdce14f9c7" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>threes <span class="op">=</span> (path <span class="op">/</span> <span class="st">'train'</span><span class="op">/</span><span class="st">'3'</span>).ls().<span class="bu">sorted</span>()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sevens <span class="op">=</span> (path <span class="op">/</span> <span class="st">'train'</span><span class="op">/</span><span class="st">'7'</span>).ls().<span class="bu">sorted</span>()</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>threes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>threes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>(#6131) [Path('train/3/10.png'),Path('train/3/10000.png'),Path('train/3/10011.png'),Path('train/3/10031.png'),Path('train/3/10034.png'),Path('train/3/10042.png'),Path('train/3/10052.png'),Path('train/3/1007.png'),Path('train/3/10074.png'),Path('train/3/10091.png')...]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>im3_path <span class="op">=</span> threes[<span class="dv">1</span>]</span>
+<div id="6afdca79-eb86-45a5-9fd8-38a774c47307" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>im3_path <span class="op">=</span> threes[<span class="dv">1</span>]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>im3 <span class="op">=</span> Image.<span class="bu">open</span>(im3_path)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>im3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>im3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Now we’re getting a slice of the image to see how it is represented underneath as numbers.</p>
 <p>The first index value is the rows we want, and then we get the columns.</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>array(im3)[<span class="dv">4</span>:<span class="dv">10</span>,<span class="dv">4</span>:<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="12894c4e-708f-4b5b-a4b3-77cfae406208" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>array(im3)[<span class="dv">4</span>:<span class="dv">10</span>,<span class="dv">4</span>:<span class="dv">10</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>array([[  0,   0,   0,   0,   0,   0],
        [  0,   0,   0,   0,   0,  29],
@@ -329,8 +318,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
        [  0,   3,  20,  20,  15,   0]], dtype=uint8)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>array(im3)[<span class="dv">4</span>:<span class="dv">10</span>,<span class="dv">4</span>:<span class="dv">15</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="5478a5b8-c669-4b21-bb66-d9058b5db641" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>array(im3)[<span class="dv">4</span>:<span class="dv">10</span>,<span class="dv">4</span>:<span class="dv">15</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>array([[  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
        [  0,   0,   0,   0,   0,  29, 150, 195, 254, 255, 254],
@@ -341,8 +330,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>We can also have the same as a tensor. This is a PyTorch object which will allow us to get the benefits of everything PyTorch has to offer (plus speed optimisation if we use a GPU).</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tensor(im3)[<span class="dv">4</span>:<span class="dv">10</span>,<span class="dv">4</span>:<span class="dv">15</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1c28f42b-a532-4b32-b811-21657507587f" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tensor(im3)[<span class="dv">4</span>:<span class="dv">10</span>,<span class="dv">4</span>:<span class="dv">15</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>tensor([[  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
         [  0,   0,   0,   0,   0,  29, 150, 195, 254, 255, 254],
@@ -354,12 +343,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>It basically looks the same except for the name of the object at this moment.</p>
 <p>If we plot out the values of a different slice we can visualise how the numbers are used to output the actual image.</p>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>im3_tensor <span class="op">=</span> tensor(im3)</span>
+<div id="2599e5b8-051a-4900-975d-e6bac88523bf" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>im3_tensor <span class="op">=</span> tensor(im3)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(im3_tensor[<span class="dv">4</span>:<span class="dv">15</span>,<span class="dv">4</span>:<span class="dv">22</span>])</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>df.style.set_properties(<span class="op">**</span>{<span class="st">'font-size'</span>:<span class="st">'6pt'</span>}).background_gradient(<span class="st">'Greys'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>df.style.set_properties(<span class="op">**</span>{<span class="st">'font-size'</span>:<span class="st">'6pt'</span>}).background_gradient(<span class="st">'Greys'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
-
 <style type="text/css">
 #T_09c33_row0_col0, #T_09c33_row0_col1, #T_09c33_row0_col2, #T_09c33_row0_col3, #T_09c33_row0_col4, #T_09c33_row0_col5, #T_09c33_row0_col6, #T_09c33_row0_col7, #T_09c33_row0_col8, #T_09c33_row0_col9, #T_09c33_row0_col10, #T_09c33_row0_col11, #T_09c33_row0_col12, #T_09c33_row0_col13, #T_09c33_row0_col14, #T_09c33_row0_col15, #T_09c33_row0_col16, #T_09c33_row0_col17, #T_09c33_row1_col0, #T_09c33_row1_col1, #T_09c33_row1_col2, #T_09c33_row1_col3, #T_09c33_row1_col4, #T_09c33_row1_col15, #T_09c33_row1_col16, #T_09c33_row1_col17, #T_09c33_row2_col0, #T_09c33_row2_col1, #T_09c33_row2_col2, #T_09c33_row2_col15, #T_09c33_row2_col16, #T_09c33_row2_col17, #T_09c33_row3_col0, #T_09c33_row3_col15, #T_09c33_row3_col16, #T_09c33_row3_col17, #T_09c33_row4_col0, #T_09c33_row4_col6, #T_09c33_row4_col7, #T_09c33_row4_col8, #T_09c33_row4_col9, #T_09c33_row4_col10, #T_09c33_row4_col15, #T_09c33_row4_col16, #T_09c33_row4_col17, #T_09c33_row5_col0, #T_09c33_row5_col5, #T_09c33_row5_col6, #T_09c33_row5_col7, #T_09c33_row5_col8, #T_09c33_row5_col9, #T_09c33_row5_col15, #T_09c33_row5_col16, #T_09c33_row5_col17, #T_09c33_row6_col0, #T_09c33_row6_col1, #T_09c33_row6_col2, #T_09c33_row6_col3, #T_09c33_row6_col4, #T_09c33_row6_col5, #T_09c33_row6_col6, #T_09c33_row6_col7, #T_09c33_row6_col8, #T_09c33_row6_col9, #T_09c33_row6_col14, #T_09c33_row6_col15, #T_09c33_row6_col16, #T_09c33_row6_col17, #T_09c33_row7_col0, #T_09c33_row7_col1, #T_09c33_row7_col2, #T_09c33_row7_col3, #T_09c33_row7_col4, #T_09c33_row7_col5, #T_09c33_row7_col6, #T_09c33_row7_col13, #T_09c33_row7_col14, #T_09c33_row7_col15, #T_09c33_row7_col16, #T_09c33_row7_col17, #T_09c33_row8_col0, #T_09c33_row8_col1, #T_09c33_row8_col2, #T_09c33_row8_col3, #T_09c33_row8_col4, #T_09c33_row8_col13, #T_09c33_row8_col14, #T_09c33_row8_col15, #T_09c33_row8_col16, #T_09c33_row8_col17, #T_09c33_row9_col0, #T_09c33_row9_col1, #T_09c33_row9_col2, #T_09c33_row9_col3, #T_09c33_row9_col4, #T_09c33_row9_col16, #T_09c33_row9_col17, #T_09c33_row10_col0, #T_09c33_row10_col1, #T_09c33_row10_col2, #T_09c33_row10_col3, #T_09c33_row10_col4, #T_09c33_row10_col5, #T_09c33_row10_col6, #T_09c33_row10_col17 {
   font-size: 6pt;
@@ -612,263 +600,264 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   color: #f1f1f1;
 }
 </style>
-<table id="T_09c33">
-  <thead>
-    <tr>
-      <th class="blank level0">&nbsp;</th>
-      <th id="T_09c33_level0_col0" class="col_heading level0 col0">0</th>
-      <th id="T_09c33_level0_col1" class="col_heading level0 col1">1</th>
-      <th id="T_09c33_level0_col2" class="col_heading level0 col2">2</th>
-      <th id="T_09c33_level0_col3" class="col_heading level0 col3">3</th>
-      <th id="T_09c33_level0_col4" class="col_heading level0 col4">4</th>
-      <th id="T_09c33_level0_col5" class="col_heading level0 col5">5</th>
-      <th id="T_09c33_level0_col6" class="col_heading level0 col6">6</th>
-      <th id="T_09c33_level0_col7" class="col_heading level0 col7">7</th>
-      <th id="T_09c33_level0_col8" class="col_heading level0 col8">8</th>
-      <th id="T_09c33_level0_col9" class="col_heading level0 col9">9</th>
-      <th id="T_09c33_level0_col10" class="col_heading level0 col10">10</th>
-      <th id="T_09c33_level0_col11" class="col_heading level0 col11">11</th>
-      <th id="T_09c33_level0_col12" class="col_heading level0 col12">12</th>
-      <th id="T_09c33_level0_col13" class="col_heading level0 col13">13</th>
-      <th id="T_09c33_level0_col14" class="col_heading level0 col14">14</th>
-      <th id="T_09c33_level0_col15" class="col_heading level0 col15">15</th>
-      <th id="T_09c33_level0_col16" class="col_heading level0 col16">16</th>
-      <th id="T_09c33_level0_col17" class="col_heading level0 col17">17</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_09c33_level0_row0" class="row_heading level0 row0">0</th>
-      <td id="T_09c33_row0_col0" class="data row0 col0">0</td>
-      <td id="T_09c33_row0_col1" class="data row0 col1">0</td>
-      <td id="T_09c33_row0_col2" class="data row0 col2">0</td>
-      <td id="T_09c33_row0_col3" class="data row0 col3">0</td>
-      <td id="T_09c33_row0_col4" class="data row0 col4">0</td>
-      <td id="T_09c33_row0_col5" class="data row0 col5">0</td>
-      <td id="T_09c33_row0_col6" class="data row0 col6">0</td>
-      <td id="T_09c33_row0_col7" class="data row0 col7">0</td>
-      <td id="T_09c33_row0_col8" class="data row0 col8">0</td>
-      <td id="T_09c33_row0_col9" class="data row0 col9">0</td>
-      <td id="T_09c33_row0_col10" class="data row0 col10">0</td>
-      <td id="T_09c33_row0_col11" class="data row0 col11">0</td>
-      <td id="T_09c33_row0_col12" class="data row0 col12">0</td>
-      <td id="T_09c33_row0_col13" class="data row0 col13">0</td>
-      <td id="T_09c33_row0_col14" class="data row0 col14">0</td>
-      <td id="T_09c33_row0_col15" class="data row0 col15">0</td>
-      <td id="T_09c33_row0_col16" class="data row0 col16">0</td>
-      <td id="T_09c33_row0_col17" class="data row0 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row1" class="row_heading level0 row1">1</th>
-      <td id="T_09c33_row1_col0" class="data row1 col0">0</td>
-      <td id="T_09c33_row1_col1" class="data row1 col1">0</td>
-      <td id="T_09c33_row1_col2" class="data row1 col2">0</td>
-      <td id="T_09c33_row1_col3" class="data row1 col3">0</td>
-      <td id="T_09c33_row1_col4" class="data row1 col4">0</td>
-      <td id="T_09c33_row1_col5" class="data row1 col5">29</td>
-      <td id="T_09c33_row1_col6" class="data row1 col6">150</td>
-      <td id="T_09c33_row1_col7" class="data row1 col7">195</td>
-      <td id="T_09c33_row1_col8" class="data row1 col8">254</td>
-      <td id="T_09c33_row1_col9" class="data row1 col9">255</td>
-      <td id="T_09c33_row1_col10" class="data row1 col10">254</td>
-      <td id="T_09c33_row1_col11" class="data row1 col11">176</td>
-      <td id="T_09c33_row1_col12" class="data row1 col12">193</td>
-      <td id="T_09c33_row1_col13" class="data row1 col13">150</td>
-      <td id="T_09c33_row1_col14" class="data row1 col14">96</td>
-      <td id="T_09c33_row1_col15" class="data row1 col15">0</td>
-      <td id="T_09c33_row1_col16" class="data row1 col16">0</td>
-      <td id="T_09c33_row1_col17" class="data row1 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row2" class="row_heading level0 row2">2</th>
-      <td id="T_09c33_row2_col0" class="data row2 col0">0</td>
-      <td id="T_09c33_row2_col1" class="data row2 col1">0</td>
-      <td id="T_09c33_row2_col2" class="data row2 col2">0</td>
-      <td id="T_09c33_row2_col3" class="data row2 col3">48</td>
-      <td id="T_09c33_row2_col4" class="data row2 col4">166</td>
-      <td id="T_09c33_row2_col5" class="data row2 col5">224</td>
-      <td id="T_09c33_row2_col6" class="data row2 col6">253</td>
-      <td id="T_09c33_row2_col7" class="data row2 col7">253</td>
-      <td id="T_09c33_row2_col8" class="data row2 col8">234</td>
-      <td id="T_09c33_row2_col9" class="data row2 col9">196</td>
-      <td id="T_09c33_row2_col10" class="data row2 col10">253</td>
-      <td id="T_09c33_row2_col11" class="data row2 col11">253</td>
-      <td id="T_09c33_row2_col12" class="data row2 col12">253</td>
-      <td id="T_09c33_row2_col13" class="data row2 col13">253</td>
-      <td id="T_09c33_row2_col14" class="data row2 col14">233</td>
-      <td id="T_09c33_row2_col15" class="data row2 col15">0</td>
-      <td id="T_09c33_row2_col16" class="data row2 col16">0</td>
-      <td id="T_09c33_row2_col17" class="data row2 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row3" class="row_heading level0 row3">3</th>
-      <td id="T_09c33_row3_col0" class="data row3 col0">0</td>
-      <td id="T_09c33_row3_col1" class="data row3 col1">93</td>
-      <td id="T_09c33_row3_col2" class="data row3 col2">244</td>
-      <td id="T_09c33_row3_col3" class="data row3 col3">249</td>
-      <td id="T_09c33_row3_col4" class="data row3 col4">253</td>
-      <td id="T_09c33_row3_col5" class="data row3 col5">187</td>
-      <td id="T_09c33_row3_col6" class="data row3 col6">46</td>
-      <td id="T_09c33_row3_col7" class="data row3 col7">10</td>
-      <td id="T_09c33_row3_col8" class="data row3 col8">8</td>
-      <td id="T_09c33_row3_col9" class="data row3 col9">4</td>
-      <td id="T_09c33_row3_col10" class="data row3 col10">10</td>
-      <td id="T_09c33_row3_col11" class="data row3 col11">194</td>
-      <td id="T_09c33_row3_col12" class="data row3 col12">253</td>
-      <td id="T_09c33_row3_col13" class="data row3 col13">253</td>
-      <td id="T_09c33_row3_col14" class="data row3 col14">233</td>
-      <td id="T_09c33_row3_col15" class="data row3 col15">0</td>
-      <td id="T_09c33_row3_col16" class="data row3 col16">0</td>
-      <td id="T_09c33_row3_col17" class="data row3 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row4" class="row_heading level0 row4">4</th>
-      <td id="T_09c33_row4_col0" class="data row4 col0">0</td>
-      <td id="T_09c33_row4_col1" class="data row4 col1">107</td>
-      <td id="T_09c33_row4_col2" class="data row4 col2">253</td>
-      <td id="T_09c33_row4_col3" class="data row4 col3">253</td>
-      <td id="T_09c33_row4_col4" class="data row4 col4">230</td>
-      <td id="T_09c33_row4_col5" class="data row4 col5">48</td>
-      <td id="T_09c33_row4_col6" class="data row4 col6">0</td>
-      <td id="T_09c33_row4_col7" class="data row4 col7">0</td>
-      <td id="T_09c33_row4_col8" class="data row4 col8">0</td>
-      <td id="T_09c33_row4_col9" class="data row4 col9">0</td>
-      <td id="T_09c33_row4_col10" class="data row4 col10">0</td>
-      <td id="T_09c33_row4_col11" class="data row4 col11">192</td>
-      <td id="T_09c33_row4_col12" class="data row4 col12">253</td>
-      <td id="T_09c33_row4_col13" class="data row4 col13">253</td>
-      <td id="T_09c33_row4_col14" class="data row4 col14">156</td>
-      <td id="T_09c33_row4_col15" class="data row4 col15">0</td>
-      <td id="T_09c33_row4_col16" class="data row4 col16">0</td>
-      <td id="T_09c33_row4_col17" class="data row4 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row5" class="row_heading level0 row5">5</th>
-      <td id="T_09c33_row5_col0" class="data row5 col0">0</td>
-      <td id="T_09c33_row5_col1" class="data row5 col1">3</td>
-      <td id="T_09c33_row5_col2" class="data row5 col2">20</td>
-      <td id="T_09c33_row5_col3" class="data row5 col3">20</td>
-      <td id="T_09c33_row5_col4" class="data row5 col4">15</td>
-      <td id="T_09c33_row5_col5" class="data row5 col5">0</td>
-      <td id="T_09c33_row5_col6" class="data row5 col6">0</td>
-      <td id="T_09c33_row5_col7" class="data row5 col7">0</td>
-      <td id="T_09c33_row5_col8" class="data row5 col8">0</td>
-      <td id="T_09c33_row5_col9" class="data row5 col9">0</td>
-      <td id="T_09c33_row5_col10" class="data row5 col10">43</td>
-      <td id="T_09c33_row5_col11" class="data row5 col11">224</td>
-      <td id="T_09c33_row5_col12" class="data row5 col12">253</td>
-      <td id="T_09c33_row5_col13" class="data row5 col13">245</td>
-      <td id="T_09c33_row5_col14" class="data row5 col14">74</td>
-      <td id="T_09c33_row5_col15" class="data row5 col15">0</td>
-      <td id="T_09c33_row5_col16" class="data row5 col16">0</td>
-      <td id="T_09c33_row5_col17" class="data row5 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row6" class="row_heading level0 row6">6</th>
-      <td id="T_09c33_row6_col0" class="data row6 col0">0</td>
-      <td id="T_09c33_row6_col1" class="data row6 col1">0</td>
-      <td id="T_09c33_row6_col2" class="data row6 col2">0</td>
-      <td id="T_09c33_row6_col3" class="data row6 col3">0</td>
-      <td id="T_09c33_row6_col4" class="data row6 col4">0</td>
-      <td id="T_09c33_row6_col5" class="data row6 col5">0</td>
-      <td id="T_09c33_row6_col6" class="data row6 col6">0</td>
-      <td id="T_09c33_row6_col7" class="data row6 col7">0</td>
-      <td id="T_09c33_row6_col8" class="data row6 col8">0</td>
-      <td id="T_09c33_row6_col9" class="data row6 col9">0</td>
-      <td id="T_09c33_row6_col10" class="data row6 col10">249</td>
-      <td id="T_09c33_row6_col11" class="data row6 col11">253</td>
-      <td id="T_09c33_row6_col12" class="data row6 col12">245</td>
-      <td id="T_09c33_row6_col13" class="data row6 col13">126</td>
-      <td id="T_09c33_row6_col14" class="data row6 col14">0</td>
-      <td id="T_09c33_row6_col15" class="data row6 col15">0</td>
-      <td id="T_09c33_row6_col16" class="data row6 col16">0</td>
-      <td id="T_09c33_row6_col17" class="data row6 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row7" class="row_heading level0 row7">7</th>
-      <td id="T_09c33_row7_col0" class="data row7 col0">0</td>
-      <td id="T_09c33_row7_col1" class="data row7 col1">0</td>
-      <td id="T_09c33_row7_col2" class="data row7 col2">0</td>
-      <td id="T_09c33_row7_col3" class="data row7 col3">0</td>
-      <td id="T_09c33_row7_col4" class="data row7 col4">0</td>
-      <td id="T_09c33_row7_col5" class="data row7 col5">0</td>
-      <td id="T_09c33_row7_col6" class="data row7 col6">0</td>
-      <td id="T_09c33_row7_col7" class="data row7 col7">14</td>
-      <td id="T_09c33_row7_col8" class="data row7 col8">101</td>
-      <td id="T_09c33_row7_col9" class="data row7 col9">223</td>
-      <td id="T_09c33_row7_col10" class="data row7 col10">253</td>
-      <td id="T_09c33_row7_col11" class="data row7 col11">248</td>
-      <td id="T_09c33_row7_col12" class="data row7 col12">124</td>
-      <td id="T_09c33_row7_col13" class="data row7 col13">0</td>
-      <td id="T_09c33_row7_col14" class="data row7 col14">0</td>
-      <td id="T_09c33_row7_col15" class="data row7 col15">0</td>
-      <td id="T_09c33_row7_col16" class="data row7 col16">0</td>
-      <td id="T_09c33_row7_col17" class="data row7 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row8" class="row_heading level0 row8">8</th>
-      <td id="T_09c33_row8_col0" class="data row8 col0">0</td>
-      <td id="T_09c33_row8_col1" class="data row8 col1">0</td>
-      <td id="T_09c33_row8_col2" class="data row8 col2">0</td>
-      <td id="T_09c33_row8_col3" class="data row8 col3">0</td>
-      <td id="T_09c33_row8_col4" class="data row8 col4">0</td>
-      <td id="T_09c33_row8_col5" class="data row8 col5">11</td>
-      <td id="T_09c33_row8_col6" class="data row8 col6">166</td>
-      <td id="T_09c33_row8_col7" class="data row8 col7">239</td>
-      <td id="T_09c33_row8_col8" class="data row8 col8">253</td>
-      <td id="T_09c33_row8_col9" class="data row8 col9">253</td>
-      <td id="T_09c33_row8_col10" class="data row8 col10">253</td>
-      <td id="T_09c33_row8_col11" class="data row8 col11">187</td>
-      <td id="T_09c33_row8_col12" class="data row8 col12">30</td>
-      <td id="T_09c33_row8_col13" class="data row8 col13">0</td>
-      <td id="T_09c33_row8_col14" class="data row8 col14">0</td>
-      <td id="T_09c33_row8_col15" class="data row8 col15">0</td>
-      <td id="T_09c33_row8_col16" class="data row8 col16">0</td>
-      <td id="T_09c33_row8_col17" class="data row8 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row9" class="row_heading level0 row9">9</th>
-      <td id="T_09c33_row9_col0" class="data row9 col0">0</td>
-      <td id="T_09c33_row9_col1" class="data row9 col1">0</td>
-      <td id="T_09c33_row9_col2" class="data row9 col2">0</td>
-      <td id="T_09c33_row9_col3" class="data row9 col3">0</td>
-      <td id="T_09c33_row9_col4" class="data row9 col4">0</td>
-      <td id="T_09c33_row9_col5" class="data row9 col5">16</td>
-      <td id="T_09c33_row9_col6" class="data row9 col6">248</td>
-      <td id="T_09c33_row9_col7" class="data row9 col7">250</td>
-      <td id="T_09c33_row9_col8" class="data row9 col8">253</td>
-      <td id="T_09c33_row9_col9" class="data row9 col9">253</td>
-      <td id="T_09c33_row9_col10" class="data row9 col10">253</td>
-      <td id="T_09c33_row9_col11" class="data row9 col11">253</td>
-      <td id="T_09c33_row9_col12" class="data row9 col12">232</td>
-      <td id="T_09c33_row9_col13" class="data row9 col13">213</td>
-      <td id="T_09c33_row9_col14" class="data row9 col14">111</td>
-      <td id="T_09c33_row9_col15" class="data row9 col15">2</td>
-      <td id="T_09c33_row9_col16" class="data row9 col16">0</td>
-      <td id="T_09c33_row9_col17" class="data row9 col17">0</td>
-    </tr>
-    <tr>
-      <th id="T_09c33_level0_row10" class="row_heading level0 row10">10</th>
-      <td id="T_09c33_row10_col0" class="data row10 col0">0</td>
-      <td id="T_09c33_row10_col1" class="data row10 col1">0</td>
-      <td id="T_09c33_row10_col2" class="data row10 col2">0</td>
-      <td id="T_09c33_row10_col3" class="data row10 col3">0</td>
-      <td id="T_09c33_row10_col4" class="data row10 col4">0</td>
-      <td id="T_09c33_row10_col5" class="data row10 col5">0</td>
-      <td id="T_09c33_row10_col6" class="data row10 col6">0</td>
-      <td id="T_09c33_row10_col7" class="data row10 col7">43</td>
-      <td id="T_09c33_row10_col8" class="data row10 col8">98</td>
-      <td id="T_09c33_row10_col9" class="data row10 col9">98</td>
-      <td id="T_09c33_row10_col10" class="data row10 col10">208</td>
-      <td id="T_09c33_row10_col11" class="data row10 col11">253</td>
-      <td id="T_09c33_row10_col12" class="data row10 col12">253</td>
-      <td id="T_09c33_row10_col13" class="data row10 col13">253</td>
-      <td id="T_09c33_row10_col14" class="data row10 col14">253</td>
-      <td id="T_09c33_row10_col15" class="data row10 col15">187</td>
-      <td id="T_09c33_row10_col16" class="data row10 col16">22</td>
-      <td id="T_09c33_row10_col17" class="data row10 col17">0</td>
-    </tr>
-  </tbody>
+
+<table id="T_09c33" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_09c33_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">0</th>
+<th id="T_09c33_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">1</th>
+<th id="T_09c33_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">2</th>
+<th id="T_09c33_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3</th>
+<th id="T_09c33_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">4</th>
+<th id="T_09c33_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">5</th>
+<th id="T_09c33_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">6</th>
+<th id="T_09c33_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">7</th>
+<th id="T_09c33_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">8</th>
+<th id="T_09c33_level0_col9" class="col_heading level0 col9" data-quarto-table-cell-role="th">9</th>
+<th id="T_09c33_level0_col10" class="col_heading level0 col10" data-quarto-table-cell-role="th">10</th>
+<th id="T_09c33_level0_col11" class="col_heading level0 col11" data-quarto-table-cell-role="th">11</th>
+<th id="T_09c33_level0_col12" class="col_heading level0 col12" data-quarto-table-cell-role="th">12</th>
+<th id="T_09c33_level0_col13" class="col_heading level0 col13" data-quarto-table-cell-role="th">13</th>
+<th id="T_09c33_level0_col14" class="col_heading level0 col14" data-quarto-table-cell-role="th">14</th>
+<th id="T_09c33_level0_col15" class="col_heading level0 col15" data-quarto-table-cell-role="th">15</th>
+<th id="T_09c33_level0_col16" class="col_heading level0 col16" data-quarto-table-cell-role="th">16</th>
+<th id="T_09c33_level0_col17" class="col_heading level0 col17" data-quarto-table-cell-role="th">17</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_09c33_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_09c33_row0_col0" class="data row0 col0">0</td>
+<td id="T_09c33_row0_col1" class="data row0 col1">0</td>
+<td id="T_09c33_row0_col2" class="data row0 col2">0</td>
+<td id="T_09c33_row0_col3" class="data row0 col3">0</td>
+<td id="T_09c33_row0_col4" class="data row0 col4">0</td>
+<td id="T_09c33_row0_col5" class="data row0 col5">0</td>
+<td id="T_09c33_row0_col6" class="data row0 col6">0</td>
+<td id="T_09c33_row0_col7" class="data row0 col7">0</td>
+<td id="T_09c33_row0_col8" class="data row0 col8">0</td>
+<td id="T_09c33_row0_col9" class="data row0 col9">0</td>
+<td id="T_09c33_row0_col10" class="data row0 col10">0</td>
+<td id="T_09c33_row0_col11" class="data row0 col11">0</td>
+<td id="T_09c33_row0_col12" class="data row0 col12">0</td>
+<td id="T_09c33_row0_col13" class="data row0 col13">0</td>
+<td id="T_09c33_row0_col14" class="data row0 col14">0</td>
+<td id="T_09c33_row0_col15" class="data row0 col15">0</td>
+<td id="T_09c33_row0_col16" class="data row0 col16">0</td>
+<td id="T_09c33_row0_col17" class="data row0 col17">0</td>
+</tr>
+<tr class="even">
+<th id="T_09c33_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_09c33_row1_col0" class="data row1 col0">0</td>
+<td id="T_09c33_row1_col1" class="data row1 col1">0</td>
+<td id="T_09c33_row1_col2" class="data row1 col2">0</td>
+<td id="T_09c33_row1_col3" class="data row1 col3">0</td>
+<td id="T_09c33_row1_col4" class="data row1 col4">0</td>
+<td id="T_09c33_row1_col5" class="data row1 col5">29</td>
+<td id="T_09c33_row1_col6" class="data row1 col6">150</td>
+<td id="T_09c33_row1_col7" class="data row1 col7">195</td>
+<td id="T_09c33_row1_col8" class="data row1 col8">254</td>
+<td id="T_09c33_row1_col9" class="data row1 col9">255</td>
+<td id="T_09c33_row1_col10" class="data row1 col10">254</td>
+<td id="T_09c33_row1_col11" class="data row1 col11">176</td>
+<td id="T_09c33_row1_col12" class="data row1 col12">193</td>
+<td id="T_09c33_row1_col13" class="data row1 col13">150</td>
+<td id="T_09c33_row1_col14" class="data row1 col14">96</td>
+<td id="T_09c33_row1_col15" class="data row1 col15">0</td>
+<td id="T_09c33_row1_col16" class="data row1 col16">0</td>
+<td id="T_09c33_row1_col17" class="data row1 col17">0</td>
+</tr>
+<tr class="odd">
+<th id="T_09c33_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_09c33_row2_col0" class="data row2 col0">0</td>
+<td id="T_09c33_row2_col1" class="data row2 col1">0</td>
+<td id="T_09c33_row2_col2" class="data row2 col2">0</td>
+<td id="T_09c33_row2_col3" class="data row2 col3">48</td>
+<td id="T_09c33_row2_col4" class="data row2 col4">166</td>
+<td id="T_09c33_row2_col5" class="data row2 col5">224</td>
+<td id="T_09c33_row2_col6" class="data row2 col6">253</td>
+<td id="T_09c33_row2_col7" class="data row2 col7">253</td>
+<td id="T_09c33_row2_col8" class="data row2 col8">234</td>
+<td id="T_09c33_row2_col9" class="data row2 col9">196</td>
+<td id="T_09c33_row2_col10" class="data row2 col10">253</td>
+<td id="T_09c33_row2_col11" class="data row2 col11">253</td>
+<td id="T_09c33_row2_col12" class="data row2 col12">253</td>
+<td id="T_09c33_row2_col13" class="data row2 col13">253</td>
+<td id="T_09c33_row2_col14" class="data row2 col14">233</td>
+<td id="T_09c33_row2_col15" class="data row2 col15">0</td>
+<td id="T_09c33_row2_col16" class="data row2 col16">0</td>
+<td id="T_09c33_row2_col17" class="data row2 col17">0</td>
+</tr>
+<tr class="even">
+<th id="T_09c33_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_09c33_row3_col0" class="data row3 col0">0</td>
+<td id="T_09c33_row3_col1" class="data row3 col1">93</td>
+<td id="T_09c33_row3_col2" class="data row3 col2">244</td>
+<td id="T_09c33_row3_col3" class="data row3 col3">249</td>
+<td id="T_09c33_row3_col4" class="data row3 col4">253</td>
+<td id="T_09c33_row3_col5" class="data row3 col5">187</td>
+<td id="T_09c33_row3_col6" class="data row3 col6">46</td>
+<td id="T_09c33_row3_col7" class="data row3 col7">10</td>
+<td id="T_09c33_row3_col8" class="data row3 col8">8</td>
+<td id="T_09c33_row3_col9" class="data row3 col9">4</td>
+<td id="T_09c33_row3_col10" class="data row3 col10">10</td>
+<td id="T_09c33_row3_col11" class="data row3 col11">194</td>
+<td id="T_09c33_row3_col12" class="data row3 col12">253</td>
+<td id="T_09c33_row3_col13" class="data row3 col13">253</td>
+<td id="T_09c33_row3_col14" class="data row3 col14">233</td>
+<td id="T_09c33_row3_col15" class="data row3 col15">0</td>
+<td id="T_09c33_row3_col16" class="data row3 col16">0</td>
+<td id="T_09c33_row3_col17" class="data row3 col17">0</td>
+</tr>
+<tr class="odd">
+<th id="T_09c33_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_09c33_row4_col0" class="data row4 col0">0</td>
+<td id="T_09c33_row4_col1" class="data row4 col1">107</td>
+<td id="T_09c33_row4_col2" class="data row4 col2">253</td>
+<td id="T_09c33_row4_col3" class="data row4 col3">253</td>
+<td id="T_09c33_row4_col4" class="data row4 col4">230</td>
+<td id="T_09c33_row4_col5" class="data row4 col5">48</td>
+<td id="T_09c33_row4_col6" class="data row4 col6">0</td>
+<td id="T_09c33_row4_col7" class="data row4 col7">0</td>
+<td id="T_09c33_row4_col8" class="data row4 col8">0</td>
+<td id="T_09c33_row4_col9" class="data row4 col9">0</td>
+<td id="T_09c33_row4_col10" class="data row4 col10">0</td>
+<td id="T_09c33_row4_col11" class="data row4 col11">192</td>
+<td id="T_09c33_row4_col12" class="data row4 col12">253</td>
+<td id="T_09c33_row4_col13" class="data row4 col13">253</td>
+<td id="T_09c33_row4_col14" class="data row4 col14">156</td>
+<td id="T_09c33_row4_col15" class="data row4 col15">0</td>
+<td id="T_09c33_row4_col16" class="data row4 col16">0</td>
+<td id="T_09c33_row4_col17" class="data row4 col17">0</td>
+</tr>
+<tr class="even">
+<th id="T_09c33_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_09c33_row5_col0" class="data row5 col0">0</td>
+<td id="T_09c33_row5_col1" class="data row5 col1">3</td>
+<td id="T_09c33_row5_col2" class="data row5 col2">20</td>
+<td id="T_09c33_row5_col3" class="data row5 col3">20</td>
+<td id="T_09c33_row5_col4" class="data row5 col4">15</td>
+<td id="T_09c33_row5_col5" class="data row5 col5">0</td>
+<td id="T_09c33_row5_col6" class="data row5 col6">0</td>
+<td id="T_09c33_row5_col7" class="data row5 col7">0</td>
+<td id="T_09c33_row5_col8" class="data row5 col8">0</td>
+<td id="T_09c33_row5_col9" class="data row5 col9">0</td>
+<td id="T_09c33_row5_col10" class="data row5 col10">43</td>
+<td id="T_09c33_row5_col11" class="data row5 col11">224</td>
+<td id="T_09c33_row5_col12" class="data row5 col12">253</td>
+<td id="T_09c33_row5_col13" class="data row5 col13">245</td>
+<td id="T_09c33_row5_col14" class="data row5 col14">74</td>
+<td id="T_09c33_row5_col15" class="data row5 col15">0</td>
+<td id="T_09c33_row5_col16" class="data row5 col16">0</td>
+<td id="T_09c33_row5_col17" class="data row5 col17">0</td>
+</tr>
+<tr class="odd">
+<th id="T_09c33_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_09c33_row6_col0" class="data row6 col0">0</td>
+<td id="T_09c33_row6_col1" class="data row6 col1">0</td>
+<td id="T_09c33_row6_col2" class="data row6 col2">0</td>
+<td id="T_09c33_row6_col3" class="data row6 col3">0</td>
+<td id="T_09c33_row6_col4" class="data row6 col4">0</td>
+<td id="T_09c33_row6_col5" class="data row6 col5">0</td>
+<td id="T_09c33_row6_col6" class="data row6 col6">0</td>
+<td id="T_09c33_row6_col7" class="data row6 col7">0</td>
+<td id="T_09c33_row6_col8" class="data row6 col8">0</td>
+<td id="T_09c33_row6_col9" class="data row6 col9">0</td>
+<td id="T_09c33_row6_col10" class="data row6 col10">249</td>
+<td id="T_09c33_row6_col11" class="data row6 col11">253</td>
+<td id="T_09c33_row6_col12" class="data row6 col12">245</td>
+<td id="T_09c33_row6_col13" class="data row6 col13">126</td>
+<td id="T_09c33_row6_col14" class="data row6 col14">0</td>
+<td id="T_09c33_row6_col15" class="data row6 col15">0</td>
+<td id="T_09c33_row6_col16" class="data row6 col16">0</td>
+<td id="T_09c33_row6_col17" class="data row6 col17">0</td>
+</tr>
+<tr class="even">
+<th id="T_09c33_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_09c33_row7_col0" class="data row7 col0">0</td>
+<td id="T_09c33_row7_col1" class="data row7 col1">0</td>
+<td id="T_09c33_row7_col2" class="data row7 col2">0</td>
+<td id="T_09c33_row7_col3" class="data row7 col3">0</td>
+<td id="T_09c33_row7_col4" class="data row7 col4">0</td>
+<td id="T_09c33_row7_col5" class="data row7 col5">0</td>
+<td id="T_09c33_row7_col6" class="data row7 col6">0</td>
+<td id="T_09c33_row7_col7" class="data row7 col7">14</td>
+<td id="T_09c33_row7_col8" class="data row7 col8">101</td>
+<td id="T_09c33_row7_col9" class="data row7 col9">223</td>
+<td id="T_09c33_row7_col10" class="data row7 col10">253</td>
+<td id="T_09c33_row7_col11" class="data row7 col11">248</td>
+<td id="T_09c33_row7_col12" class="data row7 col12">124</td>
+<td id="T_09c33_row7_col13" class="data row7 col13">0</td>
+<td id="T_09c33_row7_col14" class="data row7 col14">0</td>
+<td id="T_09c33_row7_col15" class="data row7 col15">0</td>
+<td id="T_09c33_row7_col16" class="data row7 col16">0</td>
+<td id="T_09c33_row7_col17" class="data row7 col17">0</td>
+</tr>
+<tr class="odd">
+<th id="T_09c33_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_09c33_row8_col0" class="data row8 col0">0</td>
+<td id="T_09c33_row8_col1" class="data row8 col1">0</td>
+<td id="T_09c33_row8_col2" class="data row8 col2">0</td>
+<td id="T_09c33_row8_col3" class="data row8 col3">0</td>
+<td id="T_09c33_row8_col4" class="data row8 col4">0</td>
+<td id="T_09c33_row8_col5" class="data row8 col5">11</td>
+<td id="T_09c33_row8_col6" class="data row8 col6">166</td>
+<td id="T_09c33_row8_col7" class="data row8 col7">239</td>
+<td id="T_09c33_row8_col8" class="data row8 col8">253</td>
+<td id="T_09c33_row8_col9" class="data row8 col9">253</td>
+<td id="T_09c33_row8_col10" class="data row8 col10">253</td>
+<td id="T_09c33_row8_col11" class="data row8 col11">187</td>
+<td id="T_09c33_row8_col12" class="data row8 col12">30</td>
+<td id="T_09c33_row8_col13" class="data row8 col13">0</td>
+<td id="T_09c33_row8_col14" class="data row8 col14">0</td>
+<td id="T_09c33_row8_col15" class="data row8 col15">0</td>
+<td id="T_09c33_row8_col16" class="data row8 col16">0</td>
+<td id="T_09c33_row8_col17" class="data row8 col17">0</td>
+</tr>
+<tr class="even">
+<th id="T_09c33_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_09c33_row9_col0" class="data row9 col0">0</td>
+<td id="T_09c33_row9_col1" class="data row9 col1">0</td>
+<td id="T_09c33_row9_col2" class="data row9 col2">0</td>
+<td id="T_09c33_row9_col3" class="data row9 col3">0</td>
+<td id="T_09c33_row9_col4" class="data row9 col4">0</td>
+<td id="T_09c33_row9_col5" class="data row9 col5">16</td>
+<td id="T_09c33_row9_col6" class="data row9 col6">248</td>
+<td id="T_09c33_row9_col7" class="data row9 col7">250</td>
+<td id="T_09c33_row9_col8" class="data row9 col8">253</td>
+<td id="T_09c33_row9_col9" class="data row9 col9">253</td>
+<td id="T_09c33_row9_col10" class="data row9 col10">253</td>
+<td id="T_09c33_row9_col11" class="data row9 col11">253</td>
+<td id="T_09c33_row9_col12" class="data row9 col12">232</td>
+<td id="T_09c33_row9_col13" class="data row9 col13">213</td>
+<td id="T_09c33_row9_col14" class="data row9 col14">111</td>
+<td id="T_09c33_row9_col15" class="data row9 col15">2</td>
+<td id="T_09c33_row9_col16" class="data row9 col16">0</td>
+<td id="T_09c33_row9_col17" class="data row9 col17">0</td>
+</tr>
+<tr class="odd">
+<th id="T_09c33_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_09c33_row10_col0" class="data row10 col0">0</td>
+<td id="T_09c33_row10_col1" class="data row10 col1">0</td>
+<td id="T_09c33_row10_col2" class="data row10 col2">0</td>
+<td id="T_09c33_row10_col3" class="data row10 col3">0</td>
+<td id="T_09c33_row10_col4" class="data row10 col4">0</td>
+<td id="T_09c33_row10_col5" class="data row10 col5">0</td>
+<td id="T_09c33_row10_col6" class="data row10 col6">0</td>
+<td id="T_09c33_row10_col7" class="data row10 col7">43</td>
+<td id="T_09c33_row10_col8" class="data row10 col8">98</td>
+<td id="T_09c33_row10_col9" class="data row10 col9">98</td>
+<td id="T_09c33_row10_col10" class="data row10 col10">208</td>
+<td id="T_09c33_row10_col11" class="data row10 col11">253</td>
+<td id="T_09c33_row10_col12" class="data row10 col12">253</td>
+<td id="T_09c33_row10_col13" class="data row10 col13">253</td>
+<td id="T_09c33_row10_col14" class="data row10 col14">253</td>
+<td id="T_09c33_row10_col15" class="data row10 col15">187</td>
+<td id="T_09c33_row10_col16" class="data row10 col16">22</td>
+<td id="T_09c33_row10_col17" class="data row10 col17">0</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -880,23 +869,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Find the average pixel value for each pixel of the 3s and 7s</li>
 <li>Use this ‘ideal’ 3 and 7 to compare a single image that we want to know whether it’s a 3 or a 7</li>
 </ol>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>three_tensors <span class="op">=</span> [tensor(Image.<span class="bu">open</span>(img)) <span class="cf">for</span> img <span class="kw">in</span> threes]</span>
+<div id="eb477023-9bb2-4967-8074-726732139440" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>three_tensors <span class="op">=</span> [tensor(Image.<span class="bu">open</span>(img)) <span class="cf">for</span> img <span class="kw">in</span> threes]</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>seven_tensors <span class="op">=</span> [tensor(Image.<span class="bu">open</span>(img)) <span class="cf">for</span> img <span class="kw">in</span> sevens]</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(three_tensors), <span class="bu">len</span>(seven_tensors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(three_tensors), <span class="bu">len</span>(seven_tensors)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>(6131, 6265)</code></pre>
 </div>
 </div>
 <p>We can view these images with the fastai <code>show_image</code> function. This takes a tensor and makes it viewable in a Jupyter Notebook:</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>show_image(three_tensors[<span class="dv">8</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cbb662ae-e919-414e-a778-19f8a98cc385" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>show_image(three_tensors[<span class="dv">8</span>])<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>torch.stack(three_tensors)[<span class="dv">0</span>][<span class="dv">4</span>:<span class="dv">15</span>, <span class="dv">4</span>:<span class="dv">15</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c37596c0-146a-46a7-9331-e4e8389815a7" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>torch.stack(three_tensors)[<span class="dv">0</span>][<span class="dv">4</span>:<span class="dv">15</span>, <span class="dv">4</span>:<span class="dv">15</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>tensor([[  0,   0,   0,   0,   0,   0,   0,  42, 118, 219, 166],
         [  0,   0,   0,   0,   0,   0, 103, 242, 254, 254, 254],
@@ -912,12 +905,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>It’s fairly common to have to convert a collection (i.e.&nbsp;in our case, a list) of tensors into a single tensor object with an extra dimension, so that’s why we have the <code>torch.stack</code> method which takes a collection and returns a rank-3 tensor.</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 </div>
@@ -925,27 +918,27 @@ Tip
 <p>You’ll see here that we also convert our values into floats and normalise them (i.e.&nbsp;divide by 255) since this will help us at a later stage.</p>
 </div>
 </div>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>stacked_threes <span class="op">=</span> torch.stack(three_tensors).<span class="bu">float</span>()<span class="op">/</span><span class="dv">255</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>stacked_sevens <span class="op">=</span> torch.stack(seven_tensors).<span class="bu">float</span>()<span class="op">/</span><span class="dv">255</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1d31491d-db22-4cee-88c9-c192ffb1057b" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>stacked_threes <span class="op">=</span> torch.stack(three_tensors).<span class="bu">float</span>()<span class="op">/</span><span class="dv">255</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>stacked_sevens <span class="op">=</span> torch.stack(seven_tensors).<span class="bu">float</span>()<span class="op">/</span><span class="dv">255</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can see that the first axis of this tensor is our 6131 images, and each image has 28x28 pixels. The <code>shape</code> tells you the length of each axis.</p>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>stacked_threes.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3baa7930-cb24-4215-a6a8-e00764922b04" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>stacked_threes.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>torch.Size([6131, 28, 28])</code></pre>
 </div>
 </div>
 <p>Note: the <em>length</em> of a tensor’s shape is its <em>rank</em>. We have a rank-3 tensor:</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(stacked_threes.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8bd02c49-38b7-45cb-bf9a-252e71eb30a5" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(stacked_threes.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>3</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can get the same value by using `ndim`</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>stacked_threes.ndim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="526ebce0-0710-4d3e-bd78-9a7987205468" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can get the same value by using `ndim`</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>stacked_threes.ndim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>3</code></pre>
 </div>
@@ -958,38 +951,50 @@ Tip
 <h3 class="anchored" data-anchor-id="getting-the-ideal-3">Getting the ideal 3</h3>
 <p>We take our stack of threes (i.e.&nbsp;a rank-3 tensor) and we calculate the mean across the first dimension (i.e.&nbsp;the 6131 individual threes).</p>
 <p>By the end, you can see that <code>mean3</code> is actually a 28x28 tensor (i.e.&nbsp;a single image) that represents the ideal version of our threes data.</p>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mean3 <span class="op">=</span> stacked_threes.mean(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fb58c665-0ab1-4528-9edb-f07d5c640beb" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mean3 <span class="op">=</span> stacked_threes.mean(<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>mean3.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="99883565-2dd7-4d91-904f-c91932d48dce" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>mean3.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>torch.Size([28, 28])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>show_image(mean3)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d790966b-0772-4b2b-a689-96dfbda14671" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>show_image(mean3)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-22-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeat calculations for 7s</span></span>
+</div>
+<div id="6a67e3f6-32fc-46de-bee8-fb3b6d0c341e" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeat calculations for 7s</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>mean7 <span class="op">=</span> stacked_sevens.mean(<span class="dv">0</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>show_image(mean7)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>show_image(mean7)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-23-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="comparing-our-ideal-numbers-with-an-individual-sample" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-our-ideal-numbers-with-an-individual-sample">Comparing our ideal numbers with an individual sample</h3>
-<div class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sample_3 <span class="op">=</span> stacked_threes[<span class="dv">35</span>]</span>
+<div id="4c6611c7-a827-4fb8-8f0a-92cb242f27c5" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sample_3 <span class="op">=</span> stacked_threes[<span class="dv">35</span>]</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>sample_7 <span class="op">=</span> stacked_sevens[<span class="dv">35</span>]</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>show_image(sample_3)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>show_image(sample_3)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-24-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>There are two main ways we can measure the distance (i.e.&nbsp;similarity) in this context:</p>
@@ -997,66 +1002,66 @@ Tip
 <li>the <strong>Mean Absolute Difference</strong> aka <em>L1 Norm</em> – the mean of the absolute value of differences (our absolute value replaces negative values with positive values)</li>
 <li>the <strong>Root Mean Squared Error</strong> (RMSE) aka <em>L2 Norm</em> – we square all the differences (making everything positive), get the mean of those values, and then square root everything (which undoes all the squaring).</li>
 </ul>
-<div class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in code it looks like this</span></span>
+<div id="12be8282-ff6a-405a-9fde-4d3a9e120536" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in code it looks like this</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_l1_norm(tensor1, tensor2):</span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tensor1 <span class="op">-</span> tensor2).<span class="bu">abs</span>().mean()</span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_l2_norm(tensor1, tensor2):</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ((tensor1 <span class="op">-</span> tensor2)<span class="op">**</span><span class="dv">2</span>).mean().sqrt()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ((tensor1 <span class="op">-</span> tensor2)<span class="op">**</span><span class="dv">2</span>).mean().sqrt()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_3 <span class="op">=</span> get_l1_norm(sample_3, mean3)</span>
+<div id="65cb2e1e-fbfe-43e9-95fe-3e6131666716" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_3 <span class="op">=</span> get_l1_norm(sample_3, mean3)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>l2_norm_distance_3 <span class="op">=</span> get_l2_norm(sample_3, mean3)</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_3, l2_norm_distance_3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_3, l2_norm_distance_3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>(tensor(0.1401), tensor(0.2545))</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_7 <span class="op">=</span> get_l1_norm(sample_3, mean7)</span>
+<div id="64a9ba69-b31e-4cc8-9582-617b2c29c2f8" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_7 <span class="op">=</span> get_l1_norm(sample_3, mean7)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>l2_norm_distance_7 <span class="op">=</span> get_l2_norm(sample_3, mean7)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_7, l2_norm_distance_7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_7, l2_norm_distance_7</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>(tensor(0.1670), tensor(0.3121))</code></pre>
 </div>
 </div>
 <p>The differences from our <code>sample_3</code> to the <code>mean3</code> is less than the differences between our <code>sample_3</code> and the <code>mean7</code>. This totally makes sense and is what we were expecting!</p>
-<div class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l1_norm_distance_3 <span class="op">&lt;</span> l1_norm_distance_7</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l2_norm_distance_3 <span class="op">&lt;</span> l2_norm_distance_7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="bc6ab382-113b-4aca-b9a8-ae57e5ba4e7a" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l1_norm_distance_3 <span class="op">&lt;</span> l1_norm_distance_7</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l2_norm_distance_3 <span class="op">&lt;</span> l2_norm_distance_7</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="the-pytorch-built-in-ways-of-calculating-loss" class="level3">
 <h3 class="anchored" data-anchor-id="the-pytorch-built-in-ways-of-calculating-loss">The PyTorch built-in ways of calculating loss</h3>
 <p>PyTorch exposes a variety of loss functions at <code>torch.nn.functional</code> which it recommends importing as <code>F</code>. These are available by default under that name in fastai.</p>
-<div class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a sense of what options are available by inspecting the functions that are available to us with `rich`</span></span>
+<div id="02b1e458-bbba-41ed-8870-3ab1ea005545" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a sense of what options are available by inspecting the functions that are available to us with `rich`</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install -Uqq rich</span></span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># from rich import inspect as rinspect</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rinspect(F, methods=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rinspect(F, methods=True)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>pytorch_l1_norm_distance_3 <span class="op">=</span> F.l1_loss(sample_3.<span class="bu">float</span>(), mean3)</span>
+<div id="ed7fea3a-42d6-472a-b251-34efccdee750" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>pytorch_l1_norm_distance_3 <span class="op">=</span> F.l1_loss(sample_3.<span class="bu">float</span>(), mean3)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>pytorch_l1_norm_distance_7 <span class="op">=</span> F.l1_loss(sample_3.<span class="bu">float</span>(), mean7)</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pytorch_l1_norm_distance_3 <span class="op">&lt;</span> pytorch_l1_norm_distance_7</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>pytorch_l1_norm_distance_3, pytorch_l1_norm_distance_7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>pytorch_l1_norm_distance_3, pytorch_l1_norm_distance_7</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>(tensor(0.1401), tensor(0.1670))</code></pre>
 </div>
 </div>
 <p>For the L2 norm, the PyTorch function only calculates the mean squared error loss, so we have to add in the square root at the end ourselves:</p>
-<div class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>pytorch_l2_norm_distance_3 <span class="op">=</span> F.l1_loss(sample_3.<span class="bu">float</span>(), mean3).sqrt()</span>
+<div id="ff790cab-a741-464b-9573-cb45a90b4834" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>pytorch_l2_norm_distance_3 <span class="op">=</span> F.l1_loss(sample_3.<span class="bu">float</span>(), mean3).sqrt()</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>pytorch_l2_norm_distance_7 <span class="op">=</span> F.l1_loss(sample_3.<span class="bu">float</span>(), mean7).sqrt()</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pytorch_l2_norm_distance_3 <span class="op">&lt;</span> pytorch_l2_norm_distance_7</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pytorch_l2_norm_distance_3, pytorch_l2_norm_distance_7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pytorch_l2_norm_distance_3, pytorch_l2_norm_distance_7</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>(tensor(0.3743), tensor(0.4087))</code></pre>
 </div>
@@ -1073,8 +1078,8 @@ Tip
 <section id="load-the-fashion-mnist-dataset-with-pytorch" class="level2">
 <h2 class="anchored" data-anchor-id="load-the-fashion-mnist-dataset-with-pytorch">Load the Fashion MNIST dataset with PyTorch</h2>
 <p>The <a href="https://github.com/zalandoresearch/fashion-mnist">Fashion MNIST dataset</a> was created as a more advanced / difficult (and perhaps interesting) alternative to MNIST for computer vision tasks. It was first released in 2017 and I thought it might be interesting to try the same technique as we tried there on this new data set.</p>
-<div class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>training_data <span class="op">=</span> datasets.FashionMNIST(</span>
+<div id="9d5a8f1f-5959-4f3a-b29d-b765d253f94d" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>training_data <span class="op">=</span> datasets.FashionMNIST(</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    root<span class="op">=</span><span class="st">"data"</span>,</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    train<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    download<span class="op">=</span><span class="va">True</span>,</span>
@@ -1086,10 +1091,10 @@ Tip
 <span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    train<span class="op">=</span><span class="va">False</span>,</span>
 <span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    download<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    transform<span class="op">=</span>ToTensor()</span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>labels_map <span class="op">=</span> {</span>
+<div id="1cff1c4d-b2c3-4e35-9f94-9baf5dcc10f0" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>labels_map <span class="op">=</span> {</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>: <span class="st">"T-Shirt"</span>,</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: <span class="st">"Trouser"</span>,</span>
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>: <span class="st">"Pullover"</span>,</span>
@@ -1110,40 +1115,48 @@ Tip
 <span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>    plt.title(labels_map[label])</span>
 <span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">"off"</span>)</span>
 <span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>    plt.imshow(img.squeeze(), cmap<span class="op">=</span><span class="st">"gray"</span>)</span>
-<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-33-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>I found it a bit hard to extract the data for the images, stored as it was together with the labels. Here you can see me getting the image and the label.</p>
-<div class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>show_image(training_data[<span class="dv">1</span>][<span class="dv">0</span>][<span class="dv">0</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="44dd2e37-72bb-475f-abee-ba24f7013cf2" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>show_image(training_data[<span class="dv">1</span>][<span class="dv">0</span>][<span class="dv">0</span>])<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-34-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="34">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>training_data[<span class="dv">1</span>][<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="aa7274cb-db3e-4eed-943f-b5f535b30a66" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>training_data[<span class="dv">1</span>][<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>0</code></pre>
 </div>
 </div>
 <p>There are 60,000 items in this training dataset, and 10 categories, so it makes sense that the set of images for the two categories I extracted would be 6000 each.</p>
-<div class="cell" data-execution_count="35">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>training_dresses <span class="op">=</span> [item[<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> training_data <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">3</span>]</span>
+<div id="f4c40144-aead-4f74-a3f7-4d7dbf704e6c" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>training_dresses <span class="op">=</span> [item[<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> training_data <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">3</span>]</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>training_pullovers <span class="op">=</span> [item[<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> training_data <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">2</span>]</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(training_dresses), <span class="bu">len</span>(training_pullovers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(training_dresses), <span class="bu">len</span>(training_pullovers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>(6000, 6000)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>training_dresses_tensor <span class="op">=</span> torch.stack(training_dresses)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>training_pullovers_tensor <span class="op">=</span> torch.stack(training_pullovers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3640e1c6-22eb-4be8-a938-4f923b25ee15" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>training_dresses_tensor <span class="op">=</span> torch.stack(training_dresses)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>training_pullovers_tensor <span class="op">=</span> torch.stack(training_pullovers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>training_dresses_tensor.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="bda8645e-77d3-4105-b0fb-bd2397611a82" class="cell" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>training_dresses_tensor.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>torch.Size([6000, 28, 28])</code></pre>
 </div>
@@ -1151,150 +1164,166 @@ Tip
 </section>
 <section id="calculate-the-mean-image-for-a-dress-and-a-pullover" class="level2">
 <h2 class="anchored" data-anchor-id="calculate-the-mean-image-for-a-dress-and-a-pullover">Calculate the mean image for a dress and a pullover</h2>
-<div class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>mean_training_dress <span class="op">=</span> training_dresses_tensor.mean(<span class="dv">0</span>)</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>mean_training_pullover <span class="op">=</span> training_pullovers_tensor.mean(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4a009883-c08d-47ce-a92a-8c28b24e5b2b" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>mean_training_dress <span class="op">=</span> training_dresses_tensor.mean(<span class="dv">0</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>mean_training_pullover <span class="op">=</span> training_pullovers_tensor.mean(<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>mean_training_dress.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0b927857-fe0a-41e2-bcde-d721438d6003" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>mean_training_dress.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>torch.Size([28, 28])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="40">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>show_image(mean_training_dress)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="7ffb639a-3b2b-4a88-a8f9-c719d813a965" class="cell" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>show_image(mean_training_dress)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-41-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-41-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>show_image(mean_training_pullover)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="25d8ca7e-cba8-45cf-9c21-72083180b350" class="cell" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>show_image(mean_training_pullover)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-42-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-42-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>I chose the two because I wondered whether there might be a decent amount of crossover between the two items. You can see even in the ‘mean’ / average versions of the items that they look fairly similar.</p>
 </section>
 <section id="assemble-the-validation-data" class="level2">
 <h2 class="anchored" data-anchor-id="assemble-the-validation-data">Assemble the validation data</h2>
-<div class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>test_dresses <span class="op">=</span> [item[<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> test_data <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">3</span>]</span>
+<div id="7e063e11-0d83-4607-942f-1868560dc72b" class="cell" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>test_dresses <span class="op">=</span> [item[<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> test_data <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">3</span>]</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>test_pullovers <span class="op">=</span> [item[<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> test_data <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">2</span>]</span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(test_dresses), <span class="bu">len</span>(test_pullovers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(test_dresses), <span class="bu">len</span>(test_pullovers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>(1000, 1000)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>test_dresses_tensor <span class="op">=</span> torch.stack(test_dresses)</span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>test_pullovers_tensor <span class="op">=</span> torch.stack(test_pullovers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="03138684-4053-495a-969d-a16642de826a" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>test_dresses_tensor <span class="op">=</span> torch.stack(test_dresses)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>test_pullovers_tensor <span class="op">=</span> torch.stack(test_pullovers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>test_dresses_tensor.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="76438ee1-54e6-4989-b403-1572ba3f15e3" class="cell" data-execution_count="44">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>test_dresses_tensor.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="44">
 <pre><code>torch.Size([1000, 28, 28])</code></pre>
 </div>
 </div>
 <p>I also extract a single dress and a single pullover to check the loss in the next section.</p>
-<div class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>sample_test_dress <span class="op">=</span> test_dresses_tensor[<span class="dv">0</span>]</span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>sample_test_pullover <span class="op">=</span> test_pullovers_tensor[<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b6a5c507-8fc8-46bd-a119-e3e641662291" class="cell" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>sample_test_dress <span class="op">=</span> test_dresses_tensor[<span class="dv">0</span>]</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>sample_test_pullover <span class="op">=</span> test_pullovers_tensor[<span class="dv">10</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>show_image(sample_test_dress)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b5f6480c-bf6f-46f0-986f-0b570012f3de" class="cell" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>show_image(sample_test_dress)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-47-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-47-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>show_image(sample_test_pullover)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b66bb7a8-9526-4298-aba3-997c02d77f62" class="cell" data-execution_count="47">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>show_image(sample_test_pullover)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2022-05-11-fashion-mnist-pixel-similarity_files/figure-html/cell-48-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="calculate-the-loss-comparing-a-random-pullover-with-validation-data" class="level2">
 <h2 class="anchored" data-anchor-id="calculate-the-loss-comparing-a-random-pullover-with-validation-data">Calculate the loss comparing a random pullover with validation data</h2>
-<div class="cell" data-execution_count="48">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_l1_norm(tensor1, tensor2):</span>
+<div id="0fe8538d-bc5d-4df2-9625-a07f7bdf21cb" class="cell" data-execution_count="48">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_l1_norm(tensor1, tensor2):</span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tensor1 <span class="op">-</span> tensor2).<span class="bu">abs</span>().mean()</span>
 <span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_l2_norm(tensor1, tensor2):</span>
-<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ((tensor1 <span class="op">-</span> tensor2)<span class="op">**</span><span class="dv">2</span>).mean().sqrt()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ((tensor1 <span class="op">-</span> tensor2)<span class="op">**</span><span class="dv">2</span>).mean().sqrt()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_dress <span class="op">=</span> get_l1_norm(sample_test_dress, mean_training_dress)</span>
+<div id="bc08cce3-74f6-4837-87be-c5d4e03cd17b" class="cell" data-execution_count="49">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_dress <span class="op">=</span> get_l1_norm(sample_test_dress, mean_training_dress)</span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>l2_norm_distance_dress <span class="op">=</span> get_l2_norm(sample_test_dress, mean_training_dress)</span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_dress, l2_norm_distance_dress</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_dress, l2_norm_distance_dress</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>(tensor(0.1134), tensor(0.1766))</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="50">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_pullover <span class="op">=</span> get_l1_norm(sample_test_pullover, mean_training_pullover)</span>
+<div id="a13a97cb-337e-4b25-8eb1-9d0bf6cfa32a" class="cell" data-execution_count="50">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_pullover <span class="op">=</span> get_l1_norm(sample_test_pullover, mean_training_pullover)</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>l2_norm_distance_pullover <span class="op">=</span> get_l2_norm(sample_test_pullover, mean_training_pullover)</span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_pullover, l2_norm_distance_pullover</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>l1_norm_distance_pullover, l2_norm_distance_pullover</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>(tensor(0.1713), tensor(0.2220))</code></pre>
 </div>
 </div>
 <p>The differences from our <code>sample_test_dress</code> to the <code>mean_training_dress</code> is less than the differences between our <code>sample_test_dress</code> and the <code>mean_training_pullover</code>. This totally makes sense and is what we were expecting!</p>
-<div class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l1_norm_distance_dress <span class="op">&lt;</span> l1_norm_distance_pullover</span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l2_norm_distance_dress <span class="op">&lt;</span> l2_norm_distance_pullover</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9fbbed68-35d2-4bfe-833a-efee92580503" class="cell" data-execution_count="51">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l1_norm_distance_dress <span class="op">&lt;</span> l1_norm_distance_pullover</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> l2_norm_distance_dress <span class="op">&lt;</span> l2_norm_distance_pullover</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="using-broadcasting-to-check-our-predictions-on-our-validation-data" class="level2">
 <h2 class="anchored" data-anchor-id="using-broadcasting-to-check-our-predictions-on-our-validation-data">Using broadcasting to check our predictions on our validation data</h2>
 <p>This function returns the L1 norm loss when calculated between two tensors. Because of the final tuple passed into <code>.mean()</code> (i.e.&nbsp;<code>(-1, -2)</code>), we can actually use this function to calculate the distance between a single image as compared to a full rank-3 tensor.</p>
-<div class="cell" data-execution_count="52">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fashion_mnist_distance(tensor1, tensor2):</span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tensor1 <span class="op">-</span> tensor2).<span class="bu">abs</span>().mean((<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="96057fc2-482c-4227-a9c4-3a46252579b3" class="cell" data-execution_count="52">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fashion_mnist_distance(tensor1, tensor2):</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tensor1 <span class="op">-</span> tensor2).<span class="bu">abs</span>().mean((<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>fashion_mnist_distance(sample_test_dress, mean_training_dress)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="15819095-f2a3-4ef7-9b4b-74e5d23fac23" class="cell" data-execution_count="53">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>fashion_mnist_distance(sample_test_dress, mean_training_dress)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>tensor(0.1134)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="54">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>fashion_mnist_distance(sample_test_dress, mean_training_pullover)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4caaf695-4c14-4354-b793-478444cfb8f7" class="cell" data-execution_count="54">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>fashion_mnist_distance(sample_test_dress, mean_training_pullover)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>tensor(0.2864)</code></pre>
 </div>
 </div>
 <p>Again, our dress is ‘closer’ to the <code>mean_training_dress</code> than it is to the <code>mean_training_pullover</code>.</p>
 <p>We can now create a function that predicts (by way of calculating and comparing these two losses) whether an item is a dress or not.</p>
-<div class="cell" data-execution_count="55">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_dress(x):</span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fashion_mnist_distance(x, mean_training_dress) <span class="op">&lt;</span> fashion_mnist_distance(x, mean_training_pullover)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="98f560b4-e149-4f12-a069-2333e324a0d9" class="cell" data-execution_count="55">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_dress(x):</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fashion_mnist_distance(x, mean_training_dress) <span class="op">&lt;</span> fashion_mnist_distance(x, mean_training_pullover)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="56">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>is_dress(sample_test_dress)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="bcdd46db-3f36-4ee0-aa53-017994ab8763" class="cell" data-execution_count="56">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>is_dress(sample_test_dress)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>tensor(True)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="57">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>is_dress(sample_test_pullover)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b2ebf80a-b159-475f-a86e-5424c3141a2e" class="cell" data-execution_count="57">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>is_dress(sample_test_pullover)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="57">
 <pre><code>tensor(False)</code></pre>
 </div>
 </div>
 <p>…as expected…</p>
 <p>Finally, we can get an overall sense of how well our prediction function is on average. We get it to calculate predictions for the entire test dataset and average them out.</p>
-<div class="cell" data-execution_count="58">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>dress_accuracy <span class="op">=</span> is_dress(test_dresses_tensor).<span class="bu">float</span>().mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="de7a1307-2f90-4373-bf2b-8b9cc2a0e7fa" class="cell" data-execution_count="58">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>dress_accuracy <span class="op">=</span> is_dress(test_dresses_tensor).<span class="bu">float</span>().mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="59">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>pullover_accuracy <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> is_dress(test_pullovers_tensor).<span class="bu">float</span>().mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="f1dfbf5b-9ccb-4a63-97bb-0750fc295021" class="cell" data-execution_count="59">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>pullover_accuracy <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> is_dress(test_pullovers_tensor).<span class="bu">float</span>().mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-execution_count="60">
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>combined_accuracy <span class="op">=</span> (dress_accuracy <span class="op">+</span> pullover_accuracy) <span class="op">/</span> <span class="dv">2</span></span>
-<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>combined_accuracy, dress_accuracy, pullover_accuracy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="34785dec-2e4c-4a8f-9751-a1c2e1ff7d99" class="cell" data-execution_count="60">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>combined_accuracy <span class="op">=</span> (dress_accuracy <span class="op">+</span> pullover_accuracy) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>combined_accuracy, dress_accuracy, pullover_accuracy</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="60">
 <pre><code>(tensor(0.9175), tensor(0.9730), tensor(0.8620))</code></pre>
 </div>
@@ -1307,139 +1336,407 @@ Tip
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
+
 
 
 

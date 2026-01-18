@@ -9,7 +9,7 @@
 <link>https://alexstrick.com/til.html</link>
 <atom:link href="https://alexstrick.com/til.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
-<generator>quarto-1.2.269</generator>
+<generator>quarto-1.8.27</generator>
 <lastBuildDate>Sun, 15 Sep 2024 22:00:00 GMT</lastBuildDate>
 <item>
   <title>What is the Rust prelude?</title>
@@ -19,15 +19,27 @@
 
 
 
+
 <p>I’m studying Rust these days on the side and one thing that I keep hearing and seeing is the idea of the ‘prelude’. I thought I’d write a quick blog to cement exactly what’s going on here.</p>
 <p>At a very high level, the prelude is a bunch of functions, methods and other things that are automatically available to you when you start working on your project without you having to manually or explicitly import them. As <a href="https://doc.rust-lang.org/std/prelude/">the Rust docs</a> state:</p>
 <blockquote class="blockquote">
 <p>“The prelude is the list of things that Rust automatically imports into every Rust program. It’s kept as small as possible, and is focused on things, particularly traits, which are used in almost every single Rust program.”</p>
 </blockquote>
 <p>I thought maybe a good example of this is the classic ‘Hello, World!’ starter when you create a new project using <code>cargo new ...</code>:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><span class="kw" style="color: #003B4F;">fn</span> main() <span class="op" style="color: #5E5E5E;">{</span></span>
-<span id="cb1-2">    <span class="pp" style="color: #AD0000;">println!</span>(<span class="st" style="color: #20794D;">"Hello, World!"</span>)</span>
-<span id="cb1-3"><span class="op" style="color: #5E5E5E;">}</span></span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fn</span> main() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-2">    <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello, World!"</span>)</span>
+<span id="cb1-3"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div></div>
 <p>So here we have <code>println!</code> which is actually a macro, and from what I read this is <em>not</em> part of the prelude, though it is available to us by default.</p>
 <p>A better / actual list of some things that are made available would include some types like <code>Option</code>, <code>Result</code>, <code>String</code> and <code>Vec</code>, as well as some traits like <code>Copy</code>, <code>Clone</code>, <code>Eq</code> and so on. For a full list, refer to <a href="https://doc.rust-lang.org/std/prelude/#prelude-contents">the official prelude contents</a> as listed in the docs. Note that there are several versions (2015, 2018, 2021 etc) of the prelude. My understanding is that each successive version only adds new things that are exported by default. If that wasn’t the case, then I’m guessing it would be hard to provide those solid backwards-compatibility guarantees.</p>
 <p>So basically, there are some symbols or imports that were deemed to be used so often that they decided not to force you to have to import them explicitly every time you want to get started writing code.</p>
