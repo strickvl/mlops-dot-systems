@@ -60,17 +60,16 @@
 <span id="cb2-8">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
 <span id="cb2-9">)</span>
 <span id="cb2-10"></span>
-<span id="cb2-11"></span>
-<span id="cb2-12">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb2-13">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb2-14">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb2-15">        {</span>
-<span id="cb2-16">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb2-17">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb2-18">        }</span>
-<span id="cb2-19">    ],</span>
-<span id="cb2-20">)</span>
-<span id="cb2-21"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
+<span id="cb2-11">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb2-12">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb2-13">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb2-14">        {</span>
+<span id="cb2-15">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb2-16">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb2-17">        }</span>
+<span id="cb2-18">    ],</span>
+<span id="cb2-19">)</span>
+<span id="cb2-20"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
 <p>So we first register the Phoenix tracer, specify the project (already set up in Phoenix Cloud) and then run our litellm <code>completion</code> as previously. In the terminal we see he following logs:</p>
 <pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
 |  Phoenix Project: hinbox
@@ -112,17 +111,16 @@ Beijing</code></pre>
 <span id="cb4-10">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
 <span id="cb4-11">)</span>
 <span id="cb4-12"></span>
-<span id="cb4-13"></span>
-<span id="cb4-14">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb4-15">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb4-16">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb4-17">        {</span>
-<span id="cb4-18">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb4-19">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb4-20">        }</span>
-<span id="cb4-21">    ],</span>
-<span id="cb4-22">)</span>
-<span id="cb4-23"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
+<span id="cb4-13">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb4-14">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb4-15">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb4-16">        {</span>
+<span id="cb4-17">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb4-18">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb4-19">        }</span>
+<span id="cb4-20">    ],</span>
+<span id="cb4-21">)</span>
+<span id="cb4-22"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
 <p>And I get this in the terminal:</p>
 <pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
 |  Phoenix Project: hinbox
@@ -183,28 +181,25 @@ Beijing</code></pre>
 <span id="cb7-8">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
 <span id="cb7-9">)</span>
 <span id="cb7-10"></span>
-<span id="cb7-11"></span>
-<span id="cb7-12"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb7-13">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb7-14">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb7-15">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb7-16">            {</span>
-<span id="cb7-17">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb7-18">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb7-19">            }</span>
-<span id="cb7-20">        ],</span>
-<span id="cb7-21">    )</span>
-<span id="cb7-22">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb7-23"></span>
-<span id="cb7-24"></span>
-<span id="cb7-25"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb7-26">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb7-27">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb7-28">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
-<span id="cb7-29"></span>
-<span id="cb7-30"></span>
-<span id="cb7-31"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb7-32">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<span id="cb7-11"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb7-12">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb7-13">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb7-14">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb7-15">            {</span>
+<span id="cb7-16">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb7-17">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb7-18">            }</span>
+<span id="cb7-19">        ],</span>
+<span id="cb7-20">    )</span>
+<span id="cb7-21">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb7-22"></span>
+<span id="cb7-23"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb7-24">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb7-25">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb7-26">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb7-27"></span>
+<span id="cb7-28"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb7-29">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
 <p>But these just get registered as two separate traces/calls. The key bit of the documentation is <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/instrument-python">the ‘Using Phoenix Decorator’ section</a>, it seems. If I add a decorator on top of my function and get the specific tracer, it seems I <em>am</em> able to start to group things together:</p>
 <div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
 <span id="cb8-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
@@ -217,29 +212,26 @@ Beijing</code></pre>
 <span id="cb8-9">)</span>
 <span id="cb8-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
 <span id="cb8-11"></span>
-<span id="cb8-12"></span>
-<span id="cb8-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb8-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb8-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb8-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb8-17">            {</span>
-<span id="cb8-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb8-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb8-20">            }</span>
-<span id="cb8-21">        ],</span>
-<span id="cb8-22">    )</span>
-<span id="cb8-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb8-24"></span>
-<span id="cb8-25"></span>
-<span id="cb8-26"><span class="at" style="color: #657422;">@tracer.llm</span></span>
-<span id="cb8-27"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb8-28">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb8-29">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb8-30">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
-<span id="cb8-31"></span>
-<span id="cb8-32"></span>
-<span id="cb8-33"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb8-34">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<span id="cb8-12"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb8-13">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb8-14">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb8-15">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb8-16">            {</span>
+<span id="cb8-17">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb8-18">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb8-19">            }</span>
+<span id="cb8-20">        ],</span>
+<span id="cb8-21">    )</span>
+<span id="cb8-22">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb8-23"></span>
+<span id="cb8-24"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb8-25"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb8-26">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb8-27">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb8-28">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb8-29"></span>
+<span id="cb8-30"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb8-31">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
 <p>This works and I see this in the Phoenix Cloud dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -280,36 +272,32 @@ Beijing</code></pre>
 <span id="cb9-8">)</span>
 <span id="cb9-9">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
 <span id="cb9-10"></span>
-<span id="cb9-11"></span>
-<span id="cb9-12"><span class="at" style="color: #657422;">@tracer.llm</span></span>
-<span id="cb9-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb9-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb9-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb9-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb9-17">            {</span>
-<span id="cb9-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb9-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb9-20">            }</span>
-<span id="cb9-21">        ],</span>
-<span id="cb9-22">    )</span>
-<span id="cb9-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb9-24"></span>
-<span id="cb9-25"></span>
-<span id="cb9-26"><span class="at" style="color: #657422;">@tracer.agent</span></span>
-<span id="cb9-27"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb9-28">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
-<span id="cb9-29"></span>
-<span id="cb9-30"></span>
-<span id="cb9-31"><span class="at" style="color: #657422;">@tracer.chain</span></span>
-<span id="cb9-32"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb9-33">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb9-34">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb9-35">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
-<span id="cb9-36">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1)</span>
-<span id="cb9-37"></span>
-<span id="cb9-38"></span>
-<span id="cb9-39"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb9-40">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<span id="cb9-11"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb9-12"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb9-13">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb9-14">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb9-15">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb9-16">            {</span>
+<span id="cb9-17">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb9-18">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb9-19">            }</span>
+<span id="cb9-20">        ],</span>
+<span id="cb9-21">    )</span>
+<span id="cb9-22">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb9-23"></span>
+<span id="cb9-24"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb9-25"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb9-26">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
+<span id="cb9-27"></span>
+<span id="cb9-28"><span class="at" style="color: #657422;">@tracer.chain</span></span>
+<span id="cb9-29"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb9-30">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb9-31">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb9-32">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
+<span id="cb9-33">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1)</span>
+<span id="cb9-34"></span>
+<span id="cb9-35"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb9-36">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
 <p>And you can see how this looks in the Phoenix Cloud dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -329,42 +317,37 @@ Beijing</code></pre>
 <span id="cb10-9">)</span>
 <span id="cb10-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
 <span id="cb10-11"></span>
-<span id="cb10-12"></span>
-<span id="cb10-13"><span class="at" style="color: #657422;">@tracer.llm</span></span>
-<span id="cb10-14"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb10-15">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb10-16">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb10-17">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb10-18">            {</span>
-<span id="cb10-19">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb10-20">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb10-21">            }</span>
-<span id="cb10-22">        ],</span>
-<span id="cb10-23">    )</span>
-<span id="cb10-24">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb10-25"></span>
-<span id="cb10-26"></span>
-<span id="cb10-27"><span class="at" style="color: #657422;">@tracer.agent</span></span>
-<span id="cb10-28"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb10-29">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
-<span id="cb10-30"></span>
-<span id="cb10-31"></span>
-<span id="cb10-32"><span class="at" style="color: #657422;">@tracer.tool</span>(name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"query_embedding"</span>, description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Query embedding"</span>)</span>
-<span id="cb10-33"><span class="kw" style="color: #003B4F;">def</span> query_embedding(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb10-34">    <span class="cf" style="color: #003B4F;">return</span> [<span class="fl" style="color: #AD0000;">0.1</span>, <span class="fl" style="color: #AD0000;">0.2</span>, <span class="fl" style="color: #AD0000;">0.3</span>]</span>
-<span id="cb10-35"></span>
-<span id="cb10-36"></span>
-<span id="cb10-37"><span class="at" style="color: #657422;">@tracer.agent</span></span>
-<span id="cb10-38"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb10-39">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb10-40">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb10-41">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
-<span id="cb10-42">    embedding1 <span class="op" style="color: #5E5E5E;">=</span> query_embedding(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb10-43">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1, embedding1)</span>
-<span id="cb10-44"></span>
-<span id="cb10-45"></span>
-<span id="cb10-46"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb10-47">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<span id="cb10-12"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb10-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb10-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb10-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb10-17">            {</span>
+<span id="cb10-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb10-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb10-20">            }</span>
+<span id="cb10-21">        ],</span>
+<span id="cb10-22">    )</span>
+<span id="cb10-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb10-24"></span>
+<span id="cb10-25"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb10-26"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-27">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
+<span id="cb10-28"></span>
+<span id="cb10-29"><span class="at" style="color: #657422;">@tracer.tool</span>(name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"query_embedding"</span>, description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Query embedding"</span>)</span>
+<span id="cb10-30"><span class="kw" style="color: #003B4F;">def</span> query_embedding(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-31">    <span class="cf" style="color: #003B4F;">return</span> [<span class="fl" style="color: #AD0000;">0.1</span>, <span class="fl" style="color: #AD0000;">0.2</span>, <span class="fl" style="color: #AD0000;">0.3</span>]</span>
+<span id="cb10-32"></span>
+<span id="cb10-33"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb10-34"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb10-35">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb10-36">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb10-37">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
+<span id="cb10-38">    embedding1 <span class="op" style="color: #5E5E5E;">=</span> query_embedding(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb10-39">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1, embedding1)</span>
+<span id="cb10-40"></span>
+<span id="cb10-41"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb10-42">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
 <p>And now instead of this trace being of kind ‘chain’, it’s now of kind ‘agent’, which some internal spans also being of kind ‘agent’. In a conversation in the Arize Slack I got the following clarification:</p>
 <blockquote class="blockquote">
 <p>“Traces as the concept under”signals” is basically a unique identifier of spans (think “span” of time). See https://opentelemetry.io/docs/concepts/signals/traces/ In most cases if you filter spans by “roots” (e.g.&nbsp;spans that don’t have parents) and or look at the collective set of “traces” they will roughly look the same. Most of the time this is the view you want when looking at telemetry. Spans are too noisy to be looking at in isolation. While the two tabs feel largely overlapping, it’s a bit intentional as there’s actually no real object called a trace - it’s just a series of spans. You will see these abstractions in most observability platform.”</p>
@@ -445,32 +428,29 @@ Beijing</code></pre>
 <span id="cb2-6">logger <span class="op" style="color: #5E5E5E;">=</span> init_logger(project<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>)</span>
 <span id="cb2-7">client <span class="op" style="color: #5E5E5E;">=</span> wrap_openai(OpenAI(api_key<span class="op" style="color: #5E5E5E;">=</span>os.environ[<span class="st" style="color: #20794D;">"OPENAI_API_KEY"</span>]))</span>
 <span id="cb2-8"></span>
-<span id="cb2-9"></span>
-<span id="cb2-10"><span class="co" style="color: #5E5E5E;"># @traced automatically logs the input (args) and output (return value)</span></span>
-<span id="cb2-11"><span class="co" style="color: #5E5E5E;"># of this function to a span. To ensure the span is named `answer_question`,</span></span>
-<span id="cb2-12"><span class="co" style="color: #5E5E5E;"># you should name the function `answer_question`.</span></span>
-<span id="cb2-13"><span class="at" style="color: #657422;">@traced</span></span>
-<span id="cb2-14"><span class="kw" style="color: #003B4F;">def</span> answer_question(body: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">str</span>:</span>
-<span id="cb2-15">    prompt <span class="op" style="color: #5E5E5E;">=</span> [</span>
-<span id="cb2-16">        {<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"system"</span>, <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"You are a helpful assistant."</span>},</span>
-<span id="cb2-17">        {<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>, <span class="st" style="color: #20794D;">"content"</span>: body},</span>
-<span id="cb2-18">    ]</span>
-<span id="cb2-19"></span>
-<span id="cb2-20">    result <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
-<span id="cb2-21">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"gpt-3.5-turbo"</span>,</span>
-<span id="cb2-22">        messages<span class="op" style="color: #5E5E5E;">=</span>prompt,</span>
-<span id="cb2-23">    )</span>
-<span id="cb2-24">    <span class="cf" style="color: #003B4F;">return</span> result.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb2-25"></span>
-<span id="cb2-26"></span>
-<span id="cb2-27"><span class="kw" style="color: #003B4F;">def</span> main():</span>
-<span id="cb2-28">    input_text <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span></span>
-<span id="cb2-29">    result <span class="op" style="color: #5E5E5E;">=</span> answer_question(input_text)</span>
-<span id="cb2-30">    <span class="bu" style="color: null;">print</span>(result)</span>
-<span id="cb2-31"></span>
-<span id="cb2-32"></span>
-<span id="cb2-33"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb2-34">    main()</span></code></pre></div>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;"># @traced automatically logs the input (args) and output (return value)</span></span>
+<span id="cb2-10"><span class="co" style="color: #5E5E5E;"># of this function to a span. To ensure the span is named `answer_question`,</span></span>
+<span id="cb2-11"><span class="co" style="color: #5E5E5E;"># you should name the function `answer_question`.</span></span>
+<span id="cb2-12"><span class="at" style="color: #657422;">@traced</span></span>
+<span id="cb2-13"><span class="kw" style="color: #003B4F;">def</span> answer_question(body: <span class="bu" style="color: null;">str</span>) <span class="op" style="color: #5E5E5E;">-&gt;</span> <span class="bu" style="color: null;">str</span>:</span>
+<span id="cb2-14">    prompt <span class="op" style="color: #5E5E5E;">=</span> [</span>
+<span id="cb2-15">        {<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"system"</span>, <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"You are a helpful assistant."</span>},</span>
+<span id="cb2-16">        {<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>, <span class="st" style="color: #20794D;">"content"</span>: body},</span>
+<span id="cb2-17">    ]</span>
+<span id="cb2-18"></span>
+<span id="cb2-19">    result <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb2-20">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"gpt-3.5-turbo"</span>,</span>
+<span id="cb2-21">        messages<span class="op" style="color: #5E5E5E;">=</span>prompt,</span>
+<span id="cb2-22">    )</span>
+<span id="cb2-23">    <span class="cf" style="color: #003B4F;">return</span> result.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb2-24"></span>
+<span id="cb2-25"><span class="kw" style="color: #003B4F;">def</span> main():</span>
+<span id="cb2-26">    input_text <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span></span>
+<span id="cb2-27">    result <span class="op" style="color: #5E5E5E;">=</span> answer_question(input_text)</span>
+<span id="cb2-28">    <span class="bu" style="color: null;">print</span>(result)</span>
+<span id="cb2-29"></span>
+<span id="cb2-30"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb2-31">    main()</span></code></pre></div>
 <p>This indeed does label the span as <code>answer_question</code> but it doesn’t do much else. Even the model name isn’t captured here. Instrumenting a series of calls to handle ‘deeply nested code’ (as <a href="https://www.braintrust.dev/docs/guides/traces/customize#deeply-nested-code">their docs</a> puts it) even didn’t log the things it was supposed to:</p>
 <div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"></span>
 <span id="cb3-2"><span class="im" style="color: #00769E;">import</span> os</span>
@@ -482,32 +462,28 @@ Beijing</code></pre>
 <span id="cb3-8">logger <span class="op" style="color: #5E5E5E;">=</span> init_logger(project<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>)</span>
 <span id="cb3-9">client <span class="op" style="color: #5E5E5E;">=</span> wrap_openai(OpenAI(api_key<span class="op" style="color: #5E5E5E;">=</span>os.environ[<span class="st" style="color: #20794D;">"OPENAI_API_KEY"</span>]))</span>
 <span id="cb3-10"></span>
-<span id="cb3-11"></span>
-<span id="cb3-12"><span class="at" style="color: #657422;">@traced</span></span>
-<span id="cb3-13"><span class="kw" style="color: #003B4F;">def</span> run_llm(<span class="bu" style="color: null;">input</span>):</span>
-<span id="cb3-14">    model <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"gpt-4o"</span> <span class="cf" style="color: #003B4F;">if</span> random.random() <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="fl" style="color: #AD0000;">0.5</span> <span class="cf" style="color: #003B4F;">else</span> <span class="st" style="color: #20794D;">"gpt-4o-mini"</span></span>
-<span id="cb3-15">    result <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
-<span id="cb3-16">        model<span class="op" style="color: #5E5E5E;">=</span>model, messages<span class="op" style="color: #5E5E5E;">=</span>[{<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>, <span class="st" style="color: #20794D;">"content"</span>: <span class="bu" style="color: null;">input</span>}]</span>
-<span id="cb3-17">    )</span>
-<span id="cb3-18">    current_span().log(metadata<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"randomModel"</span>: model})</span>
-<span id="cb3-19">    <span class="cf" style="color: #003B4F;">return</span> result.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb3-20"></span>
-<span id="cb3-21"></span>
-<span id="cb3-22"><span class="at" style="color: #657422;">@traced</span></span>
-<span id="cb3-23"><span class="kw" style="color: #003B4F;">def</span> some_logic(<span class="bu" style="color: null;">input</span>):</span>
-<span id="cb3-24">    <span class="cf" style="color: #003B4F;">return</span> run_llm(<span class="st" style="color: #20794D;">"You are a magical wizard. Answer the following question: "</span> <span class="op" style="color: #5E5E5E;">+</span> <span class="bu" style="color: null;">input</span>)</span>
-<span id="cb3-25"></span>
-<span id="cb3-26"></span>
-<span id="cb3-27"><span class="kw" style="color: #003B4F;">def</span> simple_handler(input_text: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb3-28">    <span class="cf" style="color: #003B4F;">with</span> start_span() <span class="im" style="color: #00769E;">as</span> span:</span>
-<span id="cb3-29">        output <span class="op" style="color: #5E5E5E;">=</span> some_logic(input_text)</span>
-<span id="cb3-30">        span.log(<span class="bu" style="color: null;">input</span><span class="op" style="color: #5E5E5E;">=</span>input_text, output<span class="op" style="color: #5E5E5E;">=</span>output, metadata<span class="op" style="color: #5E5E5E;">=</span><span class="bu" style="color: null;">dict</span>(user_id<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"test_user"</span>))</span>
-<span id="cb3-31">        <span class="bu" style="color: null;">print</span>(output)</span>
-<span id="cb3-32"></span>
-<span id="cb3-33"></span>
-<span id="cb3-34"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb3-35">    question <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span></span>
-<span id="cb3-36">    simple_handler(question)</span></code></pre></div>
+<span id="cb3-11"><span class="at" style="color: #657422;">@traced</span></span>
+<span id="cb3-12"><span class="kw" style="color: #003B4F;">def</span> run_llm(<span class="bu" style="color: null;">input</span>):</span>
+<span id="cb3-13">    model <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"gpt-4o"</span> <span class="cf" style="color: #003B4F;">if</span> random.random() <span class="op" style="color: #5E5E5E;">&gt;</span> <span class="fl" style="color: #AD0000;">0.5</span> <span class="cf" style="color: #003B4F;">else</span> <span class="st" style="color: #20794D;">"gpt-4o-mini"</span></span>
+<span id="cb3-14">    result <span class="op" style="color: #5E5E5E;">=</span> client.chat.completions.create(</span>
+<span id="cb3-15">        model<span class="op" style="color: #5E5E5E;">=</span>model, messages<span class="op" style="color: #5E5E5E;">=</span>[{<span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>, <span class="st" style="color: #20794D;">"content"</span>: <span class="bu" style="color: null;">input</span>}]</span>
+<span id="cb3-16">    )</span>
+<span id="cb3-17">    current_span().log(metadata<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"randomModel"</span>: model})</span>
+<span id="cb3-18">    <span class="cf" style="color: #003B4F;">return</span> result.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb3-19"></span>
+<span id="cb3-20"><span class="at" style="color: #657422;">@traced</span></span>
+<span id="cb3-21"><span class="kw" style="color: #003B4F;">def</span> some_logic(<span class="bu" style="color: null;">input</span>):</span>
+<span id="cb3-22">    <span class="cf" style="color: #003B4F;">return</span> run_llm(<span class="st" style="color: #20794D;">"You are a magical wizard. Answer the following question: "</span> <span class="op" style="color: #5E5E5E;">+</span> <span class="bu" style="color: null;">input</span>)</span>
+<span id="cb3-23"></span>
+<span id="cb3-24"><span class="kw" style="color: #003B4F;">def</span> simple_handler(input_text: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb3-25">    <span class="cf" style="color: #003B4F;">with</span> start_span() <span class="im" style="color: #00769E;">as</span> span:</span>
+<span id="cb3-26">        output <span class="op" style="color: #5E5E5E;">=</span> some_logic(input_text)</span>
+<span id="cb3-27">        span.log(<span class="bu" style="color: null;">input</span><span class="op" style="color: #5E5E5E;">=</span>input_text, output<span class="op" style="color: #5E5E5E;">=</span>output, metadata<span class="op" style="color: #5E5E5E;">=</span><span class="bu" style="color: null;">dict</span>(user_id<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"test_user"</span>))</span>
+<span id="cb3-28">        <span class="bu" style="color: null;">print</span>(output)</span>
+<span id="cb3-29"></span>
+<span id="cb3-30"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb3-31">    question <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span></span>
+<span id="cb3-32">    simple_handler(question)</span></code></pre></div>
 <p>This is adapted from the example they pasted in their docs as their one isn’t even a functional code example on its own.</p>
 <p>It is seeming increasingly clear that Braintrust isn’t going to be the right choice, at least as long as I want to keep using <code>litellm</code>. I know that Langfuse has a very nice integration with <code>litellm</code>, so I think I’ll pivot over to that now.</p>
 </section>
@@ -518,27 +494,24 @@ Beijing</code></pre>
 <span id="cb4-2"></span>
 <span id="cb4-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"langfuse"</span>]</span>
 <span id="cb4-4"></span>
-<span id="cb4-5"></span>
-<span id="cb4-6"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb4-7">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb4-8">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb4-9">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb4-10">            {</span>
-<span id="cb4-11">                <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb4-12">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb4-13">            }</span>
-<span id="cb4-14">        ],</span>
-<span id="cb4-15">    )</span>
-<span id="cb4-16">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb4-17"></span>
-<span id="cb4-18"></span>
-<span id="cb4-19"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb4-20">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb4-21">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb4-22">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
-<span id="cb4-23"></span>
-<span id="cb4-24"></span>
-<span id="cb4-25"><span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<span id="cb4-5"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb4-6">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb4-7">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb4-8">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb4-9">            {</span>
+<span id="cb4-10">                <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb4-11">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb4-12">            }</span>
+<span id="cb4-13">        ],</span>
+<span id="cb4-14">    )</span>
+<span id="cb4-15">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb4-16"></span>
+<span id="cb4-17"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb4-18">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb4-19">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb4-20">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb4-21"></span>
+<span id="cb4-22"><span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
 <p>We specify <code>langfuse</code> for the callback and each llm call is logged as a separate trace + span. Here you can see what this looks like in the dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -551,39 +524,36 @@ Beijing</code></pre>
 <span id="cb5-2"></span>
 <span id="cb5-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"langfuse"</span>]</span>
 <span id="cb5-4"></span>
-<span id="cb5-5"></span>
-<span id="cb5-6"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>, trace_id: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb5-7">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb5-8">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb5-9">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb5-10">            {</span>
-<span id="cb5-11">                <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb5-12">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb5-13">            }</span>
-<span id="cb5-14">        ],</span>
-<span id="cb5-15">        metadata<span class="op" style="color: #5E5E5E;">=</span>{</span>
-<span id="cb5-16">            <span class="st" style="color: #20794D;">"trace_id"</span>: trace_id,</span>
-<span id="cb5-17">            <span class="st" style="color: #20794D;">"trace_name"</span>: <span class="st" style="color: #20794D;">"my_llm_application"</span>,</span>
-<span id="cb5-18">            <span class="st" style="color: #20794D;">"project"</span>: <span class="st" style="color: #20794D;">"hinbox"</span>,</span>
-<span id="cb5-19">        },</span>
-<span id="cb5-20">    )</span>
-<span id="cb5-21">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb5-22"></span>
-<span id="cb5-23"></span>
-<span id="cb5-24"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb5-25">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(</span>
-<span id="cb5-26">        <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb5-27">        <span class="st" style="color: #20794D;">"my_llm_application_run_789"</span>,</span>
-<span id="cb5-28">    )</span>
-<span id="cb5-29">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(</span>
-<span id="cb5-30">        <span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>,</span>
-<span id="cb5-31">        <span class="st" style="color: #20794D;">"my_llm_application_run_789"</span>,</span>
-<span id="cb5-32">    )</span>
-<span id="cb5-33">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
-<span id="cb5-34"></span>
-<span id="cb5-35"></span>
-<span id="cb5-36"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb5-37">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<span id="cb5-5"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>, trace_id: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb5-6">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb5-7">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb5-8">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb5-9">            {</span>
+<span id="cb5-10">                <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb5-11">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb5-12">            }</span>
+<span id="cb5-13">        ],</span>
+<span id="cb5-14">        metadata<span class="op" style="color: #5E5E5E;">=</span>{</span>
+<span id="cb5-15">            <span class="st" style="color: #20794D;">"trace_id"</span>: trace_id,</span>
+<span id="cb5-16">            <span class="st" style="color: #20794D;">"trace_name"</span>: <span class="st" style="color: #20794D;">"my_llm_application"</span>,</span>
+<span id="cb5-17">            <span class="st" style="color: #20794D;">"project"</span>: <span class="st" style="color: #20794D;">"hinbox"</span>,</span>
+<span id="cb5-18">        },</span>
+<span id="cb5-19">    )</span>
+<span id="cb5-20">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb5-23">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(</span>
+<span id="cb5-24">        <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb5-25">        <span class="st" style="color: #20794D;">"my_llm_application_run_789"</span>,</span>
+<span id="cb5-26">    )</span>
+<span id="cb5-27">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(</span>
+<span id="cb5-28">        <span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>,</span>
+<span id="cb5-29">        <span class="st" style="color: #20794D;">"my_llm_application_run_789"</span>,</span>
+<span id="cb5-30">    )</span>
+<span id="cb5-31">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb5-32"></span>
+<span id="cb5-33"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb5-34">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
 <p>This looks like this in the Langfuse dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
