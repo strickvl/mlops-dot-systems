@@ -1,0 +1,409 @@
+/* Personal Blog Styles
+ * Modern Warm aesthetic - sibling to technical but warmer
+ * Fonts: Outfit (headings/UI)
+ */
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-warm-white: #FDFCFA;
+    --bg-white: #FFFFFF;
+    --bg-soft: #F9F7F4;
+    --text-primary: #1F1F1F;
+    --text-secondary: #5A5A5A;
+    --text-muted: #9A9A9A;
+    --accent-rose: #E07A5F;
+    --accent-rose-light: #FDF0ED;
+    --accent-rose-dark: #C4664D;
+    --accent-teal: #4A9B94;
+    --border-soft: #EAEAEA;
+    
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== BASE STYLES ===== */
+body.personal-page {
+    background: var(--bg-warm-white) !important;
+    color: var(--text-primary);
+    font-family: var(--font-sans) !important;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ===== NAVBAR ===== */
+body.personal-page #quarto-header {
+    background: rgba(253, 252, 250, 0.9) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-soft) !important;
+}
+
+body.personal-page .navbar {
+    background: transparent !important;
+    border: none !important;
+}
+
+body.personal-page .navbar-brand {
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    font-size: 0.9375rem !important;
+    color: var(--text-primary) !important;
+}
+
+body.personal-page .navbar .nav-link {
+    font-family: var(--font-sans) !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    padding: 0.5rem 0.875rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+body.personal-page .navbar .nav-link:hover {
+    color: var(--text-primary) !important;
+    background: rgba(224, 122, 95, 0.08);
+}
+
+body.personal-page .navbar .nav-link.active {
+    color: var(--accent-rose) !important;
+    background: var(--accent-rose-light) !important;
+}
+
+/* ===== PAGE HEADER ===== */
+body.personal-page #title-block-header {
+    background: transparent !important;
+    border: none !important;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+body.personal-page h1.title {
+    font-family: var(--font-sans) !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.03em;
+    color: var(--text-primary) !important;
+    margin-bottom: 0.75rem;
+}
+
+/* Description text */
+body.personal-page main.content > p:first-of-type,
+body.personal-page main.content > p:nth-of-type(2) {
+    font-family: var(--font-sans) !important;
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    max-width: 560px;
+}
+
+body.personal-page main.content > p a {
+    color: var(--accent-teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+body.personal-page main.content > p a:hover {
+    text-decoration: underline;
+}
+
+/* ===== CATEGORY PILLS (added via QMD) ===== */
+body.personal-page .personal-category-nav {
+    max-width: 1100px;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+body.personal-page .category-pill {
+    padding: 0.5rem 1rem;
+    font-family: var(--font-sans) !important;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+body.personal-page .category-pill:hover {
+    background: var(--bg-white);
+    border-color: var(--accent-rose);
+    color: var(--accent-rose);
+}
+
+body.personal-page .category-pill--active {
+    background: var(--accent-rose);
+    border-color: var(--accent-rose);
+    color: white;
+}
+
+/* ===== LISTING CONTAINER ===== */
+body.personal-page .quarto-listing {
+    margin-top: 2rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2rem;
+}
+
+/* ===== GRID LISTING ===== */
+body.personal-page .quarto-listing-container-grid .list.grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2rem !important;
+}
+
+/* Remove any gray backgrounds */
+body.personal-page .quarto-listing-container-grid,
+body.personal-page .quarto-listing-container-grid .list,
+body.personal-page .quarto-listing-container-grid .g-col-1 {
+    background: transparent !important;
+}
+
+/* ===== FEATURED FIRST CARD ===== */
+/* First card spans full width for prominence */
+body.personal-page .quarto-listing-container-grid .list.grid > .g-col-1:first-child {
+    grid-column: 1 / -1;
+}
+
+body.personal-page .quarto-listing-container-grid .list.grid > .g-col-1:first-child .card-body {
+    padding: 2rem !important;
+}
+
+body.personal-page .quarto-listing-container-grid .list.grid > .g-col-1:first-child .listing-title {
+    font-size: 1.5rem !important;
+}
+
+/* ===== GRID CARDS ===== */
+body.personal-page .quarto-grid-item {
+    background: var(--bg-white) !important;
+    border: 1px solid var(--border-soft) !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    transition: all 0.4s var(--ease-out-expo);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+body.personal-page .quarto-grid-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent !important;
+}
+
+/* Card container */
+body.personal-page .quarto-grid-item .card {
+    background: transparent !important;
+    border: none !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hide any images or placeholders - this is a text-only card design */
+body.personal-page .quarto-grid-item .card-img-top,
+body.personal-page .quarto-grid-item .listing-item-img-placeholder,
+body.personal-page .quarto-grid-item .thumbnail {
+    display: none !important;
+}
+
+/* Card body */
+body.personal-page .quarto-grid-item .card-body {
+    padding: 1.5rem !important;
+    background: var(--bg-white) !important;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Reorder elements using flexbox order */
+/* Categories come first */
+body.personal-page .quarto-grid-item .listing-categories {
+    order: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Title comes second */
+body.personal-page .quarto-grid-item .card-title,
+body.personal-page .quarto-grid-item .listing-title {
+    order: 1;
+}
+
+/* Description comes third */
+body.personal-page .quarto-grid-item .card-text,
+body.personal-page .quarto-grid-item .listing-description {
+    order: 2;
+    flex-grow: 1;
+}
+
+/* Meta row (date) comes last */
+body.personal-page .quarto-grid-item .card-attribution {
+    order: 3;
+}
+
+/* Category styling - show as label, uppercase */
+body.personal-page .quarto-grid-item .listing-category {
+    font-family: var(--font-sans) !important;
+    font-size: 0.6875rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--accent-rose) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    text-decoration: none !important;
+}
+
+/* Only show first category */
+body.personal-page .quarto-grid-item .listing-category:not(:first-child) {
+    display: none;
+}
+
+body.personal-page .quarto-grid-item .listing-category:hover {
+    color: var(--accent-rose-dark) !important;
+}
+
+/* Post title */
+body.personal-page .quarto-grid-item .card-title,
+body.personal-page .quarto-grid-item .card-title a,
+body.personal-page .quarto-grid-item .listing-title,
+body.personal-page .quarto-grid-item .listing-title a {
+    font-family: var(--font-sans) !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    line-height: 1.35;
+    color: var(--text-primary) !important;
+    letter-spacing: -0.01em;
+    text-decoration: none !important;
+    margin-bottom: 0.5rem;
+}
+
+body.personal-page .quarto-grid-item:hover .card-title,
+body.personal-page .quarto-grid-item:hover .card-title a,
+body.personal-page .quarto-grid-item:hover .listing-title,
+body.personal-page .quarto-grid-item:hover .listing-title a {
+    color: var(--accent-rose) !important;
+}
+
+/* Post description/excerpt */
+body.personal-page .quarto-grid-item .card-text,
+body.personal-page .quarto-grid-item .listing-description {
+    font-family: var(--font-sans) !important;
+    font-size: 0.9375rem !important;
+    color: var(--text-secondary) !important;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+/* Meta row with date */
+body.personal-page .quarto-grid-item .card-attribution {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-soft);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+body.personal-page .quarto-grid-item .listing-date {
+    font-family: var(--font-sans) !important;
+    font-size: 0.8125rem !important;
+    color: var(--text-muted) !important;
+}
+
+/* Hide author if shown */
+body.personal-page .quarto-grid-item .listing-author {
+    display: none;
+}
+
+/* ===== FOOTER ===== */
+body.personal-page .nav-footer {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-top: 1px solid var(--border-soft);
+    font-family: var(--font-sans) !important;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    body.personal-page h1.title {
+        font-size: 2rem !important;
+    }
+
+    body.personal-page .quarto-listing-container-grid .list.grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Featured card goes back to single column on mobile */
+    body.personal-page .quarto-listing-container-grid .list.grid > .g-col-1:first-child {
+        grid-column: 1;
+    }
+
+    body.personal-page .quarto-listing-container-grid .list.grid > .g-col-1:first-child .listing-title {
+        font-size: 1.375rem !important;
+    }
+
+    body.personal-page .personal-category-nav {
+        padding: 0 1.5rem;
+    }
+
+    body.personal-page .quarto-listing {
+        padding: 0 1.5rem;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.personal-page #title-block-header {
+    animation: fadeIn 0.5s var(--ease-out-expo) both;
+}
+
+body.personal-page .personal-category-nav {
+    animation: fadeIn 0.5s var(--ease-out-expo) 0.1s both;
+}
+
+body.personal-page .quarto-listing {
+    animation: fadeIn 0.5s var(--ease-out-expo) 0.15s both;
+}
+
+body.personal-page .quarto-grid-item {
+    animation: fadeIn 0.5s var(--ease-out-expo) both;
+}
+
+body.personal-page .quarto-grid-item:nth-child(1) { animation-delay: 0.2s; }
+body.personal-page .quarto-grid-item:nth-child(2) { animation-delay: 0.25s; }
+body.personal-page .quarto-grid-item:nth-child(3) { animation-delay: 0.3s; }
+body.personal-page .quarto-grid-item:nth-child(4) { animation-delay: 0.35s; }
+body.personal-page .quarto-grid-item:nth-child(5) { animation-delay: 0.4s; }

@@ -1,7 +1,7 @@
 ---
-title: "Today I Learned (TIL)"
+title: "Technical Blog"
 listing:
-  contents: til
+  contents: posts
   sort: "date desc"
   type: default
   categories: false
@@ -15,4 +15,7 @@ body-classes: technical-page
 css: styles/technical.css
 ---
 
-Short-form notes on things I've learned while working on ML engineering, software, and related topics.
+Writings on MLOps, machine learning, software engineering, and programming.
+
+For personal writings on Afghanistan, books, languages, and life,
+see the [personal blog](/personal.html).

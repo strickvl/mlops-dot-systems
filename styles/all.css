@@ -1,0 +1,284 @@
+/* All Posts Archive Styles
+ * Condensed text-only listing of all posts
+ * Minimal, scannable design
+ */
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+
+:root {
+    --bg-primary: #FAFBFC;
+    --bg-white: #FFFFFF;
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --text-muted: #9CA3AF;
+    --accent-primary: #2563EB;
+    --accent-rose: #E07A5F;
+    --border-default: #E5E7EB;
+    
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===== BASE STYLES ===== */
+body.all-page {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary);
+    font-family: var(--font-sans) !important;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ===== NAVBAR ===== */
+body.all-page #quarto-header {
+    background: rgba(250, 251, 252, 0.85) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-default) !important;
+}
+
+body.all-page .navbar {
+    background: transparent !important;
+    border: none !important;
+}
+
+body.all-page .navbar-brand {
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    font-size: 0.9375rem !important;
+    color: var(--text-primary) !important;
+}
+
+body.all-page .navbar .nav-link {
+    font-family: var(--font-sans) !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    padding: 0.5rem 0.875rem !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+body.all-page .navbar .nav-link:hover {
+    color: var(--text-primary) !important;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+/* ===== PAGE HEADER ===== */
+body.all-page #title-block-header {
+    background: transparent !important;
+    border: none !important;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+body.all-page h1.title {
+    font-family: var(--font-sans) !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.025em;
+    color: var(--text-primary) !important;
+    margin-bottom: 0.75rem;
+}
+
+/* Description text */
+body.all-page main.content > p:first-of-type,
+body.all-page main.content > p:nth-of-type(2) {
+    font-family: var(--font-sans) !important;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+body.all-page main.content > p a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+body.all-page main.content > p a:hover {
+    text-decoration: underline;
+}
+
+/* ===== LISTING CONTAINER ===== */
+body.all-page .quarto-listing {
+    margin-top: 2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* The posts list - clean, condensed rows */
+body.all-page #listing-listing .list.quarto-listing-default {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ===== POST ROWS ===== */
+body.all-page .quarto-listing-default .quarto-post {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: baseline !important;
+    gap: 1.5rem !important;
+    padding: 0.75rem 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    margin: 0 !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease !important;
+}
+
+body.all-page .quarto-listing-default .quarto-post:first-child {
+    border-top: 1px solid var(--border-default) !important;
+}
+
+body.all-page .quarto-listing-default .quarto-post:hover {
+    background: rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Date column - comes FIRST visually using order */
+body.all-page .quarto-listing-default .quarto-post .metadata {
+    display: block !important;
+    position: static !important;
+    order: -1 !important;
+    flex-shrink: 0 !important;
+    width: 7rem !important;
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.all-page .quarto-listing-default .listing-date {
+    font-family: var(--font-mono) !important;
+    font-size: 0.8125rem !important;
+    color: var(--text-muted) !important;
+    white-space: nowrap;
+}
+
+/* Content column - title and tags inline */
+body.all-page .quarto-listing-default .quarto-post .body {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: baseline !important;
+    gap: 0.75rem !important;
+    flex: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Title */
+body.all-page .quarto-listing-default .listing-title,
+body.all-page .quarto-listing-default .listing-title a {
+    font-family: var(--font-sans) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+    text-decoration: none !important;
+    line-height: 1.4;
+}
+
+body.all-page .quarto-listing-default .quarto-post:hover .listing-title,
+body.all-page .quarto-listing-default .quarto-post:hover .listing-title a {
+    color: var(--accent-primary) !important;
+}
+
+/* Hide description */
+body.all-page .quarto-listing-default .listing-description {
+    display: none !important;
+}
+
+/* Categories/tags - inline with title */
+body.all-page .quarto-listing-default .listing-categories {
+    display: inline-flex !important;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0 !important;
+}
+
+body.all-page .quarto-listing-default .listing-category {
+    font-family: var(--font-mono) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    background: rgba(0, 0, 0, 0.04) !important;
+    color: var(--text-muted) !important;
+    border-radius: 3px;
+    text-decoration: none !important;
+    border: none !important;
+    text-transform: lowercase;
+}
+
+body.all-page .quarto-listing-default .listing-category:hover {
+    background: rgba(0, 0, 0, 0.08) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Hide thumbnails */
+body.all-page .quarto-listing-default .thumbnail,
+body.all-page .quarto-listing-default .quarto-post img {
+    display: none !important;
+}
+
+/* ===== FOOTER ===== */
+body.all-page .nav-footer {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-default);
+    font-family: var(--font-sans) !important;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    body.all-page h1.title {
+        font-size: 1.75rem !important;
+    }
+    
+    body.all-page .quarto-listing-default .quarto-post {
+        grid-template-columns: 1fr !important;
+        gap: 0.25rem !important;
+        padding: 1rem 0 !important;
+    }
+    
+    body.all-page .quarto-listing-default .quarto-post .metadata {
+        grid-column: 1 !important;
+    }
+    
+    body.all-page .quarto-listing-default .quarto-post .body {
+        grid-column: 1 !important;
+    }
+    
+    body.all-page .quarto-listing-default .listing-date {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.all-page #title-block-header {
+    animation: fadeIn 0.5s var(--ease-out-expo) both;
+}
+
+body.all-page .quarto-listing {
+    animation: fadeIn 0.5s var(--ease-out-expo) 0.1s both;
+}

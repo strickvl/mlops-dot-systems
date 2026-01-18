@@ -14,6 +14,7 @@ website:
   title: "Alex Strick van Linschoten"
   description: "Personal and technical writings from Alex Strick van Linschoten"
   site-url: "https://alexstrick.com"
+  draft-mode: gone
   open-graph: true
   twitter-card:
     creator: "@strickvl"
@@ -23,6 +24,8 @@ website:
         file: technical.qmd
       - text: "Personal"
         file: personal.qmd
+      - text: "All"
+        file: all.qmd
     right:
       - text: "TIL"
         file: til.qmd

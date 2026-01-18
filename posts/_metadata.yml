@@ -4,5 +4,6 @@
 # (see https://quarto.org/docs/projects/code-execution.html#freeze)
 freeze: true
 
-# Enable banner style title blocks
-title-block-banner: true
+# Apply technical styling to all posts
+body-classes: technical-page
+css: /styles/technical.css

@@ -1,0 +1,288 @@
+/* Landing Page Styles
+ * Dark minimal landing with navigation cards
+ * Fonts: Cormorant (display) + Instrument Sans (body)
+ */
+
+:root {
+    --bg-primary: #0D0D0F;
+    --bg-secondary: #151518;
+    --text-primary: #F5F5F4;
+    --text-secondary: #A1A1A6;
+    --text-muted: #6B6B70;
+    --accent-technical: #60A5FA;
+    --accent-personal: #F9A875;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    
+    --font-display: 'Cormorant', Georgia, serif;
+    --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset Quarto defaults for custom layout */
+body {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hide Quarto navbar on landing page */
+.navbar {
+    display: none !important;
+}
+
+/* Hide any Quarto-generated header */
+#quarto-header {
+    display: none !important;
+}
+
+/* Subtle grain texture overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.025;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    z-index: 0;
+}
+
+/* Main landing content */
+.landing-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    min-height: calc(100vh - 80px);
+}
+
+/* Intro section */
+.landing-intro {
+    text-align: center;
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.8s var(--ease-out-expo) 0.1s both;
+}
+
+.landing-name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+}
+
+.landing-tagline {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+.landing-tagline em {
+    font-style: italic;
+    color: var(--text-primary);
+    font-family: var(--font-display);
+}
+
+/* Navigation Cards */
+.landing-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.8s var(--ease-out-expo) 0.25s both;
+}
+
+.nav-card {
+    position: relative;
+    padding: 2rem 1.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.5s var(--ease-out-expo);
+    overflow: hidden;
+}
+
+.nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--card-accent, var(--text-secondary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out-expo);
+}
+
+.nav-card:hover::before {
+    transform: scaleX(1);
+}
+
+.nav-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+}
+
+.nav-card--technical {
+    --card-accent: var(--accent-technical);
+}
+
+.nav-card--personal {
+    --card-accent: var(--accent-personal);
+}
+
+.nav-card__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.nav-card__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.nav-card__desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.nav-card__arrow {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    transform: translate(-8px, 8px);
+    transition: all 0.4s var(--ease-out-expo);
+    color: var(--card-accent);
+}
+
+.nav-card:hover .nav-card__arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+/* Social Links */
+.landing-social {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeInUp 0.8s var(--ease-out-expo) 0.4s both;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s var(--ease-out-expo);
+}
+
+.social-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.social-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* About link */
+.landing-about-link {
+    margin-top: 3rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 100px;
+    transition: all 0.3s var(--ease-out-expo);
+    animation: fadeInUp 0.8s var(--ease-out-expo) 0.5s both;
+}
+
+.landing-about-link:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Footer */
+.landing-footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .landing-nav {
+        grid-template-columns: 1fr;
+    }
+    
+    .landing-social {
+        gap: 1rem;
+    }
+    
+    .landing-main {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Entry animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

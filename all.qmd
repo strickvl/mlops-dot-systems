@@ -1,0 +1,21 @@
+---
+title: "All Posts"
+listing:
+  contents:
+    - posts
+    - personal
+  sort: "date desc"
+  type: default
+  categories: false
+  sort-ui: false
+  filter-ui: false
+  fields: [title, date, categories]
+  date-format: "YYYY-MM-DD"
+page-layout: article
+body-classes: all-page
+css: styles/all.css
+---
+
+A chronological archive of all posts—both technical and personal writings.
+
+Browse by section: [Technical](/technical.html) | [Personal](/personal.html)
