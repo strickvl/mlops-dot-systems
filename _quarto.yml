@@ -8,6 +8,7 @@ project:
     - "!CLAUDE.md"
     - "!**/README.md"
     - "!scripts/**"
+    - "!squarespace_export/**"
 
 website:
   title: "Alex Strick van Linschoten"
