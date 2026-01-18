@@ -18,7 +18,7 @@ comments:
 
 I'm looking forward to this book, [just reviewed](http://www.publishersweekly.com/article/456648-Nonfiction_Book_Reviews_4_19_2010.php) (below) by Publisher's Weekly. Quite apart from the whole survival-memoir thing, Jere knows a lot about the Haqqanis (having spent time with them during the 1980s).
 
-![](http://ecx.images-amazon.com/images/I/41IcsWUUwcL._SL160_.avif)  
+![](http://ecx.images-amazon.com/images/I/41IcsWUUwcL._SL160_.jpg)  
 ["Captive: My Time as a Prisoner of the Taliban" (Jere Van Dyk)](http://www.amazon.com/Captive-My-Time-Prisoner-Taliban/dp/080508827X%3FSubscriptionId%3D0PZ7TM66EXQCXFVTMTR2%26tag%3Dalexstrick-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D080508827X)
 
 **Captive: My Time as a Prisoner of the Taliban Jere Van Dyk. Times, $25 (288p) ISBN 978-0-8050-8827-4**
