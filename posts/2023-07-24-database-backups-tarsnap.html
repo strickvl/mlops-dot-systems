@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="Automating database backups with Tarsnap – Alex Strick van Linschoten">
 <meta property="og:description" content="I added a cronjob to automate database backups for my MathsPrompt questions.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/mathsprompt/database-backups-cover.png">
@@ -90,10 +91,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -108,12 +109,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -146,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -163,57 +168,56 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Automating database backups with Tarsnap</h1>
-                  <div>
-        <div class="description">
-          I added a cronjob to automate database backups for my MathsPrompt questions.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">databases</div>
-                <div class="quarto-category">skillbuilding</div>
-                <div class="quarto-category">softwareengineering</div>
-                <div class="quarto-category">tools</div>
-                <div class="quarto-category">miniproject</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">July 24, 2023</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Automating database backups with Tarsnap</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">databases</div>
+    <div class="quarto-category">skillbuilding</div>
+    <div class="quarto-category">softwareengineering</div>
+    <div class="quarto-category">tools</div>
+    <div class="quarto-category">miniproject</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    I added a cronjob to automate database backups for my MathsPrompt questions.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 24, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p><a href="https://mlops.systems/posts/2023-07-23-maths-prompt-rust-project.html">Yesterday I wrote</a> about <a href="https://github.com/strickvl/mathsprompt/">my MathsPrompt tool</a> which serves up questions to help me practice new skills I’m learning as part of my mathematics degree. Today I realised that all the data (both autogenerated and copy-pasted) is being stored in my database and that I hadn’t really given much thought yet to ensuring a long life for that data.</p>

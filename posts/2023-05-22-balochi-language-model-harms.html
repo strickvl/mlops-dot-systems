@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="The Risks of Language Models in Minority Languages – Alex Strick van Linschoten">
 <meta property="og:description" content="The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks such as misuse by state actors for surveillance and power consolidation, and the unintentional promotion of linguistic monoculture.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/balochi-llm-harms.png">
@@ -90,10 +91,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed technical-page fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -108,12 +109,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -146,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -163,55 +168,54 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">The Risks of Language Models in Minority Languages</h1>
-                  <div>
-        <div class="description">
-          The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks such as misuse by state actors for surveillance and power consolidation, and the unintentional promotion of linguistic monoculture.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">balochi</div>
-                <div class="quarto-category">nlp</div>
-                <div class="quarto-category">balochi-language-model</div>
-                <div class="quarto-category">deep-learning</div>
-                <div class="quarto-category">ethics</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">May 22, 2023</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Risks of Language Models in Minority Languages</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">balochi</div>
+    <div class="quarto-category">nlp</div>
+    <div class="quarto-category">balochi-language-model</div>
+    <div class="quarto-category">deep-learning</div>
+    <div class="quarto-category">ethics</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    The dual-edged nature of developing a language model for the Balochi language, weighing potential benefits like improved communication, accessibility, and language preservation against serious risks such as misuse by state actors for surveillance and power consolidation, and the unintentional promotion of linguistic monoculture.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 22, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>In thinking about my work to put together a language model or some utilities relating to the Balochi language, I thought a fair bit about whether I should even start. At a very high level, we can look at general risks that comes from language models, as highlighted in <a href="https://dl.acm.org/doi/pdf/10.1145/3531146.3533088">the 2022 Deepmind paper</a> entitled “Taxonomy of Risks posed by Language Models” which covers</p>

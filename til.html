@@ -80,9 +80,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-date','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -132,14 +132,17 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles/technical.css">
 <link rel="alternate" type="application/rss+xml" title="Alex Strick van Linschoten" href="til.xml" data-external="1"><meta property="og:title" content="Today I Learned (TIL) – Alex Strick van Linschoten">
+<meta property="og:description" content="Personal and technical writings from Alex Strick van Linschoten">
 <meta property="og:site_name" content="Alex Strick van Linschoten">
 <meta name="twitter:title" content="Today I Learned (TIL) – Alex Strick van Linschoten">
+<meta name="twitter:description" content="Personal and technical writings from Alex Strick van Linschoten">
 <meta name="twitter:creator" content="@strickvl">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -157,12 +160,16 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="./technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -195,7 +202,7 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="./index.xml">
+    <a class="dropdown-item" href="./technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -215,9 +222,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-cloud"><div class="category" data-category="bGVhcm5pbmc="><span class="quarto-category-count category-cloud-10">learning</span></div><div class="category" data-category="cnVzdA=="><span class="quarto-category-count category-cloud-10">rust</span></div><div class="category" data-category="VElM"><span class="quarto-category-count category-cloud-10">TIL</span></div></div></div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -240,20 +245,18 @@ window.Quarto = {
 </header>
 
 
+<p>Short-form notes on things I’ve learned while working on ML engineering, software, and related topics.</p>
 
 
 
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="cnVzdCUyQ2xlYXJuaW5nJTJDVElM" data-listing-date-sort="1726437600000" data-listing-file-modified-sort="1768760698543" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="305">
-<a href="./til/2024-09-16-what-is-the-rust-prelude.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-What is the Rust prelude?
-</h5>
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="cnVzdCUyQ2xlYXJuaW5nJTJDVElM" data-listing-date-sort="1726437600000" data-listing-file-modified-sort="1768760698543" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="305">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./til/2024-09-16-what-is-the-rust-prelude.html" class="no-external">What is the Rust prelude?</a>
+</h3>
 <div class="listing-categories">
 
 <div class="listing-category" onclick="window.quartoListingCategory('cnVzdA=='); return false;">rust</div>
@@ -263,19 +266,17 @@ What is the Rust prelude?
 <div class="listing-category" onclick="window.quartoListingCategory('VElM'); return false;">TIL</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="delink listing-description"><a href="./til/2024-09-16-what-is-the-rust-prelude.html" class="no-external">
 <p>A quick post on what the ‘prelude’ is and why it exists.</p>
+</a></div>
 </div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Alex Strick van Linschoten
-</div>
+<div class="metadata">
+<a href="./til/2024-09-16-what-is-the-rust-prelude.html" class="no-external">
 <div class="listing-date">
-Sep 16, 2024
+2024-09-16
 </div>
+</a>
 </div>
-</div>
-</div></a>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>

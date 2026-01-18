@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="Terraform Input Variables – Alex Strick van Linschoten">
 <meta property="og:description" content="All the ways you can set input and local variables when using Terraform.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/inputs-outputs-terraform.png">
@@ -90,10 +91,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -108,12 +109,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -146,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -163,45 +168,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Terraform Input Variables</h1>
-                  <div>
-        <div class="description">
-          All the ways you can set input and local variables when using Terraform.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">terraform</div>
-                <div class="quarto-category">devops</div>
-                <div class="quarto-category">softwareengineering</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">June 22, 2023</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -220,10 +187,47 @@ ul.task-list li input[type="checkbox"] {
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Terraform Input Variables</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">terraform</div>
+    <div class="quarto-category">devops</div>
+    <div class="quarto-category">softwareengineering</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    All the ways you can set input and local variables when using Terraform.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 22, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>When working with Terraform code, there are ways to take in user input at the time when you are applying whatever you’ve defined. To take a perhaps needlessly simple example, you might write a definition that allows you to deploy a new S3 bucket but you probably wouldn’t want to hardcode the name of the new bucket; instead, you’d rather take that name at the point of deployment. So if we think of the terraform process as a big function call, our input variables are the inputs we pass into this function application.</p>

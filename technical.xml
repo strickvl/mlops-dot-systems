@@ -6,8 +6,8 @@
       version="2.0">
 <channel>
 <title>Alex Strick van Linschoten</title>
-<link>https://alexstrick.com/</link>
-<atom:link href="https://alexstrick.com/index.xml" rel="self" type="application/rss+xml"/>
+<link>https://alexstrick.com/technical.html</link>
+<atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.8.27</generator>
 <lastBuildDate>Tue, 03 Jun 2025 22:00:00 GMT</lastBuildDate>
@@ -16,7 +16,6 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -919,7 +918,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
-
 <p>I <a href="https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">previously tried (and failed)</a> to setup LLM tracing for hinbox using Arize Phoenix and litellm. Since this is sort of a priority for being able to follow along with the <a href="https://maven.com/parlance-labs/evals">Hamel / Shreya evals course</a> with my practical application, I’ll take another stab using a tool with which I’m familiar: <a href="https://www.braintrust.dev/">Braintrust</a>. Let’s start simple and then if it works the way we want we can set things up for <code>hinbox</code> as well.</p>
 <section id="simple-braintrust-tracing-with-litellm-callbacks" class="level2">
 <h2 class="anchored" data-anchor-id="simple-braintrust-tracing-with-litellm-callbacks">Simple Braintrust tracing with litellm callbacks</h2>
@@ -1500,7 +1498,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
-
 <p>I’ve been working on a project called <a href="https://github.com/strickvl/hinbox"><code>hinbox</code></a> - a flexible entity extraction system designed to help historians and researchers build structured knowledge databases from collections of primary source documents. At its core, <code>hinbox</code> processes historical documents, academic papers, books and news articles to automatically extract and organize information about people, organizations, locations, and events.</p>
 <p>The tool works by ingesting batches of documents and intelligently identifying entities across sources. What makes it interesting is the iterative improvement aspect: as you feed more documents into the system, entity profiles become richer and more comprehensive. When <code>hinbox</code> encounters a person or organization it’s seen before, it updates their profile with new information rather than creating duplicates. I’ve been testing it extensively with Guantánamo Bay media sources - a domain where I have deep expertise from my previous career as a historian - which allows me to rigorously evaluate the quality of its extractions.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -1612,7 +1609,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
-
 <p>I came across this quote in a happy coincidence after attending the second session of the evals course:</p>
 <p><img src="https://alexstrick.com/posts/images/2025-05-23-error-analysis-to-find-failure-modes/patchett-quote.png" class="img-fluid"></p>
 <p>It’s obviously a bit abstract, but I thought it was a nice oblique reflection on the topic being discussed. Both the main session and the office hours were mostly focused on the first part of the analyse-measure-improve loop that was introduced <a href="https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html">earlier in the week</a>.</p>
@@ -1711,7 +1707,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-05-20-how-to-think-about-evals.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -1831,7 +1826,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
-
 <p>Google released an updated iteration of their Deep Research tool that uses the new 2.5 Pro model. This was taken from a post originally made on Twitter, so please excuse the terseness.</p>
 <p>First impressions:</p>
 <ul>
@@ -1880,7 +1874,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-03-16-learnings-building-llms.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -1976,7 +1969,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
-
 <p>I spent the morning <a href="https://github.com/strickvl/mcp-beeminder">building an MCP server</a> for <a href="https://www.beeminder.com">Beeminder</a>, bridging the gap between AI assistants and my personal goal tracking data. This project emerged from a practical need — ok, desire :) — to interact more effectively with my Beeminder data through AI interfaces like Claude Desktop and Cursor.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2027,7 +2019,6 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -2343,7 +2334,6 @@ font-style: inherit;">\</span></span>
 
 
 
-
 <p>I finished the first unit of the <a href="https://huggingface.co/learn/agents-course/">Hugging Face Agents course</a>, at least the reading part. I still want to play around with the code a bit more, since I imagine we’ll be doing that more going forward. In the meanwhile I wanted to write up some reflections on the course materials from unit one, in no particular order…</p>
 <section id="code-agents-prominence" class="level2">
 <h2 class="anchored" data-anchor-id="code-agents-prominence">Code agents’ prominence</h2>
@@ -2411,7 +2401,6 @@ font-style: inherit;">\</span></span>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -2601,7 +2590,6 @@ font-style: inherit;">\</span></span>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-02-07-ai-engineering-chapter-9.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -2921,7 +2909,6 @@ font-style: inherit;">\</span></span>
 
 
 
-
 <p>Finally back on track and reading the next chapter of Chip Huyen’s book, ‘AI Engineering’. Here are my notes on the chapter.</p>
 <section id="overview-and-core-philosophy" class="level2">
 <h2 class="anchored" data-anchor-id="overview-and-core-philosophy">Overview and Core Philosophy</h2>
@@ -3106,7 +3093,6 @@ font-style: inherit;">\</span></span>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -3335,7 +3321,6 @@ font-style: inherit;">\</span></span>
 
 
 
-
 <p>This chapter was all about RAG and agents. It’s only 50 pages, so clearly there’s only so much of the details she can get into, but it was pretty good nonetheless and there were a few things in here I’d never really read. Also Chip does a good job bringing the RAG story into the story about agents, particularly in terms of how she defines agents. (Note that <a href="https://huyenchip.com/2025/01/07/agents.html">the second half of this chapter</a>, on agents, is available <a href="https://huyenchip.com/2025/01/07/agents.html">on Chip’s blog</a> as a free excerpt!)</p>
 <p>As always, what follows is just my notes on the things that seemed interesting to me (and a high-level overview of the main points of the chapter just for future reference). YMMV!</p>
 <section id="chapter-structure-and-framing" class="level2">
@@ -3532,7 +3517,6 @@ font-style: inherit;">\</span></span>
 
 
 
-
 <p>This chapter represents a crucial bridge between academic research and production engineering practice in AI system evaluation. What sets it apart is the Chip’s very balanced perspective - neither succumbing to the prevalent hype in the field nor becoming overly academic. Instead, she melds together practical insights with theoretical foundations, creating a useful framework for evaluation that acknowledges both technical and ethical considerations.</p>
 <section id="introduction-and-context" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-and-context">Introduction and Context</h2>
@@ -3712,7 +3696,6 @@ font-style: inherit;">\</span></span>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -3940,7 +3923,6 @@ font-style: inherit;">\</span></span>
 
 
 
-
 <p>Had the first of <a href="https://www.meetup.com/delft-fast-ai-study-group/">a series of meet-ups</a> I’m organising in which we discuss Chip Huyen’s new book. My notes from reading the chapter follow this, and then I’ll try to summarise what we discussed in the group.</p>
 <p>At a high-level, I <em>really</em> enjoyed the final part of the chapter where she got into how she was thinking about the practice of ‘AI Engineering’ and how it differs from ML engineering. Also the use of the term ‘model adaptation’ was an interesting way of encompassing all the different things that engineers are doing to get the LLM to better follow their instructions.</p>
 <section id="chapter-1-notes" class="level2">
@@ -4050,7 +4032,6 @@ font-style: inherit;">\</span></span>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</link>
   <description><![CDATA[ 
-
 
 
 
@@ -4200,7 +4181,6 @@ font-style: inherit;">\</span></span>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</link>
   <description><![CDATA[ 
-
 
 
 

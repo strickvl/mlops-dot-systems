@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="What makes code robust? – Alex Strick van Linschoten">
 <meta property="og:description" content="Reflections on the first chapter of Patrick Viafore’s recent book, ‘Robust Python’.">
 <meta property="og:image" content="https://alexstrick.com/posts/robust-python/robust-python-cover.jpeg">
@@ -86,10 +87,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed technical-page fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -104,12 +105,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -142,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -159,53 +164,52 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">What makes code robust?</h1>
-                  <div>
-        <div class="description">
-          Reflections on the first chapter of Patrick Viafore’s recent book, ‘Robust Python’.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">robustpython</div>
-                <div class="quarto-category">python</div>
-                <div class="quarto-category">books-i-read</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">December 29, 2021</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">What makes code robust?</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">robustpython</div>
+    <div class="quarto-category">python</div>
+    <div class="quarto-category">books-i-read</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Reflections on the first chapter of Patrick Viafore’s recent book, ‘Robust Python’.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 29, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>We use a lot of modern Python idioms, libraries and patterns at work, so I’ve been wanting to get up to speed on that and maybe even actively contribute to this general direction. A recently-published book, <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8">Robust Python: Write Clean and Maintainable Code</a> by <a href="https://www.linkedin.com/in/patviafore/">Patrick Viafore</a>, seems like it answers many of the questions I have around this topic. It is quite dense in terms of the amount of new things per chapter, so I’ll be working my way through it in the coming months and reflecting on things as I encounter them.</p>

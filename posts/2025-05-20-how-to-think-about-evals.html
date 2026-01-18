@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="How to think about evals – Alex Strick van Linschoten">
 <meta property="og:description" content="Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a ‘three gulfs’ mental model (specification, generalisation, and comprehension) for LLM application development and the importance of systematic evaluation and improvement processes.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/2025-05-20-how-to-think-about-evals/maven-course.png">
@@ -90,10 +91,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -108,12 +109,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -146,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -163,46 +168,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">How to think about evals</h1>
-                  <div>
-        <div class="description">
-          Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a ‘three gulfs’ mental model (specification, generalisation, and comprehension) for LLM application development and the importance of systematic evaluation and improvement processes.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">evals-course</div>
-                <div class="quarto-category">llms</div>
-                <div class="quarto-category">llmops</div>
-                <div class="quarto-category">evaluation</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">May 20, 2025</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -223,10 +189,48 @@ ul.task-list li input[type="checkbox"] {
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How to think about evals</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">evals-course</div>
+    <div class="quarto-category">llms</div>
+    <div class="quarto-category">llmops</div>
+    <div class="quarto-category">evaluation</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Key insights from the first session of the Hamel/Shreya AI Evals course, focusing on a ‘three gulfs’ mental model (specification, generalisation, and comprehension) for LLM application development and the importance of systematic evaluation and improvement processes.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 20, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>Today was the first session of Hamel + Shreya’s course, “<a href="maven.com/parlance-labs/evals/">AI Evals for Engineers and PMs</a>”. The first session was all about mental models for thinking about the topic as a whole, mixed in with some teasers of practical examples and advice.</p>

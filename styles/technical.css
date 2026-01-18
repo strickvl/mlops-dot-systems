@@ -1,0 +1,361 @@
+/* Technical Blog Styles
+ * Developer-clean aesthetic (Stripe/Linear inspired)
+ * Fonts: Plus Jakarta Sans (body) + JetBrains Mono (code)
+ */
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-primary: #FAFBFC;
+    --bg-white: #FFFFFF;
+    --bg-code: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --text-muted: #9CA3AF;
+    --accent-primary: #2563EB;
+    --accent-hover: #1D4ED8;
+    --accent-light: #EFF6FF;
+    --border-default: #E5E7EB;
+    --border-hover: #D1D5DB;
+    
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== BASE STYLES ===== */
+body.technical-page {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary);
+    font-family: var(--font-sans) !important;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== NAVBAR ===== */
+body.technical-page #quarto-header {
+    background: rgba(250, 251, 252, 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-default) !important;
+}
+
+body.technical-page .navbar {
+    background: transparent !important;
+    border: none !important;
+}
+
+body.technical-page .navbar-brand {
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    font-size: 0.9375rem !important;
+    color: var(--text-primary) !important;
+}
+
+body.technical-page .navbar .nav-link {
+    font-family: var(--font-sans) !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    padding: 0.5rem 0.875rem !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+body.technical-page .navbar .nav-link:hover {
+    color: var(--text-primary) !important;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.technical-page .navbar .nav-link.active {
+    color: var(--accent-primary) !important;
+    background: var(--accent-light) !important;
+}
+
+/* ===== PAGE HEADER ===== */
+body.technical-page #title-block-header {
+    background: transparent !important;
+    border: none !important;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+body.technical-page h1.title {
+    font-family: var(--font-sans) !important;
+    font-size: 2.25rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.025em;
+    color: var(--text-primary) !important;
+    margin-bottom: 0.75rem;
+}
+
+/* Description text */
+body.technical-page main.content > p:first-of-type,
+body.technical-page main.content > p:nth-of-type(2) {
+    font-family: var(--font-sans) !important;
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    max-width: 600px;
+}
+
+body.technical-page main.content > p a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+body.technical-page main.content > p a:hover {
+    text-decoration: underline;
+}
+
+/* ===== LISTING CONTAINER ===== */
+body.technical-page .quarto-listing {
+    margin-top: 2rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* The posts list container - use gap-as-separator technique */
+body.technical-page #listing-listing .list.quarto-listing-default {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+    background: var(--border-default) !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: var(--shadow-sm) !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ===== POST CARDS ===== */
+/* Each post item - the gap color shows through as separator */
+body.technical-page .quarto-listing-default .quarto-post {
+    display: block !important;
+    position: relative !important;
+    padding: 1.5rem 1.75rem !important;
+    background: var(--bg-white) !important;
+    text-decoration: none !important;
+    transition: background 0.25s var(--ease-out-expo) !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+/* Hover accent bar on left */
+body.technical-page .quarto-listing-default .quarto-post::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent-primary);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.25s var(--ease-out-expo);
+}
+
+body.technical-page .quarto-listing-default .quarto-post:hover {
+    background: #FDFDFE !important;
+}
+
+body.technical-page .quarto-listing-default .quarto-post:hover::before {
+    transform: scaleY(1);
+}
+
+/* ===== LAYOUT INSIDE POST CARDS ===== */
+/* The .body contains title, description, categories */
+body.technical-page .quarto-listing-default .quarto-post .body {
+    display: block !important;
+    padding-right: 7rem !important; /* Reserve space for date */
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* The .metadata contains the date - position it top-right */
+body.technical-page .quarto-listing-default .quarto-post .metadata {
+    position: absolute !important;
+    top: 1.5rem !important;
+    right: 1.75rem !important;
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+/* ===== POST CONTENT STYLING ===== */
+/* Title */
+body.technical-page .quarto-listing-default .listing-title,
+body.technical-page .quarto-listing-default .listing-title a {
+    font-family: var(--font-sans) !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    text-decoration: none !important;
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+}
+
+body.technical-page .quarto-listing-default .quarto-post:hover .listing-title,
+body.technical-page .quarto-listing-default .quarto-post:hover .listing-title a {
+    color: var(--accent-primary) !important;
+}
+
+/* Date */
+body.technical-page .quarto-listing-default .listing-date {
+    font-family: var(--font-mono) !important;
+    font-size: 0.8125rem !important;
+    color: var(--text-muted) !important;
+    white-space: nowrap;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Description */
+body.technical-page .quarto-listing-default .listing-description {
+    font-family: var(--font-sans) !important;
+    font-size: 0.9375rem !important;
+    color: var(--text-secondary) !important;
+    line-height: 1.6;
+    margin-bottom: 0.875rem !important;
+    display: block !important;
+}
+
+/* Categories/tags - show AFTER description */
+body.technical-page .quarto-listing-default .listing-categories {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0 !important;
+}
+
+body.technical-page .quarto-listing-default .listing-category {
+    font-family: var(--font-mono) !important;
+    font-size: 0.75rem !important;
+    font-weight: 500;
+    padding: 0.25rem 0.625rem;
+    background: var(--bg-code) !important;
+    color: var(--text-secondary) !important;
+    border-radius: 4px;
+    text-decoration: none !important;
+    border: none !important;
+    text-transform: lowercase;
+}
+
+body.technical-page .quarto-listing-default .listing-category:hover {
+    background: var(--border-default) !important;
+}
+
+/* Hide any thumbnails in the listing */
+body.technical-page .quarto-listing-default .thumbnail,
+body.technical-page .quarto-listing-default .quarto-post img {
+    display: none !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    body.technical-page h1.title {
+        font-size: 1.75rem !important;
+    }
+    
+    body.technical-page .quarto-listing-default .quarto-post {
+        padding: 1.25rem 1.5rem !important;
+    }
+    
+    /* On mobile: stack date above title */
+    body.technical-page .quarto-listing-default .quarto-post .body {
+        padding-right: 0 !important;
+    }
+    
+    body.technical-page .quarto-listing-default .quarto-post .metadata {
+        position: static !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    body.technical-page .quarto-listing-default .listing-date {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ===== INDIVIDUAL POST PAGES ===== */
+body.technical-page article {
+    font-family: var(--font-sans) !important;
+}
+
+body.technical-page article h1,
+body.technical-page article h2,
+body.technical-page article h3,
+body.technical-page article h4 {
+    font-family: var(--font-sans) !important;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+body.technical-page article p {
+    color: var(--text-secondary);
+}
+
+body.technical-page article a {
+    color: var(--accent-primary);
+}
+
+body.technical-page article code {
+    font-family: var(--font-mono) !important;
+    background: var(--bg-code);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875em;
+}
+
+body.technical-page article pre {
+    background: var(--bg-code) !important;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+body.technical-page article pre code {
+    background: transparent;
+    padding: 0;
+}
+
+/* ===== FOOTER ===== */
+body.technical-page .nav-footer {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-default);
+    font-family: var(--font-sans) !important;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.technical-page #title-block-header {
+    animation: fadeIn 0.5s var(--ease-out-expo) both;
+}
+
+body.technical-page .quarto-listing {
+    animation: fadeIn 0.5s var(--ease-out-expo) 0.1s both;
+}

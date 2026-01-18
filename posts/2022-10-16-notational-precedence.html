@@ -110,6 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="Avoiding BIDMAS, or how J does notation – Alex Strick van Linschoten">
 <meta property="og:description" content="I learned about prefix, postfix and infix notation, and how J evaluates mathematical expressions which makes the BIDMAS rules unnecessary.">
 <meta property="og:image" content="https://alexstrick.com/posts/notational-precedence/j-precedence.png">
@@ -125,10 +126,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed technical-page fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -143,12 +144,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -181,7 +186,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -198,55 +203,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Avoiding BIDMAS, or how J does notation</h1>
-                  <div>
-        <div class="description">
-          I learned about prefix, postfix and infix notation, and how J evaluates mathematical expressions which makes the BIDMAS rules unnecessary.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">j</div>
-                <div class="quarto-category">mathematics</div>
-                <div class="quarto-category">mu123</div>
-                <div class="quarto-category">q31</div>
-                <div class="quarto-category">notation</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">October 16, 2022</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Avoiding BIDMAS, or how J does notation</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">j</div>
+    <div class="quarto-category">mathematics</div>
+    <div class="quarto-category">mu123</div>
+    <div class="quarto-category">q31</div>
+    <div class="quarto-category">notation</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    I learned about prefix, postfix and infix notation, and how J evaluates mathematical expressions which makes the BIDMAS rules unnecessary.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 16, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>One of the topics that comes up early on in Open University’s <a href="https://www.open.ac.uk/courses/modules/mu123">MU123 mathematics course</a> is precedence. Those who grew up in English-speaking countries will probably know this as <a href="https://www.bbc.co.uk/bitesize/topics/zxqnsk7/articles/znm8cmn">BODMAS or BIDMAS</a>. The order of precedence for execution of a mathematical expression gives us an idea for how to resolve expressions that don’t make sense. For example, <code>3 + 1 x 4</code> can either amount to 7 or 16, depending on how when you do the multiplication step.</p>

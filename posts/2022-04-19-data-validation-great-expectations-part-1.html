@@ -110,6 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1) – Alex Strick van Linschoten">
 <meta property="og:description" content="An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring. I introduce and simplify the high-level concepts you need to use the Great Expectations library.">
 <meta property="og:image" content="https://alexstrick.com/posts/great_expectations/g_e_logo.jpeg">
@@ -121,10 +122,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -139,12 +140,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -177,7 +182,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -194,46 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</h1>
-                  <div>
-        <div class="description">
-          An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring. I introduce and simplify the high-level concepts you need to use the Great Expectations library.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">tools</div>
-                <div class="quarto-category">redactionmodel</div>
-                <div class="quarto-category">computervision</div>
-                <div class="quarto-category">datavalidation</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">April 19, 2022</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -250,10 +216,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">tools</div>
+    <div class="quarto-category">redactionmodel</div>
+    <div class="quarto-category">computervision</div>
+    <div class="quarto-category">datavalidation</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    An overview of the problem that data validation seeks to solve, explored through the lens of an object detection problem and some of the tradeoffs that such an approach might bring. I introduce and simplify the high-level concepts you need to use the Great Expectations library.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 19, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p><em>(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out <a href="https://mlops.systems/#category=redactionmodel">the <code>redactionmodel</code> taglist</a>.)</em></p>

@@ -110,6 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy – Alex Strick van Linschoten">
 <meta property="og:description" content="I explore language tokenization using FastAI, Spacy, and Huggingface Tokenizers, with a special focus on the less-represented Balochi language. I share the challenges I faced due to language-specific limitations, my initiative to expand language metadata, and my plans to assess and enhance tokenization efficiency.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/tokenisation/hf-tokenizer-small.png">
@@ -125,10 +126,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -143,12 +144,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -181,7 +186,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -198,46 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy</h1>
-                  <div>
-        <div class="description">
-          I explore language tokenization using FastAI, Spacy, and Huggingface Tokenizers, with a special focus on the less-represented Balochi language. I share the challenges I faced due to language-specific limitations, my initiative to expand language metadata, and my plans to assess and enhance tokenization efficiency.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">nlp</div>
-                <div class="quarto-category">balochi-language-model</div>
-                <div class="quarto-category">tokenisation</div>
-                <div class="quarto-category">balochi</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">June 3, 2023</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -258,10 +224,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">nlp</div>
+    <div class="quarto-category">balochi-language-model</div>
+    <div class="quarto-category">tokenisation</div>
+    <div class="quarto-category">balochi</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    I explore language tokenization using FastAI, Spacy, and Huggingface Tokenizers, with a special focus on the less-represented Balochi language. I share the challenges I faced due to language-specific limitations, my initiative to expand language metadata, and my plans to assess and enhance tokenization efficiency.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 3, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>In this blog I want to walk through how I trained my first tokenizer(s) on a small Balochi language corpus. I used the Huggingface Tokenizers library and FastAI / Spacy to get a sense of the interfaces involved. There’s also some naive pre-processing I did to get the corpus into a format that the tokenizer could handle. I’m not sure if this is the best way to do it, but it worked for this first iteration.</p>

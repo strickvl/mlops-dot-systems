@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="Notes on ‘AI Engineering’ (Chip Huyen) chapter 1 – Alex Strick van Linschoten">
 <meta property="og:description" content="A detailed analysis of Chapter 1 from Chip Huyen’s ‘AI Engineering’ book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms. Includes insights from a study group discussion on enterprise adoption challenges and emerging evaluation techniques.">
 <meta property="og:image" content="https://alexstrick.com/posts/images/aieng1-small.png">
@@ -90,10 +91,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -108,12 +109,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -146,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -163,47 +168,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Notes on ‘AI Engineering’ (Chip Huyen) chapter 1</h1>
-                  <div>
-        <div class="description">
-          A detailed analysis of Chapter 1 from Chip Huyen’s ‘AI Engineering’ book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms. Includes insights from a study group discussion on enterprise adoption challenges and emerging evaluation techniques.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">books-i-read</div>
-                <div class="quarto-category">llm</div>
-                <div class="quarto-category">llms</div>
-                <div class="quarto-category">finetuning</div>
-                <div class="quarto-category">prompt-engineering</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">January 19, 2025</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -231,10 +196,49 @@ ul.task-list li input[type="checkbox"] {
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Notes on ‘AI Engineering’ (Chip Huyen) chapter 1</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">books-i-read</div>
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">llms</div>
+    <div class="quarto-category">finetuning</div>
+    <div class="quarto-category">prompt-engineering</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A detailed analysis of Chapter 1 from Chip Huyen’s ‘AI Engineering’ book, covering the transition from ML Engineering to AI Engineering, the three-layer AI stack, and modern development paradigms. Includes insights from a study group discussion on enterprise adoption challenges and emerging evaluation techniques.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 19, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>Had the first of <a href="https://www.meetup.com/delft-fast-ai-study-group/">a series of meet-ups</a> I’m organising in which we discuss Chip Huyen’s new book. My notes from reading the chapter follow this, and then I’ll try to summarise what we discussed in the group.</p>

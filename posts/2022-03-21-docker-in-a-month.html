@@ -75,6 +75,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="Starting Docker In A Month Of Lunches – Alex Strick van Linschoten">
 <meta property="og:description" content="I’m reading Elton Stoneman’s ‘Learn Docker in a Month of Lunches’ and blogging as I learn along the way. In chapters 1-3 we learn about the context for Docker as well as some basic commands for running and building containers.">
 <meta property="og:image" content="https://alexstrick.com/posts/diamol/diamol-cover.jpg">
@@ -86,10 +87,10 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed technical-page quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -104,12 +105,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -142,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -159,45 +164,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Starting Docker In A Month Of Lunches</h1>
-                  <div>
-        <div class="description">
-          I’m reading Elton Stoneman’s ‘Learn Docker in a Month of Lunches’ and blogging as I learn along the way. In chapters 1-3 we learn about the context for Docker as well as some basic commands for running and building containers.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">tools</div>
-                <div class="quarto-category">dockerinamonthoflunches</div>
-                <div class="quarto-category">books-i-read</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">March 21, 2022</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -214,10 +181,47 @@ ul.task-list li input[type="checkbox"] {
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Starting Docker In A Month Of Lunches</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">tools</div>
+    <div class="quarto-category">dockerinamonthoflunches</div>
+    <div class="quarto-category">books-i-read</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    I’m reading Elton Stoneman’s ‘Learn Docker in a Month of Lunches’ and blogging as I learn along the way. In chapters 1-3 we learn about the context for Docker as well as some basic commands for running and building containers.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 21, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>As far as software engineers go, I’m still barely a spring chicken, six months into my job with <a href="https://zenml.io/">ZenML</a>. Working at a startup is fairly fast-paced and the ability to get going quickly with any number of libraries and tools is a requirement of the work. The number of things I could study, learn or practice is vastly larger than the amount of time I have. Accordingly, it helps to try to pick things that will be long-lasting, teach a cross-cutting skill or that are somehow fundamental.</p>

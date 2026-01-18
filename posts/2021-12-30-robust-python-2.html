@@ -110,6 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
 <meta property="og:title" content="What’s special about types in Python? – Alex Strick van Linschoten">
 <meta property="og:description" content="Reflections on the second chapter of Patrick Viafore’s recent book, ‘Robust Python’. We learn about types and how they fit into Python.">
 <meta property="og:image" content="https://alexstrick.com/posts/robust-python/robust-python-cover.jpeg">
@@ -121,10 +122,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed technical-page fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -139,12 +140,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../technical.html"> 
 <span class="menu-text">Technical</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../personal.html"> 
 <span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -177,7 +182,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
         <li>
-    <a class="dropdown-item" href="../index.xml">
+    <a class="dropdown-item" href="../technical.xml">
  <span class="dropdown-text">Technical RSS</span></a>
   </li>  
         <li>
@@ -194,53 +199,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">What’s special about types in Python?</h1>
-                  <div>
-        <div class="description">
-          Reflections on the second chapter of Patrick Viafore’s recent book, ‘Robust Python’. We learn about types and how they fit into Python.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">robustpython</div>
-                <div class="quarto-category">python</div>
-                <div class="quarto-category">books-i-read</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Alex Strick van Linschoten </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">December 30, 2021</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">What’s special about types in Python?</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">robustpython</div>
+    <div class="quarto-category">python</div>
+    <div class="quarto-category">books-i-read</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Reflections on the second chapter of Patrick Viafore’s recent book, ‘Robust Python’. We learn about types and how they fit into Python.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 30, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>The first section of <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8"><em>Robust Python</em></a> dives into types. We begin by taking a step back to think about what exactly types are being used for, and what they might bring us. Python was not (<a href="https://stackoverflow.com/questions/32557920/what-are-type-hints-in-python-3-5">until v3.5</a>) a language with which you could easily use typing. I remember going to <a href="http://pylondinium.org/2018/">the Pylondinium conference</a> in London in 2018 and going to <a href="https://pylondinium.org/2018/talk.html?talk_id=24">a talk by Bernat Gabor</a> about type hints in Python. Back then I didn’t have much of a sense of how new they were to many people, but even now I don’t get the feeling that they’ve been universally adopted. Hence Patrick’s book, I suppose…</p>
