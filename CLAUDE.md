@@ -67,6 +67,7 @@ aliases:
 
 ## Important Notes
 
+- **DO NOT DELETE FILES without understanding what they are.** Only delete files that are clearly identified as build artifacts (`.html` files in source directories, `_files/` directories, `site_libs/`). If you see an unfamiliar file or directory in `git status`, ASK before deleting. The user may be working on new files in parallel.
 - **Image handling**: Do NOT manually save images into `posts/copied_from_nb/`. GitHub Actions automatically manages images there and may delete manually added files at build time.
 - **Image compression**: A GitHub Action automatically compresses images on PRs using calibreapp/image-actions.
 - **Build outputs**: `_site/` and `.quarto/` are gitignored and regenerated on build.
