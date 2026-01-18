@@ -189,3 +189,4 @@ cython_debug/
 .pypirc
 
 design/
+.claude/
