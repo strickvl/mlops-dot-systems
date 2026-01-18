@@ -190,3 +190,5 @@ cython_debug/
 
 design/
 .claude/
+
+**/*.quarto_ipynb
