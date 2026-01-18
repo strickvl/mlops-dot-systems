@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-08-31-phd-tools-bookends/78f73ceeb1e8_image-asset.webp)
+![](images/2016-08-31-phd-tools-bookends/78f73ceeb1e8_image-asset.avif)
 
 My PhD included references to 479 individual sources. It's well known that formatting issues often plague students just prior to submission of their dissertations. A reference manager can help solve most of [these problems](http://www.phdcomics.com/comics/archive.php?comicid=286).
 

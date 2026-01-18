@@ -28,7 +28,7 @@ What follows is mostly some self-reflection on some of the first practice swatch
 
 The first thing I did was learn knit stitches and purls. With this swatch I just put in a bunch of repetition. I didn't have any context beyond the specific stitches, in other words how these stitches fit together or what they were called.
 
-![](images/2025-01-05-first-stitches-on-learning-to-knit/9c2c5e74dee5_F32BE84C-1F96-4478-BDD5-9E5D9EC9231A.webp)
+![](images/2025-01-05-first-stitches-on-learning-to-knit/9c2c5e74dee5_F32BE84C-1F96-4478-BDD5-9E5D9EC9231A.avif)
 
 Along the way there were a few places, especially at the beginning, where I accidentally increased or decreased the number of stitches. I was quite happy with how it turned out, this being basically the first thing I've ever knit.
 
@@ -38,7 +38,7 @@ It took me ages to summon up the courage to figure out how to purl, but once I'd
 
 I did two small swatches of garter stitch and stockinette:
 
-![](images/2025-01-05-first-stitches-on-learning-to-knit/c7f2ca2ac92a_IMG_5738.webp)
+![](images/2025-01-05-first-stitches-on-learning-to-knit/c7f2ca2ac92a_IMG_5738.avif)
 
 Note how the garter stitch doesn't curl at the edges. That's a characteristic of the pattern, as I learned! (And vice versa for the stockinette swatch).
 
@@ -48,7 +48,7 @@ The yellow-ish yarn I used for this was [Lana Grossa Cool Merino](https://www.ra
 
 I switched to [Drops Karisma](https://www.ravelry.com/people/strickvl/stash/drops-karisma-2) for the remaining swatches. Much easier, if fairly slippery on my metal (circular) needles. Both single and double ribs came together really easily and felt satisfying to produce.
 
-![](images/2025-01-05-first-stitches-on-learning-to-knit/a82467b53d1e_A54D43C9-6215-4DAA-9188-B420444CA71E.webp)
+![](images/2025-01-05-first-stitches-on-learning-to-knit/a82467b53d1e_A54D43C9-6215-4DAA-9188-B420444CA71E.avif)
 
 You can see that the bottom, where I cast on, is a bit uneven. I found previous swatches *extremely* tightly bound so I just used two needles together when casting on. This loosened things up considerably but seems to have had the unwanted side effect of making this wonky first row / edge.
 
@@ -56,7 +56,7 @@ I spoke with a friend (thanks Naheed!) and she suggested I try the old Norwegian
 
 The TGKA course requires me to use the long-tail cast on so I'll have to figure it out. The other alternative suggestion that people often have when your cast on is tight is to use a needle size one larger for the cast on. My interchangeable needles require a different base / connector for the next size up, so I'm not exactly sure in my head how this will all work.
 
-![](images/2025-01-05-first-stitches-on-learning-to-knit/76c386664010_IMG_5748.webp)
+![](images/2025-01-05-first-stitches-on-learning-to-knit/76c386664010_IMG_5748.avif)
 
 With the double ribs you can see that the base / cast on row is so much neater. Though now I'm starting to look at the right and left edges and wondering how those undulations can be reduced (or if it's meant to be this way at all?).
 
@@ -64,7 +64,7 @@ With the double ribs you can see that the base / cast on row is so much neater. 
 
 This seed stitch swatch proved trickier than expected although I learned some lessons along the way.
 
-![](images/2025-01-05-first-stitches-on-learning-to-knit/dc63a397c05e_IMG_5752.webp)
+![](images/2025-01-05-first-stitches-on-learning-to-knit/dc63a397c05e_IMG_5752.avif)
 
 As you can see below, part of the swatch has what looks like some descending stockinette (or I'm not exactly sure what to call it). While doing the work I got confused as to whether I had to knit or to purl. The instruction was to do the opposite of whatever was on the stitch I was at (so knit if I saw a purl bump and so on), but this meant that I somehow ended up perpetuating mistakes I'd made on a previous row. In the end the only way to get out of it was to just stick to something regardless of what I'd done in the previous row.
 
@@ -74,7 +74,7 @@ I also found myself often getting into extremely tough and tight spots, where th
 
 The final swatch includes multiple different techniques and somehow it's the least obviously successful of the lot.
 
-![](images/2025-01-05-first-stitches-on-learning-to-knit/1497d2434f8a_IMG_5755.webp)
+![](images/2025-01-05-first-stitches-on-learning-to-knit/1497d2434f8a_IMG_5755.avif)
 
 With this, I started off with some stockinette, then increased the number of stitches on the row with the bar increase and three kinds of Make One increase (M1-L, M1-R and M1-O). At that point I did some more stockinette and then some decreases (k2tog, ssk and SKP).
 

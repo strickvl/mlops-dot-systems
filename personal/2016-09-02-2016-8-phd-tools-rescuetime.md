@@ -23,7 +23,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-02-2016-8-phd-tools-rescuetime/674ea69b3d1a_image-asset.webp)
+![](images/2016-09-02-2016-8-phd-tools-rescuetime/674ea69b3d1a_image-asset.avif)
 
 [RescueTime](https://www.rescuetime.com/) is a passive activity tracker for what you do on your laptop (or Android phone -- limitations in Apple's iOS mean that it's not possible to have the same detail in app usage tracking from iPhones and iPads). It sits in the background, watching where you spend your time. You can visit the website to see your stats, or it also sends you a weekly summary of what you did.
 

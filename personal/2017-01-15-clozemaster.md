@@ -24,7 +24,7 @@ comments:
 
 [Clozemaster](https://www.clozemaster.com/) is a service I discovered recently while researching the resource guide for my new book, [Master Arabic](http://languagecoach.io/masterarabic). Clozemaster is intended to be a next step for students who have mastered some of the basics of their language of study. It teaches the language through a game where you identify the missing word. Here's what one of their tests look like, for example:
 
-![](images/2017-01-15-clozemaster/3c79db5511ea_image-asset.webp)
+![](images/2017-01-15-clozemaster/3c79db5511ea_image-asset.avif)
 
 You can see that it has a space where a word is blocked out. Four options are available below, from which you have to choose. Of course, number two is the correct option and by clicking it you move onto the next question.
 

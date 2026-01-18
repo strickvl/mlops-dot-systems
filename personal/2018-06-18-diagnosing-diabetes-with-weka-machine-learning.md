@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/c38e437eeda6_vDMGm.webp)
+![](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/c38e437eeda6_vDMGm.avif)
 
 *[I [mentioned two weeks ago](https://www.alexstrick.com/blog/ml-with-weka) that I was working to dive into the practical uses of machine learning algorithms. This is the first of a series of posts where I show what I’ve been working on.]*
 
@@ -87,8 +87,8 @@ Producing these various versions of the data was something I learned from Brownl
 
 Weka does offer some nice tools for the initial exploration of the data. Here you can see two charts that are generated in the ‘explorer’ application. First we have a series of simple bar charts visualising all the individual attributes. Then we have a plot matrix showing how all the various attributes correlate to each other (or not, as was mostly the case for this data set).
 
-[caption id="" align="alignnone" width="2168"]![ Visualisation of Pima Indians dataset attributes (auto-generated in Weka) ](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/63880b21bd7f_image-asset.webp) Visualisation of Pima Indians dataset attributes (auto-generated in Weka) [/caption]
-[caption id="" align="alignnone" width="1444"]![ Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka) ](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/6991cd1ab463_fig2.webp) Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka) [/caption]
+[caption id="" align="alignnone" width="2168"]![ Visualisation of Pima Indians dataset attributes (auto-generated in Weka) ](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/63880b21bd7f_image-asset.avif) Visualisation of Pima Indians dataset attributes (auto-generated in Weka) [/caption]
+[caption id="" align="alignnone" width="1444"]![ Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka) ](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/6991cd1ab463_fig2.avif) Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka) [/caption]
 
 ## Choosing Algorithms and Training the Model
 
@@ -102,7 +102,7 @@ When doing this kind of test, it helps to have a baseline accuracy figure agains
 
 (Note that everything here is being run through k-fold cross-validation where training and test data are kept separately, and then this is repeated ten times. The final results are averaged out between them. Weka does this all with great ease, making it pleasant to conform to best practices when it comes to data science).
 
-![](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/c03ff81ec017_fig3.webp)
+![](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/c03ff81ec017_fig3.avif)
 
 This figure shows how logistic regression was the best performing algorithm out of the box at 77.47% accuracy. I read somewhere that it often performs well on binary classification problems, so this didn’t surprise me. Support Vector Machines (listed as SMO in the Weka GUI) are also supposedly quite good for binary problems and it was only two-thirds of a percent behind logistic regression. Using Weka’s tools for statistical analysis of the result, I came to the conclusion that LMT, logistic regression, SGD and SMO were all worth further exploration and tinkering.
 
@@ -115,7 +115,7 @@ None of my tweaks really seemed to improve the accuracy of the model. I imagine 
 
 The next step was to try some ensemble methods where the predictions made by multiple models are combined. In particular, bagging/bootstrap, boosting and voting were all recommended as options to try out.
 
-![](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/ad997552336c_fig4.webp)
+![](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/ad997552336c_fig4.avif)
 
 You can see here that ultimately none of those outperformed logistic regression, which was surprising to me. I’m not at a place where my statistical understanding can explain why that’s the case — ensemble methods seemed to offer the best of many worlds — but I can’t really argue against the results.
 

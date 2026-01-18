@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-02-14-how-to-learn-languages-without-teachers/a0bb1f55c2b3_image-asset.webp)
+![](images/2017-02-14-how-to-learn-languages-without-teachers/a0bb1f55c2b3_image-asset.avif)
 
 A key belief at the foundation of my [language coaching work](http://languagecoach.io/coaching) has always been that teachers aren't needed to learn a language. Younger people and students of mine seem to understand this far more readily than people who grew up in a culture where 'learning a language' meant taking a course or enrolling with a teacher.
 

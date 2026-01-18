@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![_POU1490_bd.jpg](images/2011-01-21-helmand-refugee-appeal-update-distribution-day/0c2f42505f78_POU1490_bd.webp)
+![_POU1490_bd.jpg](images/2011-01-21-helmand-refugee-appeal-update-distribution-day/0c2f42505f78_POU1490_bd.avif)
 
 Photo: © Philip Poupin
 

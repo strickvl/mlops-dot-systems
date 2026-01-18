@@ -23,7 +23,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-[caption id="" align="alignnone" width="700"]![ What was leftover by the end of my PhD submission process... ](images/2016-08-24-2016-8-phd-tools-trello/21451e4145cc_image-asset.webp) What was leftover by the end of my PhD submission process... [/caption]
+[caption id="" align="alignnone" width="700"]![ What was leftover by the end of my PhD submission process... ](images/2016-08-24-2016-8-phd-tools-trello/21451e4145cc_image-asset.avif) What was leftover by the end of my PhD submission process... [/caption]
 
 I used [Trello](https://trello.com/) for structuring my PhD argument and for tracking my progress during the drafting and redrafting of the final text.
 

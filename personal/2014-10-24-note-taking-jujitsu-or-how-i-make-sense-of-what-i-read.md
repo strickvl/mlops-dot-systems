@@ -20,11 +20,11 @@ comments:
 
 Note-taking is a problem. It's an interesting problem, but still a problem. Many people have switched over from paper books to digital copies. I am certainly one of the early adopters in this trend, having wrangled [Graeme Smith](https://twitter.com/smithkabul) and [his sister](https://twitter.com/tinyalligator) into facilitating a first iteration of Amazon's Kindle to be [delivered to my house](http://www.frontlineclub.com/kindle_in_kandahar/) in Kandahar.
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/e01c4f773148_image-asset.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/e01c4f773148_image-asset.avif)
 
 My colleague [Felix Kuehn](http://felixkuehn.com) and I used Kindle versions of books heavily in our research for [*An Enemy We Created*](www.anenemywecreated.com). Using those references in footnotes was difficult at the time: the format was so new that established footnoting styles (APA/Chicago etc) hadn’t developed the standards for referencing kindle documents. All this was made harder by the fact that Kindle copies of books added a whole new problem into the mix by abandoning page numbers for ‘Kindle location numbers’. This changed a few years later, and current users probably won’t have this problem, but if you go look at the footnotes for [*An Enemy We Created*](http://www.anenemywecreated.com/), you’ll still find that many, if not most, of the references are to Kindle locations and not page numbers. In fact, I think our book was probably the first serious history work to rely so extensively on digital Kindle references in the footnotes; I remember having discussions with our publisher about it.
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cc44f69ecbac_image-asset.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cc44f69ecbac_image-asset.avif)
 
 All this isn’t to say paper copies don't have their uses. But some books just aren't available in digital format. I'll get into the workaround for that later. The best way to make this less of a problem is to gently nudge publishers to issue their books on a kindle format.[1](#fn1) But I am already getting off track.
 
@@ -89,7 +89,7 @@ First thing’s first: sync your kindle to the cloud. Just turn on the wifi/3G a
 
 Then plug your Kindle into your computer via USB. Then go into the “Documents” folder, and search for a file called “My Clippings.txt”. If you’ve been using your kindle for a while, it’s probably going to be quite large. Nevertheless, copy that file to your desktop. Feel free to eject your Kindle from your laptop now. We won’t be needing it any more.
 
-[caption id="" align="alignnone" width="1634"]![ An example of what you might see when you open your ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/646c39110e47_image-asset.webp) An example of what you might see when you open your "My Clippings.txt" file [/caption]
+[caption id="" align="alignnone" width="1634"]![ An example of what you might see when you open your ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/646c39110e47_image-asset.avif) An example of what you might see when you open your "My Clippings.txt" file [/caption]
 
 If you open the txt file that is now saved to your desktop, you’ll find all your clippings and annotations preserved in a useful plaintext format. This may solve your problems straightaway, in which case, congratulations: you now have all your annotations in a useful format that you can use however you wish.
 
@@ -99,7 +99,7 @@ This is where [Split-ter.scpt](https://dl.dropboxusercontent.com/u/530416/Split-
 
 This script works with another piece of software mentioned above — [DevonThink Pro Office](http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html). For now, I’ll ask you to ignore that bit, and focus on what’s happening to the file. I use the script to convert our “My Clippings.txt” file into multiple files. It goes in, finds a delimiter (any piece of text or syntax that repeats itself in the original file) and creates a new note/file every time it comes across this delimiter. In this way, you’ll quite quickly from the file shown above to something like this:
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/b6f9d87464c7_image-asset.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/b6f9d87464c7_image-asset.avif)
 
 Now you have a note for every annotation and/or clipping. This is then something you can dump into Evernote, or keep in DevonThink. Again, more about the difference between these programmes in the next section. (Note, that you can use Tinderbox to split up the “MyClippings.txt” file as well using the “Explode” tool).
 
@@ -119,7 +119,7 @@ For those who aren’t comfortable removing the DRM on your books, you can get a
 
 Here’s an example of what I mean (screenshot from my DevonThink library). I was reading in Hegghammer’s excellent *[Jihad in Saudi Arabia](http://www.amazon.com/gp/product/0521732360/ref=as_li_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=0521732360&linkCode=as2&tag=soumet-20&linkId=HMU6UB34V7SLYVVX)* and making highlights (at 4:06am, apparently) but at some point I hit the limit imposed by the publisher.
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/321a6f13d76d_image-asset.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/321a6f13d76d_image-asset.avif)
 
 The workaround to bypass this limit from the publisher is to first export all your notes out of your “MyClippings.txt” file. So all your clippings are saved, even though some of them may not work. Let’s say, for the sake of argument, that the final three notes aren’t working because of the publisher’s limitatations. That’s the case in the screenshot above. What you do is (again, once you’ve backed up the clippings txt file) delete three of the earlier clippings that you already have. Then you sync your Kindle to the server and it will think that you have clipped three less quotes, so these will then become available (both in the myclippings.txt file and on [the website](kindle.amazon.com). Like I said, it’s a bit fiddly. I would much rather remove the DRM completely and not have this hassle at all, though when you do that Amazon will not sync your clippings to the cloud and to their <kindle.amazon.com> database. You’ll have to export them using the tools I mentioned above.
 
@@ -137,7 +137,7 @@ The same goes for twitter. [I follow enough people](https://twitter.com/strickvl
 
 After reading articles on my Kindle (or sometimes on a mobile device like my iPad or iPhone), you can clip the article if you want to save it (just like making a clipping inside a book, only the entire article is saved).
 
-[caption id="" align="alignnone" width="2448"]![ This is what you see in an article when you click to ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/63b0658369bd_image-asset.webp) This is what you see in an article when you click to "Clip This Article" on a kindle... [/caption]
+[caption id="" align="alignnone" width="2448"]![ This is what you see in an article when you click to ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/63b0658369bd_image-asset.avif) This is what you see in an article when you click to "Clip This Article" on a kindle... [/caption]
 
 Then your clippings will be captured in the ‘MyClippings.txt’ file as explained above and you can export them directly to DevonThink or Evernote or Tinderbox. (The main downside to doing things this way is that when the kindle clips it, all formatting is lost (including paragraph breaks)).
 
@@ -167,7 +167,7 @@ If you made it this far, congratulations. This is the section where all the fidd
 
 The Steve Berlin Johnson articles referenced earlier are an essential first stop, particularly in demonstrating how [DevonThink](www.devontechnologies.com/products/devonthink/overview.html) can add some serendipity into how you use your individual notes. To give you an example of how this works, here’s a screenshot from my ‘TalQaeda’ database that I put together while working on [An Enemy We Created](www.anenemywecreated.com):
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/4cbc64293299_image-asset.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/4cbc64293299_image-asset.avif)
 
 In the upper part you can see a bunch of notes relating to the Haqqani family. The lower left part is the contents of a note (Note: exported from [Instapaper](http://instapaper.com)). The bottom right list of documents (under “See Also”) is a list of notes that may be related to this particular quote. This is the magic algorithmic sauce I mentioned earlier that makes [DevonThink](http://www.devontechnologies.com/products/devonthink/overview.html) so powerful.
 
@@ -189,15 +189,15 @@ I don’t find [DevonThink](www.devontechnologies.com/products/devonthink/overvi
 
 Tinderbox can display notes in a number of different ways. You can view your documents as outlines, as maps, or even as timelines:
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/58b07a0edc6e_Screen_Shot_2014-10-24_at_18.42.06.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/58b07a0edc6e_Screen_Shot_2014-10-24_at_18.42.06.avif)
 
 In this image you can see the information arranged as an outline, but here (below) you see the same information organised as a map (mirroring the actual layout of the map of those districts in a particular part of Kandahar):
 
-![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/ea96ad9bb425_image-asset.webp)
+![](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/ea96ad9bb425_image-asset.avif)
 
 Just to show you that it can handle complexity, here’s a map created by [Felix](http://felixkuehn.com) to help him figure out how people involved in militant Islamism were/are connected across different geographical sectors:
 
-[caption id="" align="alignnone" width="1966"]![ It's complicated... ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cf88aec723b3_image-asset.webp) It's complicated... [/caption]
+[caption id="" align="alignnone" width="1966"]![ It's complicated... ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cf88aec723b3_image-asset.avif) It's complicated... [/caption]
 
 I’ll often use Tinderbox maps to store outlines for how I’ll write a particular section or chapter, making notes inside the document, dragging quotes in from DevonThink to supplement the argument that’s being constructed.
 

@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![](images/2016-12-30-master-arabic-preorder/7250983c713c_image-asset.webp)](http://gum.co/masterarabic-premium)
+[![](images/2016-12-30-master-arabic-preorder/7250983c713c_image-asset.avif)](http://gum.co/masterarabic-premium)
 
 We're getting closer to finalising the materials for our new book and resource guide, 'Master Arabic'. The full description of the book reads as follows:
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-09-27-lessons-learnt-language-study-habits/6745dd90cd50_image-asset.webp)
+![](images/2016-09-27-lessons-learnt-language-study-habits/6745dd90cd50_image-asset.avif)
 
 I’ve been coaching a dozen or so students for a few months now, and I wanted to reflect a little on the experience. (For more information on what language coaching is, [click here](http://www.alexstrick.com/language-coaching)). Since I mainly work on meta-skills around habit formation, scheduling and planning, and accountability, I even work with those who are studying languages I don’t speak. (I also work and consult on specific productivity-related issues, such as with PhD students to figure out work plans, idea structures and schedule reconfigurations).
 

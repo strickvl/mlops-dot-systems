@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/6fa00a7e7b3b_image-asset.webp)
+![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/6fa00a7e7b3b_image-asset.avif)
 
 **[UPDATE: I now offer one-on-one language coaching designed to help students prepare for Middlebury's intensive summer programme.**[Read more](http://www.alexstrick.com/language-coaching)**about what it involves and what kinds of problems it's best suited to addressing.]**
 
@@ -92,11 +92,11 @@ So, to put you in my shoes, every day we’d study new texts, listen to things, 
 
 A typical entry might look something like this:
 
-![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/31acb7a31ca7_image-asset.webp)
+![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/31acb7a31ca7_image-asset.avif)
 
 which will, in due course, create cards like this, to test my recall:
 
-![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/2ac7c1ad977a_image-asset.webp)
+![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/2ac7c1ad977a_image-asset.avif)
 
 (That card is giving me a picture of a political prisoner along with the context of a sentence in which a word (*mu3taqaliin*) was originally present; it is my job to remember which word is suitable for that context, prompted by the picture to remind me. Note that the cards are 100% Arabic-only. This is important in general, regardless of the Middlebury language pledge.)
 
@@ -104,7 +104,7 @@ which will, in due course, create cards like this, to test my recall:
 
 So I’ll do that for every new word we learned, sometimes formatting them those context-heavy cards, and sometimes cards without the context (especially when first learning a word, and when the word or phrase is something tangible). Like this:
 
-![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/ce7353c623c6_image-asset.webp)
+![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/ce7353c623c6_image-asset.avif)
 
 …which is a prompt for me to recall the Arabic word for "hummingbird" (which I saw fly by me one day while walking around the grounds of the campus). When I click the card to check the answer, I also hear the word pronounced.
 
@@ -168,7 +168,7 @@ There are some slight amendments I’d recommend for Arabic-learners. If you go 
 
 It should look something like this:
 
-![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/70aed4affd38_image-asset.webp)
+![](images/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school/70aed4affd38_image-asset.avif)
 
 It’s one of the best online dictionaries for Arabic and works very well in conjunction with [Readlang](http://www.readlang.com).
 

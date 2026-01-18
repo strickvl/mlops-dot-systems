@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/ae495ea7b8bf_IMG_2653.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/ae495ea7b8bf_IMG_2653.avif)
 
 I'll be taking a break from regular blogging for the next few months while I focus on finishing the writeup of my PhD dissertation. Most of what I'm interested in about the Afghan Taliban is their pre-2001 history, so I recently put together a list of 'value-added' sources that offer useful and/or unique information. As I write things up for my research, I'll often come across someone's name or some minutiae I know very little about. These are the sources to which I turn when I reach those moments. They're often biased, but they're rich in detail and in first-person observations. I've long grown frustrated by long analyses of the Taliban that don't contain the results of time spent in Afghanistan and that haven't bothered to engage with the ever-growing list of useful primary sources on the movement.
 
@@ -35,7 +35,7 @@ UPDATE: I added a few things as of August 2021 below. Notably, [The Taliban Read
 
 Jere van Dyk’s book contains recollections of time spent in south-eastern Afghanistan (including conversations with Jalaluddin Haqqani) and Kandahar during the early 1980s. Lots of atmospheric description and snippets of discussions. Not definitive, by any means, but useful nonetheless.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/c4663eb9856d_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/c4663eb9856d_image-asset.avif)
 
 - [William Maley, "Fundamentalism Reborn?" (1998)](http://www.amazon.com/Fundamentalism-Reborn-Afghanistan-Under-Taliban/dp/0814755860/ref=sr_1_1?ie=UTF8&sr=1-1&s=books&keywords=fundamentalism%2Breborn&tag=soumet-20&qid=1451153324)
 
@@ -43,7 +43,7 @@ This was the first mainstream book published about the Taliban movement in Engli
 
 - [Anna M. Pont, "Blind Chickens & Social Animals: Creating Spaces for Afghan Women's Narratives Under the Taliban" (2000)](http://www.amazon.com/Blind-Chickens-Social-Animals-Narratives/dp/193157300X/ref=sr_1_2?ie=UTF8&sr=1-2&s=books&keywords=blind%2Bchickens&tag=soumet-20&qid=1451153346)
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/9acb49844d76_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/9acb49844d76_image-asset.avif)
 
 This report was initially commissioned/published by Mercy Corps in 2000. The text was republished as a book in 2001. Pont was investigating the situation for women in Helmand and she managed to gather (together with a team of Afghan researchers) interviews with women in Lashkar Gah, Darwishan, Nad Ali, Gereshk and Naw Zad. She also did some interviews in Baluchistan (Pakistan). These interviews were carried out in 1998 and, as such, offer a fascinating window into the lives of women in an area where the Taliban had strong support and presence. The report/book includes lots of quotations of the testimony. It is also of interest since a lot of what emerges offers a counterfactual to what is often written about the experiences of women under Taliban rule. Download the original report [here](http://www.afghandata.org:8080/xmlui/bitstream/handle/azu/3278/azu_acku_pamphlet_ds371_3_p668_2000_w.pdf?sequence=1&isAllowed=y).
 
@@ -55,7 +55,7 @@ This was another early account of the Taliban, published a year before 2001 saw 
 
 This story for the New Yorker contains a lot of unique interview material and closely observed profiles of individuals in the Taliban leadership. I don’t see it referenced much, but there are some useful details in here.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/27c8164f12bd_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/27c8164f12bd_image-asset.avif)
 
 - [Ahmed Rashid, "Taliban" (2001)](http://www.amazon.com/Taliban-Militant-Fundamentalism-Central-Second/dp/0300163681/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=rashid%2Btaliban&tag=soumet-20&qid=1451153470)
 
@@ -69,7 +69,7 @@ This book was published in an impeccable English translation in the mid-2000s by
 
 Mohammad Salah is a journalist who wrote in Arabic for al-Hayat and various other publications. This book is a recollection of some memories and interviews he carried out with Arabs (particularly those from Egypt) who were involved in Afghanistan during the 1980s and 1990s. There are interesting details on how the Arabs interacted with Afghans during this time period. Parts of this book are quoted in my book, *An Enemy We Created*.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/616d461bea06_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/616d461bea06_image-asset.avif)
 
 - [Robert D. Kaplan, "Soldiers of God" (2001)](http://www.amazon.com/Soldiers-God-Warriors-Afghanistan-Pakistan/dp/1400030250/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=soldiers%2Bof%2Bgod&tag=soumet-20&qid=1451153560)
 
@@ -79,7 +79,7 @@ Kaplan travelled inside Afghanistan during the 1980s and this book contains memo
 
 This is essential reading for anyone who wants to understand how the fronts functioned during the 1980s in southern Afghanistan. The author, an Egyptian who came to Afghanistan to fight during the mid-1980s, spent time in and around Kandahar, participating in a number of important battles towards the end of the war. He includes a wealth of names and places, all of which can be used to triangulate information about the location of fronts, commanders and fighters in the south.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/cf631ac27435_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/cf631ac27435_image-asset.avif)
 
 - [David Edwards, "Before Taliban" (2002)](http://www.amazon.com/Before-Taliban-Genealogies-Afghan-Jihad/dp/0520228618/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=before%2Btaliban&tag=soumet-20&qid=1451153595)
 
@@ -93,7 +93,7 @@ This is a collection of Jon Lee Anderson’s dispatches for the New Yorker, publ
 
 This was the writeup of Peter Bergen’s earliest investigations into bin Laden’s activities pre-2001. It includes time spent in Afghanistan during their 1990s rule of the country (including conversations with senior figures during that time). There isn’t that much of value relating to the Afghan Taliban, however, in this book, and you’d be better off reading his later edited volume, The Osama Bin Laden I Know.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/157bfd50e79f_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/157bfd50e79f_image-asset.avif)
 
 - [Wayne Madsen, "Forbidden Truth" (2002)](http://www.amazon.com/Forbidden-Truth-U-S--Taliban-Secret-Diplomacy/dp/1560254149/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=forbidden%2Btruth&tag=soumet-20&qid=1451153652)
 
@@ -103,7 +103,7 @@ I hesitate a bit about including this book in among the list of sources. This is
 
 Wahid Muzhda was an official working in the Taliban’s Foreign Ministry during their rule over Afghanistan during the 1990s. This short memoir includes a number of recollections from that time, for example of meetings between senior Taliban leaders and foreign delegations. It’s unclear how accurate all of the book is, but a lot has been confirmed through other interviews so, to my mind, this is a useful atmospheric source for insight into the inner workings of a Taliban ministry from a somewhat dispassionate observer.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/b3d27dd86cea_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/b3d27dd86cea_image-asset.avif)
 
 - [Muhammad Amir Rana, "A to Z of Jehadi Organizations in Pakistan" (2004)](http://www.amazon.com/Z-JEHADI-ORGANIZATIONS-PAKISTAN/dp/B003R3QEMK/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=muhammad%2Bamir%2Brana&tag=soumet-20&qid=1451153685)
 
@@ -113,7 +113,7 @@ Much of the information in this book is of dubious provenance, and it’s very d
 
 Mustafa Hamid is a prolific writer and this is just one of over a dozen titles published online since 2001. This volume specifically covers the details of the relationship between the Taliban and bin Laden (and his associates) as relayed through a series of stories from the pre-2001 period. This book isn’t available in English apart from liberal quotations used in my own book, *An Enemy We Created*. The Arabic version appears online from time to time, though currently I can’t seem to find a stable link to share with you.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/ef38f6276f4e_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/ef38f6276f4e_image-asset.avif)
 
 - Husayn Ibn Mahmud, "Al-Rajul al-‘Amlaaq: The Giant Man" (2005)
 
@@ -127,7 +127,7 @@ This document was the product of the Taliban’s internal constitutional review 
 
 Excerpts of this book are included in Bergen’s The Osama bin Laden I Know, but the full account is worth a read. Only some of it is germane to the Afghan Taliban, but there are some interesting gems in those sections relating to the relationship between the Taliban and the foreign fighters in Afghanistan during the era of the Islamic Emirate of Afghanistan (late-1990s).
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/0aa7faebf221_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/0aa7faebf221_image-asset.avif)
 
 - [Robert Fisk, "The Great War for Civilisation: The Conquest of the Middle East" (2005)](http://www.amazon.com/Great-War-Civilisation-Conquest-Middle/dp/1400075173/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=great%2Bwar%2Bfisk&tag=soumet-20&qid=1451153797)
 
@@ -137,7 +137,7 @@ Fisk reported from Afghanistan from the Soviet War through the Taliban era (albe
 
 Murshed was Pakistan’s Special Envoy to Afghanistan during the late 1990s and as such, this book is filled with interesting stories about the author’s time spent interacting with the Afghan Taliban. Lots of this is unavailable elsewhere, so it’s worth reading for exposure to the stories, even if it’s unclear how much of it can be relied upon as an accurate account.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/95c7ade18d21_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/95c7ade18d21_image-asset.avif)
 
 - [Peter Bergen (ed), "The Osama bin Laden I Know" (2006)](http://www.amazon.com/Osama-bin-Laden-Know-History/dp/0743278925/ref=sr_1_3?sr=8-3&ie=UTF8&keywords=bergen%2Bbin%2Bladen&tag=soumet-20&qid=1451153870)
 
@@ -152,7 +152,7 @@ These so-called ‘rulebooks’ for the Afghan Taliban started publication in 20
 2010 Layeha ([English](http://www.tandfonline.com/doi/abs/10.1080/1057610X.2012.675546))  
 2011 Layeha (Unavailable online)
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/30ee0de7d0ec_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/30ee0de7d0ec_image-asset.avif)
 
 - [Kathy Gannon, "I is for Infidel" (2007)](http://www.amazon.com/Infidel-Holy-War-Terror-Afghanistan/dp/1586484524/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=I%2Bis%2Bfor%2Binfidel&tag=soumet-20&qid=1451153984)
 
@@ -166,7 +166,7 @@ Sarah Chayes lived in Kandahar for several years post-2001 and her book was one 
 
 Of all the Taliban memoirs, Mutawakil’s is perhaps the least interesting. This is unfortunate, given how much he must have been exposed to as Foreign Minister, but perhaps unsurprising that he’s chosen to retain a lot of stories for possible narration in the future. Nevertheless, this is part of the ‘canon’ of memoirs by senior leadership figures and as such is essential reading.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/cc2c5fe4a94d_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/cc2c5fe4a94d_image-asset.avif)
 
 - [Omar Nasiri, "Inside the Jihad: My Life with Al Qaeda" (2008)](http://www.amazon.com/Inside-Jihad-My-Life-Qaeda/dp/0465023894/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=nasiri%2Binside%2Bjihad&tag=soumet-20&qid=1451154028)
 
@@ -176,7 +176,7 @@ A lyrical look at life for foreign fighters in Afghanistan during the late 1990s
 
 I haven’t mentioned Giustozzi’s earlier work, [*Koran, Kalashnikov and Laptop*](http://www.amazon.com/Koran-Kalashnikov-Laptop-Neo-Taliban-Afghanistan/dp/0199326355/ref=sr_1_3?ie=UTF8&sr=1-3&s=books&tag=soumet-20&qid=1451154065) (2007), because it is mainly a synthesis of various secondary source materials. This edited volume, however, offers various encounters with primary sources, whether this is Joanna Nathan’s account of Taliban propaganda, Graeme Smith’s writeup of his ‘Talking to the Taliban’ interview series, or Tom Coghlan’s oral history of the Taliban in Helmand. Lots of gems quoted in this book.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/cae9cf73a04a_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/cae9cf73a04a_image-asset.avif)
 
 - [Crews/Tarzi, "The Taliban and the Crisis of Afghanistan" (2009)](http://www.amazon.com/Taliban-Crisis-Afghanistan-Robert-Crews/dp/067402690X/ref=sr_1_1?ie=UTF8&sr=1-1&s=books&keywords=crews%2Btarzi&tag=soumet-20&qid=1451154089)
 
@@ -190,7 +190,7 @@ Loyn spent time in Afghanistan during the mid-late 1990s with the Taliban, inclu
 
 [This article](http://europe.newsweek.com/talibans-oral-history-afghanistan-war-79553) was published by Newsweek in 2009 and it consists of raw testimony from a variety of figures within the Afghan Taliban about their post-2001 history. The sources aren’t identified so it’s hard to know who is reliable or not, but I trust Yousafzai’s ability to turn up the kind of people would would have real knowledge of these events. In any case, treat with caution, but make use of the detail in this long set of accounts.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/a6163fe2cfc0_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/a6163fe2cfc0_image-asset.avif)
 
 - [Abdul Salam Zaeef, "My Life With the Taliban" (2010)](http://www.mylifewiththetaliban.com/My_Life_With_The_Taliban/Home.html)
 
@@ -204,7 +204,7 @@ Gretchen Peters sources a lot of this book to interviews with “Western officia
 
 Jere van Dyk’s second book on Afghanistan details the time he spent as a Taliban prisoner in Pakistan. He relates many conversations he had with his captors and thus, like David Rohde’s account, this is a useful, albeit biased, source.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/12e6bba13bfe_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/12e6bba13bfe_image-asset.avif)
 
 - [Najwa bin Laden, "Growing Up bin Laden" (2010)](http://www.amazon.com/Growing-Up-bin-Laden-Osamas-ebook/dp/B003H3IOQO/ref=sr_1_1?ie=UTF8&sr=1-1&s=books&keywords=growing%2Bup%2Bbin%2Bladen&tag=soumet-20&qid=1451154233)
 
@@ -222,7 +222,7 @@ Tawil gathers together a number of new materials and interviews with those who k
 
 Fergusson spent time in Afghanistan during the late 1990s. He also returned to Afghanistan post-2001 to report parts of this book and as such, it includes a number of interviewees and accounts of the Taliban that are unavailable elsewhere. This is a somewhat partisan account, but the interview materials make it a worthwhile read.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/39bab291892d_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/39bab291892d_image-asset.avif)
 
 - [Kabir Mohabbat, "Delivering Osama" (2011)](https://books.google.nl/books/about/Delivering_Osama.html?id=I-Y4T9kUfxQC&redir_esc=y)
 
@@ -230,7 +230,7 @@ It remains unclear to me why more people haven’t discovered this quirky memoir
 
 - [Klaits/Gulmamadova-Klaits, "Love and War in Afghanistan" (2011)](http://www.amazon.com/Love-War-Afghanistan-Alex-Klaits-ebook/dp/B00541Z8L6/ref=sr_1_1?ie=UTF8&sr=1-1&s=books&keywords=love%2Bwar%2Bafghanistan&tag=soumet-20&qid=1451154371)
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/e5ea4d65006e_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/e5ea4d65006e_image-asset.avif)
 
 This book is a collection of oral history accounts from Kunduz and Takhar provinces. It covers several decades, but parts venture into the Taliban’s time in northern Afghanistan and as such this is a fascinating book. Moreover, these are not the recollections of senior leaders (with axes to grind) but rather those with little or no power. As such, this book has limited but focused value.
 
@@ -242,7 +242,7 @@ This internal report on the Taliban, based on the testimonies of dozens of Talib
 
 My own book, written together with Felix Kuehn. Most of this is a summary of the research of others, though we supplemented that research with interviews with various individuals associated with the Taliban and al-Qaeda. Mindful of the fact that the original interview transcripts are often left out of research writeup, I pushed to include the raw texts as much as possible, so you’ll find lots of lengthy quotations peppered throughout the book.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/62281740ead6_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/62281740ead6_image-asset.avif)
 
 - [Strick/Kuehn, "Poetry of the Taliban" (2012)](http://poetryofthetaliban.com/Poetry_of_the_Taliban/Home.html)
 
@@ -256,7 +256,7 @@ This is the fruit of several years’ research by Don Rassler and Vahid Brown. T
 
 Malkasian spent time in Helmand with the US State Department and this book is the product of interviews he made during that time. Much like Mike Martin’s Helmand book, this explains local histories through the stories of individuals, often with extensive quotation from his interview subjects. Again, there isn’t as much on the 1980s and 1990s as I would have liked, but there is a lot here that isn’t available anywhere else and as such it’s a useful source.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/ac71f1634423_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/ac71f1634423_image-asset.avif)
 
 - [Akbar Agha, "I Am Akbar Agha" (2014)](http://www.amazon.com/Akbar-Agha-Memories-Publishing-Originals-ebook/dp/B00NFNE708/ref=sr_1_2?ie=UTF8&sr=1-2&s=books&keywords=akbar%2Bagha&tag=soumet-20&qid=1451154500)
 
@@ -270,13 +270,13 @@ This is the first of two books dealing with the 1980s jihad in the greater Kanda
 
 Mike Martin’s research includes a lot of interview material which he gathered in Helmand. This book is extremely valuable if you are interested in hyper-local histories of the Taliban. There isn’t as much about the 1980s or 1990s as I would have liked, but this book contains lots of information that you won’t find anywhere else.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/50578482e2a5_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/50578482e2a5_image-asset.avif)
 
 - [Mufti Rasheed Ludhianvi, "Obedience to the Amir" (2015)](http://www.amazon.com/Obedience-Amir-Taliban-Movement-Publishing-ebook/dp/B0183VF0HA/ref=sr_1_sc_1?ie=UTF8&sr=1-1-spell&s=books&keywords=obedience%2Barmir&tag=soumet-20&qid=1451154610)
 
 Originally published in the late 1990s, Mufti Rasheed’s text explains a lot about how the Taliban movement functioned and how religious clerics situated their claims to power. The text is available for the first time in a translation by Yameema Mitha. Michael Semple has written introductory materials that give the document context. [I recently wrote on my blog](http://www.alexstrick.com/blog/2015/11/obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions) that this was one of the most interesting primary source texts I’ve read relating to the Afghan Taliban in recent years. Highly recommended.
 
-![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/c135eebf2cec_image-asset.webp)
+![](images/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying/c135eebf2cec_image-asset.avif)
 
 - Farrall/Hamid, "The Arabs at War in Afghanistan" (2015)
 

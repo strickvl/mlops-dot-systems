@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![](images/2011-12-28-talibantwitterfight-the-news-story-that-wasnt/1016534c7eab_alsomood.webp "alsomood")](images/2011-12-28-talibantwitterfight-the-news-story-that-wasnt/1016534c7eab_alsomood.webp)
+[![](images/2011-12-28-talibantwitterfight-the-news-story-that-wasnt/1016534c7eab_alsomood.avif "alsomood")](images/2011-12-28-talibantwitterfight-the-news-story-that-wasnt/1016534c7eab_alsomood.avif)
 
 The Taliban twitter account (sic) is back in the news again, this time courtesy of the US Senate:
 
@@ -118,6 +118,6 @@ At any rate, I hope this puts to rest the whole 'Taliban spokesmen are on the in
 
 In fact, the only people who seem to really be enjoying this all are @ISAFmedia themselves and the media outlets covering the story. Almost every day now, @ISAFmedia puts out a tweet to @Alemarahweb saying that something that was posted was wrong. This is one example:
 
-[![](images/2011-12-28-talibantwitterfight-the-news-story-that-wasnt/0dc0bff0234a_intotheether1.webp "intotheether")](https://twitter.com/#!/ISAFmedia/statuses/144729933283991553)
+[![](images/2011-12-28-talibantwitterfight-the-news-story-that-wasnt/0dc0bff0234a_intotheether1.avif "intotheether")](https://twitter.com/#!/ISAFmedia/statuses/144729933283991553)
 
 And, in a way, it sort of represents the futility of a lot of what goes on in Afghanistan these days: someone sitting behind a desk in ISAF headquarters, tweeting away at a Taliban twitter account, hoping to goad someone in response, but there is nobody to respond to since @Alemarahweb is tweeting automatically without anyone needed to run their account.

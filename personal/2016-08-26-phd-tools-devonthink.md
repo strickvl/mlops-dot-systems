@@ -28,7 +28,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-[caption id="" align="alignnone" width="700"]![ Discovering similar notes in one of my DevonThink databases ](images/2016-08-26-phd-tools-devonthink/0162dc3e4803_image-asset.webp) Discovering similar notes in one of my DevonThink databases [/caption]
+[caption id="" align="alignnone" width="700"]![ Discovering similar notes in one of my DevonThink databases ](images/2016-08-26-phd-tools-devonthink/0162dc3e4803_image-asset.avif) Discovering similar notes in one of my DevonThink databases [/caption]
 
 I first heard about [DevonThink](http://www.devontechnologies.com/products/devonthink/overview.html) in the same breath as [Tinderbox](http://www.eastgate.com/Tinderbox/). They go together, though they serve different purposes. Some people want to make an either/or decision about which to use. I see them as sufficiently different to assess them on their own merits and as per your usage scenario.
 

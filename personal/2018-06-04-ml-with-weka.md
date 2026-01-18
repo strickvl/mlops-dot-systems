@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-04-ml-with-weka/c70977cb3bba_weka-loader.webp)
+![](images/2018-06-04-ml-with-weka/c70977cb3bba_weka-loader.avif)
 
 Learning to program is an infinite process. The field is as open and wide as you can imagine, and you are mostly constrained by your imagination.
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="960"]![ Me, climbing at Fuheis last week ](images/2016-09-02-existential-battles-climbing-amman/a107400b8908_image-asset.webp) Me, climbing at Fuheis last week [/caption]
+[caption id="" align="alignnone" width="960"]![ Me, climbing at Fuheis last week ](images/2016-09-02-existential-battles-climbing-amman/a107400b8908_image-asset.avif) Me, climbing at Fuheis last week [/caption]
 
 Over the past few months, since submitting my PhD (and then successfully defending it) I've been engaged in a number of activities that push me outside my comfort zone. From swing dancing to starting a new small business (the [99 Names Challenge](http://incrementalelephant.org/)) to learning how to code, I've tried to push the envelope of what I know. Like many of us, I'm a creature of habit and routine. I like my routine and my habits. But I also know that those habits and routines -- the same ones that delivered results and even a PhD in the past -- can grow stale. If I'm to grow -- professionally or personally -- I have to get more comfortable with change and with discomfort. The best way to start figuring this out, I have found, is to expose myself to newness and that discomfort as often as possible.
 
@@ -33,7 +33,7 @@ My 'adventures' included abseiling off high bridges, [potholing](https://en.wiki
 
 Since that time, I've avoided activities or experiences that necessitated me visiting high-up places. Confession: I even never made it all the way up [Kandahar's Forty Steps](http://www.atlasobscura.com/places/forty-steps-kandahar-chilzina) (*chilzina*) for this reason. Halfway was my limit.
 
-[caption id="" align="alignnone" width="590"]![ Amman's ClimbAt centre ](images/2016-09-02-existential-battles-climbing-amman/1e7635006323_image-asset.webp) Amman's ClimbAt centre [/caption]
+[caption id="" align="alignnone" width="590"]![ Amman's ClimbAt centre ](images/2016-09-02-existential-battles-climbing-amman/1e7635006323_image-asset.avif) Amman's ClimbAt centre [/caption]
 
 Cut to the present day: I'm 10 or 15 metres up a wall at Amman's [Climbat centre](https://www.facebook.com/climbatamman). This seems to be the point where things shift. My existential battle begins. I use those words only partially in jest.
 

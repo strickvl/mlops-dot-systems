@@ -24,7 +24,7 @@ comments:
 
 *[This is part of a series on getting out of a language-learning plateau at the intermediate-advanced level. Check out the other parts here.]*
 
-![](images/2021-05-26-arabic-language-plateau-principles/5ca5bbf280bf_image-asset.webp)
+![](images/2021-05-26-arabic-language-plateau-principles/5ca5bbf280bf_image-asset.avif)
 
 Seasoned language learners are familiar with the concept of the 'language plateau'. If you're learning a second language for the first time, you will inevitably reach a point in your studies where your progress seems to flatten. You will find this place and period extremely frustrating.
 

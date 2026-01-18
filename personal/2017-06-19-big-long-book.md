@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-06-19-big-long-book/b4937a173e97_image-asset.webp)
+![](images/2017-06-19-big-long-book/b4937a173e97_image-asset.avif)
 
 One million words. More.
 

@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![I_am_Akbar_Agha-cover](images/2014-09-16-our-first-publication-i-am-akbar-agha/b4dcf8787f7f_I_am_Akbar_Agha-cover.webp)
+![I_am_Akbar_Agha-cover](images/2014-09-16-our-first-publication-i-am-akbar-agha/b4dcf8787f7f_I_am_Akbar_Agha-cover.avif)
 Very happy to announce the publication of First Draft Publishing's inaugural book, *I Am Akbar Agha*. Felix and I have been working on this initiative for a while, and it's nice to have it see the light of day.
 
 Akbar Agha's book is the latest in an (increasingly) long line of memoirs by individuals associated with the (Afghan) Taliban. So far we have insider accounts from Zaeef, Mutawakil, Mujhda, Mustas'ad, Abu al-Walid al-Masri and rumours of works being written by figures like Mawlawi Qalamuddin and others.

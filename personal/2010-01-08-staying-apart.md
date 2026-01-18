@@ -35,7 +35,7 @@ Journalists themselves are separated from the people in Kandahar:
 
 It was with these issues in mind that I travelled to Arghestan today. It's only two hours drive from Kandahar City to the district centre in Arghestan, but you'd be lucky to find someone who'll go with you. This is not to say that the district is dangerous -- far from it in fact -- but that the distances are an obstacle even for Afghans.
 
-![Arghestan district, Kandahar province](images/2010-01-08-staying-apart/4d4f40dd1521_arghestanmain.webp)
+![Arghestan district, Kandahar province](images/2010-01-08-staying-apart/4d4f40dd1521_arghestanmain.avif)
 
 The road out to the district centre is newly-built and, according to the district chief, one of the main development projects which have been carried out in the district since he took over some three years ago. Only in a few areas did our driver have some worries about passing through safely; for most parts of the road we were completely undisturbed -- there was even very little traffic heading to and from Arghestan.
 

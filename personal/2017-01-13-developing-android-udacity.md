@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-13-developing-android-udacity/013ae158f5b0_image-asset.webp)
+![](images/2017-01-13-developing-android-udacity/013ae158f5b0_image-asset.avif)
 
 I was lucky to be awarded a scholarship to learn to code apps for Android phones. [10,000 such scholarships](https://www.udacity.com/google-scholarships) were awarded (from 70,000 applicants) to citizens of the European Union through a Google-Udacity partnership.
 

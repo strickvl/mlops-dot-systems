@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-01-phd-tools-mellel/e9ff89e8f1b5_image-asset.webp)
+![](images/2016-09-01-phd-tools-mellel/e9ff89e8f1b5_image-asset.avif)
 
 [Mellel](http://www.mellel.com/) is what I use for the final formatting of documents. It might be overkill for some, but in the case of my PhD, the extra features really saved me some time and headaches.
 

@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-02-lynne-kelly-podcast/50b3de2684ec_ScreenShot_2016-12-28_at_21.44.14.webp)
+![](images/2017-01-02-lynne-kelly-podcast/50b3de2684ec_ScreenShot_2016-12-28_at_21.44.14.avif)
 
 I released [a new episode](https://www.sourcesandmethods.com/podcast/sources-and-methods-34-lynne-kelly) of Sources and Methods today. This week I spoke with Lynne Kelly, author of ‘[The Memory Code: The Secrets of Stonehenge, Easter Island and Other Ancient Monuments](https://www.amazon.com/Memory-Code-Secrets-Stonehenge-Monuments-ebook/dp/B01K5J6V9E/ref=dp_kinw_strp_1?tag=soumet-20)', a fascinating exploration of the intersection between history, archaeological sleuthing and memory techniques. We delved into the contents of her book as well as the practical applications she found for these ancient skills.
 

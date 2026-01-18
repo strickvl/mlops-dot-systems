@@ -26,11 +26,11 @@ A friend was asking about using [Anki](http://ankisrs.net/) to learn to recognis
 
 On the front of the card the question is presented along with a computer-generated audio pronunciation of the district name:
 
-![](images/2016-08-21-learn-afghanistan-districts-anki/96213ee40fff_image-asset.webp)
+![](images/2016-08-21-learn-afghanistan-districts-anki/96213ee40fff_image-asset.avif)
 
 Then if you know it, you'll answer Badakhshan and then you'll click/tap through to the next screen to see if you got it right. You'll see this:
 
-![](images/2016-08-21-learn-afghanistan-districts-anki/6d498be1fe21_image-asset.webp)
+![](images/2016-08-21-learn-afghanistan-districts-anki/6d498be1fe21_image-asset.avif)
 
 Then you can mark whether you got it right or not. There are around 400 districts to learn, so if you learn 13-15 new cards each day you'll finish the whole lot in a month.
 

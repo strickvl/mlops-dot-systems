@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-27-how-to-learn-a-page-of-verbs/a38a3228032e_image-asset.webp)
+![](images/2017-01-27-how-to-learn-a-page-of-verbs/a38a3228032e_image-asset.avif)
 
 Someone sent me a list of verbs that they were hoping to memorise. They wanted some tips and suggestions for different ways to approach the task. You can see part of the image above. Verb, translation and a sample sentence where the word is used in context.
 

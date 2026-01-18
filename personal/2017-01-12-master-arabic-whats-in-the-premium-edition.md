@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![](images/2017-01-12-master-arabic-whats-in-the-premium-edition/fcec11f1ea55_image-asset.webp)](http://languagecoach.io/masterarabic)
+[![](images/2017-01-12-master-arabic-whats-in-the-premium-edition/fcec11f1ea55_image-asset.avif)](http://languagecoach.io/masterarabic)
 
 *Master Arabic* is the book I wish I'd had when I got the end of my university programme studying Arabic. I'm really happy with how it's turned out, especially the resource list. I discovered all sorts of new books and online materials that I'll be using in my own studies going forward.
 

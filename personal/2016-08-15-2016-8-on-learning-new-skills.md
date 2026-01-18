@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-08-15-2016-8-on-learning-new-skills/1a8b8bd4a5ba_image-asset.webp)
+![](images/2016-08-15-2016-8-on-learning-new-skills/1a8b8bd4a5ba_image-asset.avif)
 
 Newly released from life under the PhD regime, I have been exploring new interests and indulging my curiosity down new pathways. Last time I wrote, I explained how I had taken to [studying sharks](http://www.alexstrick.com/blog/2016/7/chondrichthyan-fun-a-review-of-shark-mooc) and various aspects of conservation and marine biology. There was a certain amount of training around higher-level concepts in that course: in particular, on the scientific method, ways to problem-solve and so on, but in general the emphasis was on the material rather than specific skills.
 

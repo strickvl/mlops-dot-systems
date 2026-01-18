@@ -21,7 +21,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-09-phd-tools-the-secret-to-finishing-your-phd/32dff6b9d96e_image-asset.webp)
+![](images/2016-09-09-phd-tools-the-secret-to-finishing-your-phd/32dff6b9d96e_image-asset.avif)
 
 Four Perfect Hours. Repeat every day for two and a half months, and you have your PhD.
 

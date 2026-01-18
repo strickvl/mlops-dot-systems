@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-21-letting-go/508d7790fb5c_image-asset.webp)
+![](images/2016-10-21-letting-go/508d7790fb5c_image-asset.avif)
 
 Over the past week, I have felt the progress I’ve been making on the climbing wall is in jeopardy somehow. My energy levels have fluctuated quite a bit. I can never be sure how much I’ll be able to climb when I get to the wall, and old fears have started to raise their heads again.
 

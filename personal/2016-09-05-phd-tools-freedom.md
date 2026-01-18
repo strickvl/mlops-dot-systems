@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-05-phd-tools-freedom/84f9cee193bd_image-asset.webp)
+![](images/2016-09-05-phd-tools-freedom/84f9cee193bd_image-asset.avif)
 
 [Freedom](https://freedom.refersion.com/c/5f78b) does one thing and it does it well: turning off the internet (or parts of it). It removes temptation by giving you a time slot where the internet is turned off (and no way to turn it back on) on both your laptop and your phone. [Note: at the current moment there is no Android version of Freedom, but it's been a long time coming so I imagine that will be released in the near-term future -- a [recent twitter query](https://twitter.com/freedom_svc/status/745939494776381441) suggested "end of the summer"].
 

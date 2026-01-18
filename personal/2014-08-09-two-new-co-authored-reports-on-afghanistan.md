@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![2](images/2014-08-09-two-new-co-authored-reports-on-afghanistan/33e6e1ce9542_2.webp)![1](images/2014-08-09-two-new-co-authored-reports-on-afghanistan/8e5049a95e8c_1.webp)
+![2](images/2014-08-09-two-new-co-authored-reports-on-afghanistan/33e6e1ce9542_2.avif)![1](images/2014-08-09-two-new-co-authored-reports-on-afghanistan/8e5049a95e8c_1.avif)
 Just a short post. Two reports that I co-authored have just been published. They were both finished a few months back, but they're not so time-sensitive that this will make much of a difference.
 
 The first is for Chatham House, written together with [Felix Kuehn](http://www.felixkuehn.com "Felix Kuehn (blog)"). You can [read the executive summary here](http://www.chathamhouse.org/publication/rebooting-political-settlement-engagement-and-mediation-after-afghan-elections), and [download the full report here](http://www.chathamhouse.org/sites/files/chathamhouse/field/field_document/20140728Afghanistan.pdf). The central point we were trying to get across is that a political settlement in Afghanistan must be about more than just 'talks with the Taliban'. That ship has sailed, and new realities mean it's important to bring all parties into a discussion about the future. I remain skeptical as to internal and external parties' ability to make this happen, but here's hoping...

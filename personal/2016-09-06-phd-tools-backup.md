@@ -24,7 +24,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](http://www.alexstrick.com/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-06-phd-tools-backup/69bfee7313ec_image-asset.webp)
+![](images/2016-09-06-phd-tools-backup/69bfee7313ec_image-asset.avif)
 
 Having some kind of backup system is essential for all PhD students (and probably anyone else using a computer for writing of one kind or another). The less friction to your backup system, the better. If you have to plug in a USB or Firewire external hard drive in order to start your backup process, you're probably not going to be doing it enough and you're probably going to lose files and data.
 

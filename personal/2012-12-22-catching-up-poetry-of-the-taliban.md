@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![Poetry of the Taliban - Cover](images/2012-12-22-catching-up-poetry-of-the-taliban/5c14b93b776a_pott-blog.webp)
+![Poetry of the Taliban - Cover](images/2012-12-22-catching-up-poetry-of-the-taliban/5c14b93b776a_pott-blog.avif)
 The second book that came out this year -- I co-edited it together with [Felix Kuehn](http://www.felixkuehn.com) -- was *Poetry of the Taliban*. Some people [weren't entirely happy](http://www.guardian.co.uk/books/2012/may/04/taliban-poetry-book-denounced-british?mobile-redirect=false) with that idea, but on the whole [the reviews](https://pinboard.in/u:strickvl/bundle:TalibanPoetry/) were pretty positive, both about the collection and about the idea of publishing these translated songs.
 
 The very existence of these cultural artefacts provoked a discussion -- ultimately one of the things we had hoped would happen -- and if you browse through [the list of responses](https://pinboard.in/u:strickvl/bundle:TalibanPoetry/) you can get a sense of the diversity of that debate.

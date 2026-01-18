@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-13-keep-moving/bf60fb3f7388_image-asset.webp)
+![](images/2016-10-13-keep-moving/bf60fb3f7388_image-asset.avif)
 
 There was a moment, three-quarters of the way up the wall yesterday, where I started to think. I was starting to slip off the wall, and the holds were starting to become slippy with sweat from my palms. My arms were both tense, holding the weight of my body in a way that was tiring them out. I was doing everything wrong -- holding myself onto the wall instead of finding a way to keep my arms long and straight, the rest position that climbers are encouraged to take.
 

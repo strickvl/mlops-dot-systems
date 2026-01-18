@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-02-memory-course-positive-feedback/a16be0c18d9c_19987.webp)
+![](images/2016-12-02-memory-course-positive-feedback/a16be0c18d9c_19987.avif)
 
 I [haven’t written much](https://www.alexstrick.com/blog/2016/5/memorisation-language-ninja) on this blog about [the memory course](http://incrementalelephant.org/) I wrote and launched a few months back. Its target audience is Muslims hoping to learn the non-canonical *Asmaa al-Husnaa* or 99 Names of God.
 

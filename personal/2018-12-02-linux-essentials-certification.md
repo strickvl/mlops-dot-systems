@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![](images/2018-12-02-linux-essentials-certification/908c4586117e_ScreenShot_2018-12-02_at_14.51.43.webp)](http://lpi.org/v/LPI000414691/v9davm32hd)
+[![](images/2018-12-02-linux-essentials-certification/908c4586117e_ScreenShot_2018-12-02_at_14.51.43.avif)](http://lpi.org/v/LPI000414691/v9davm32hd)
 
 Last week I went to a test centre here in Amman to take the [LPI Linux Essentials](https://www.lpi.org/our-certifications/linux-essentials-overview) certification. The qualification doesn’t expire and takes you from zero to dangerous in a variety of basic scenarios in the Linux operating system.
 

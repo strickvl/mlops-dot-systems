@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-11-11-squarespace-goes-ssl/b287ef5bf4e0_image-asset.webp)
+![](images/2016-11-11-squarespace-goes-ssl/b287ef5bf4e0_image-asset.avif)
 
 This news is a few days old, but it's worth restating. Squarespace is the name of the comapny that hosts this blog and most of the other websites that I currently manage. A few days ago, [they announced](https://blog.squarespace.com/blog/were-securing-millions-of-websites-with-ssl) that they'd be offering SSL for all Squarespace sites:
 

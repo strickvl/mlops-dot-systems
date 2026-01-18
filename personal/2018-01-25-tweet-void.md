@@ -28,7 +28,7 @@ Increasingly in recent months, I found myself growing dissatisfied with the pull
 
 [RescueTime](https://www.rescuetime.com/) tells me that I spent 86 hours and 16 minutes on Twitter in 2017 -- just under quarter of an hour each day. That feels like a lot to me.
 
-![](images/2018-01-25-tweet-void/973d0aaf7086_ScreenShot_2018-01-25_at_19.13.15.webp)
+![](images/2018-01-25-tweet-void/973d0aaf7086_ScreenShot_2018-01-25_at_19.13.15.avif)
 
 Enter '[Tweet to the Void](https://chrome.google.com/webstore/detail/tweet-to-the-void/jicdanpdmekcldpgdkmlmffgfoafgckh)'. This is a Chrome extension. (For Firefox and other browsers, I have to imagine things like this exist.) When I visit twitter.com, the feed is not visible. All I see is somewhere to post a tweet if that's what I want to do. (There is still some value in posting blogposts and articles there, since I know some people don't use RSS). Of course, I can always turn off the extension with ease, but adding this extra step has effectively neutralised Twitter for me.
 

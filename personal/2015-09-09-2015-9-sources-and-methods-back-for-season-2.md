@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-09-09-2015-9-sources-and-methods-back-for-season-2/570bb04dd701_image-asset.webp)
+![](images/2015-09-09-2015-9-sources-and-methods-back-for-season-2/570bb04dd701_image-asset.avif)
 
 I’m very glad to be able to announce the resumption of normal services over on the [Sources & Methods](http://www.sourcesandmethods.com) podcast. [Matt](https://twitter.com/MattTrevithick) and I took a break over the summer while [I was away at Middlebury](http://www.alexstrick.com/a-different-place/2015/9/surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school) but we’re now back and excited to share a new set of interviews with [interesting people doing interesting things](http://www.sourcesandmethods.com/about/).
 

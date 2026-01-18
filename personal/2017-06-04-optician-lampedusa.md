@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-06-04-optician-lampedusa/1e41d7a3b039_30807858.webp)
+![](images/2017-06-04-optician-lampedusa/1e41d7a3b039_30807858.avif)
 
 > "How naive he'd been, thought the optician, how naive. Because there would always be greater sorrow, deeper and more unfathomable than any of us could ever imagine.” (p. 83)
 

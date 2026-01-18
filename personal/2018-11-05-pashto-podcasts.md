@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-11-05-pashto-podcasts/1cf3d51cac62_244284.webp)
+![](images/2018-11-05-pashto-podcasts/1cf3d51cac62_244284.avif)
 
 It’s been several years since I’ve actively studied Pashto. I’m returning to a somewhat stale vocabulary base. In these cases, listening is one of the more useful ways to reactivate words I once knew, or to learn new words from scratch in context. Podcasts are usually a really useful way to get that active language practice. For most big languages you’re usually spoiled for choice (think French, Mandarin, or even Arabic) but Pashto has fewer options despite around 50 million people speaking it worldwide (source for estimates [here](https://omniglot.com/writing/pashto.htm) and [here](https://en.wikipedia.org/wiki/Pashto)).
 

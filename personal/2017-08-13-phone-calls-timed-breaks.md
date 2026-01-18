@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-08-13-phone-calls-timed-breaks/9c4f89baf9f4_image-asset.webp)
+![](images/2017-08-13-phone-calls-timed-breaks/9c4f89baf9f4_image-asset.avif)
 
 *[This is a continuation of Taylor's blog series where she details some of the week-in-week-out lessons that she learns through her Arabic studies and* [*coaching work*](http://languagecoach.io/coaching)*together with me. For other posts in the series,*[*click here.*](https://www.alexstrick.com/blog/?tag=taylorjournal#show-archive)*]*
 

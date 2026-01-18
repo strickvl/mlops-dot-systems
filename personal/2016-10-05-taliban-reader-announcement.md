@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-05-taliban-reader-announcement/04042dda0983_image-asset.webp)
+![](images/2016-10-05-taliban-reader-announcement/04042dda0983_image-asset.avif)
 
 Hot off the press. [Hurst Publishers](http://www.hurstpublishers.com/) (my publisher for [My Life With the Taliban](http://www.mylifewiththetaliban.com/My_Life_With_The_Taliban/Home.html), [An Enemy We Created](http://www.anenemywecreated.com/An_Enemy_We_Created/Welcome.html) and [Poetry of the Taliban](http://poetryofthetaliban.com/Poetry_of_the_Taliban/Home.html)) just [released their spring/summer catalogue](http://www.hurstpublishers.com/catalogue/springsummer-2017/). As always, some great titles in the works.
 

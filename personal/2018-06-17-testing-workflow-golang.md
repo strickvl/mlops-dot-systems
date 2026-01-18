@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-17-testing-workflow-golang/01d91dc5b786_ScreenShot_2018-06-17_at_11.34.18.webp)
+![](images/2018-06-17-testing-workflow-golang/01d91dc5b786_ScreenShot_2018-06-17_at_11.34.18.avif)
 
 I've been trying to figure out a way to work my way into increasingly complex Go explorations. I thought I'd start at the most simple and expand from there.
 

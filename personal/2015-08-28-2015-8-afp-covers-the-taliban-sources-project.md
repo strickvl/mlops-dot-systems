@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/642b9b574b68_image-asset.webp)
+![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/642b9b574b68_image-asset.avif)
 
 A few years back I [put out a call](http://www.alexstrick.com/a-different-place/2013/04/translators-sought-job-opening) (together with [Felix Kuehn](http://felixkuehn.com) and [Anand Gopal](http://anandgopal.com)) for translators to work on a new project I was trying to get off the ground. Thankfully, that project is coming to a close, but as you can read in [this article](https://news.yahoo.com/british-library-rejects-taliban-trove-fearing-terror-laws-105317279.html), we've had some bumps along the way.
 
@@ -40,26 +40,26 @@ The AFP's [article](https://news.yahoo.com/british-library-rejects-taliban-trove
 
 [Thomas Hegghammer](https://twitter.com/Hegghammer) (Director of terrorism research at the Norwegian Defence Research Establishment (FFI)):
 
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/3280386afbf8_image-asset.webp)](https://twitter.com/Hegghammer/status/637235827807006724)
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/31ff90f5b7cd_image-asset.webp)](https://twitter.com/Hegghammer/status/637248801762320384)
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/73e28c822abe_image-asset.webp)](https://twitter.com/Hegghammer/status/637248859341783040)
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/58807f9b7fc0_image-asset.webp)](https://twitter.com/Hegghammer/status/637248973326163968)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/3280386afbf8_image-asset.avif)](https://twitter.com/Hegghammer/status/637235827807006724)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/31ff90f5b7cd_image-asset.avif)](https://twitter.com/Hegghammer/status/637248801762320384)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/73e28c822abe_image-asset.avif)](https://twitter.com/Hegghammer/status/637248859341783040)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/58807f9b7fc0_image-asset.avif)](https://twitter.com/Hegghammer/status/637248973326163968)
 
 [Aaron Zelin](https://twitter.com/azelin) (Richard Borow Fellow @WashInstitute, Rena and Sami David Fellow @ICSR\_Centre, PhD candidate @KingsCollegeLon, Founder of @Jihadology\_Net and @JihadPod):
 
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/937c9e238bc3_image-asset.webp)](https://twitter.com/azelin/status/637240398767894528)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/937c9e238bc3_image-asset.avif)](https://twitter.com/azelin/status/637240398767894528)
 
 [Chris Woods](https://twitter.com/chrisjwoods) (journalist / researcher):
 
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/283b05f41e91_image-asset.webp)](https://twitter.com/chrisjwoods/status/637249471450087424)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/283b05f41e91_image-asset.avif)](https://twitter.com/chrisjwoods/status/637249471450087424)
 
 [Aymenn Jawad Al-Tamimi](http://www.aymennjawad.org/) (working with primary sources in the Middle East and a Shillman-Ginsburg Fellow at the Middle East Forum):
 
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/78392703d601_image-asset.webp)](https://twitter.com/ajaltamimi/status/637255064160215040)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/78392703d601_image-asset.avif)](https://twitter.com/ajaltamimi/status/637255064160215040)
 
 [Graeme Smith](https://twitter.com/smithkabul) (Senior Analyst for the International Crisis Group in Afghanistan):
 
-[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/bc2d554d44f5_image-asset.webp)](https://twitter.com/smithkabul/status/637257405198413824)
+[![](images/2015-08-28-2015-8-afp-covers-the-taliban-sources-project/bc2d554d44f5_image-asset.avif)](https://twitter.com/smithkabul/status/637257405198413824)
 
 The Guardian newspaper (UK) [has a story out](http://www.theguardian.com/world/2015/aug/28/terror-law-prompts-british-library-to-reject-unique-taliban-archive) as well covering the reasoning behind our disappointment with the decision.
 

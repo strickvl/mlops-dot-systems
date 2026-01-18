@@ -28,7 +28,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-09-08-spaced-repetition-foundation/0e76c7fe8e1a_image-asset.webp)
+![](images/2016-09-08-spaced-repetition-foundation/0e76c7fe8e1a_image-asset.avif)
 
 When I first learned about the idea of [spaced repetition](http://www.gwern.net/Spaced%20repetition), I felt like I'd discovered a magic trick or a secret of some kind. Here was a piece of research that could transform how quickly I learned new words (I was studying Pashto at the time) and how well I recalled them. On the other side of that elation, I felt a simultaneous frustration and sense of disappointment that this piece of pedagogy / educational science hadn't come up before in my schooling career. All those vocab cards I'd created for my BA degree in Arabic and Farsi! So much inefficiency! Not to mention all the things I had studied at primary and secondary school. Most of that specific knowledge remains but it is like the shadow of its original form. I've recently started studying Maths again and I'm painfully aware just how much I've forgotten.
 

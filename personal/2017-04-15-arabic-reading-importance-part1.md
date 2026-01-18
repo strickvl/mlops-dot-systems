@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-04-15-arabic-reading-importance-part1/1954fdfc66f8_image-asset.webp)
+![](images/2017-04-15-arabic-reading-importance-part1/1954fdfc66f8_image-asset.avif)
 
 > "Millions of language students are trapped in vicious circles. They complain that they cannot understand what they read in the foreign language because they do not know enough words. So they do not read and they do not increase their vocabulary, and so they continue not to be able to understand. Then perhaps someone tells them how important reading is and persuades them to try again. So they sit down with their dictionaries, and they look up every single word that is new to them, and very often many words that are not new but that they 'want to be quite sure about'. At the end of three hours they have got through half a page in a book, or half a column in a newspaper. They do this for three or four days, and then give up in despair, oppressed by the tediousness of it all. They are convinced ­ quite correctly ­ that they do not know enough words to understand ordinary books and newspapers. As a result their vocabularies stay more or less the same size as they were, and they complain that they are making no progress. They either become permanently frustrated and depressed, or just give in and give up. And it all happens because they have spent more time with the dictionary than with the language itself.” (Source: Gethin / Gunnemark - [*The Art and Science of Learning Languages*](https://www.amazon.com/Art-Science-Learning-Languages/dp/1871516676/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=art%2Band%2Bscience%2Blearning%2Blanguages&tag=soumet-20&qid=1492241951), p. 89)
 

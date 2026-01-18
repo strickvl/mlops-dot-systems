@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-31-variations-on-a-pomodoro/6798f2dd24e5_24905.webp)
+![](images/2017-01-31-variations-on-a-pomodoro/6798f2dd24e5_24905.avif)
 
 I've recently started work on a large translation project (about which more in due course). This sees me grappling with the Arabic text for several hours each day. Early on, I tried replicating my '[4 perfect hours](https://www.alexstrick.com/blog/phd-tools-the-secret-to-finishing-your-phd)' approach that had worked so well when writing my PhD dissertation.
 

@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-23-gift-language-coaching/1600691f9964_image-asset.webp)
+![](images/2016-12-23-gift-language-coaching/1600691f9964_image-asset.avif)
 
 If you’re still looking around for last-minute Christmas presents, look no further. How about the friend who has been struggling to learn a language? Know someone who is always talking about how they want to learn a language but don’t have the time? Or even you yourself: are you always putting off studying Arabic or French (or even Mandarin) that you know would benefit you, but you just don’t know how to get started?
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="295"]![ One of the scanning machines we used during the course of the Taliban Sources Project ](images/2016-12-07-taliban-on-the-clintons/8b450b230c97_IMG_2584.webp) One of the scanning machines we used during the course of the Taliban Sources Project [/caption]
+[caption id="" align="alignnone" width="295"]![ One of the scanning machines we used during the course of the Taliban Sources Project ](images/2016-12-07-taliban-on-the-clintons/8b450b230c97_IMG_2584.avif) One of the scanning machines we used during the course of the Taliban Sources Project [/caption]
 
 The US election is over; my work on materials deriving from the Taliban Sources Project continues. As I waded through the archives -- released [in book form](http://www.hurstpublishers.com/book/the-taliban-reader/) and online this coming spring -- I found this little gem. Published on May 22, 2000, in *Shariat* newspaper (the flagship publication that ran throughout the years of Taliban rule), this is a commentary piece on Hillary, Bill and Chelsea Clinton in the wake of the Monica Lewinsky scandal. It ran with the headline, "Friend" in their op-ed section of the day:
 

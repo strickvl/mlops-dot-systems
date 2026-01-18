@@ -16,6 +16,6 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-11-08-misquoting-mohammad-meets-sources-methods/3547c1645568_image-asset.webp)
+![](images/2015-11-08-misquoting-mohammad-meets-sources-methods/3547c1645568_image-asset.avif)
 
 [Matt](https://twitter.com/MattTrevithick) and I were lucky to get [Jonathan Brown on the podcast](http://www.sourcesandmethods.com/podcast/2015/9/14/sources-and-methods-23-jonathan-brown) for an episode that came out this week. [Check it out](http://www.sourcesandmethods.com/podcast/2015/9/14/sources-and-methods-23-jonathan-brown) for his work on authority and sourcing in the Islamic tradition, a discussion of how he picks the examples that end up in his books and the current state of Islamic studies.

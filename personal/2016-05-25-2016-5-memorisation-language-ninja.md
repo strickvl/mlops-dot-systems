@@ -22,7 +22,7 @@ comments:
 
 I’m very glad to be able to announce two new things I’ve been busy with over the past few months.
 
-![](images/2016-05-25-2016-5-memorisation-language-ninja/b1812ec14325_image-asset.webp)
+![](images/2016-05-25-2016-5-memorisation-language-ninja/b1812ec14325_image-asset.avif)
 
 Firstly, I’m [launching an email course](http://incrementalelephant.org/) showing how to learn long lists of items by heart. This course is outwardly directed towards Muslims, since the list that you learn over the course of a week, is a list of 99 Names of God — the so-called [*Asmaa ul-Husnaa*](https://en.wikipedia.org/wiki/Names_of_God_in_Islam). But the broad principles are the same for learning any long list of things, so don’t think you need to be a Muslim to take the course. The materials come with lots of handouts and supplementary information about memory and the like.
 

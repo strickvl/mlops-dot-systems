@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-11-podcasts-data-science-programming/574a04395428_image-asset.webp)
+![](images/2017-01-11-podcasts-data-science-programming/574a04395428_image-asset.avif)
 
 When learning a new skill or indulging a new interest, I like to find out who is podcasting about that thing. I do this early on in the process since it is hard to get a sense of the full landscape of a particular skill or issue without reading widely. The internet, of course, is a great way to find out about all the different nooks and crannies of a particular community. That doesn't help me much when I'm cooking, though, or when I'm walking in town. Podcasts are an opportunity to broaden my exposure to those topics while doing something else, usually something physical.
 

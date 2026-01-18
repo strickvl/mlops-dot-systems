@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-08-23-2016-8-walking-with-words/6a7763d68ba1_image-asset.webp)
+![](images/2016-08-23-2016-8-walking-with-words/6a7763d68ba1_image-asset.avif)
 
 Earlier this year I glanced at my [Fitbit stats](http://www.fitbit.com/user/22K346) and saw that I was walking less than usual. There were some reasons for this, but as always, the data itself functioned as a sort of reminder, a nudge in the right direction. I had a think about the main thing keeping me from writing and realised it was because I was working full-out writing my PhD.
 

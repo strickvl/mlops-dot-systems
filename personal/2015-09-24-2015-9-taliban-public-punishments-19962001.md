@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-09-24-2015-9-taliban-public-punishments-19962001/c4a9b5ab1637_image-asset.webp)
+![](images/2015-09-24-2015-9-taliban-public-punishments-19962001/c4a9b5ab1637_image-asset.avif)
 
 Executions are a recurrent motif in how historians, journalists and analysts have chosen to write about the Afghan Taliban. See the opening to [Dexter Filkins’ *The Forever War*](http://www.amazon.com/Forever-War-Dexter-Filkins-ebook/dp/B0018QSO0S/ref=sr_1_1_twi_kin_2?sr=8-1&ie=UTF8&keywords=forever%2Bwar%2Bfilkins&tag=soumet-20&qid=1443075711) as one example, or [this Reuters piece](http://www.afghanistannewscenter.com/news/1999/may/may5e1999.htm) from May 1999. I wanted to study the role of executions and public punishments in the Taliban’s government for a while, but lacked data to place the anecdotes into some sort of context.
 

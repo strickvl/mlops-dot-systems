@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-03-10-language-transfer/fe9457b96e11_image-asset.webp)
+![](images/2017-03-10-language-transfer/fe9457b96e11_image-asset.avif)
 
 For beginners, one of the most important tasks is to get a sense for how a new language sounds. You can do this by immersion and osmosis -- living in a country, perhaps -- but it's hard and you'll usually just get exposed to the same set of words and phrases: numbers, directions and greetings.
 

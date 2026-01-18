@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-04-internal-vs-external-goals/e8b5ffff7094_image-asset.webp)
+![](images/2017-01-04-internal-vs-external-goals/e8b5ffff7094_image-asset.avif)
 
 When it comes to goal setting, I’ve found it helps to distinguish between the kinds of goals you envision and create. I first came across this concept in a book on Stoic philosophy: [A Guide to the Good Life](https://www.amazon.com/Guide-Good-Life-Ancient-Stoic-ebook/dp/B0040JHNQG/ref=dp_kinw_strp_1?tag=soumet-20), by William Irvine. (If you’re interested in the full details/writeup, read chapter five.)
 
@@ -32,7 +32,7 @@ The basic premise Irvine lays out goes as follows:
 
 He splits up the internal / external distinction a bit further:
 
-![](images/2017-01-04-internal-vs-external-goals/a25919694ee7_image-asset.webp)
+![](images/2017-01-04-internal-vs-external-goals/a25919694ee7_image-asset.avif)
 
 Here you can see that there are some things over which we have complete control. There are also things which we don't completely control. This can be split into things we have no control over at all, and things we have some control over but not total. (This is actually [a trichotomy](https://mountainstoic.com/2015/10/21/on-the-stoic-dichotomoy-or-is-it-trichotomy/) derived from the philosopher Epictetus.)
 

@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-09-28-three-climbing-books/5aebf52a1193_image-asset.webp)
+![](images/2016-09-28-three-climbing-books/5aebf52a1193_image-asset.avif)
 
 Today, three quick and dirty reviews. I read these books back-to-back. They reinforce each other, despite their authors being unconnected in any practical sense.
 

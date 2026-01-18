@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-09-29-learning-without-seams/8f62440533bf_image-asset.webp)
+![](images/2016-09-29-learning-without-seams/8f62440533bf_image-asset.avif)
 
 We’re often told to learn from others, to take (role) models and to emulate either the path they took, or some of the key lessons they learnt along the way. Sometimes, though, it’s hard to figure out how someone reached a particular goal, or they actively work to prevent you from seeing the struggle that took them there.
 

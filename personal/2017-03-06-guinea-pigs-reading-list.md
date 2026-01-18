@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-03-06-guinea-pigs-reading-list/f1d39529cb72_image-asset.webp)
+![](images/2017-03-06-guinea-pigs-reading-list/f1d39529cb72_image-asset.avif)
 
 Followers of my Goodreads account will recently have noticed a flurry of activity: I read six books about guinea pigs over a period of two or three days.
 

@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-08-25-phd-tools-tinderbox/6f6160c208c5_image-asset.webp)
+![](images/2016-08-25-phd-tools-tinderbox/6f6160c208c5_image-asset.avif)
 
 [Tinderbox](http://www.eastgate.com/Tinderbox/) is a tool for writers and thinkers that can handle most things that you throw at it. Anything to do with thinking, it can probably do what you want. That said, there is a slight learning curve to the programme, and it may not be to everyone's particular style. With those caveats stated, let's dive in.
 

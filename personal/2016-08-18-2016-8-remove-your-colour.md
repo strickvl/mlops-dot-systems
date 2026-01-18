@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-08-18-2016-8-remove-your-colour/b5fe9c57cf5c_image-asset.webp)
+![](images/2016-08-18-2016-8-remove-your-colour/b5fe9c57cf5c_image-asset.avif)
 
 This is just a quick little trick that may or may not be useful for you. I can't seem to track down the site where I originally read about this, but if I discover it subsequently I'll be sure to credit the author/blogger because I've derived a lot of benefit from this.
 

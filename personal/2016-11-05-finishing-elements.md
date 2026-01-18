@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-11-05-finishing-elements/5260c225d874_image-asset.webp)
+![](images/2016-11-05-finishing-elements/5260c225d874_image-asset.avif)
 
 Today marks the final day in my eight-week work on [GMB’s Elements training programme](https://gmb.io/e/). I’ve [made allusions](https://www.alexstrick.com/blog/exist) to [GMB](https://gmb.io/) on this blog in the past, but the short story is that they’re an amazing community of trainers who put together fun, sensible and rewarding programmes that increase your ability to move your body. I’ve been working — one way or another — with them and their programmes for the past three years, and they’re consistently supportive and constructive in their approach.
 

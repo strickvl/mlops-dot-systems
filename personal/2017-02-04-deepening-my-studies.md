@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-02-04-deepening-my-studies/780533107011_image-asset.webp)
+![](images/2017-02-04-deepening-my-studies/780533107011_image-asset.avif)
 
 [*This is a continuation of Taylor's blog series where she details some of the week-in-week-out lessons that she learns through her Arabic studies and coaching work together with me. For other posts in the series, [click here](https://www.alexstrick.com/blog/?tag=taylorjournal#show-archive).*]
 

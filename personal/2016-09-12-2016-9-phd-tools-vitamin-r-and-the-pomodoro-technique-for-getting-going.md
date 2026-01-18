@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/821034d8ced9_image-asset.webp)
+![](images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/821034d8ced9_image-asset.avif)
 
 In my last post I mentioned the way I divide my work into timed segments. The ideal timing for me, I felt, was 45 mins on : 15 minutes off. The canonical division, however, is 25 minutes on : 5 minutes off. This is a technique commonly referred to as [the Pomodoro Technique](https://en.wikipedia.org/wiki/Pomodoro_Technique) (named after a tomato-shaped kitchen timer, I think). You might find that starting off at 45:15 is too much at the beginning, particularly if you're not used to focused stretches of work, and that you have to slowly work your way up to that ratio, increasing the minutes incrementally.
 
@@ -41,12 +41,12 @@ The programme works on your laptop and your phone (though I almost exclusively u
 
 At the end of each session, it asks you how focused you felt while working. This is really useful for building up (over time) a picture of which times of the day are more useful than others in terms of your focus.
 
-[caption id="" align="alignnone" width="1450"]![ One of the charts that Vitamin-R generates ](images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/19aa911789d4_image-asset.webp) One of the charts that Vitamin-R generates [/caption]
+[caption id="" align="alignnone" width="1450"]![ One of the charts that Vitamin-R generates ](images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/19aa911789d4_image-asset.avif) One of the charts that Vitamin-R generates [/caption]
 
 You can see that my early mornings were generally my core work time. You will usually have an instinctual understanding of this truth, but Vitamin-R allows you to confirm it and to keep track of just how many hours you're spending in 'Deep Work'.
 
 I happened to have a Beeminder goal for 'Deep Work' at the time, and I filled it with data from Vitamin-R. At the end of every day, I'd update it with however many minutes Vitamin-R said I'd tracked as having been devoted to that deep work. That kept me honest, and it was also nice to see the cumulative core hours add up over time.
 
-[caption id="" align="alignnone" width="1348"]![ Here you can see the 187 or so hours I tracked in the first half of 2016 ](images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/f88d05b0025e_image-asset.webp) Here you can see the 187 or so hours I tracked in the first half of 2016 [/caption]
+[caption id="" align="alignnone" width="1348"]![ Here you can see the 187 or so hours I tracked in the first half of 2016 ](images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/f88d05b0025e_image-asset.avif) Here you can see the 187 or so hours I tracked in the first half of 2016 [/caption]
 
 Most won't need or want this level of specificity or tracking. Any phone (even a dumb phone') comes with a countdown timer, and that's enough to get started with the pomodoro technique. I recommend it because it encourages regular breaks. If you find this useful, please do let me know. It's always good to hear from others in the 'trenches' of knowledge work.

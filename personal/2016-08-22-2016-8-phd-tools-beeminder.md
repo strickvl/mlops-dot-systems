@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-08-22-2016-8-phd-tools-beeminder/034c3aacebc7_image-asset.webp)
+![](images/2016-08-22-2016-8-phd-tools-beeminder/034c3aacebc7_image-asset.avif)
 
 I feel like I've mentioned the end of the PhD several times in recent posts (PHD IS OVER!). It occurred to me that it might be useful to go through some of the tools and principles that I found most useful in completing the doctoral thesis, the research and the work in general. Part of this is by way of giving thanks to the application or methodological creators, and the other part is me thinking that others (future / current PhD students?) might find this useful.
 

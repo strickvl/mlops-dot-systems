@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="1134"]![ Some pronunciation rules for vowels ](images/2016-09-04-learning-icelandic/31feac877e11_image-asset.webp) Some pronunciation rules for vowels [/caption]
+[caption id="" align="alignnone" width="1134"]![ Some pronunciation rules for vowels ](images/2016-09-04-learning-icelandic/31feac877e11_image-asset.avif) Some pronunciation rules for vowels [/caption]
 
 Yesterday, mostly out of curiosity, I took my first lesson in Icelandic. I’m not anticipating this becoming a major driving force in my life, but I was provoked by someone’s explanation of the language’s pronunciation weirdnesses to learn more.
 
@@ -36,7 +36,7 @@ I’d read [a little online](http://grapevine.is/mag/articles/2013/01/09/learnin
 
 A textbook I found online had the following caveat to those who sought to embark on a programme of study:
 
-![](images/2016-09-04-learning-icelandic/c8483236a1c0_image-asset.webp)
+![](images/2016-09-04-learning-icelandic/c8483236a1c0_image-asset.avif)
 
 None of this bothers me *too* much. My teacher said something similar, that the faster we get speaking without necessarily allowing ourselves to fall into the abyss of inflection and grammar then the faster we can progress to the level that it makes sense to add in all the complexity.
 

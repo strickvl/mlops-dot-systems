@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-08-language-coach-how-to/b7c4eabd6320_image-asset.webp)
+![](images/2017-01-08-language-coach-how-to/b7c4eabd6320_image-asset.avif)
 
 I work to help language students make more effective and efficient progress. Sometimes I work with those who want to learn other skills like coding, or perhaps a more specific productivity issue or project that requires top performance.
 

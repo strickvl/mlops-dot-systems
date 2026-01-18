@@ -23,7 +23,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-07-phd-tools-omnifocus/1ab5af6af19b_image-asset.webp)
+![](images/2016-09-07-phd-tools-omnifocus/1ab5af6af19b_image-asset.avif)
 
 Discussions of task management systems have a tendency to devolve into disagreement and discord, so I'll state upfront that the choice of how you manage the various projects and goals in your life is a very personal one. There *is* no one single 'best' software for task management; there is only the best one for *you*.
 

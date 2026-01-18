@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2019-02-16-solid-study-habits-for-coders/6e617b25963e_image-asset.webp)
+![](images/2019-02-16-solid-study-habits-for-coders/6e617b25963e_image-asset.avif)
 
 I’ve been working to diversify my skills over the past three years, in particular to grow as a software developer / computer programmer. To that end, I started working my way through the [Launch School](https://launchschool.com/) syllabus a few months back. I’m at an inflection point in the course right now so I thought it worth reflecting on what study habits have served me well as well as which ones I still haven’t quite managed to adopt.
 
@@ -116,11 +116,11 @@ If I think a particular method / fact / morsel of knowledge is something I’m g
 
 I use a mix of cloze-deletion cards and custom templates for coding.
 
-![](images/2019-02-16-solid-study-habits-for-coders/7782d8f282e3_ScreenShot_2019-02-14_at_09.36.30.webp)
+![](images/2019-02-16-solid-study-habits-for-coders/7782d8f282e3_ScreenShot_2019-02-14_at_09.36.30.avif)
 
 This card is a simple cloze deletion card. I wanted to make sure I was learning the options for file permissions as part of the command line portion of the prep course.
 
-![](images/2019-02-16-solid-study-habits-for-coders/cc0fc3bc1bde_ScreenShot_2019-02-14_at_09.37.48.webp)
+![](images/2019-02-16-solid-study-habits-for-coders/cc0fc3bc1bde_ScreenShot_2019-02-14_at_09.37.48.avif)
 
 This card tests my ability to produce an example where I’m using the `.reduce` method. I try to include a bunch of these production cards since they mimic the kinds of situations / circumstances where I’d need to recall this piece of information in real life.
 
@@ -143,7 +143,7 @@ I use a slight variant of this [much](https://fs.blog/2012/04/feynman-technique/
 3. Identify any gaps in your explanation / understanding.
 4. Relearn / restudy / interrogate to fill in the gaps.
 
-[caption id="" align="alignnone" width="600"]![ Part of one of my Feynman reviews that I do on Saturday afternoons ](images/2019-02-16-solid-study-habits-for-coders/7d8071d9b5fd_IMG_0487.webp) Part of one of my Feynman reviews that I do on Saturday afternoons [/caption]
+[caption id="" align="alignnone" width="600"]![ Part of one of my Feynman reviews that I do on Saturday afternoons ](images/2019-02-16-solid-study-habits-for-coders/7d8071d9b5fd_IMG_0487.avif) Part of one of my Feynman reviews that I do on Saturday afternoons [/caption]
 
 You can use narrative / diagrams to condense and clarify your explanation. For my Launch School studies, I do this once a week on Saturdays. I keep a list of new methods that I’m learning about during the week. Particularly towards the end of RB101 these started to mount up. Then on the weekend, I’d take the list of methods and test myself by writing out (by hand, with pen and paper) code that illustrated how to use each method. If needed, I’d write or say out loud an explanation relating to that method. This is a humbling exercise; you realise that you don’t know the things that you thought you knew.
 

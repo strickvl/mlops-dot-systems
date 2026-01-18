@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2020-12-10-a-basic-overview-of-how-to-use-handlebars/9e8ea59b7c0c_image-asset.webp)
+![](images/2020-12-10-a-basic-overview-of-how-to-use-handlebars/9e8ea59b7c0c_image-asset.avif)
 
 [Handlebars](https://handlebarsjs.com/) is a simple templating language that you can use with your JavaScript code. It came somewhat late to the game; Python and Ruby and others had their own templating options for a while.
 

@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-08-nutritional-density/3734e5aba54c_image-asset.webp)
+![](images/2016-12-08-nutritional-density/3734e5aba54c_image-asset.avif)
 
 [I wrote a few weeks back](https://www.alexstrick.com/blog/fundamentals-versus-hacks) about how fundamentals are often superior to hacks. It seems it’s a useful mental model to employ as I’ve encountered various other expressions of more or less the same thing.
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-02-climbing-routes-without-numbers/b435de7bc6e7_image-asset.webp)
+![](images/2016-12-02-climbing-routes-without-numbers/b435de7bc6e7_image-asset.avif)
 
 On Wednesday I climbed up an ungraded route. The [indoor climbing centre](https://www.facebook.com/climbatamman) where I go once or twice a week has been updating and renewing the different holds they bolt to the wall. We arrived before they had printed out the little square reference signs that run along the bottom of the wall.
 

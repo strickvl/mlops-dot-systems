@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-17-trello-markdown-chrome-extension/aea960663548_image-asset.webp)
+![](images/2017-01-17-trello-markdown-chrome-extension/aea960663548_image-asset.avif)
 
 Turns out, whenever you need something on the internet, someone else has already made it.
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="600"]![ This is what a Wikipedia site looks like in Arabic ](images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.webp) This is what a Wikipedia site looks like in Arabic [/caption]
+[caption id="" align="alignnone" width="600"]![ This is what a Wikipedia site looks like in Arabic ](images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.avif) This is what a Wikipedia site looks like in Arabic [/caption]
 
 Anyone who's ever studied Arabic and attempted to increase their exposure to the language through the internet will have encountered this problem: Arabic fonts are always two or three sizes smaller than their English/Roman alphabet equivalent. This can make navigating the web a dispiriting experience. Most big websites take a lot of time and effort to get their browsing experience just right, with fonts that are appropriately scaled and optimised for reading. (Get a sense of how much thought goes into typefaces [here](https://www.quora.com/Which-typefaces-does-The-New-York-Times-use), for example, at the New York Times.)
 
@@ -27,7 +27,7 @@ So why does this happen? At first I thought it was just a case of Arabic fonts b
 
 What's worse, the consistency is subject to random change. To give one small example, iOS's 'Save to Evernote' dialogue box allows me to save articles from [Instapaper](https://www.instapaper.com/) into [Evernote](https://www.evernote.com/). (This is part of my somewhat laborious workflow for getting articles into [DevonThink](http://www.devontechnologies.com/products/devonthink/overview.html). [Read here](https://www.alexstrick.com/blog/2014/10/note-taking-jujitsu-or-how-i-make-sense-of-what-i-read) for more.) For years, I clicked a button in the right-hand corner to 'save', but a few months back they switched all the boxes around and now I have to click in the left-hand corner. The muscle memory is such that this is a hard one to fix. It's not the end of the world, but it still is an indication (along with the many other times this happens, seemingly without plan) of how little thought goes into this design and user interface work.
 
-[caption id="" align="alignnone" width="600"]![ This is what the English version of Wikipedia looks like ](images/2017-03-12-why-are-arabic-fonts-so-small/dd3014a7047e_image-asset.webp) This is what the English version of Wikipedia looks like [/caption]
+[caption id="" align="alignnone" width="600"]![ This is what the English version of Wikipedia looks like ](images/2017-03-12-why-are-arabic-fonts-so-small/dd3014a7047e_image-asset.avif) This is what the English version of Wikipedia looks like [/caption]
 
 Coming back to fonts, the real reason for why this happens has to do with the amount of vertical space that letters take up. Thomas Phinney of FontLab [explained it clearly](https://www.quora.com/Why-are-default-Arabic-fonts-so-small) over on Quora when he wrote:
 

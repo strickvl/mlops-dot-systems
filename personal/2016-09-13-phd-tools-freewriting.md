@@ -25,7 +25,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-13-phd-tools-freewriting/904f71a7357f_image-asset.webp)
+![](images/2016-09-13-phd-tools-freewriting/904f71a7357f_image-asset.avif)
 
 A few years back, I read a book with the (intentionally) provocative title, [Write Your Dissertation in 15 Minutes A Day](https://www.amazon.com/Writing-Your-Dissertation-Fifteen-Minutes-ebook/dp/B003E74BPG?tag=soumet-20). I was travelling back to Afghanistan from a short stay in Europe, and I was sat in Istanbul airport, waiting for my connecting flight. I remember the moment quite clearly, because a long wait time plus a delay didn't phase me. I was sucked into the book and the idea that the author presented. (There's also another good one along a similar theme: [How to Write a Lot: A Practical Guide to Productive Academic Writing](https://www.amazon.com/How-Write-Lot-Practical-Productive-ebook/dp/B001Y35G60/ref=dp_kinw_strp_1?tag=soumet-20) by Paul Silvia.
 

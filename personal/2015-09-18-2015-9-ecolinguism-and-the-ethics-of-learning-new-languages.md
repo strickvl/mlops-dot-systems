@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-09-18-2015-9-ecolinguism-and-the-ethics-of-learning-new-languages/884883396705_image-asset.webp)
+![](images/2015-09-18-2015-9-ecolinguism-and-the-ethics-of-learning-new-languages/884883396705_image-asset.avif)
 
 [I was interviewed](http://tammybjelland.com/podcast-episode-10-interview-alex-strick-van-linschoten/) by [Tammy Bjelland](http://tammybjelland.com/) of the [Business of Language podcast](http://tammybjelland.com/category/podcast/) a few weeks ago, and the episode recently went live. Readers of this blog will know that I write about the study of language with some regularity – [see the archives](http://www.alexstrick.com/?category=Language) for some previous posts – but I don’t talk about it a great deal on my own podcast nor is it really the focus of my work. So it was nice to have a chance to talk through my background in learning languages and the challenges of learning languages with few materials available for self-study. There isn’t enough written about this.
 

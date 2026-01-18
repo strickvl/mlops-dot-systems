@@ -17,6 +17,6 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2020-06-11-kapoor-amp-sons/1e0c5a50a86a_download.webp)
+![](images/2020-06-11-kapoor-amp-sons/1e0c5a50a86a_download.avif)
 
 A bittersweet family drama set in Coonoor, Tamil Nadu. This was a picture of India I wasn't familiar with, and purely as backdrop this went a long way for me. The story with Tia (played by Alia Bhatt) seemed vastly underfunded in the plot, and the stumbling block was artificial. A number of strong ensemble scenes, though, and just enough grit in the ending to make sense to this viewer.

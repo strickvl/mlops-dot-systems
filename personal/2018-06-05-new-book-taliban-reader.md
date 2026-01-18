@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-05-new-book-taliban-reader/249835f6ed28_DeXH1VMW0AAN60p.jpg_3Alarge.webp)
+![](images/2018-06-05-new-book-taliban-reader/249835f6ed28_DeXH1VMW0AAN60p.jpg_3Alarge.avif)
 
 My new book is out (finally). The Taliban Reader is somehow the culmination of years of work to drive studies of the Taliban back to primary sources. Some of this work was accidental; more recently it was more purposeful. The book I produced (together with [Felix Kuehn](https://www.felixkuehn.com)) is long and detailed.
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-05-06-prisoner345translation/18048c2c64c7_ScreenShot_2018-05-06_at_07.13.47.webp)
+![](images/2018-05-06-prisoner345translation/18048c2c64c7_ScreenShot_2018-05-06_at_07.13.47.avif)
 
 I’ve been sitting on this for a while.
 

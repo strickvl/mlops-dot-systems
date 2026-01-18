@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-11-17-encrypt-your-dropbox-files/c523f447d271_10995.webp)
+![](images/2016-11-17-encrypt-your-dropbox-files/c523f447d271_10995.avif)
 
 Much has been written about securing your digital life since the conclusion of the US election. (This was [one of the better posts](https://theintercept.com/2016/11/12/surveillance-self-defense-against-the-trump-administration/), I thought.) It's worth doing this regardless of whatever is going on in the politics of country x or y. If the country is big enough, it's going to want to suck your digital life up into its archives one way or another. So why make it easy for them?
 

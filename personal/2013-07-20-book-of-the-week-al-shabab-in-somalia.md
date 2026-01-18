@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![shabab](images/2013-07-20-book-of-the-week-al-shabab-in-somalia/60b1c4007448_shabab.webp)](images/2013-07-20-book-of-the-week-al-shabab-in-somalia/60b1c4007448_shabab.webp)
+[![shabab](images/2013-07-20-book-of-the-week-al-shabab-in-somalia/60b1c4007448_shabab.avif)](images/2013-07-20-book-of-the-week-al-shabab-in-somalia/60b1c4007448_shabab.avif)
 An excellent overview of the history of the Somali al-Shabab group, one with many lessons or reminders of Afghanistan (at least for this reader).
 
 This is a short book, based on some reports written for FFI and others, and in that it has the virtue of concision. Hansen covers al-Shabab's history starting with early proto-Islamist movements and groups started several decades ago. It was the best explanation of where the networks that make up al-Shabab come from that I've read, although it may just be that I haven't been following this too closely since the last time I was last in Mogadishu a couple of years ago.

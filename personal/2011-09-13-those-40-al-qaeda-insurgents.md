@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2011-09-13-those-40-al-qaeda-insurgents/3eeb2716e109_poupinnr.webp "Afghanistan. July to October 2006.")
+![](images/2011-09-13-those-40-al-qaeda-insurgents/3eeb2716e109_poupinnr.avif "Afghanistan. July to October 2006.")
 
 I never really thought I'd be writing something in semi-solidarity with the Long War Journal, but [this](http://www.longwarjournal.org/threat-matrix/archives/2011/09/how_many_al_qaeda_fighters_are.php) jogged my mind. 10 days ago, ISAF put out [a press release](http://www.isaf.nato.int/article/isaf-releases/isaf-joint-command-morning-operational-update-sept-3-2011.html) following the killing of Sabir Lal, someone who was said to be a 'key affiliate' of al-Qaeda in Afghanistan. You can read more about him [here](http://www.upi.com/Top_News/World-News/2011/09/03/Insurgent-leader-killed-in-Afghanistan/UPI-69401315057383/) and [here](http://www.huffingtonpost.com/2011/09/03/saber-lal-melma_n_948027.html) (watch how those headlines start to resemble chinese whispers).
 

@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2014-12-10-new-book-an-educators-tale/f3f651e89ebf_image-asset.webp)
+![](images/2014-12-10-new-book-an-educators-tale/f3f651e89ebf_image-asset.avif)
 
 The [publishing house](http://firstdraft-publishing.com) that [Felix Kuehn](http://www.felixkuehn.com) and I set up has two new books out. The first of these is called [*[An Undesirable Element](http://www.firstdraft-publishing.com/publications.html#an_undesirable_element)*](#)[*: An Afghan Memoir*](http://www.firstdraft-publishing.com/publications.html#an_undesirable_element) and it tells the story of Sharif Fayez, the man responsible for much of the progress seen in Afghan higher education since 2001. The book also includes a lot from the 1980s jihad and pre-Taliban periods where the author was forced to leave the country -- fleeing to Iran before heading for the United States. This is an extremely readable book, and the story has a fast pace to it.
 

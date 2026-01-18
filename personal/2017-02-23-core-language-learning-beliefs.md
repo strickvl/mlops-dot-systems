@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-02-23-core-language-learning-beliefs/7e65fa800911_image-asset.webp)
+![](images/2017-02-23-core-language-learning-beliefs/7e65fa800911_image-asset.avif)
 
 I have [previously written](https://www.alexstrick.com/blog/fundamentals-versus-hacks) about my core principles relating to learning. I contrasted fundamental principles and beliefs with the idea of 'life hacks'. Today I wanted to get more specific and write an initial set of core beliefs that motivate and shape both how I study languages myself and how I encourage others to do the same [through my coaching work](http://languagecoach.io/coaching).
 

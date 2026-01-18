@@ -52,7 +52,7 @@ The final semester included three graduate-level courses in subjects of the stud
 
 The core belief behind the programme was that reading was important to the students' knowledge of Arabic in a fundamental way. All the other skills would benefit and develop alongside the reading done as part of the programme. There were different kinds of texts available and a selection criteria for what kinds of reading took place:
 
-![](images/2017-04-17-on-reading-in-arabic-the-evidence/c8e9fd711285_image-asset.webp)
+![](images/2017-04-17-on-reading-in-arabic-the-evidence/c8e9fd711285_image-asset.avif)
 
 Finding materials for intensive / analytic reading was easy. The harder issue was finding materials suitable for extensive reading, i.e. the kind of wide-reading that students are able to do with some level of ease. Arabic poses a particular problem in this regard, given its 'wide range of active vocabulary in use', and the 'complexity of the morphs-semantic system'.
 

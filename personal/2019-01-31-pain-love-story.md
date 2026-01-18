@@ -47,7 +47,7 @@ A year or two ago I came across something called a keukegen. See the picture to 
 
 They are often cited as explanations for complicated illnesses that appear without a clear reason or pathway.
 
-![](images/2019-01-31-pain-love-story/48038e512634_keuk.webp)
+![](images/2019-01-31-pain-love-story/48038e512634_keuk.avif)
 
 I grabbed on to the idea of externalising what I was feeling — or the cause of what I was feeling — into this shaggy creature. I loved too how this somehow allowed me to feel some kind of compassion for whatever was going on. The creature perhaps can seem a little sinister, but mostly it doesn’t seem like what you’d consider to be a scary depiction of illness or pain. There is somehow some kind of reassurance in the keukegen. It'll stick around as long as it needs; while it's here I might as well feed it and take care of it.
 
@@ -87,7 +87,7 @@ I often find that the different flavours of pain come with a colour or mood or s
 
 The smiley faces card method of grading your pain is more or less useless. For starters, the scale of the smiley pictures often doesn't make any sense. Why does the frown have to come before the grimace? Why is the wide-open mouth with tears the final position? It doesn't correspond to my pain scale, at any rate.
 
-![](images/2019-01-31-pain-love-story/c2e8d05c4f64_2017-10-15_2BAT_2B01.webp)
+![](images/2019-01-31-pain-love-story/c2e8d05c4f64_2017-10-15_2BAT_2B01.avif)
 
 I tried to express a little of what my body feels sometimes in this drawing. It's not always like this — either the intensity or the precise flavour — but it gives you an idea. Like this piece, the drawing was just a snapshot in time. Pain never stays the same; it is always changing. This is one of the things I've learnt and that I find somehow reassuring; nothing is for ever after all. There is reassurance in that.
 

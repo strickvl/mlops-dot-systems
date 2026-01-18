@@ -22,7 +22,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-08-29-2016-8-phd-tools-pinboard/ff13519a4144_image-asset.webp)
+![](images/2016-08-29-2016-8-phd-tools-pinboard/ff13519a4144_image-asset.avif)
 
 [Pinboard](https://pinboard.in/) is the successor to [Delicious](https://blog.pinboard.in/2011/03/anatomy_of_a_crushing/) and various other social link repositories. It's a service I get a lot of use out of because some parts of following the news, monitoring various government / non-governmental sites etc means reading lots of small articles each day. If, in the future, I want to return to a particular article, I generally don't want to have to go through the hassle of searching for it afresh (sidebar: use [DuckDuckGo](https://duckduckgo.com/) instead of Google! It's great!) so I just click a button to save a page in Pinboard when I think there's a chance I'll find this useful or I want to preserve it in some way. (Visit the '[tour](https://pinboard.in/tour/)' part of the site to learn more about how Pinboard works.)
 

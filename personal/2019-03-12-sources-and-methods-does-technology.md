@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2019-03-12-sources-and-methods-does-technology/632b56e3f13f_index.webp)
+![](images/2019-03-12-sources-and-methods-does-technology/632b56e3f13f_index.avif)
 
 Episode one of Sources and Methods’s new season is [out today](https://www.sourcesandmethods.com/podcast/38-rightlobemath). In this interview, Matt and I spoke with the two creators of an online programme to teach the abacus.
 

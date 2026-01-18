@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-08-18-2016-8-jordan-diaries-start-with-geography/4aee911cd23b_image-asset.webp)
+![](images/2016-08-18-2016-8-jordan-diaries-start-with-geography/4aee911cd23b_image-asset.avif)
 
 I arrived in Jordan this morning and am beginning my attempts to get to know the lay of the land. First thing is always geography. If I don't have those mental hooks to know that someone is talking about a particular *muhafadha*  / governorate, I can't properly engage in the conversation / information, so the only way to do this at the beginning is to learn a bunch of those initial hooks in a more deliberate fashion. Later on, you can learn things naturally, incorporating new pieces of information as you hear it, but at the beginning you need that initial scaffolding.
 

@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school/ec3946e22039_strickvl_study_skills_85e9b059-dc1b-49d1-99a9-c8edce64dc76.webp)
+![](images/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school/ec3946e22039_strickvl_study_skills_85e9b059-dc1b-49d1-99a9-c8edce64dc76.avif)
 
 My niece reached out to me a few days back asking about tips for studying at school. She was specifically interested in any ideas I had about how to excel in her maths studies. I wrote up my thoughts for her and it occurred to me yesterday that there might be some benefit from putting these notes online as well.
 
@@ -72,7 +72,7 @@ Another way of testing things (e.g. in your specific case of quadratics) is to d
 
 It can also help to make *distilled summary sheets* at some point during your studies which gather together your understanding on a single piece of paper for the entire topic. Here actually you can see the one I made digitally for my own study of quadratics a few months ago:
 
-![](images/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school/85f6860731ec_ScreenShot_2023-08-06_at_20.47.47.webp)
+![](images/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school/85f6860731ec_ScreenShot_2023-08-06_at_20.47.47.avif)
 
 The key thing with retrieval practice is to get a lot of it, and to try to make it the 'hard' / 'difficult' kind of retrieval. Mostly this starts with a blank sheet of paper and then you try to write down what you know about a topic, or a concept, or whatever specific thing you're trying to understand. Writing things down will help you realise (quickly! painfully!) which parts you don't *actually* understand. So it's as much to reveal to you which parts you need to work on as it is for anything else.
 

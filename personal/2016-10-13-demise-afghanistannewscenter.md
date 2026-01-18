@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-13-demise-afghanistannewscenter/f6c084f10990_image-asset.webp)
+![](images/2016-10-13-demise-afghanistannewscenter/f6c084f10990_image-asset.avif)
 
 Earlier this year, without any fanfare, a truly great resource and archive relating to Afghanistan's recent past went offline.
 

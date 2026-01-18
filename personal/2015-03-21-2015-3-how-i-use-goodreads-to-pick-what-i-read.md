@@ -30,7 +30,7 @@ Previously, I was generally following my gut with what I wanted to read next. Un
 
 This year I've been trying a different approach. Goodreads allows you to sort lists by various bits of metadata attached to each book (author name, date added etc) but you can also sort by "average rating". This is the average rating given to a particular book by the entire Goodreads user base (20+ million users). You can see how this pans out in my current set of 'up next' books:
 
-![](images/2015-03-21-2015-3-how-i-use-goodreads-to-pick-what-i-read/8d16f697deb1_image-asset.webp)
+![](images/2015-03-21-2015-3-how-i-use-goodreads-to-pick-what-i-read/8d16f697deb1_image-asset.avif)
 
 This "average rating" isn't in any way a guarantee of anything resembling quality. It's not that hard for authors to game the system, and books with few reviews (common for niche subjects like Afghanistan or Islam) have either really high or low ratings. But I'm finding this approach brings me to read far more books outside my path-of-least-resistance choices and often brings me into contact with some real gems.
 

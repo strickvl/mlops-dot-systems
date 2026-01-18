@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-24-udacity-ipnd/bb177f34ff5f_image-asset.webp)
+![](images/2016-10-24-udacity-ipnd/bb177f34ff5f_image-asset.avif)
 
 Add this one to the drawer of semi-meaningless certificates!
 

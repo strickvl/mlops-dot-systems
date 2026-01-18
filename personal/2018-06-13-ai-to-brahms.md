@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-13-ai-to-brahms/c98b03c8f6fe_Cog_X_logo_Grey-01.webp)
+![](images/2018-06-13-ai-to-brahms/c98b03c8f6fe_Cog_X_logo_Grey-01.avif)
 
 The past few days have been consumed by a flurry of meetups, conferences and other engagements.
 

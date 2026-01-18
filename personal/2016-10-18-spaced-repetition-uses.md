@@ -24,7 +24,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-18-spaced-repetition-uses/84c7ca264211_image-asset.webp)
+![](images/2016-10-18-spaced-repetition-uses/84c7ca264211_image-asset.avif)
 
 *[This is [a cross-post](http://www.spacedrepfoundation.org/blog/srs-uses) via the Spaced Repetition Foundation blog, where it was originally published]*
 

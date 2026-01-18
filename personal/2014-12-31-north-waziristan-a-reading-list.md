@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="1596"][![ Technically, this is South Waziristan...  Photo credit: Drregor (via  Flickr )  ](images/2014-12-31-north-waziristan-a-reading-list/0f63842ab0ce_image-asset.webp)](https://www.flickr.com/photos/drregor/4302412283) Technically, this is South Waziristan... Photo credit: Drregor (via Flickr ) [/caption]
+[caption id="" align="alignnone" width="1596"][![ Technically, this is South Waziristan...  Photo credit: Drregor (via  Flickr )  ](images/2014-12-31-north-waziristan-a-reading-list/0f63842ab0ce_image-asset.avif)](https://www.flickr.com/photos/drregor/4302412283) Technically, this is South Waziristan... Photo credit: Drregor (via Flickr ) [/caption]
 
 I've been doing a bit of reading about North Waziristan in the English-language sources that are available outside Pakistan. It took a bit of time to put together a decent collection that gave real information. By 'real information', I mean things that speak of names, dates, places and events. I wasn't really interested in analysis, though that forms part of what follows. I was interested in the basic factual building blocks that must precede any analysis or understanding of a place. (That, and actually going there yourself). Most of these sources have are filled with stories and little details, all of which need triangulating with one another and with interviews on the ground.
 

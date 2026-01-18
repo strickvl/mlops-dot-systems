@@ -14,7 +14,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-23-splitting-pdfs-with-python/00c066f40568_ScreenShot_2018-06-23_at_21_55_59.webp)
+![](images/2018-06-23-splitting-pdfs-with-python/00c066f40568_ScreenShot_2018-06-23_at_21_55_59.avif)
 
 A big part of data science and data engineering is simply getting hold of the data you need from various file types and sources. For better or for worse, PDFs are a big part of the information ecosystem. They contain all sorts of charts, texts, images and other data points but are relatively complicated to parse.
 
@@ -24,7 +24,7 @@ I’ve found that a lot of the courses and tutorials teaching programming are bi
 
 For my specific problem, it was non-trivial to get even the most basic prototype working. Before even thinking about the PDF part, I wanted to loop over all the files in a particular folder and print out the names. This seems like a simple thing to do, and in the end it was (sort of), but the documentation doesn’t really lend itself to newbies. This is what one of the functions I used looks like in the documentation, for example:
 
-[caption id="" align="alignnone" width="600"]![ Not particularly intuitive... ](images/2018-06-23-splitting-pdfs-with-python/5cffab5418f2_ScreenShot_2018-06-23_at_22.20.20.webp) Not particularly intuitive... [/caption]
+[caption id="" align="alignnone" width="600"]![ Not particularly intuitive... ](images/2018-06-23-splitting-pdfs-with-python/5cffab5418f2_ScreenShot_2018-06-23_at_22.20.20.avif) Not particularly intuitive... [/caption]
 
 Luckily, this being a fairly ordinary and common task, various people had suggested ways to iterate over some files and list the filenames. StackOverflow proved helpful, as did some friendly voices over on the [PythonistaCafe forum](https://www.pythonistacafe.com/). For a simple file list, `os.walk` seemed to be the easiest option, though someone has since let me know that for Python 3.5 onwards there’s also `glob` which looks a lot less verbose to use.
 

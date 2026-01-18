@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-23-real-world-go-with-referenced-functions/4b6c1af93950_ScreenShot_2018-06-23_at_21.40.26.webp)
+![](images/2018-06-23-real-world-go-with-referenced-functions/4b6c1af93950_ScreenShot_2018-06-23_at_21.40.26.avif)
 
 Writing small test scenarios and packages in the Go Playground, or in a single `main.go` file is all good and well, but in the real world things are more complex. (Or so I heard).
 

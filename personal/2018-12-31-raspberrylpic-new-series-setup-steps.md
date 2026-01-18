@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-12-31-raspberrylpic-new-series-setup-steps/43c9501bc8f1_92690.webp)
+![](images/2018-12-31-raspberrylpic-new-series-setup-steps/43c9501bc8f1_92690.avif)
 
 I mentioned in my [last post](https://www.alexstrick.com/blog/linux-essentials-certification) that I hoped to move on to the LPIC-1 exam in the coming weeks. I’m going through a bit of flux in terms of my stable laptop setup at the moment and I wanted a bit of stability as I work my way through the course. The idea suggested itself to me: what if I work through the syllabus using a Raspberry Pi?
 

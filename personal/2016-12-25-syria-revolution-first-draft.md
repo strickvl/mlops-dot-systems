@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="351"]![ A photo taken back when I lived in Damascus ](images/2016-12-25-syria-revolution-first-draft/05892fc6c0f2_image-asset.webp) A photo taken back when I lived in Damascus [/caption]
+[caption id="" align="alignnone" width="351"]![ A photo taken back when I lived in Damascus ](images/2016-12-25-syria-revolution-first-draft/05892fc6c0f2_image-asset.avif) A photo taken back when I lived in Damascus [/caption]
 
 I haven’t been following events in Syria that closely. ‘[*Burning Country: Syrians in Revolution and War*](https://www.amazon.com/Burning-Country-Syrians-Revolution-War-ebook/dp/B01A5OJTDO/ref=sr_1_1_twi_kin_2?sr=8-1&ie=UTF8&keywords=burning%2Bcountry&tag=soumet-20&qid=1482526234)’ (by Robin Yassin-Kassab, Leila Al-Shami) is only one among several books that have been written in the midst of the ongoing conflict, but I’d heard consistently good things about it since its release at the beginning of 2016. It doesn’t disappoint. I started it yesterday, lulled by the conclusion of a large project and a thousand pictures of Christmas dinner preparations on twitter. I woke up this morning and finished the rest.
 

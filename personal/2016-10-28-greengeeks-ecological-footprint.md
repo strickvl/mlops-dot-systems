@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-28-greengeeks-ecological-footprint/81a1f7624053_image-asset.webp)
+![](images/2016-10-28-greengeeks-ecological-footprint/81a1f7624053_image-asset.avif)
 
 I’ve been trying to reduce my ecological impact on the planet for several months. Some of this has meant not taking flights, while other parts have involved me re-evaluating more habitual choices I make such as my diet.
 

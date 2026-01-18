@@ -24,7 +24,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-09-knot2-translation-as-trauma/777efa007f44_19693.webp)
+![](images/2016-12-09-knot2-translation-as-trauma/777efa007f44_19693.avif)
 
 This week I fell back in love with a piece of software ([DevonThink Pro Office](http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html)) while reorganising and refreshing two dozen archival databases. I’ve been busy putting the final touches on [The Taliban Reader](http://www.hurstpublishers.com/book/the-taliban-reader/) and I’ve made new strides of progress on the slackline.
 

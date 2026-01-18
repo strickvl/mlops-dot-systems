@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions/0ebe29230733_image-asset.webp)
+![](images/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions/0ebe29230733_image-asset.avif)
 
 It’s finally out. I’m really glad that other researchers, journalists and anyone else with a bit of curiosity can [read this translated volume](http://www.amazon.com/Obedience-Amir-Taliban-Movement-Publishing-ebook/dp/B0183VF0HA?tag=soumet-20).
 

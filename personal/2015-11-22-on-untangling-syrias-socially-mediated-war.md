@@ -20,9 +20,9 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="351"][![ Some old photos from when I used to live in Damascus ](images/2015-11-22-on-untangling-syrias-socially-mediated-war/b6c62b0fe72a_IMG_0212.webp)](http://iraqburning.blogspot.no/2006/04/walk-in-damascus-amidst-symbols-of.html) Some old photos from when I used to live in Damascus [/caption]
-![](images/2015-11-22-on-untangling-syrias-socially-mediated-war/49348bea8f0f_image-asset.webp)
-![](images/2015-11-22-on-untangling-syrias-socially-mediated-war/1dd7f9a461ee_fountains.webp)
+[caption id="" align="alignnone" width="351"][![ Some old photos from when I used to live in Damascus ](images/2015-11-22-on-untangling-syrias-socially-mediated-war/b6c62b0fe72a_IMG_0212.avif)](http://iraqburning.blogspot.no/2006/04/walk-in-damascus-amidst-symbols-of.html) Some old photos from when I used to live in Damascus [/caption]
+![](images/2015-11-22-on-untangling-syrias-socially-mediated-war/49348bea8f0f_image-asset.avif)
+![](images/2015-11-22-on-untangling-syrias-socially-mediated-war/1dd7f9a461ee_fountains.avif)
 
 How do we figure out what is going on in a country like Syria, when journalists, researchers and civilians alike are targeted with frustrating ease? Is it enough to track what is being posted on social media outlets? These two questions are at the core of a fascinating recent(ish) study published by the [United States Institute for Peace (USIP)](http://www.usip.org/).
 

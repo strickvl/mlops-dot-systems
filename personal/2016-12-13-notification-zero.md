@@ -23,7 +23,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-13-notification-zero/ae5170905979_43679.webp)
+![](images/2016-12-13-notification-zero/ae5170905979_43679.avif)
 
 As I reach the final stages of [a major project](http://www.hurstpublishers.com/book/the-taliban-reader/), I’ve been saying ‘no’ more often. I’ve been turning down work, conferences and all the little things that take away from my ability to focus for hours at a stretch.
 

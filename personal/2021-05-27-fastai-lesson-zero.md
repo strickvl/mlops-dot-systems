@@ -65,7 +65,7 @@ comments:
   - just work regularly on things, show up every day, try to make your model a little better each day
   - Do these things:
 
-[![](images/2021-05-27-fastai-lesson-zero/ff44b78fb0ed_ScreenShot_2021-05-27_at_12.40.27.webp)](https://twitter.com/radekosmulski/status/1334490647986905089)
+[![](images/2021-05-27-fastai-lesson-zero/ff44b78fb0ed_ScreenShot_2021-05-27_at_12.40.27.avif)](https://twitter.com/radekosmulski/status/1334490647986905089)
 
 - For getting a job in the space
   - having a public-facing portfolio of writings and projects will take you a really long way

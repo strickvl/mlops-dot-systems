@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-11-07-learn-persian-farsi-dari-with-podcasts/281c689aa485_podcastimage.webp)
+![](images/2018-11-07-learn-persian-farsi-dari-with-podcasts/281c689aa485_podcastimage.avif)
 
 Learning Farsi or Dari from podcasts is a bit easier than with Pashto. There are lots of options in a variety of topic areas, so you’re not confined to listening to news broadcasts 24/7. They also cover a broader spectrum of language abilities, so you have more options even if you’re a relative beginner.
 

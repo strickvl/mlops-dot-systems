@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-02-03-actual-fluency/642cb3c81bb3_image-asset.webp)
+![](images/2017-02-03-actual-fluency/642cb3c81bb3_image-asset.avif)
 
 I was interviewed by Kris Broholm on the [Actual Fluency podcast](http://actualfluency.com/actual-fluency-language-learning-podcast/) last week. This was a real pleasure to do, since I've been listening to that podcast more or less since it first started.
 

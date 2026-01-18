@@ -28,12 +28,12 @@ In a [classic essay](https://journals.sagepub.com/doi/abs/10.1177/00027162623400
 
 Within this essay and this quote specifically, we can find some of the key building blocks of machine learning:
 
-![](images/2021-05-26-arthur-samuel-and-the-frontier-of-automation/a5d2ca1f4554_ScreenShot_2021-05-26_at_10.41.29.webp)
+![](images/2021-05-26-arthur-samuel-and-the-frontier-of-automation/a5d2ca1f4554_ScreenShot_2021-05-26_at_10.41.29.avif)
 
 We have our inputs (our data) and our weights. Our weights (or the weight assignments) are variables that allow for different configurations and behaviours of our model. Our results are what the computer has assumed based on the weights and the model, and we have some kind of a metric (our performance) to judge whether this model was accurate or not. The computer then updates the weights based on that performance, tweaking it such that it tries to get better performance.
 
 This is a slightly amended version which language or jargon that are more commonly found today. As you might expect would happen, the language used in the 1960s is in many cases different from what gets used today:
 
-![](images/2021-05-26-arthur-samuel-and-the-frontier-of-automation/67a0c320e0d2_ScreenShot_2021-05-26_at_10.41.37.webp)
+![](images/2021-05-26-arthur-samuel-and-the-frontier-of-automation/67a0c320e0d2_ScreenShot_2021-05-26_at_10.41.37.avif)
 
 The main difference here is that we have some labels which are used to know whether the predictions are correct or not. The loss is a way of measuring the performance of our model that is suited for updating our parameters (that used to be referred to as weights).

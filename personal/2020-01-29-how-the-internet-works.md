@@ -33,19 +33,19 @@ So once we have this top-down understanding of the internet as a bunch of networ
 
 At this point, it's useful to make use of another abstraction: communication across the internet happens across a series of layers. There are several different models for these various layers. Two of the more common models — the OSI model and the TCP/IP model — are represented below:
 
-![](images/2020-01-29-how-the-internet-works/927c43c6c96c_layered-system-osi-tcp-ip-comparison.webp)
+![](images/2020-01-29-how-the-internet-works/927c43c6c96c_layered-system-osi-tcp-ip-comparison.avif)
 
 At the top level — "Application" — you have your website or whatever the user comes into contact with that is being served up to your web browser, let's say. All the layers below that are progressively more and more specialised, which is another way of saying that they become progressively less comprehensible if you were to eavesdrop on the data as it were passing over the wire or through the fibre optic cable.
 
 Let's move through the big pieces of how information is communicated, then, starting at the bottom. (I'll mostly follow the TCP/IP model since it's a bit less granular and allows me to split things up in a way that make sense). This chart will help keep all the pieces in your mind:
 
-![](images/2020-01-29-how-the-internet-works/24852f39db7f_layersofinternet.webp)
+![](images/2020-01-29-how-the-internet-works/24852f39db7f_layersofinternet.avif)
 
 Note that each layer has something known as a 'protocol data unit' or PDU. A PDU is usually made up of a combination of a header, payload or chunk of data and an optional footer or trailer. The header and footer contain metadata which allows for the appropriate transmission / decoding etc of the data payload.
 
 The PDU of one layer is used by the layer below or above it to make up its own separate PDU. See the following diagram as an illustration:
 
-![](images/2020-01-29-how-the-internet-works/30ffa3d90bfb_encapsulation.webp)
+![](images/2020-01-29-how-the-internet-works/30ffa3d90bfb_encapsulation.avif)
 
 ## Physical Layer
 

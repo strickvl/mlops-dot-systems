@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-09-17-coding-chronicles-failure/7bfba3f57c53_image-asset.webp)
+![](images/2016-09-17-coding-chronicles-failure/7bfba3f57c53_image-asset.avif)
 
 A true journal of my progress in learning data analysis skills must include notes about failure. Nothing is purely sunshine and achievement milestones, so this is a short write-up of a recent (ongoing) problem I’m having with my data analysis / coding nanodegree.
 

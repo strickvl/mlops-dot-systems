@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-18-seeking-python-code-mentor/22a10216d76f_magic-forest-free-license-CC0-1024x665.webp)
+![](images/2016-12-18-seeking-python-code-mentor/22a10216d76f_magic-forest-free-license-CC0-1024x665.avif)
 
 My initial foray into the world of coding began earlier this year. I’m now at the point where I am at the least cognisant of the major structures and features of this language. If you give me some Python (or Javascript) code I can most likely start to figure out what’s going on.
 

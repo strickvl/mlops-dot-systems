@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![bookshelf](images/2012-12-29-some-things-i-read/1356f0449435_bookshelf.webp)
+![bookshelf](images/2012-12-29-some-things-i-read/1356f0449435_bookshelf.avif)
 I read [43 books](http://www.goodreads.com/user_challenges/393339) this year. 44, if you count the book I'm about to finish. For some reason, 2012 doesn't feel like it was a particularly great year in terms of the books and longform articles that were published.
 
 Jeevan Deol and Zaheer Kazmi edited a fantastic collection of essays entitled [*Contextualising Jihadi Thought*](http://www.amazon.com/Contextualising-Jihadi-Thought-Columbia-Hurst/dp/023170254X). Anyone interested in that kind of thing should read it.

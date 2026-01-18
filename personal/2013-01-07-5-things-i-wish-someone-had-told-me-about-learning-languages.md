@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![1195995_44850378](images/2013-01-07-5-things-i-wish-someone-had-told-me-about-learning-languages/a2bd3106c6e8_1195995_44850378.webp)
+![1195995_44850378](images/2013-01-07-5-things-i-wish-someone-had-told-me-about-learning-languages/a2bd3106c6e8_1195995_44850378.avif)
 
 **[UPDATE: I now offer one-on-one language coaching. [Read more](http://www.alexstrick.com/language-coaching) about what it involves and what kinds of problems it's best suited to addressing.]**
 

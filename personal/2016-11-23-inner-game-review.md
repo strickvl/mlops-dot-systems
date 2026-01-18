@@ -23,7 +23,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-11-23-inner-game-review/984a2eb9c686_image-asset.webp)
+![](images/2016-11-23-inner-game-review/984a2eb9c686_image-asset.avif)
 
 I’ve recently become interested in [mental models](http://mentalmodels.princeton.edu/about/what-are-mental-models/), or different types of lenses you can bring to view a particular situation or reality. We all have an immense flexibility in how we can view the world; sometimes changing our approach in this way can change how we experience our reality.
 

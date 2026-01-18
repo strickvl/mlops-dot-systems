@@ -26,10 +26,10 @@ I'll assume you know something about the Taskpaper syntax. [This video](https://
 
 The trick which Gabe explained relates to getting hierarchically sorted task lists from Taskpaper into Omnifocus. It's as simple as copy-->paste. So I can go from something complicated in Taskpaper like this:
 
-![](images/2017-01-05-2017-1-taskpaper-omnifocus/07107d0dde0f_image-asset.webp)
+![](images/2017-01-05-2017-1-taskpaper-omnifocus/07107d0dde0f_image-asset.avif)
 
 to a set of tasks like this in Omnifocus:
 
-![](images/2017-01-05-2017-1-taskpaper-omnifocus/1a7ab7acd3bd_image-asset.webp)
+![](images/2017-01-05-2017-1-taskpaper-omnifocus/1a7ab7acd3bd_image-asset.avif)
 
 It's a great tip, and a great time-saver.

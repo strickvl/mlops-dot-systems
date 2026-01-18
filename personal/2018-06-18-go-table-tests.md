@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-06-18-go-table-tests/54d26a29baf9_ScreenShot_2018-06-18_at_21.47.05.webp)
+![](images/2018-06-18-go-table-tests/54d26a29baf9_ScreenShot_2018-06-18_at_21.47.05.avif)
 
 Today I wanted to stretch my use of test scenarios with Go. The example I [described a couple of days ago](https://www.alexstrick.com/blog/testing-workflow-golang) basically had me running individual tests for specific values. What I wanted was a way to test a bunch of different values for the same function. Enter: table tests.
 
@@ -27,7 +27,7 @@ I started with some notes I’d taken during [Todd McLeod’s](https://twitter.c
 
 When I ran *go fmt* at the end to format my code, it gave me an error as it refused to build:
 
-![](images/2018-06-18-go-table-tests/2ec46b2e84d8_ScreenShot_2018-06-18_at_22.04.25.webp)
+![](images/2018-06-18-go-table-tests/2ec46b2e84d8_ScreenShot_2018-06-18_at_22.04.25.avif)
 
 I could see that it wanted two ints and I was giving it a slice of ints. Basically this turned into a hunt for fixing my loop and which values I was spitting out at various iterations of the loop.
 

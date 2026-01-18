@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-17-knot3-encryption-race-tunnels/714a1d243b6e_67589.webp)
+![](images/2016-12-17-knot3-encryption-race-tunnels/714a1d243b6e_67589.avif)
 
 More focus this week on finishing [a big project](http://www.hurstpublishers.com/book/the-taliban-reader/), so [less time](https://www.alexstrick.com/blog/notification-zero) for books or outside reading, but nevertheless some articles to recommend.
 

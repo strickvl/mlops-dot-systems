@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![aewc-cover(2010jan4).jpg](images/2011-01-10-an-enemy-we-created-the-website/b04e5ae719b9_aewc-cover2010jan4.webp)
+![aewc-cover(2010jan4).jpg](images/2011-01-10-an-enemy-we-created-the-website/b04e5ae719b9_aewc-cover2010jan4.avif)
 
 You can read more about *An Enemy We Created* on the book's [website](http://www.anenemywecreated.com/). It went online tonight and contains an outline of the argument along with advance praise from several analysts and scholars of the region. This is the book [Felix Kuehn](http://www.felixkuehn.com) and I spent the past year working on.  Go take a look:
 

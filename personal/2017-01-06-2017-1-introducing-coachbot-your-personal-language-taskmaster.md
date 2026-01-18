@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-06-2017-1-introducing-coachbot-your-personal-language-taskmaster/2a7c6225242d_image-asset.webp)
+![](images/2017-01-06-2017-1-introducing-coachbot-your-personal-language-taskmaster/2a7c6225242d_image-asset.avif)
 
 For languages that aren’t new, I often feel like I’m stagnating and get bored when I reach the intermediate levels. This can reflect a lack of materials from which to study (as was the case with Pashto when I first started studying it) or — more commonly — a surfeit of materials. This creates a kind of choice paralysis where the number of options means I’m far less likely to sit down and pick one of them. (In a similar way, I'll sometimes choose not to watch any of the in-flight entertainment because there are too many choices to pick from.)
 

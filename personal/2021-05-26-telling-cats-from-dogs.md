@@ -24,11 +24,11 @@ An imperative approach might be to make a mega list of certain kinds of features
 
 Instead, with neural network layers, we turn that pattern on its side. Instead of this:
 
-![](images/2021-05-26-telling-cats-from-dogs/2e5999af6274_ScreenShot_2021-05-26_at_09.28.57.webp)
+![](images/2021-05-26-telling-cats-from-dogs/2e5999af6274_ScreenShot_2021-05-26_at_09.28.57.avif)
 
 We have something closer to this:
 
-![](images/2021-05-26-telling-cats-from-dogs/ea0a106d3a1e_ScreenShot_2021-05-26_at_09.29.07.webp)
+![](images/2021-05-26-telling-cats-from-dogs/ea0a106d3a1e_ScreenShot_2021-05-26_at_09.29.07.avif)
 
 So the neural networks are learning on the basis of data provided to it — you give it a bunch of images which you've pre-labelled to say 'this one is a cat and that one is a dog' and so on.
 

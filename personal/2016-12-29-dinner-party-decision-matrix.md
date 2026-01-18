@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-29-dinner-party-decision-matrix/8212b6190e37_image-asset.webp)
+![](images/2016-12-29-dinner-party-decision-matrix/8212b6190e37_image-asset.avif)
 
 Some friends were coming round for dinner this evening and I couldn’t decide what to cook. I couldn’t decide because there were too many variables floating around that would impact the decision.
 
@@ -43,7 +43,7 @@ The app ended up picking the following for dinner (photo below):
 
 - and a beetroot and chocolate cake
 
-![](images/2016-12-29-dinner-party-decision-matrix/fc35d4f49cbd_dinner.webp)
+![](images/2016-12-29-dinner-party-decision-matrix/fc35d4f49cbd_dinner.avif)
 
 I learnt a bunch of things about Python while coding the tool:
 

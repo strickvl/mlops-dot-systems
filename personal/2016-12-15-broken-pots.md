@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-15-broken-pots/c4ceb29ab09f_image-asset.webp)
+![](images/2016-12-15-broken-pots/c4ceb29ab09f_image-asset.avif)
 
 Kintsugi or kintsukuroi is the Japanese art of rebuilding a broken pot or other ceramic in a way so as to make it more beautiful than it was before. This is sometimes done with gold or silver, or other materials to join the broken pieces together.
 

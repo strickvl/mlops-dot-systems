@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-07-24-2016-7-chondrichthyan-fun-a-review-of-shark-mooc/08ec567f2b2c_image-asset.webp)
+![](images/2016-07-24-2016-7-chondrichthyan-fun-a-review-of-shark-mooc/08ec567f2b2c_image-asset.avif)
 
 Everyone needs a good distraction. For the past four weeks, mine has been an online edX course run by the University of Cornell and the University of Queensland (Australia) entitled, [*Sharks! Global Diversity, Biology and Conservation*](https://www.edx.org/course/sharks-global-biodiversity-biology-cornellx-uqx-bioee101x). With my PhD newly submitted to external examiners and nothing to do but to wait until the oral *viva* examination, this was my reward to myself. The course would be a way to engage with the world in a different way, through the medium of biology, and maybe open myself to new possibilities.
 

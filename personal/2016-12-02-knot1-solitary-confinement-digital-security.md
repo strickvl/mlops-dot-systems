@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-02-knot1-solitary-confinement-digital-security/0add8c69ede4_image-asset.webp)
+![](images/2016-12-02-knot1-solitary-confinement-digital-security/0add8c69ede4_image-asset.avif)
 
 This is the first of what I hope will be a regular feature on this blog. *Knot* will link to recent things that I’ve been reading. It will include short articles as well as books and other things on the internet.
 

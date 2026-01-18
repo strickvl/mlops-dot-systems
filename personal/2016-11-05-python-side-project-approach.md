@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-11-05-python-side-project-approach/d340fc318e99_image-asset.webp)
+![](images/2016-11-05-python-side-project-approach/d340fc318e99_image-asset.avif)
 
 Since finishing the [Udacity IPND](https://www.alexstrick.com/blog/udacity-ipnd) I have been drawing up plans to start practical work on a specific side-project. I won’t go into too many of the details for now — it’ll be more fun to release it as a surprise — but I wanted to take a note of some of my evolving thinking on my approach.
 

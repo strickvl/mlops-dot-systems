@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-05-randomise-your-learning/e902e3ddb7af_image-asset.webp)
+![](images/2017-01-05-randomise-your-learning/e902e3ddb7af_image-asset.avif)
 
 Scientists of various stripes have been studying how best to learn for many years. We can draw a variety of conclusions from this academic literature, but one of the more surprising results is that randomised practice is better than when you focus on a particular topic to the exclusion of everything else.
 
@@ -30,7 +30,7 @@ This misses out on the opportunity to 'interleave' (the term used by the literat
 
 When I open up Anki, I see the following:
 
-![](images/2017-01-05-randomise-your-learning/f84e73f5bede_image-asset.webp)
+![](images/2017-01-05-randomise-your-learning/f84e73f5bede_image-asset.avif)
 
 I have one deck (called "All The Things") which contains all my cards. There is a lot you can do with in-built and plugin support for tags so I'm able to dice and segment the cards as I wish. This means when I'm reviewing my decks, I'll get one card with Arabic vocabulary one minute, then something testing me on shark anatomy the next, followed by some Python coding-related knowledge I'm learning.
 

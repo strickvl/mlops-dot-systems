@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="550"]![ Urdu Frequency Dictionary ](images/2014-09-05-an-ankified-urdu-frequency-dictionary/1a23c0c7095b_Screen-Shot-2014-09-05-at-09.14.27.webp) Urdu Frequency Dictionary [/caption]
+[caption id="" align="alignnone" width="550"]![ Urdu Frequency Dictionary ](images/2014-09-05-an-ankified-urdu-frequency-dictionary/1a23c0c7095b_Screen-Shot-2014-09-05-at-09.14.27.avif) Urdu Frequency Dictionary [/caption]
 
 Until recently I had been trying to spend more time in Pakistan's megatropolis, Karachi. As part of this move I had been trying to learn Urdu. There are a variety of excellent study materials for Urdu, but I won't write about those today. Rather, I want to offer up a resource for serious students of the language.
 

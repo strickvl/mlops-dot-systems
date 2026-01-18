@@ -19,6 +19,6 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-06-27-srs-without-computers/97f14dea672c_image-asset.webp)
+![](images/2017-06-27-srs-without-computers/97f14dea672c_image-asset.avif)
 
 I [wrote a little something](http://www.spacedrepfoundation.org/blog/srs-without-computers) over for the Spaced Repetition Foundation about getting the benefits of spaced repetition without relying on technology. Check it out [here](http://www.spacedrepfoundation.org/blog/srs-without-computers). Also give [Matt's recent post](http://www.spacedrepfoundation.org/blog/2017/5/27/spaced-repetition-and-creativity) on spaced repetition and creativity a read.

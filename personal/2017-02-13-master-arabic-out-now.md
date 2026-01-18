@@ -23,7 +23,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-02-13-master-arabic-out-now/ecdf9211a9c0_image-asset.webp)
+![](images/2017-02-13-master-arabic-out-now/ecdf9211a9c0_image-asset.avif)
 
 I'm very pleased to announce that 'Master Arabic' is (finally) released and available for direct download. I've been busy finalising various small details relating to the text throughout January and it's great to have it finally out and in the world.
 

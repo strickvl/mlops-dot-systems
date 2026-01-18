@@ -19,7 +19,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-16-2016-9-phd-tools-sleep-movement/213397dae046_image-asset.webp)
+![](images/2016-09-16-2016-9-phd-tools-sleep-movement/213397dae046_image-asset.avif)
 
 Intense focus on a particular mental challenge, problem or project has the tendency -- at least in my experience -- to become an all-or-nothing proposition. Any non-PhD-related activities are considered unimportant or irrelevant, and you end up sitting in front of your chair for hours on end.
 

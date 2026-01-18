@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-11-29-arrival-faces/e5dbc7d01d52_image-asset.webp)
+![](images/2016-11-29-arrival-faces/e5dbc7d01d52_image-asset.avif)
 
 In Denis Villeneuve’s excellent new film, [Arrival](http://www.imdb.com/title/tt2543164/), suspense is handled more eloquently than is the norm. I won’t spoil the plot for those who still plan on catching this in the cinema, but it isn’t revealing much to say that this is a film with contact with extraterrestrial beings and spaceships. That much you can even figure out from the poster.
 

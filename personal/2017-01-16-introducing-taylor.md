@@ -38,7 +38,7 @@ Rather than just study Arabic, I've dedicated significant time to studying how t
 
 I'll be working with Alex as a coach over my upcoming months as I study at Qasid and meet weekly with a conversation partner I've picked up here in Amman. You'll see my blogs on a weekly or biweekly basis, and I hope you see some forward movement in them. Expect upcoming posts to be shorter and more technical.
 
-![](images/2017-01-16-introducing-taylor/49108b744eef_image-asset.webp)
+![](images/2017-01-16-introducing-taylor/49108b744eef_image-asset.avif)
 
 Even if I said this is no longer just a leisurely pursuit, I also don't want to lose that quality that I said I admire in Brazilians – taking small sips of a new subject just because it's interesting and novel, without having a deadline or an endgame. At our orientation at Qasid, one of our administrators said that Arabic learning [is a marathon](https://www.youtube.com/watch?v=MTo7zVGBbVc), not a sprint. I'm an athlete, and that comparison felt spot-on.
 

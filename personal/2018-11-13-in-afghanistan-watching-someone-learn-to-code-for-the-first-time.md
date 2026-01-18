@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-11-13-in-afghanistan-watching-someone-learn-to-code-for-the-first-time/d326cb9b16b0_IMG_0130.webp)
+![](images/2018-11-13-in-afghanistan-watching-someone-learn-to-code-for-the-first-time/d326cb9b16b0_IMG_0130.avif)
 
 I recently had the opportunity to observe how a total newcomer to coding / computer programming starts their learning journey. She was embarking on this journey in Kabul, which brings some special considerations that I thought I’d outline here.
 

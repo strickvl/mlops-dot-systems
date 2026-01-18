@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-04-29-guest-post-can-robots-be-language-coaches/16141386ee8b_image-asset.webp)
+![](images/2017-04-29-guest-post-can-robots-be-language-coaches/16141386ee8b_image-asset.avif)
 
 I [wrote a guest post](https://learnercoachingelt.wordpress.com/2017/03/17/alex_strick/) over on the [Learner Coaching ELT](https://learnercoachingelt.wordpress.com/) blog:
 

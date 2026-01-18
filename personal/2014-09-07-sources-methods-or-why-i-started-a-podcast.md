@@ -15,7 +15,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![logo-blackjpg](images/2014-09-07-sources-methods-or-why-i-started-a-podcast/ccc899d0e93b_logo-blackjpg.webp)
+![logo-blackjpg](images/2014-09-07-sources-methods-or-why-i-started-a-podcast/ccc899d0e93b_logo-blackjpg.avif)
 
 If you go over to [sourcesandmethods.com](http://www.sourcesandmethods.com/) you'll find the inaugural episode of a new podcast I'm doing together with Matt Trevithick. Seriously, go there now and have a listen. You'll be able to subscribe from the iTunes directory etc in about a week or so, but for now if you want to hook it up to your preferred podcast client, use the RSS feed provided.
 

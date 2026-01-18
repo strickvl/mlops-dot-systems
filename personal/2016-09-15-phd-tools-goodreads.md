@@ -24,7 +24,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-15-phd-tools-goodreads/e870ce7fabda_image-asset.webp)
+![](images/2016-09-15-phd-tools-goodreads/e870ce7fabda_image-asset.avif)
 
 During the period I was working most intensely on my PhD writeup, I read over 100 books. I put that number out there not as a confrontation, but as an illustration that reading is important to ensure you don't get lost in a small box of your own creation. Judging purely from my own experience and from sporadic conversations with a loose handful of fellow PhD candidates, this can be a real problem.
 

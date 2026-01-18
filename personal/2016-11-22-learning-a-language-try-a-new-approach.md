@@ -23,7 +23,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="700"]![ Image credit:  Alina Daniker  ](images/2016-11-22-learning-a-language-try-a-new-approach/3c2b528a582a_64694.webp) Image credit: Alina Daniker [/caption]
+[caption id="" align="alignnone" width="700"]![ Image credit:  Alina Daniker  ](images/2016-11-22-learning-a-language-try-a-new-approach/3c2b528a582a_64694.avif) Image credit: Alina Daniker [/caption]
 
 Aside from my mother tongue (English, sort of), I’ve been studying and thinking about studying languages for twenty-five years. Back at school, I studied Ancient Greek, Latin, French and German. Since leaving, I’ve tackled (to varying degrees) Arabic, Dutch, Farsi / Dari, Pashto, Russian, Toki Pona, Turkish, Urdu and Japanese. If there’s one thread that connects it all, it is this: variety.
 

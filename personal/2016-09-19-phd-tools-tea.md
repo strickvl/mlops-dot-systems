@@ -20,7 +20,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-[caption id="" align="alignnone" width="1306"]![ I got a bit carried away with my tea experiments... ](images/2016-09-19-phd-tools-tea/96bdad5dd82a_image-asset.webp) I got a bit carried away with my tea experiments... [/caption]
+[caption id="" align="alignnone" width="1306"]![ I got a bit carried away with my tea experiments... ](images/2016-09-19-phd-tools-tea/96bdad5dd82a_image-asset.avif) I got a bit carried away with my tea experiments... [/caption]
 
 This will be the last post in my PhD Tools series. I thought I'd end with something a little less serious, though still potentially of use.
 

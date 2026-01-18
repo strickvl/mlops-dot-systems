@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-20-django-vs-flask/f1549db0fbef_image-asset.webp)
+![](images/2016-12-20-django-vs-flask/f1549db0fbef_image-asset.avif)
 
 I am diving back into the coding of my language-related web tool, [as I mentioned](https://www.alexstrick.com/blog/seeking-python-code-mentor) a few days back. In and of itself, the functionality is quite simple, but there are three parts that have to all work together, so it’s harder for me to put it all together than I had expected.
 

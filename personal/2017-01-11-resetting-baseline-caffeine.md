@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-11-resetting-baseline-caffeine/61fa0739a931_image-asset.webp)
+![](images/2017-01-11-resetting-baseline-caffeine/61fa0739a931_image-asset.avif)
 
 I've [blogged enthusiastically](https://www.alexstrick.com/blog/phd-tools-tea) about tea in the past. I enjoy discovering new varieties and the winter weather in particular makes an ever-ready cuppa almost obligatory.
 

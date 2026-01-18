@@ -24,7 +24,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*
 
-[caption id="" align="alignnone" width="700"]![ I spent several years with this particular file... ](images/2016-08-30-2016-8-phd-tools-scrivener/31f26bd5cdcf_image-asset.webp) I spent several years with this particular file... [/caption]
+[caption id="" align="alignnone" width="700"]![ I spent several years with this particular file... ](images/2016-08-30-2016-8-phd-tools-scrivener/31f26bd5cdcf_image-asset.avif) I spent several years with this particular file... [/caption]
 
 [Scrivener](https://www.literatureandlatte.com/) is the go-to tool for anyone working on longer structured pieces of fiction or non-fiction. It's great for structuring your work as well as the writing itself.
 

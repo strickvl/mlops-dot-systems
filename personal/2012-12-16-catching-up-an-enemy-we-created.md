@@ -16,7 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![aewc cover](images/2012-12-16-catching-up-an-enemy-we-created/848f0fb6086a_aewc-cover.webp)
+![aewc cover](images/2012-12-16-catching-up-an-enemy-we-created/848f0fb6086a_aewc-cover.avif)
 It's been a while now that *An Enemy We Created* has been out now. You can get it from all decent bookshops, as well as on kindle (finally), both in the UK and in the USA.
 
 The reviews that have come in have been almost entirely positive. You can read clippings and mentions and browse through the [full list over here](https://pinboard.in/u:strickvl/t:AEWC/ "Pinboard AEWC").

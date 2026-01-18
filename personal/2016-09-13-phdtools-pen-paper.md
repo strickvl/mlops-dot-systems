@@ -24,7 +24,7 @@ comments:
 
 *[This is part of a series on the tools I used to write my PhD. Check out [the other parts here](/blog?tag=phdtoolsseries).]*
 
-![](images/2016-09-13-phdtools-pen-paper/a397662cdc71_image-asset.webp)
+![](images/2016-09-13-phdtools-pen-paper/a397662cdc71_image-asset.avif)
 
 It's worth also talking in general terms about pen and paper. Readers of this blog would be right in considering me as someone who uses many different digital tools. Yet I am also a firm advocate for the use of paper and pen.
 
@@ -34,7 +34,7 @@ Using pen and paper offers the opportunity for slowing down and thinking in diff
 
 I like working on problems from different perspectives throughout my attempts to tackle whatever complexities arise. For this reason, I'll spend some time outlining, some time free-writing, some time structuring and restructuring things I've already written, some time talking things through with a third-party, and some time making mindmaps or lists of ideas with pen and paper.
 
-[caption id="" align="alignnone" width="1280"]![ The full handwritten overview of all my PhD chapters, glued to a large white sheet of paper ](images/2016-09-13-phdtools-pen-paper/95283578216e_image-asset.webp) The full handwritten overview of all my PhD chapters, glued to a large white sheet of paper [/caption]
+[caption id="" align="alignnone" width="1280"]![ The full handwritten overview of all my PhD chapters, glued to a large white sheet of paper ](images/2016-09-13-phdtools-pen-paper/95283578216e_image-asset.avif) The full handwritten overview of all my PhD chapters, glued to a large white sheet of paper [/caption]
 
 This cycling through different ways of composition / thinking on paper is something I developed over time, and it was in part a product of my time in Kandahar. Electricity was in limited supply, as was the internet, and some days there would simply be no way to write on a laptop. Sometimes even the laptop wouldn't start because the temperature in our little room on the roof was too hot. So I developed things to do during those downtimes, so that I wasn't completely hampered from working. The interruptions and lack of power was such a prominent feature of life that to allow yourself to be dictated by that would be to never complete anything.
 

@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2018-07-08-regex-python-search/593d7f73a519_ScreenShot_2018-07-08_at_19.53.06.webp)
+![](images/2018-07-08-regex-python-search/593d7f73a519_ScreenShot_2018-07-08_at_19.53.06.avif)
 
 The next step in my data processing project is to find strings matching certain patterns in the PDF data. Today I worked my way through the relevant chapter ([#7](https://automatetheboringstuff.com/chapter7/)) of Al Sweigart's excellent / useful [Automate the Boring Stuff with Python](https://www.amazon.com/gp/product/1593275994/ref=as_li_tl?linkId=HDM7V3T6RHC5VVN4&linkCode=as2&creativeASIN=1593275994&creative=9325&tag=soumet-20&camp=1789&ie=UTF8).
 

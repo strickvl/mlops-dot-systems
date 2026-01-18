@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-09-classical-arabic-sources-methods/adefdf5683be_image-asset.webp)
+![](images/2017-01-09-classical-arabic-sources-methods/adefdf5683be_image-asset.avif)
 
 [The new Arabic podcast](https://soundcloud.com/ma-wara-al-logha) I started has three episodes out of [the Jordanian dialect series](https://soundcloud.com/ma-wara-al-logha/sets/jordanian-arabic-dialect). Today I'm adding to those with [a new series exploring classical literature](https://soundcloud.com/ma-wara-al-logha/sets/literary-caravans-1). I'm extremely pleased to be joined by my friend, the erudite [Talha Ahsan](http://arabic-tutor.co.uk/), someone who has a strong appreciation for the subject matter and who teaches Arabic online and in person in the UK. Read [some of the testimonials](http://arabic-tutor.co.uk/testimonials/) from his former students here.
 

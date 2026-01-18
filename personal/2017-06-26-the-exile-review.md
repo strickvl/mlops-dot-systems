@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-06-26-the-exile-review/f311c114c83a_image-asset.webp)
+![](images/2017-06-26-the-exile-review/f311c114c83a_image-asset.avif)
 
 There is [no shortage of books](https://www.goodreads.com/shelf/show/9-11) on the September 11 attacks and their aftermath. Some stand back to analyse it in terms of trends and networks, seeking to explain the 'why' through abstractions. Others have written participant accounts or their histories from the sidelines. [The Exile](https://www.amazon.com/Exile-Stunning-Inside-Story-Flight-ebook/dp/B06XBQ7ZL8/ref=sr_tnr_p_2_156628011_1_twi_kin_1?sr=8-2&ie=UTF8&keywords=the%2Bexile&tag=soumet-20&qid=1494056669) offers a fulsome corrective to this trend towards abstraction. Curious what life was like for bin Laden, his commanders and their families? Cathy Scott-Clark and Adrian Levy deliver in spades.
 

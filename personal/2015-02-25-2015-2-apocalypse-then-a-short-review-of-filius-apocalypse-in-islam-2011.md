@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-02-25-2015-2-apocalypse-then-a-short-review-of-filius-apocalypse-in-islam-2011/09a1da9f5678_image-asset.webp)
+![](images/2015-02-25-2015-2-apocalypse-then-a-short-review-of-filius-apocalypse-in-islam-2011/09a1da9f5678_image-asset.avif)
 
 [An enjoyable account](http://www.amazon.com/Apocalypse-Islam-Jean-Pierre-Filiu/dp/0520264312/ref=sr_1_1?sr=8-1&ie=UTF8&keywords=apocalypse%2Bin%2Bislam&tag=soumet-20&qid=1424868872) of the idea of apocalypse in Islamic discourse, from the Qur'an all the way up until 2011. Filiu gathered together a huge melange of written sources on the apocalypse and he presents an overview of how differing conceptions have been cultivated by Sunnis / Shi'is over time. There is a slight bias in that most of the sources are in Arabic, and his focus is, broadly, the Middle East so South Asia is not particularly part of this story at all, not to mention East Asia proper which gets nary a mention.
 

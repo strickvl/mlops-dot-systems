@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="1035"][![An Enemy We Created - Timeline](images/2011-05-13-talqaeda-the-timeline/7cfc4787f77c_AEWCtimeline.webp)](http://www.anenemywecreated.com/timeline/) An Enemy We Created - Timeline[/caption]
+[caption id="" align="alignnone" width="1035"][![An Enemy We Created - Timeline](images/2011-05-13-talqaeda-the-timeline/7cfc4787f77c_AEWCtimeline.avif)](http://www.anenemywecreated.com/timeline/) An Enemy We Created - Timeline[/caption]
 
 Long-standing readers of this blog will know that I have been working (together with my colleague, [Felix Kuehn](http://www.felixkuehn.com/)) to get to grips with the nature of the relationship between the Taliban and al-Qaeda (and the various affiliates of both). To that end, we've written a book ('[An Enemy We Created](http://www.anenemywecreated.com/)') and a [summary paper](http://www.cic.nyu.edu/afghanistan/docs/gregg_sep_tal_alqaeda.pdf) dealing with the post-2001 aspects for the [Center on International Cooperation](http://www.cic.nyu.edu/afghanistan/index.html) (who funded much of the research).
 

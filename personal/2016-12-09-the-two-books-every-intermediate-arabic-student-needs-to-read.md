@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/df9c2c0b6809_Arabic_Voices_1.webp)
+![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/df9c2c0b6809_Arabic_Voices_1.avif)
 
 In the beginning, the study of Arabic is about coming to terms with how the language works. You start to grapple with the [diglossia](http://www.slate.com/blogs/lexicon_valley/2014/09/22/arabic_diglossia_the_many_varieties_of_what_s_popularly_considered_a_single.html), with [the verb system](https://en.wikipedia.org/wiki/Arabic_verbs) (roots everywhere!) and start working your way through one of the big textbooks that most programmes prescribe.
 
@@ -38,15 +38,15 @@ The great thing about this book is that every monologue comes with a wide variet
 
 You start off with some basic comprehension questions alongside some of the key vocabulary, then you dive into some of the specifics that are unique to that particular dialect. Here’s one of the exercises where you’re supposed to draw lines connecting the English to the Egyptian and to the Fusha / ‘Modern Standard’ translations.
 
-![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/e856e6ed3bde_IMG_5626.webp)
+![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/e856e6ed3bde_IMG_5626.avif)
 
 I’m not super keen on textbooks that deal too much in translations, but if you know how to use them, this is a real goldmine. I’ll usually put one or two of what seem like key phrases or expressions into Anki to memorise. The exercises are followed by a full transcript in Arabic and English translation. Here’s one example:
 
-![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/c9dc823c90cf_IMG_5627.webp)
+![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/c9dc823c90cf_IMG_5627.avif)
 
 Some of the monologues also include grammar notes at the end if something particularly interesting is worth noting. Here’s an example of that ‘focus’ material.
 
-![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/afc14e54ac2b_image-asset.webp)
+![](images/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read/afc14e54ac2b_image-asset.avif)
 
 Once you’ve gone through all the exercises, listened to the video to figure out what the various new phrases might mean, you can start covering up the Arabic part of the transcript to see if you can reproduce parts of what was said on the basis of the English translation. This is hard work, but incredibly rewarding.
 

@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2015-10-13-four-colours/0fa3983671d1_image-asset.webp)
+![](images/2015-10-13-four-colours/0fa3983671d1_image-asset.avif)
 
 A few years ago, I read a book that changed the way I took notes. That book was “How to Make a Complete Map of Every Thought You Think” by [Lion Kimbro](file:///Users/strickvl/Desktop/users.speakeasy.net/~lion/). Thanks to my podcast, [Sources and Methods](http://sourcesandmethods.com), I had the chance to chat with Lion a few weeks ago. The episode will be out in November but I wanted to share one of the ideas that I’ve found most useful. He wrote about it in his book and we discussed it again on the podcast.
 

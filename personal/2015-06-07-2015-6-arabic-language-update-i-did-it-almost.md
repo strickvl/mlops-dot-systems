@@ -22,7 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="1366"]![ My Beeminder accountability graph showing how I reached my goal for a study challenge in June ](images/2015-06-07-2015-6-arabic-language-update-i-did-it-almost/1d8efe6fd0b6_image-asset.webp) My Beeminder accountability graph showing how I reached my goal for a study challenge in June [/caption]
+[caption id="" align="alignnone" width="1366"]![ My Beeminder accountability graph showing how I reached my goal for a study challenge in June ](images/2015-06-07-2015-6-arabic-language-update-i-did-it-almost/1d8efe6fd0b6_image-asset.avif) My Beeminder accountability graph showing how I reached my goal for a study challenge in June [/caption]
 
 Just a short post as I'm off away on an intensive language course for most of the next three months. This is [the programme](http://www.middlebury.edu/ls/arabic) run by Middlebury College, but held in Oakland, California (USA) at Mills College. I was extremely lucky to win a [Kathryn Davis Fellowship](http://www.middlebury.edu/ls/finaid/fellowships/kwd) which covers the costs of the course and food and accommodation while I'm there. I have a BA degree in Arabic and Farsi from London's [School of Oriental and African Studies](http://www.soas.ac.uk/), but 10 years in Afghanistan spent writing books and studying Dari and Pashto meant that my Arabic has atrophied considerably. I thought it was time to resurrect those old skills, in part as a way of deepening my understanding of some of the religious aspects of the Afghan Taliban and in part -- let's be honest here -- as a way of covering my bases prior to Afghanistan completely falling off the map a few months from now.
 

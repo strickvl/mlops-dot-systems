@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![](images/2015-11-15-upcoming-maniac-week/e0daada0de8a_image-asset.webp)](https://www.instagram.com/p/wi6LekTCEWkOJsFGjKdUdSslnI_KdX4f2c-_w0/?taken-by=strickvl)
+[![](images/2015-11-15-upcoming-maniac-week/e0daada0de8a_image-asset.avif)](https://www.instagram.com/p/wi6LekTCEWkOJsFGjKdUdSslnI_KdX4f2c-_w0/?taken-by=strickvl)
 
 I hereby commit to doing a maniac week. This is inspired by [Nick Winter](http://blog.nickwinter.net/the-120-hour-workweek-epic-coding-time-lapse) and the good people at [Beeminder](https://www.beeminder.com/), namely [Bethany Soule](http://blog.beeminder.com/qs2015/) and [Daniel Reeves](https://www.youtube.com/watch?v=giBIJW-2hro&feature=youtu.be). The idea is as follows (borrowing heavily from a format over [here](https://byorgey.wordpress.com/2014/08/04/maniac-week/)):
 

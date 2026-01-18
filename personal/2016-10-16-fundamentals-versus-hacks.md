@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-10-16-fundamentals-versus-hacks/b3104bf85ea5_image-asset.webp)
+![](images/2016-10-16-fundamentals-versus-hacks/b3104bf85ea5_image-asset.avif)
 
 I was talking to someone a couple of days ago who pushed back a little against [some of my recent posts](http://www.alexstrick.com/blog/?tag=phdtoolsseries#show-archive). In particular, she was resistant to the idea that there were special techniques or skills that could be learnt that might help with writing, studying and learning.
 

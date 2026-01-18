@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-28-knot4-empathy-tech-climate/0248692ebb31_image-asset.webp)
+![](images/2016-12-28-knot4-empathy-tech-climate/0248692ebb31_image-asset.avif)
 
 I completed a major stage in [a big project](http://www.hurstpublishers.com/book/the-taliban-reader/) this week. Emerging from the haze, I had a bit more time to read for pleasure / curiosity. This helps explain the older selections of article that follow, and the number of books I managed to get through. I made steady progress with my language-learning coding side-project (about which more soon), and recorded three new [podcast episodes](https://www.sourcesandmethods.com/) to be released in the next few weeks.
 

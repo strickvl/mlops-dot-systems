@@ -18,7 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2016-12-21-reading-american-revolution/7b11b7027dcb_513e1AnDK_2BL._SX332_BO1_2C204_2C203_2C200_.webp)
+![](images/2016-12-21-reading-american-revolution/7b11b7027dcb_513e1AnDK_2BL._SX332_BO1_2C204_2C203_2C200_.avif)
 
 ‘[A Powerful Mind: The Self-Education of George Washington](https://www.amazon.com/Powerful-Mind-Self-Education-George-Washington-ebook/dp/B015GLKAK2/ref=dp_kinw_strp_1?tag=soumet-20)’ tells the story of Washington’s reading habits (and how they benefited him). You can read only the introduction and get the main message: he read a lot and the things he read allowed him to grow as a military and political leader. The rest of the book is a detailed exploration of this thesis alongside some of the supporting evidence.
 

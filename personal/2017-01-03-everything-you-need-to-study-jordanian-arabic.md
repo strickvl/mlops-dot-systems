@@ -24,7 +24,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/47ffe2ebc919_image-asset.webp)](http://gum.co/masterarabic-premium)
+[![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/47ffe2ebc919_image-asset.avif)](http://gum.co/masterarabic-premium)
 
 I've been living in Jordan for a little over four months, and I'm pleased to say that I seem to have converted what Syrian/Lebanese colloquial Arabic I learnt in the past into the Jordanian dialect.
 
@@ -40,7 +40,7 @@ Being the last somewhat-calm country in the non-Gulf non-north-African Arab-spea
 
 There are a lot of books and resources listed below. The expectation is not that you'll go through them all, but that you should rather be aware of what is out there. There aren't really many options for textbooks, so you're basically stuck with *Hakini Arabi*. (Good thing it's a well-designed course, with lots of dialogue and practice). I'd recommend the serious student of Jordanian Arabic get hold of both Tiedemann's *101 Verbs* book and *Diwan Baladna*. Both are filled with material you'll find nowhere else. (See below for details on these books).
 
-[![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/db14a650c66e_image-asset.webp)](http://languagecoach.io/masterarabic)
+[![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/db14a650c66e_image-asset.avif)](http://languagecoach.io/masterarabic)
 
 As for the rest, pick and choose: watch a comedy show; do some listening practice exercises; take an iTalki lesson with someone from Jordan. Those final steps are up to you, and depend a lot more on your goals and how fast you want to go.
 
@@ -68,11 +68,11 @@ This is your only option for a full textbook covering Jordanian dialect for begi
 
 Different parts of Jordan speak slightly different sub-dialects, and this book offers options for three varieties: 'Jordanian', 'Palestinian-Rural' and 'Jordanian and Palestinian-Urban'. For an idea of the kinds of materials contained within, here's an example of a vocabulary list from early on:
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/0eb72907626f_img1.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/0eb72907626f_img1.avif)
 
 and here's an example of a context/phrasal explainer from towards the end of the book:
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/fa3a4adeb603_image-asset.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/fa3a4adeb603_image-asset.avif)
 
 For a total beginner, I would certainly start with *Hakini Arabi*. One of the first things I did after moving to Amman was to go through this book.
 
@@ -88,11 +88,11 @@ This is a thematic dictionary and phrasebook for Jordanian Arabic. I hesitated t
 
 The first part of the book is filled with expressions, phrases, phrase + answer combinations and other materials that you don't usually find, even in books specialising in colloquial readers. Here is an example of phrases that come with certain responses:
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/f982ee2946b3_image-asset.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/f982ee2946b3_image-asset.avif)
 
 and here are some expressions from their very rich selection, also showing the explanations and how the book makes them very easy to use/pick up:
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/cb08ab26019f_image-asset.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/cb08ab26019f_image-asset.avif)
 
 The rest of the book is filled with thematically-organised vocab lists (sorted into Arabic / translation / Arabic plural columns). It's useful to have them all in one place, I suppose, and to know that these are what Jordanians use (as opposed to Lebanese or Syrian speakers of Arabic), but the real value of the book is the expressions and phrases contained in the first half.
 
@@ -106,7 +106,7 @@ This book is more than just a guide to using verbs in Jordanian Arabic. It's a r
 
 The title is actually really deceptive, and I held off getting a copy for far too long because I thought it was just lists of verbs. It *is*, but at the same time it's a rich trove of sentences, phrases and associated vocabulary. I'd say this book is pretty much essential for anyone who wants to learn Jordanian Arabic. Take a look at this page, for example, to see the kind of thing *101 Verbs* contains:
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/4bf3b433a814_image-asset.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/4bf3b433a814_image-asset.avif)
 
 It's a fantastic mix of phrases, sentences, vocabulary and literal translation or explanation. There are also useful appendices and introductory materials about the grammar of the Arabic verb, lists of broken plurals and various indexes so you can look things up as well.
 
@@ -124,7 +124,7 @@ There are also [audio files](https://www.livelingua.com/project/peace-corps/Arab
 
 I'd advise you to stay away from this book. It's sold on Amazon and seems to be frequently suggested as a 'suggested purchase' when you buy anything else relating to Jordanian Arabic. Unfortunately, the contents are not very useful. The book also does not use Arabic script; it is all transliterated. *Caveat emptor*.
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/008e0b1c15b4_image-asset.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/008e0b1c15b4_image-asset.avif)
 
 - [**The Arabic Student: Jordanian Arabic**](http://www.thearabicstudent.com/search/label/Jordanian%20Dialect)
 
@@ -182,7 +182,7 @@ GLOSS is a resource developed by the US military. You can select the dialect for
 
 Once you go into the individual items, it states which country the dialect is from. I really like that you can choose whether you want the questions and instructions in Arabic, though the interface itself is really horrible. Here's one of the exercises where you pair off words to two columns, depending on the meaning:
 
-![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/2bc57fe6f54c_image-asset.webp)
+![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/2bc57fe6f54c_image-asset.avif)
 
 Despite the issues with the interface, there's loads of really useful material to work your way through here. This is a great resource.
 

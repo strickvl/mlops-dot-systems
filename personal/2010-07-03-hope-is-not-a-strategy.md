@@ -21,7 +21,7 @@ And they're right. It's not.
 
 Which brings me to an article I'm reading at the moment: Alex Thier's ["Afghanistan's Rocky Path to Peace"](http://www.usip.org/files/afghanistan/Thier%20-%20Path%20to%20Peace%20-%20Current%20History.pdf). You can see in this photo I took of my notes that I enjoyed the near-fairy-tale like quality of the article's assumptions:
 
-[caption id="" align="alignnone" width="480"]![thier.jpg](images/2010-07-03-hope-is-not-a-strategy/3c691f27059d_thier.webp) thier.jpg[/caption]
+[caption id="" align="alignnone" width="480"]![thier.jpg](images/2010-07-03-hope-is-not-a-strategy/3c691f27059d_thier.avif) thier.jpg[/caption]
 
 The words that occur with great frequency in this article are conditional: 'could' appears 8 times, 'might' appears 12 times and 'would' occurs 29 times (and also the word 'will' 29 times, as if force of suggestion will make something happen).
 

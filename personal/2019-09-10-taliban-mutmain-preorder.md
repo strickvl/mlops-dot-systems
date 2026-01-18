@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2019-09-10-taliban-mutmain-preorder/7607dd609000_FDP_Cover_Taliban.webp)
+![](images/2019-09-10-taliban-mutmain-preorder/7607dd609000_FDP_Cover_Taliban.avif)
 
 > "I was around three or four years old when the Communists led the bloodiest coup in Afghanistan. KhAD personnel were arresting the faithful. One day, a few ugly moustached men knocked on our door. My father left with them and then he never came back. We never saw him again.
 >

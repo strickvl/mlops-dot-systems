@@ -21,7 +21,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-06-22-italian-mini-challenge/b27cfb042dd3_image-asset.webp)
+![](images/2017-06-22-italian-mini-challenge/b27cfb042dd3_image-asset.avif)
 
 I'm currently scheduled to do some archival work in August that would greatly benefit from being able to understand written Italian. That's a little under two months away from now, so I've been thinking about how best to approach this problem.
 

@@ -20,7 +20,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2023-08-10-language-study-zero-to-hero/38b79d97dc3e_strickvl_a_female_turkish_student_studying_languages_in_Munich__661ccaec-73a2-4f72-ae93-8bc9ca8d8b05.webp)
+![](images/2023-08-10-language-study-zero-to-hero/38b79d97dc3e_strickvl_a_female_turkish_student_studying_languages_in_Munich__661ccaec-73a2-4f72-ae93-8bc9ca8d8b05.avif)
 
 A colleague at work asked me for some tips on learning German and her situation and goals were fairly common so I thought I'd write up some notes here.
 
@@ -52,7 +52,7 @@ The things you should work your way to accomplish here include:
 
 You'll want these materials to end up into Anki so you can continue to be tested on them so you don't forget them. Here, for example is a card I created for a word that means 'ripped / torn' in Arabic.
 
-![](images/2023-08-10-language-study-zero-to-hero/485d8e7e64cd_ScreenShot_2023-08-10_at_08.25.04.webp)
+![](images/2023-08-10-language-study-zero-to-hero/485d8e7e64cd_ScreenShot_2023-08-10_at_08.25.04.avif)
 
 I get shown the picture and then need to come up with the word in Arabic for that concept. Note that I chose a quirky image on purpose.
 
@@ -73,7 +73,7 @@ There are many (*many*) options at the total beginner level. My go-to sources / 
 
 At this point, somewhere in the middle of the basic phase and on your way to the next phase, you'll want to start investing into generating your own sentence-level comprehensible input. One way is to take the 600+ word frequency list and use those words as the basis of making basic sentences. Note that these can and will be really basic. You will likely want to do this in collaboration either with a teacher, or a friend or someone who can correct the things you're writing / producing. All these sentences and materials should then be fed into your spaced repetition system / Anki. For example, here's the back of a card where I'm being tested to produce a particular phrase that was missing (where the `...` is in the sentence).
 
-![](images/2023-08-10-language-study-zero-to-hero/51b716cb10db_ScreenShot_2023-08-10_at_08.30.26.webp)
+![](images/2023-08-10-language-study-zero-to-hero/51b716cb10db_ScreenShot_2023-08-10_at_08.30.26.avif)
 
 There's a picture above it to jog my memory if the sentence doesn't. And you can't hear it here, but there's also audio for the missing word / phrase. You'll want to be generating a lot of these kind of cards, not only because vocabulary learning *in the context of actual sentences / real language* is extremely powerful but also because it solidifies the root grammar structures, syntax and common ways of building language in your mind.
 

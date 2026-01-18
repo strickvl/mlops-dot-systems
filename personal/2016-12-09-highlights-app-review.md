@@ -27,7 +27,7 @@ comments:
 
 I’m late to the [Highlights](http://highlightsapp.net/) party, but I’m glad I got here.
 
-![](images/2016-12-09-highlights-app-review/d758bb69d367_image-asset.webp)
+![](images/2016-12-09-highlights-app-review/d758bb69d367_image-asset.avif)
 
 Like many readers of this blog, I get sent (and occasionally read) a lot of PDFs. In fact, I did a quick search in [DevonThink](http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html), and I am informed that I have 52,244 PDFs in my library. These are a mix of reports, archived copies of websites, scanned-and-OCRed photos and a thousand-and-one things in between.
 

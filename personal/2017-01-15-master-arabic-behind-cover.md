@@ -17,7 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-![](images/2017-01-15-master-arabic-behind-cover/d045181230ec_image-asset.webp)
+![](images/2017-01-15-master-arabic-behind-cover/d045181230ec_image-asset.avif)
 
 I've been pleasantly surprised by the interest and the number of people who've already pre-ordered copies of my new book, [Master Arabic](http://languagecoach.io/masterarabic). I wrote [a guest blogpost](http://lingualism.com/arabic-blog/master-arabic/) at the end of last week for [Lingualism](http://lingualism.com/bookstore/), a wonderful small publisher that puts out quality materials relating to dialect. If you're studying Egyptian Arabic in particular, they have lots of materials you'll want to check out.
 

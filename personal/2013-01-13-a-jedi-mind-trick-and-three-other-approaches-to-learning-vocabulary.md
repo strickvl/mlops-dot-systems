@@ -60,7 +60,7 @@ Perhaps don't do all of these sessions at once. Do one side of the page in one g
 
 The really Jedi vocabulary learning trick requires that you know a bit about how the mind works and how quickly we forget. Take a look at this graph. This basically shows how the memory forgets.
 
-[caption id="" align="alignnone" width="324"]![forgettingcurve](images/2013-01-13-a-jedi-mind-trick-and-three-other-approaches-to-learning-vocabulary/d2b592ee231d_forgettingcurve.webp) forgettingcurve[/caption]
+[caption id="" align="alignnone" width="324"]![forgettingcurve](images/2013-01-13-a-jedi-mind-trick-and-three-other-approaches-to-learning-vocabulary/d2b592ee231d_forgettingcurve.avif) forgettingcurve[/caption]
 
 So, following the red line, when you first learn a word (or a piece of information, or anything) if you try to remember it within an hour or so, the memory is pretty good. If you try to recall that fact 6 days later (without any study in between), you'll see (by following the red line to day 6) that the memory for such facts can swiftly decline pretty quickly.
 
