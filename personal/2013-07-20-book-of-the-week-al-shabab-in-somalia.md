@@ -11,7 +11,6 @@ title: "Book of the Week: 'Al-Shabab in Somalia'"
 toc: true
 aliases:
   - "/blog/2013/07/book-of-the-week-al-shabab-in-somalia.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

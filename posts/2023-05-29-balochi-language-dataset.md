@@ -12,9 +12,6 @@ layout: post
 title: "Building a Balochi Language Dataset for NLP Applications"
 toc: false
 image: images/awesome-balochi-small.png
-include-before-body:
-  '<script defer data-domain="mlops.systems"
-  src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

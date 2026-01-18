@@ -10,9 +10,6 @@ layout: post
 title: "Terraform Input Variables"
 toc: true
 image: images/inputs-outputs-terraform.png
-include-before-body:
-  '<script defer data-domain="mlops.systems"
-  src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

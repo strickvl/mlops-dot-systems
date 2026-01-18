@@ -10,7 +10,6 @@ title: "Sources & Methods: Podcast Follow-Up"
 toc: true
 aliases:
   - "/blog/2014/10/fa8eri6cf9zjmigzx2hasdgg8pek57.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

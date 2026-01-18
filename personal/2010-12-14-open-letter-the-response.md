@@ -11,7 +11,6 @@ title: "Open Letter: The Response (UPDATED)"
 toc: true
 aliases:
   - "/blog/2010/12/open-letter-the-response.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

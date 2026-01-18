@@ -9,7 +9,6 @@ title: "Some Books and Other Things from 2014"
 toc: true
 aliases:
   - "/blog/2014/12/some-books-and-other-things-from-2014.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

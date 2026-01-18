@@ -10,7 +10,6 @@ title: "Petraeus, Lisbon and the Great PR Push"
 toc: true
 aliases:
   - "/blog/2010/11/petraeus-lisbon-and-the-great-pr-push.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

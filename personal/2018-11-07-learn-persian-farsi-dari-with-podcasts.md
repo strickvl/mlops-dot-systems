@@ -14,7 +14,6 @@ title: "Learn Persian / Farsi / Dari with Podcasts"
 toc: true
 aliases:
   - "/blog/learn-persian-farsi-dari-with-podcasts.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

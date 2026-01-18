@@ -11,7 +11,6 @@ title: "New book: An Educator's Tale"
 toc: true
 aliases:
   - "/blog/2014/12/new-book-an-educators-tale.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

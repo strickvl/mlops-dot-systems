@@ -13,7 +13,6 @@ title: "Turn Off Facebook's News Feed"
 toc: true
 aliases:
   - "/blog/turn-off-facebook.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

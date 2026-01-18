@@ -13,7 +13,6 @@ title: "Why do Arabic fonts appear so small? (and how to fix it)"
 toc: true
 aliases:
   - "/blog/why-are-arabic-fonts-so-small.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

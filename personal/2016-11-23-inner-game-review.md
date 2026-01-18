@@ -17,7 +17,6 @@ title: "The Inner Game: How a Perspective Shift Can Radically Improve Your Perfo
 toc: true
 aliases:
   - "/blog/inner-game-review.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

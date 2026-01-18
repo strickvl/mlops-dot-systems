@@ -12,7 +12,6 @@ title: "TalQaeda: the Timeline"
 toc: true
 aliases:
   - "/blog/2011/05/talqaeda-the-timeline.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

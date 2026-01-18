@@ -14,7 +14,6 @@ title: "PhD Tools: 'Always return to your primary sources'"
 toc: true
 aliases:
   - "/blog/phd-tools-primary-sources.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

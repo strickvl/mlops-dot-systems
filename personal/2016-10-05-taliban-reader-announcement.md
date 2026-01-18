@@ -13,7 +13,6 @@ title: "Coming Soon: The Taliban Reader"
 toc: true
 aliases:
   - "/blog/taliban-reader-announcement.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

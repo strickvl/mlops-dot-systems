@@ -11,7 +11,6 @@ title: "#talibantwitterfight: The News Story That Wasn't"
 toc: true
 aliases:
   - "/blog/2011/12/talibantwitterfight-the-news-story-that-wasnt.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

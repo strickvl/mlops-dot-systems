@@ -17,7 +17,6 @@ title: "PhD Tools: Turn Off the Internet with Freedom"
 toc: true
 aliases:
   - "/blog/phd-tools-freedom.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

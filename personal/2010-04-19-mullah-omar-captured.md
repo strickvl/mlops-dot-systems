@@ -10,7 +10,6 @@ title: "Mullah Omar captured?"
 toc: true
 aliases:
   - "/blog/2010/04/mullah-omar-captured.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -10,7 +10,6 @@ title: "Python Virtual Environments, Testing Environments and Markdown Strikethr
 toc: true
 aliases:
   - "/blog/python-virtual-environments-testing-environments-and-markdown-strikethrough.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

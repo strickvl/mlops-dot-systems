@@ -11,7 +11,6 @@ title: "Climbing Fuheis: Two and a Half Ascents"
 toc: true
 aliases:
   - "/blog/fuheis-climbing-2.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -11,7 +11,6 @@ title: "'The Kill Team'"
 toc: true
 aliases:
   - "/blog/2011/04/the-kill-team.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

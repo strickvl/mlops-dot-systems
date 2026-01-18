@@ -11,9 +11,6 @@ layout: post
 title: "Tokenizer Links"
 toc: false
 image: images/link-odds-sods.png
-include-before-body:
-  '<script defer data-domain="mlops.systems"
-  src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

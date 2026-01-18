@@ -12,7 +12,6 @@ title: "PhD Tools: Tea"
 toc: true
 aliases:
   - "/blog/phd-tools-tea.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

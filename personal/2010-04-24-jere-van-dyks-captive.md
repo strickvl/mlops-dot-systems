@@ -11,7 +11,6 @@ title: "Jere van Dyk's 'Captive'"
 toc: true
 aliases:
   - "/blog/2010/04/jere-van-dyks-captive.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

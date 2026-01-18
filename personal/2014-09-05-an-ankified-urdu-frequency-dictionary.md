@@ -11,7 +11,6 @@ title: "An Ankified Urdu Frequency Dictionary"
 toc: true
 aliases:
   - "/blog/2014/09/an-ankified-urdu-frequency-dictionary.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

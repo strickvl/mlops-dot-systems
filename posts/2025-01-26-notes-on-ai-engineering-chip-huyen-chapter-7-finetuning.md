@@ -11,7 +11,6 @@ layout: post
 title: "Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning"
 toc: true
 image: images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

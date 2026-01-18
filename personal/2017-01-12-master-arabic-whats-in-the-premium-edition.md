@@ -13,7 +13,6 @@ title: "Master Arabic: What's in the Premium Edition?"
 toc: true
 aliases:
   - "/blog/master-arabic-whats-in-the-premium-edition.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

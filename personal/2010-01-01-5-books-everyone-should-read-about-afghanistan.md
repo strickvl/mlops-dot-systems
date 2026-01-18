@@ -13,7 +13,6 @@ title: "5 Books Everyone Should Read About Afghanistan"
 toc: true
 aliases:
   - "/blog/2010/01/5-books-everyone-should-read-about-afghanistan.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -11,7 +11,6 @@ title: "How to learn a language to fluency: interview with Gabe Wyner"
 toc: true
 aliases:
   - "/blog/2014/08/how-to-learn-a-language-to-fluency-interview-with-gabe-wyner.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -14,7 +14,6 @@ title: "Taliban public punishments, 1996–2001"
 toc: true
 aliases:
   - "/blog/2015/9/taliban-public-punishments-19962001.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

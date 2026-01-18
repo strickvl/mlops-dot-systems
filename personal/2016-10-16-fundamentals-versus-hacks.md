@@ -12,7 +12,6 @@ title: "Fundamentals Versus Hacks"
 toc: true
 aliases:
   - "/blog/fundamentals-versus-hacks.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

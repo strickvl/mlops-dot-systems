@@ -13,7 +13,6 @@ title: "Existential Battles: Climbing in Amman"
 toc: true
 aliases:
   - "/blog/existential-battles-climbing-amman.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

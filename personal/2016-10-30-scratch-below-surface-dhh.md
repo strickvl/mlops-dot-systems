@@ -16,7 +16,6 @@ title: "Scratching Below the Surface with David Heinemeier Hansson"
 toc: true
 aliases:
   - "/blog/scratch-below-surface-dhh.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

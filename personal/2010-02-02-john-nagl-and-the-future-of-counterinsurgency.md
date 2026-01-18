@@ -10,7 +10,6 @@ title: "John Nagl and 'the future of counterinsurgency'"
 toc: true
 aliases:
   - "/blog/2010/02/john-nagl-and-the-future-of-counterinsurgency.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

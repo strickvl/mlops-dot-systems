@@ -9,7 +9,6 @@ title: "Taliban Realism over the September 11 Attacks"
 toc: true
 aliases:
   - "/blog/2010/11/taliban-realism-over-the-september-11-attacks.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

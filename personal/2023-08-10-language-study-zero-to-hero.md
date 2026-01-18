@@ -14,7 +14,6 @@ title: "Language Learning Crash Course: from slightly more than zero to slightly
 toc: true
 aliases:
   - "/blog/language-study-zero-to-hero.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

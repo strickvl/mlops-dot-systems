@@ -15,7 +15,6 @@ title: "RaspberryLPIC: A New Series &amp; Setup Steps"
 toc: true
 aliases:
   - "/blog/raspberrylpic-new-series-setup-steps.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

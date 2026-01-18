@@ -14,7 +14,6 @@ title: "From AI to to Brahms"
 toc: true
 aliases:
   - "/blog/ai-to-brahms.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

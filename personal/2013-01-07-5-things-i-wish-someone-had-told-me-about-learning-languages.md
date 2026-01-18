@@ -11,7 +11,6 @@ title: "Five Things I Wish Someone Had Told Me About Learning Languages"
 toc: true
 aliases:
   - "/blog/2013/01/5-things-i-wish-someone-had-told-me-about-learning-languages.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

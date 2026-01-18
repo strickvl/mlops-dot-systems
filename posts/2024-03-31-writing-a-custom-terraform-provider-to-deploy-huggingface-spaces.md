@@ -12,7 +12,6 @@ layout: post
 title: "Writing a custom Terraform provider to deploy Huggingface Spaces"
 toc: true
 image: images/tf-registry-docs.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

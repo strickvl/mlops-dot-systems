@@ -11,7 +11,6 @@ title: "Understanding the use cases for Closures in JavaScript"
 toc: true
 aliases:
   - "/blog/understanding-the-use-cases-for-closures-in-javascript.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

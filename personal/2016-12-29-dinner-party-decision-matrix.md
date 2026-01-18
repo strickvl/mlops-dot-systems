@@ -13,7 +13,6 @@ title: "Dinner Party Decision Matrix: A Python Tool"
 toc: true
 aliases:
   - "/blog/dinner-party-decision-matrix.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -12,9 +12,6 @@ layout: post
 title: "The Risks of Language Models in Minority Languages"
 toc: false
 image: images/balochi-llm-harms.png
-include-before-body:
-  '<script defer data-domain="mlops.systems"
-  src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

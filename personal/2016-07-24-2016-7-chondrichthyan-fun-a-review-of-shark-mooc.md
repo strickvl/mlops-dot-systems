@@ -15,7 +15,6 @@ title: "Chondrichthyan Fun: a review of Shark MOOC"
 toc: true
 aliases:
   - "/blog/2016/7/chondrichthyan-fun-a-review-of-shark-mooc.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

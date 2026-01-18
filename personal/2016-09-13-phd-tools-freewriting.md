@@ -17,7 +17,6 @@ title: "PhD Tools: Freewriting and Journalling to Think Through your Work"
 toc: true
 aliases:
   - "/blog/phd-tools-freewriting.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

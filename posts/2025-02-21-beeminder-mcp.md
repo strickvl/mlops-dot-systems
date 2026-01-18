@@ -11,7 +11,6 @@ layout: post
 title: "Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data"
 toc: false
 image: images/mcp-bm.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

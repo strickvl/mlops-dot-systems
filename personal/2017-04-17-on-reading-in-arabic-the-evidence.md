@@ -14,7 +14,6 @@ title: "On Reading in Arabic: The Evidence"
 toc: true
 aliases:
   - "/blog/on-reading-in-arabic-the-evidence.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

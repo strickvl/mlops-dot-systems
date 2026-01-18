@@ -14,7 +14,6 @@ title: "On the interpretability of models"
 toc: true
 aliases:
   - "/blog/on-the-interpretability-of-models.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

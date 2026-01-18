@@ -12,7 +12,6 @@ title: "The Best Books of 2010 (UPDATED)"
 toc: true
 aliases:
   - "/blog/2010/12/the-best-books-of-2010.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

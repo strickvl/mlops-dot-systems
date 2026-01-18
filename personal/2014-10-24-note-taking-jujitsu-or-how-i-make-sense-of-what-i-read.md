@@ -12,7 +12,6 @@ title: "Note-Taking Jujitsu, Or How I Make Sense Of What I Read"
 toc: true
 aliases:
   - "/blog/2014/10/note-taking-jujitsu-or-how-i-make-sense-of-what-i-read.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -11,7 +11,6 @@ title: "Apocalypse Then: a short review of Filiu's 'Apocalypse in Islam' (2011)"
 toc: true
 aliases:
   - "/blog/2015/2/apocalypse-then-a-short-review-of-filius-apocalypse-in-islam-2011.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

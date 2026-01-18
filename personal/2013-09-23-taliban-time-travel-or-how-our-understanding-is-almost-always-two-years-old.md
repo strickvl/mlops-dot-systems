@@ -10,7 +10,6 @@ title: "Taliban Time Travel, or How Our Understanding Is Almost Always Two Years
 toc: true
 aliases:
   - "/blog/2013/09/taliban-time-travel-or-how-our-understanding-is-almost-always-two-years-old.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

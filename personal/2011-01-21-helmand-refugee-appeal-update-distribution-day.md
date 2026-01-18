@@ -11,7 +11,6 @@ title: "Helmand Refugee Appeal Update - Distribution Day"
 toc: true
 aliases:
   - "/blog/2011/01/helmand-refugee-appeal-update-distribution-day.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

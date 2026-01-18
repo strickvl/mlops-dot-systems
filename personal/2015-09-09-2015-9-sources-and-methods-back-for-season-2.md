@@ -10,7 +10,6 @@ title: "Sources and Methods: Back for Season 2"
 toc: true
 aliases:
   - "/blog/2015/9/sources-and-methods-back-for-season-2.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -18,7 +18,6 @@ title: "Knot 2: Translation as Trauma, Taxis and Artificial Intelligence"
 toc: true
 aliases:
   - "/blog/knot2-translation-as-trauma.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

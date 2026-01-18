@@ -13,7 +13,6 @@ title: "How to use jQuery and Handlebars in your website"
 toc: true
 aliases:
   - "/blog/how-to-use-jquery-and-handlebars-in-your-website.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

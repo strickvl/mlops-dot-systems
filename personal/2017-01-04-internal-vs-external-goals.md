@@ -16,7 +16,6 @@ title: "Things We Control: On Internal vs External Goals"
 toc: true
 aliases:
   - "/blog/internal-vs-external-goals.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

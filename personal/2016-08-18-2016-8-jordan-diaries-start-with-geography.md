@@ -13,7 +13,6 @@ title: "Jordan Diaries: Start with Geography"
 toc: true
 aliases:
   - "/blog/2016/8/jordan-diaries-start-with-geography.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

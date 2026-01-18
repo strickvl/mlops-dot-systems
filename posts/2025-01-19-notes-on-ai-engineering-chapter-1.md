@@ -12,7 +12,6 @@ layout: post
 title: "Notes on 'AI Engineering' (Chip Huyen) chapter 1"
 toc: true
 image: images/aieng1-small.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
@@ -25,7 +24,6 @@ Had the first of [a series of meet-ups](https://www.meetup.com/delft-fast-ai-stu
 At a high-level, I *really* enjoyed the final part of the chapter where she got into how she was thinking about the practice of 'AI Engineering' and how it differs from ML engineering. Also the use of the term 'model adaptation' was an interesting way of encompassing all the different things that engineers are doing to get the LLM to better follow their instructions.
 
 ## Chapter 1 Notes
-
 
 The chapter begins by establishing AI Engineering as the preferred term over alternatives like GenAI Ops or LLM Ops. This preference stems from a fundamental shift in the field, where application development has become increasingly central to working with AI models. The "ops" suffix inadequately captures the breadth and nature of work involved in modern AI applications.
 

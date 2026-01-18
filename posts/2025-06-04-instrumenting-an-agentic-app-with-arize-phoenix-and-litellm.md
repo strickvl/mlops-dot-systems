@@ -13,7 +13,6 @@ layout: post
 title: "Trying to instrument an agentic app with Arize Phoenix and litellm"
 toc: true
 image: "images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png"
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
@@ -67,7 +66,6 @@ tracer_provider = register(
     project_name="hinbox",  # Default is 'default'
     auto_instrument=True,  # Auto-instrument your app based on installed OI dependencies
 )
-
 
 completion_response = litellm.completion(
     model="openrouter/google/gemma-3n-e4b-it:free",
@@ -125,7 +123,6 @@ tracer_provider = register(
     set_global_tracer_provider=False,
     batch=True,
 )
-
 
 completion_response = litellm.completion(
     model="openrouter/google/gemma-3n-e4b-it:free",
@@ -207,7 +204,6 @@ tracer_provider = register(
     batch=True,
 )
 
-
 def query_llm(prompt: str):
     completion_response = litellm.completion(
         model="openrouter/google/gemma-3n-e4b-it:free",
@@ -220,12 +216,10 @@ def query_llm(prompt: str):
     )
     return completion_response.choices[0].message.content
 
-
 def my_llm_application():
     query1 = query_llm("What's the capital of China? Just give me the name.")
     query2 = query_llm("What's the capital of Japan? Just give me the name.")
     return (query1, query2)
-
 
 if __name__ == "__main__":
     print(my_llm_application())
@@ -245,7 +239,6 @@ tracer_provider = register(
 )
 tracer = tracer_provider.get_tracer(__name__)
 
-
 def query_llm(prompt: str):
     completion_response = litellm.completion(
         model="openrouter/google/gemma-3n-e4b-it:free",
@@ -258,13 +251,11 @@ def query_llm(prompt: str):
     )
     return completion_response.choices[0].message.content
 
-
 @tracer.llm
 def my_llm_application():
     query1 = query_llm("What's the capital of China? Just give me the name.")
     query2 = query_llm("What's the capital of Japan? Just give me the name.")
     return (query1, query2)
-
 
 if __name__ == "__main__":
     print(my_llm_application())
@@ -305,7 +296,6 @@ tracer_provider = register(
 )
 tracer = tracer_provider.get_tracer(__name__)
 
-
 @tracer.llm
 def query_llm(prompt: str):
     completion_response = litellm.completion(
@@ -319,11 +309,9 @@ def query_llm(prompt: str):
     )
     return completion_response.choices[0].message.content
 
-
 @tracer.agent
 def query_agent(prompt: str):
     return "I am an agent."
-
 
 @tracer.chain
 def my_llm_application():
@@ -331,7 +319,6 @@ def my_llm_application():
     query2 = query_llm("What's the capital of Japan? Just give me the name.")
     agent1 = query_agent("Who are you?")
     return (query1, query2, agent1)
-
 
 if __name__ == "__main__":
     print(my_llm_application())
@@ -355,7 +342,6 @@ tracer_provider = register(
 )
 tracer = tracer_provider.get_tracer(__name__)
 
-
 @tracer.llm
 def query_llm(prompt: str):
     completion_response = litellm.completion(
@@ -369,16 +355,13 @@ def query_llm(prompt: str):
     )
     return completion_response.choices[0].message.content
 
-
 @tracer.agent
 def query_agent(prompt: str):
     return "I am an agent."
 
-
 @tracer.tool(name="query_embedding", description="Query embedding")
 def query_embedding(prompt: str):
     return [0.1, 0.2, 0.3]
-
 
 @tracer.agent
 def my_llm_application():
@@ -387,7 +370,6 @@ def my_llm_application():
     agent1 = query_agent("Who are you?")
     embedding1 = query_embedding("What's the capital of China? Just give me the name.")
     return (query1, query2, agent1, embedding1)
-
 
 if __name__ == "__main__":
     print(my_llm_application())

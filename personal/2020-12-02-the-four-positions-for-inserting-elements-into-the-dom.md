@@ -11,7 +11,6 @@ title: "The Four Positions for Inserting Elements into the DOM"
 toc: true
 aliases:
   - "/blog/the-four-positions-for-inserting-elements-into-the-dom.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

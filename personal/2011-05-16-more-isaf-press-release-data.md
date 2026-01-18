@@ -11,7 +11,6 @@ title: "More data on 'Kill-Capture' Raids"
 toc: true
 aliases:
   - "/blog/2011/05/more-isaf-press-release-data.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -15,7 +15,6 @@ title: "Language Learner's Journal: Homestay Edition"
 toc: true
 aliases:
   - "/blog/language-learners-journal-homestay-edition.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

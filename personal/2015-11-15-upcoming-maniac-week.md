@@ -13,7 +13,6 @@ title: "Upcoming Maniac Week"
 toc: true
 aliases:
   - "/blog/2015/11/upcoming-maniac-week.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

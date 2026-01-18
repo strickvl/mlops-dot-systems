@@ -13,7 +13,6 @@ layout: post
 title: "Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse"
 toc: true
 image: images/braintrust-langfuse-litellm/braintrust-logging.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
@@ -67,7 +66,6 @@ from openai import OpenAI
 logger = init_logger(project="hinbox")
 client = wrap_openai(OpenAI(api_key=os.environ["OPENAI_API_KEY"]))
 
-
 # @traced automatically logs the input (args) and output (return value)
 # of this function to a span. To ensure the span is named `answer_question`,
 # you should name the function `answer_question`.
@@ -84,12 +82,10 @@ def answer_question(body: str) -> str:
     )
     return result.choices[0].message.content
 
-
 def main():
     input_text = "What's the capital of China? Just give me the name."
     result = answer_question(input_text)
     print(result)
-
 
 if __name__ == "__main__":
     main()
@@ -108,7 +104,6 @@ from openai import OpenAI
 logger = init_logger(project="hinbox")
 client = wrap_openai(OpenAI(api_key=os.environ["OPENAI_API_KEY"]))
 
-
 @traced
 def run_llm(input):
     model = "gpt-4o" if random.random() > 0.5 else "gpt-4o-mini"
@@ -118,18 +113,15 @@ def run_llm(input):
     current_span().log(metadata={"randomModel": model})
     return result.choices[0].message.content
 
-
 @traced
 def some_logic(input):
     return run_llm("You are a magical wizard. Answer the following question: " + input)
-
 
 def simple_handler(input_text: str):
     with start_span() as span:
         output = some_logic(input_text)
         span.log(input=input_text, output=output, metadata=dict(user_id="test_user"))
         print(output)
-
 
 if __name__ == "__main__":
     question = "What's the capital of China? Just give me the name."
@@ -149,7 +141,6 @@ import litellm
 
 litellm.callbacks = ["langfuse"]
 
-
 def query_llm(prompt: str):
     completion_response = litellm.completion(
         model="openrouter/google/gemma-3n-e4b-it:free",
@@ -162,12 +153,10 @@ def query_llm(prompt: str):
     )
     return completion_response.choices[0].message.content
 
-
 def my_llm_application():
     query1 = query_llm("What's the capital of China? Just give me the name.")
     query2 = query_llm("What's the capital of Japan? Just give me the name.")
     return (query1, query2)
-
 
 print(my_llm_application())
 ```
@@ -182,7 +171,6 @@ The [litellm docs](https://docs.litellm.ai/docs/observability/langfuse_integrati
 import litellm
 
 litellm.callbacks = ["langfuse"]
-
 
 def query_llm(prompt: str, trace_id: str):
     completion_response = litellm.completion(
@@ -201,7 +189,6 @@ def query_llm(prompt: str, trace_id: str):
     )
     return completion_response.choices[0].message.content
 
-
 def my_llm_application():
     query1 = query_llm(
         "What's the capital of China? Just give me the name.",
@@ -212,7 +199,6 @@ def my_llm_application():
         "my_llm_application_run_789",
     )
     return (query1, query2)
-
 
 if __name__ == "__main__":
     print(my_llm_application())

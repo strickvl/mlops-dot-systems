@@ -15,7 +15,6 @@ title: "Into Eternity: the construction of Onkalo's tunnels"
 toc: true
 aliases:
   - "/blog/into-eternity-review.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

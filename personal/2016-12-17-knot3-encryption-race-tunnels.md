@@ -15,7 +15,6 @@ title: "Knot 3: Encryption, Race and Tunnels"
 toc: true
 aliases:
   - "/blog/knot3-encryption-race-tunnels.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

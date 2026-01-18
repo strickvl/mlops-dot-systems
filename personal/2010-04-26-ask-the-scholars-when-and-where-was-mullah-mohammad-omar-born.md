@@ -10,7 +10,6 @@ title: "Ask the Scholars: when and where was Mullah Mohammad Omar born?"
 toc: true
 aliases:
   - "/blog/2010/04/ask-the-scholars-when-and-where-was-mullah-mohammad-omar-born.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -15,7 +15,6 @@ title: "Mastery-based Learning with Launch School"
 toc: true
 aliases:
   - "/blog/mastery-based-learning-with-launch-school.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

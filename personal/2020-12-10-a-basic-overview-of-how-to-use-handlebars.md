@@ -14,7 +14,6 @@ title: "A basic overview of how to use Handlebars"
 toc: true
 aliases:
   - "/blog/a-basic-overview-of-how-to-use-handlebars.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

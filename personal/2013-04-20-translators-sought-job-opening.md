@@ -9,7 +9,6 @@ title: "Translators Sought -- Job Opening"
 toc: true
 aliases:
   - "/blog/2013/04/translators-sought-job-opening.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -13,7 +13,6 @@ title: "Using CSS selectors with JavaScript DOM methods"
 toc: true
 aliases:
   - "/blog/using-css-selectors-with-javascript-dom-methods.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

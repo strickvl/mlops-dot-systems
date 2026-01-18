@@ -13,7 +13,6 @@ layout: post
 title: "All the things I learned while trending on Hacker News"
 toc: true
 image: 'images/isafpr-hackernews.png'
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

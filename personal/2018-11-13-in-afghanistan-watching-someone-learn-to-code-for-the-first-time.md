@@ -12,7 +12,6 @@ title: "In Afghanistan, watching someone learn to code for the first time"
 toc: true
 aliases:
   - "/blog/in-afghanistan-watching-someone-learn-to-code-for-the-first-time.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

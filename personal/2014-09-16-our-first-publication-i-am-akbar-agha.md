@@ -10,7 +10,6 @@ title: "Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider"
 toc: true
 aliases:
   - "/blog/2014/09/our-first-publication-i-am-akbar-agha.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

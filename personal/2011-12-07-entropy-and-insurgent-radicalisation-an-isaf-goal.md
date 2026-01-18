@@ -10,7 +10,6 @@ title: "Entropy and insurgent radicalisation: an ISAF goal?"
 toc: true
 aliases:
   - "/blog/2011/12/entropy-and-insurgent-radicalisation-an-isaf-goal.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

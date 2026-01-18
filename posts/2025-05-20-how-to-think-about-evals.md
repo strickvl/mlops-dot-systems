@@ -11,7 +11,6 @@ layout: post
 title: "How to think about evals"
 toc: true
 image: images/2025-05-20-how-to-think-about-evals/maven-course.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

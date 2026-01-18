@@ -10,7 +10,6 @@ title: "Two new co-authored reports on Afghanistan"
 toc: true
 aliases:
   - "/blog/2014/08/two-new-co-authored-reports-on-afghanistan.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -13,7 +13,6 @@ layout: post
 title: "Notes on 'AI Engineering' (Chip Huyen) chapter 6"
 toc: true
 image: images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

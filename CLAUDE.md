@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Quarto-based static blog combining technical content (mlops.systems) and personal content (migrated from Squarespace). The site is hosted on GitHub Pages. Content is written in Markdown (.md) and Jupyter notebooks (.ipynb).
+This is a Quarto-based static blog combining technical content and personal content (migrated from Squarespace). The site is hosted on GitHub Pages at **alexstrick.com** (mlops.systems redirects there). Content is written in Markdown (.md) and Jupyter notebooks (.ipynb).
+
+> **Domain Migration In Progress**: See `design/domain-migration-plan.md` for details. The canonical domain is `alexstrick.com`.
 
 The site has **two content sections** with separate RSS feeds:
 - **Technical** (`/index.xml`) - MLOps, software engineering, AI/ML content
@@ -53,7 +55,6 @@ description: "Brief description"
 layout: post
 title: "Post Title"
 toc: true
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
@@ -62,7 +63,7 @@ aliases:
 ---
 ```
 
-**Note**: Personal posts use `data-domain="alexstrick.com"` in the analytics script.
+**Note on Analytics**: The global `_quarto.yml` config handles Plausible analytics (`data-domain="alexstrick.com"`). Do NOT add `include-before-body` to individual posts — legacy overrides are being removed.
 
 ## Important Notes
 

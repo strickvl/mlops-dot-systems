@@ -13,7 +13,6 @@ title: "A Greener Technological Footprint"
 toc: true
 aliases:
   - "/blog/greengeeks-ecological-footprint.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

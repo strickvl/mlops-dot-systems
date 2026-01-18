@@ -11,7 +11,6 @@ title: "Kapoor &amp; Sons"
 toc: true
 aliases:
   - "/blog/kapoor-amp-sons.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

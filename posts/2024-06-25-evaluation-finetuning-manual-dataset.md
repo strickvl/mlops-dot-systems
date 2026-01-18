@@ -14,7 +14,6 @@ layout: post
 title: "How to think about creating a dataset for LLM finetuning evaluation"
 toc: true
 image: images/eval-preview.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -17,7 +17,6 @@ title: "Language Learner's Journal: Meaningful Leisure"
 toc: true
 aliases:
   - "/blog/meaningful-leisure.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

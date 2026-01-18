@@ -11,7 +11,6 @@ layout: post
 title: "Prompt Content: Notes on 'Prompt Engineering for LLMs' ch 5"
 toc: false
 image: images/2025-01-12-chapter-5/cover.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

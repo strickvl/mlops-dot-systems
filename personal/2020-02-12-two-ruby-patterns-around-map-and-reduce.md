@@ -11,7 +11,6 @@ title: "Two Ruby patterns around map and reduce"
 toc: true
 aliases:
   - "/blog/two-ruby-patterns-around-map-and-reduce.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

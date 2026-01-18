@@ -9,7 +9,6 @@ title: "Writing the history of the Taliban movement"
 toc: true
 aliases:
   - "/blog/2012/11/writing-the-history-of-the-taliban-movement.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

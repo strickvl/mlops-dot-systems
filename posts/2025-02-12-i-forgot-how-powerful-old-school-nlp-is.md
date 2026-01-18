@@ -11,7 +11,6 @@ layout: post
 title: "I forgot how powerful old-school NLP is"
 toc: true
 image: images/2025-02-12-i-forgot-how-powerful-old-school-nlp-is/someimage.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 draft: 'true'
 comments:
   utterances:

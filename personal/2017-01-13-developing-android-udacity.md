@@ -14,7 +14,6 @@ title: "Developing for Android with Udacity"
 toc: true
 aliases:
   - "/blog/developing-android-udacity.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

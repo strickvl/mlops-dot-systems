@@ -10,7 +10,6 @@ title: "Kandahar Prison Escape: the Taliban's Tale"
 toc: true
 aliases:
   - "/blog/2011/05/kandahar-prison-escape-the-talibans-tale.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

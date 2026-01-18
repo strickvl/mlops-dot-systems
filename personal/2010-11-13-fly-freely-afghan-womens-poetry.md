@@ -10,7 +10,6 @@ title: "'Fly Freely' - Afghan Women's Poetry"
 toc: true
 aliases:
   - "/blog/2010/11/fly-freely-afghan-womens-poetry.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

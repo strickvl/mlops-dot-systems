@@ -10,7 +10,6 @@ title: "Kandahar Chronology (September 2001-October 2009)"
 toc: true
 aliases:
   - "/blog/2010/04/kandahar-chronology-september-2001-october-2009.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

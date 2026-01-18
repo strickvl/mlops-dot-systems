@@ -17,7 +17,6 @@ title: "PhD Tools: Vitamin-R and the Pomodoro Technique for Getting Going"
 toc: true
 aliases:
   - "/blog/2016/9/phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

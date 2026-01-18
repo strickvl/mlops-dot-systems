@@ -13,7 +13,6 @@ title: "Bots: Part of the Future of Language Learning?"
 toc: true
 aliases:
   - "/blog/future-language-learning.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

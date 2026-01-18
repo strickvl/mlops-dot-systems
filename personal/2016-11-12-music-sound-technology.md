@@ -13,7 +13,6 @@ title: "Music, Sound & Technology"
 toc: true
 aliases:
   - "/blog/2016/11/music-sound-technology.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

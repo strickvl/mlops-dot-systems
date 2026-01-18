@@ -10,7 +10,6 @@ title: "Some Things I Read"
 toc: true
 aliases:
   - "/blog/2012/12/some-things-i-read.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

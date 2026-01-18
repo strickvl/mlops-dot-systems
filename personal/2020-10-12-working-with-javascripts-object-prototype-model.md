@@ -11,7 +11,6 @@ title: "Working with JavaScript's Object Prototype model"
 toc: true
 aliases:
   - "/blog/working-with-javascripts-object-prototype-model.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

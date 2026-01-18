@@ -10,7 +10,6 @@ title: "A Jedi-Mind Trick and Three Other Approaches to Learning Vocabulary"
 toc: true
 aliases:
   - "/blog/2013/01/a-jedi-mind-trick-and-three-other-approaches-to-learning-vocabulary.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

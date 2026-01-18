@@ -9,7 +9,6 @@ title: "On Experts"
 toc: true
 aliases:
   - "/blog/2010/05/on-experts.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

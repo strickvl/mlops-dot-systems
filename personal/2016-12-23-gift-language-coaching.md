@@ -11,7 +11,6 @@ title: "Share the Gift of Language Coaching"
 toc: true
 aliases:
   - "/blog/gift-language-coaching.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

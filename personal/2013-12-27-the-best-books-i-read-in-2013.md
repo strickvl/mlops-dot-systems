@@ -9,7 +9,6 @@ title: "The Best Books I Read in 2013"
 toc: true
 aliases:
   - "/blog/2013/12/the-best-books-i-read-in-2013.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -14,7 +14,6 @@ title: "The book you need to read on bin Laden's life post-2001"
 toc: true
 aliases:
   - "/blog/the-exile-review.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

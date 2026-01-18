@@ -15,7 +15,6 @@ title: "Reading the Afghan Taliban: 67 Sources You Should Be Studying"
 toc: true
 aliases:
   - "/blog/2015/12/reading-the-afghan-taliban-67-sources-you-should-be-studying.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

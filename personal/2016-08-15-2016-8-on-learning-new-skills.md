@@ -16,7 +16,6 @@ title: "On Learning New Skills, #showyourwork and other housekeeping"
 toc: true
 aliases:
   - "/blog/2016/8/on-learning-new-skills.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

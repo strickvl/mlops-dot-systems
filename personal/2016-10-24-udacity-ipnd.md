@@ -12,7 +12,6 @@ title: "On Completing Udacity's Intro to Programming Nanodegree"
 toc: true
 aliases:
   - "/blog/udacity-ipnd.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

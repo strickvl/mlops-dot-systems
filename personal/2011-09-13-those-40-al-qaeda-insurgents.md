@@ -10,7 +10,6 @@ title: "Those '40 al-Qaeda insurgents'..."
 toc: true
 aliases:
   - "/blog/2011/09/those-40-al-qaeda-insurgents.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

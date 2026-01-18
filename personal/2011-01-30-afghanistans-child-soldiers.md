@@ -10,7 +10,6 @@ title: "Afghanistan's Child Soldiers"
 toc: true
 aliases:
   - "/blog/2011/01/afghanistans-child-soldiers.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

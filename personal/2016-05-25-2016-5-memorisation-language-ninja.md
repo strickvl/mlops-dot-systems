@@ -14,7 +14,6 @@ title: "How to become a memorisation and language ninja"
 toc: true
 aliases:
   - "/blog/2016/5/memorisation-language-ninja.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

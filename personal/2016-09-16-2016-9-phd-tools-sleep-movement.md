@@ -11,7 +11,6 @@ title: "PhD Tools: Sleep and Movement to Nourish the Body"
 toc: true
 aliases:
   - "/blog/2016/9/phd-tools-sleep-movement.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

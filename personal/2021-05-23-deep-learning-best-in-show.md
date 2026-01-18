@@ -14,7 +14,6 @@ title: "Deep Learning: Best in Show?"
 toc: true
 aliases:
   - "/blog/deep-learning-best-in-show.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

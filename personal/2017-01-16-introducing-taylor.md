@@ -14,7 +14,6 @@ title: "Language Learner's Journal: Introducing Taylor"
 toc: true
 aliases:
   - "/blog/introducing-taylor.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

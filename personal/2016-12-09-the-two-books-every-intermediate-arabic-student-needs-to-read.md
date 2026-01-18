@@ -16,7 +16,6 @@ title: "The Two Books Every Intermediate Arabic Student Needs to Read"
 toc: true
 aliases:
   - "/blog/the-two-books-every-intermediate-arabic-student-needs-to-read.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

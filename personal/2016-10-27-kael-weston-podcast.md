@@ -16,7 +16,6 @@ title: "Kael Weston on Sources and Methods"
 toc: true
 aliases:
   - "/blog/kael-weston-podcast.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

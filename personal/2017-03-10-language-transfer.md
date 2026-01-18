@@ -12,7 +12,6 @@ title: "Audio Courses with Language Transfer"
 toc: true
 aliases:
   - "/blog/language-transfer.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

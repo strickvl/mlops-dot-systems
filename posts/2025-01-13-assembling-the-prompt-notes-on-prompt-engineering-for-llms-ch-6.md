@@ -10,7 +10,6 @@ layout: post
 title: "Assembling the Prompt: Notes on 'Prompt Engineering for LLMs' ch 6"
 toc: false
 image: images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
@@ -31,11 +30,9 @@ There are two key tips at this point:
 
 So craft your prompts accordingly!
 
-
 A prompt plus the resulting completion is defined as a 'document' in this book, and there are various templates that you can follow: an 'advice conversation', an 'analytic report' (often formatted with Markdown headers), and a 'structured document'.
 
 We learn that analytic report-type documents seem to offer a lighter 'cognitive load' for an LLM since it doesn't have to handle the intricacies of social interaction that it would in the case of an advice conversation. 🤔
-
 
 Two other tips or possible things to include in the analytic report-style document:
 
@@ -43,7 +40,6 @@ Two other tips or possible things to include in the analytic report-style docume
 - a scratchpad or notebook section for the model to 'think' in
 
 I haven't had much use of either of these myself but I can see why they'd be powerful.
-
 
 Structured documents can be really powerful, especially when the model has been trained to expect certain kinds of structure (be it JSON or XML or YAML etc). Also TIL that apparently OpenAI's models are very strong when dealing with JSON as inputs.
 

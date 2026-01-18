@@ -14,7 +14,6 @@ title: "How to learn a page of verbs"
 toc: true
 aliases:
   - "/blog/how-to-learn-a-page-of-verbs.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

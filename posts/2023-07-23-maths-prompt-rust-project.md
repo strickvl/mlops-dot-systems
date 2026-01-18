@@ -17,9 +17,6 @@ layout: post
 title: "Building MathsPrompt: a tool to help me review and practice problems for my degree"
 toc: true
 image: images/mathsprompt/rust-mathsprompt-cover.png
-include-before-body:
-  '<script defer data-domain="mlops.systems"
-  src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

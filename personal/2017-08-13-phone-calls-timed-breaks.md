@@ -16,7 +16,6 @@ title: "Language Learner's Journal: Phone Calls and Timed Breaks"
 toc: true
 aliases:
   - "/blog/phone-calls-timed-breaks.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

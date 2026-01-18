@@ -9,7 +9,6 @@ title: "Hope Is Not A Strategy"
 toc: true
 aliases:
   - "/blog/2010/07/hope-is-not-a-strategy.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

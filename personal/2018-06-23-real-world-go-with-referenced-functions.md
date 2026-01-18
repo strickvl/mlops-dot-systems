@@ -10,7 +10,6 @@ title: "Real-World Go with Referenced Functions"
 toc: true
 aliases:
   - "/blog/real-world-go-with-referenced-functions.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

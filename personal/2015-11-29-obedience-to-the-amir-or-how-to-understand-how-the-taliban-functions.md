@@ -14,7 +14,6 @@ title: "'Obedience to the Amir', or how the Afghan Taliban govern"
 toc: true
 aliases:
   - "/blog/2015/11/obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

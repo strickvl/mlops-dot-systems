@@ -10,7 +10,6 @@ title: "Catching Up: Poetry of the Taliban"
 toc: true
 aliases:
   - "/blog/2012/12/catching-up-poetry-of-the-taliban.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

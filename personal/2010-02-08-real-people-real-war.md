@@ -10,7 +10,6 @@ title: "Real People, Real War"
 toc: true
 aliases:
   - "/blog/2010/02/real-people-real-war.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

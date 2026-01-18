@@ -10,7 +10,6 @@ title: "Vietnam's Kill-Capture Raids"
 toc: true
 aliases:
   - "/blog/2011/09/vietnams-kill-capture-raids.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -14,7 +14,6 @@ title: "How to learn a language without a teacher"
 toc: true
 aliases:
   - "/blog/how-to-learn-languages-without-teachers.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

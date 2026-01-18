@@ -15,7 +15,6 @@ title: "PhD Tools: Omnifocus for Managing your Non-PhD Life"
 toc: true
 aliases:
   - "/blog/phd-tools-omnifocus.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

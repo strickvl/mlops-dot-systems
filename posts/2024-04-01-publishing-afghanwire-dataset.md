@@ -14,7 +14,6 @@ layout: post
 title: "Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009"
 toc: true
 image: images/afghanwire-website.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

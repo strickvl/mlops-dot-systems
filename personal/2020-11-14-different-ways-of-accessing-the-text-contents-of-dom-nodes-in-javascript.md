@@ -12,7 +12,6 @@ title: "Different ways of accessing the text contents of DOM nodes in JavaScript
 toc: true
 aliases:
   - "/blog/different-ways-of-accessing-the-text-contents-of-dom-nodes-in-javascript.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

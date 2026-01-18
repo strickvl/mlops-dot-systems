@@ -12,9 +12,6 @@ layout: post
 title: "Automating database backups with Tarsnap"
 toc: true
 image: images/mathsprompt/database-backups-cover.png
-include-before-body:
-  '<script defer data-domain="mlops.systems"
-  src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

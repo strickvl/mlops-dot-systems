@@ -13,7 +13,6 @@ title: "PhD Tools: The Secret to Finishing Your PhD"
 toc: true
 aliases:
   - "/blog/phd-tools-the-secret-to-finishing-your-phd.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

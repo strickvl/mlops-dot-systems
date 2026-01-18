@@ -15,7 +15,6 @@ title: "You need to be reading more to get ahead in Arabic"
 toc: true
 aliases:
   - "/blog/arabic-reading-importance-part1.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

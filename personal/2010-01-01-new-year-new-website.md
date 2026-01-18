@@ -9,7 +9,6 @@ title: "New Year, New Website"
 toc: true
 aliases:
   - "/blog/2010/01/new-year-new-website.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

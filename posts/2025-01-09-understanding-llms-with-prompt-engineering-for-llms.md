@@ -11,7 +11,6 @@ layout: post
 title: "Starting to read Prompt Engineering for LLMs"
 toc: false
 image: images/2025-01-09-understanding-llms-with-prompt-engineering-for-llms/first.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -12,7 +12,6 @@ title: "Vanishing Interest in Afghanistan"
 toc: true
 aliases:
   - "/blog/2015/11/afghanistan-fades-away.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

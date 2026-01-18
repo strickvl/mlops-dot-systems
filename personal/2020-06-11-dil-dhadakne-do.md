@@ -11,7 +11,6 @@ title: "Dil Dhadakne Do"
 toc: true
 aliases:
   - "/blog/dil-dhadakne-do.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

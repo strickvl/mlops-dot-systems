@@ -16,7 +16,6 @@ title: "Introducing CoachBot: Your Personal Language Taskmaster"
 toc: true
 aliases:
   - "/blog/2017/1/introducing-coachbot-your-personal-language-taskmaster.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

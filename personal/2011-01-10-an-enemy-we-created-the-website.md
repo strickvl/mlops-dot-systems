@@ -11,7 +11,6 @@ title: "'An Enemy We Created': the website"
 toc: true
 aliases:
   - "/blog/2011/01/an-enemy-we-created-the-website.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

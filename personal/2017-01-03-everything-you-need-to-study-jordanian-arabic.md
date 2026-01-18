@@ -18,7 +18,6 @@ title: "Everything You Need to Study Jordanian Arabic"
 toc: true
 aliases:
   - "/blog/everything-you-need-to-study-jordanian-arabic.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

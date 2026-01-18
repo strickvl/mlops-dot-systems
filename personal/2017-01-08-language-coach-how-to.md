@@ -14,7 +14,6 @@ title: "How to best work with a language coach"
 toc: true
 aliases:
   - "/blog/language-coach-how-to.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -15,7 +15,6 @@ layout: post
 title: "Tinbox: an LLM-based document translation tool"
 toc: true
 image: images/tinbox-gh-small.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

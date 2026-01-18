@@ -13,7 +13,6 @@ title: "Small, unexpectedly powerful boxes"
 toc: true
 aliases:
   - "/blog/small-unexpectedly-powerful-boxes.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

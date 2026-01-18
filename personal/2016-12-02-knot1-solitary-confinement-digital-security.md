@@ -15,7 +15,6 @@ title: "Knot 1: Solitary Confinement & Digital Security"
 toc: true
 aliases:
   - "/blog/knot1-solitary-confinement-digital-security.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

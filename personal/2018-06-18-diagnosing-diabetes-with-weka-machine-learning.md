@@ -14,7 +14,6 @@ title: "Diagnosing Diabetes with Weka & Machine Learning"
 toc: true
 aliases:
   - "/blog/diagnosing-diabetes-with-weka-machine-learning.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

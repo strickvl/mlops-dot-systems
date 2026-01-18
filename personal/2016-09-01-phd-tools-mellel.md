@@ -17,7 +17,6 @@ title: "PhD Tools: Mellel for Layout and Final Presentation"
 toc: true
 aliases:
   - "/blog/phd-tools-mellel.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

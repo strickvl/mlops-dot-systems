@@ -17,7 +17,6 @@ title: "Talking DevonThink with Gabe Weatherhead"
 toc: true
 aliases:
   - "/blog/podcast-gabe-weatherhead.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

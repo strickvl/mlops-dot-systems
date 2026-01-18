@@ -13,7 +13,6 @@ title: "Presenting Mullah Zaeef"
 toc: true
 aliases:
   - "/blog/2010/01/presenting-mullah-zaeef.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -15,7 +15,6 @@ title: "All the things I wish I knew about studying at school"
 toc: true
 aliases:
   - "/blog/all-the-things-i-wish-i-knew-about-studying-at-school.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

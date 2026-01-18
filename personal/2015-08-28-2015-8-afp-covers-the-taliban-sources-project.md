@@ -14,7 +14,6 @@ title: "AFP covers the Taliban Sources Project"
 toc: true
 aliases:
   - "/blog/2015/8/afp-covers-the-taliban-sources-project.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

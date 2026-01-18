@@ -9,7 +9,6 @@ title: "The Afghan Taliban react to bin Laden's death"
 toc: true
 aliases:
   - "/blog/2011/05/the-afghan-taliban-react-to-bin-ladens-death.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

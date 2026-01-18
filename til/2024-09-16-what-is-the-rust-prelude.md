@@ -9,7 +9,6 @@ description: "A quick post on what the 'prelude' is and why it exists."
 layout: post
 title: "What is the Rust prelude?"
 toc: false
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

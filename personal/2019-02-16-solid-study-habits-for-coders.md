@@ -14,7 +14,6 @@ title: "Solid Study Habits for Coders"
 toc: true
 aliases:
   - "/blog/solid-study-habits-for-coders.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

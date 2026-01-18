@@ -20,7 +20,6 @@ title: "PhD Tools: DevonThink for File Storage and Discovery"
 toc: true
 aliases:
   - "/blog/phd-tools-devonthink.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

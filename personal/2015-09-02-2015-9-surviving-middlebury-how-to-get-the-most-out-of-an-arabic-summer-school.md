@@ -13,7 +13,6 @@ title: "How to Survive Middlebury's Arabic Summer School Programme"
 toc: true
 aliases:
   - "/blog/2015/9/surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school.html"
-include-before-body: '<script defer data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems

@@ -12,7 +12,6 @@ layout: post
 title: "First impressions of the new Gemini Deep Research (with 2.5 Pro)"
 toc: false
 image: images/cover-gdr.png
-include-before-body: '<script defer data-domain="mlops.systems" src="https://plausible.io/js/script.js"></script>'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
