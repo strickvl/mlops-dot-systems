@@ -20,7 +20,7 @@ website:
   navbar:
     left:
       - text: "Technical"
-        file: index.qmd
+        file: technical.qmd
       - text: "Personal"
         file: personal.qmd
     right:
@@ -37,7 +37,7 @@ website:
       - text: "RSS"
         menu:
           - text: "Technical RSS"
-            href: index.xml
+            href: technical.xml
           - text: "Personal RSS"
             href: personal.xml
 
