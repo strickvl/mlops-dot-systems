@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2014-10-24">
+<meta name="description" content="My approach to note-taking when reading books, especially the challenges that came with early digital formats and how I’ve worked through them.">
+
+<title>Alex Strick van Linschoten - Note-Taking Jujitsu, Or How I Make Sense Of What I Read</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Note-Taking Jujitsu, Or How I Make Sense Of What I Read">
+<meta property="og:description" content="My approach to note-taking when reading books, especially the challenges that came with early digital formats and how I've worked through them.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Note-Taking Jujitsu, Or How I Make Sense Of What I Read">
+<meta name="twitter:description" content="My approach to note-taking when reading books, especially the challenges that came with early digital formats and how I've worked through them.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#storage" id="toc-storage" class="nav-link active" data-scroll-target="#storage">1. Storage</a></li>
+  <li><a href="#clipping-splitting" id="toc-clipping-splitting" class="nav-link" data-scroll-target="#clipping-splitting">2. Clipping &amp; Splitting</a>
+  <ul class="collapse">
+  <li><a href="#accessing-your-amazon-kindle-clippings" id="toc-accessing-your-amazon-kindle-clippings" class="nav-link" data-scroll-target="#accessing-your-amazon-kindle-clippings">Accessing Your Amazon Kindle Clippings</a></li>
+  <li><a href="#keeping-up-with-the-joneses-or-how-to-use-instapaper-to-clip-web-articles" id="toc-keeping-up-with-the-joneses-or-how-to-use-instapaper-to-clip-web-articles" class="nav-link" data-scroll-target="#keeping-up-with-the-joneses-or-how-to-use-instapaper-to-clip-web-articles">Keeping Up With The Joneses, or How to Use Instapaper to Clip Web Articles</a></li>
+  <li><a href="#pillaging-your-hard-copies-aka-living-the-paperless-dream" id="toc-pillaging-your-hard-copies-aka-living-the-paperless-dream" class="nav-link" data-scroll-target="#pillaging-your-hard-copies-aka-living-the-paperless-dream">Pillaging Your Hard Copies, AKA Living the Paperless Dream</a></li>
+  </ul></li>
+  <li><a href="#discovery-meaning" id="toc-discovery-meaning" class="nav-link" data-scroll-target="#discovery-meaning">3. Discovery &amp; Meaning</a>
+  <ul class="collapse">
+  <li><a href="#discovering-links-and-connections" id="toc-discovering-links-and-connections" class="nav-link" data-scroll-target="#discovering-links-and-connections">Discovering Links and Connections</a></li>
+  <li><a href="#figuring-out-what-it-all-means" id="toc-figuring-out-what-it-all-means" class="nav-link" data-scroll-target="#figuring-out-what-it-all-means">Figuring Out What It All Means</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Note-Taking Jujitsu, Or How I Make Sense Of What I Read</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">books</div>
+    <div class="quarto-category">podcast</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">useful-tools</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    My approach to note-taking when reading books, especially the challenges that came with early digital formats and how I’ve worked through them.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 24, 2014</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Note-taking is a problem. It’s an interesting problem, but still a problem. Many people have switched over from paper books to digital copies. I am certainly one of the early adopters in this trend, having wrangled <a href="https://twitter.com/smithkabul">Graeme Smith</a> and <a href="https://twitter.com/tinyalligator">his sister</a> into facilitating a first iteration of Amazon’s Kindle to be <a href="http://www.frontlineclub.com/kindle_in_kandahar/">delivered to my house</a> in Kandahar.</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/e01c4f773148_image-asset.avif" class="img-fluid"></p>
+<p>My colleague <a href="http://felixkuehn.com">Felix Kuehn</a> and I used Kindle versions of books heavily in our research for <a href="www.anenemywecreated.com"><em>An Enemy We Created</em></a>. Using those references in footnotes was difficult at the time: the format was so new that established footnoting styles (APA/Chicago etc) hadn’t developed the standards for referencing kindle documents. All this was made harder by the fact that Kindle copies of books added a whole new problem into the mix by abandoning page numbers for ‘Kindle location numbers’. This changed a few years later, and current users probably won’t have this problem, but if you go look at the footnotes for <a href="http://www.anenemywecreated.com/"><em>An Enemy We Created</em></a>, you’ll still find that many, if not most, of the references are to Kindle locations and not page numbers. In fact, I think our book was probably the first serious history work to rely so extensively on digital Kindle references in the footnotes; I remember having discussions with our publisher about it.</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cc44f69ecbac_image-asset.avif" class="img-fluid"></p>
+<p>All this isn’t to say paper copies don’t have their uses. But some books just aren’t available in digital format. I’ll get into the workaround for that later. The best way to make this less of a problem is to gently nudge publishers to issue their books on a kindle format.<a href="#fn1">1</a> But I am already getting off track.</p>
+<p>All this seemed to come to a head this past week, where <a href="http://www.sourcesandmethods.com/podcast/2014/10/17/sources-and-methods-5-mark-bernstein">a podcast I hosted</a> together with <a href="https://twitter.com/MattTrevithick">Matt Trevithick</a> took up the topic of notes and note-taking. <a href="www.markbernstein.org">Mark Bernstein</a>, our guest on the show, wrote a really excellent book on the topic some years ago entitled <a href="http://www.eastgate.com/Tinderbox/TinderboxWay/index.html"><em>The Tinderbox Way</em></a>. I’d strongly recommend you read if you’re involved in knowledge work in any way. Here’s a short excerpt defining the importance and use patterns for notes:</p>
+<blockquote class="blockquote">
+<p>“Notes play three distinct roles in our daily work:</p>
+<p>•Notes are records, reminding us of ideas and observations that we might otherwise forget.</p>
+<p>•Shared notes are a medium, an efficient communication channel between colleagues and collaborators.</p>
+<p>•Notes are a process for clarifying thinking and for refining inchoate ideas.</p>
+<p>Understanding often emerges gradually from the accumulation of factual detail and from our growing comprehension of the relationships among isolated details. Only after examining the data, laying it out and handling it, can we feel comfortable in reaching complex decisions.”<a href="#fn2">2</a></p>
+</blockquote>
+<p>Later in the week, Maria Popova (of <a href="http://www.brainpickings.org/">Brainpickings</a> fame) was <a href="http://www.fourhourworkweek.com/2014/10/21/brain-pickings/">on Tim Ferriss’ podcast</a> to talk about her website, her reading and her workflow. Both Tim and Maria expressed frustration over the lack of tools for people wanting to download and interact with their Kindle clippings:</p>
+<blockquote class="blockquote">
+<p>“I highlight in the kindle app on the iPad, and then Amazon has this function that you can basically see your kindle notes on the desktop on your computer. I go to those, I copy them from that page, and I paste them into an Evernote file to have all my notes on a specific book in one place. But sometimes I will also take a screengrab of a kindle page with my highlighted passage, and then email that screengrab into my Evernote email, because Evernote has, as you know, Optical Character Recognition, so when I search within it, it’s also going to search the text in that image. I don’t have to wait till I’ve finished the book.</p>
+<p>The formatting is kind of shitty in the kindle notes on the desktop(…) if you copy them, they paste into Evernote with this really weird formatting. (…) It’s awful. If you want to fix it you have to do it manually within Evernote. (…) There is no viable solution that I know.”<a href="#fn3">3</a></p>
+</blockquote>
+<p>She then goes on to some more detailed points of how this doesn’t work, and Tim commiserates, suggesting that maybe they should hire some people to fix this problem. But the good thing is that there <em>are</em> solutions. The problems Maria and Tim bemoan are things that every other Kindle user has had to deal with since day one, so thankfully there are a number of workarounds that simplify the process of reading, annotating and sifting within one’s notes of a book or document.<a href="#fn4">4</a></p>
+<p>So notes are important, we get that. But how do we use them to their utmost? How do we even gather them together and store them? How do we use them for our writing, for our thinking? These are all important questions which I don’t feel have been properly answered, and where those answers have been given, they’re buried or hidden somewhere out on the internet.</p>
+<p>I want this post to get into the weeds about how to get your materials off a Kindle device, how to store it usefully on a Mac (my apologies, PC/Linux users), and how to repurpose those notes to be creative, to write, and to think.</p>
+<p>This post has three parts:</p>
+<ol type="1">
+<li>Storage</li>
+<li>Clipping &amp; Splitting</li>
+<li>Discovery &amp; Meaning</li>
+</ol>
+<p>It will by necessity be an overview of some useful tools and options for researchers, but if you leave comments I can probably expand on individual points/sections in follow-up posts if needed.</p>
+<section id="storage" class="level2">
+<h2 class="anchored" data-anchor-id="storage">1. Storage</h2>
+<p>This is a problem that wasn’t explicitly raised in the things that motivated this post, but it’s something I get asked frequently. Maria and Tim both seem to be avid Evernote users, and I know many others also use this, but there are other options. It’s worth starting here because the tools will determine what you can do with your notes.</p>
+<p>I’ve offered advice to other Mac users on what software to use for research projects that require a certain deftness in handling large quantities of sometimes disparate materials. The same applies to people who are just trying to keep track of the things they read, trying to draw together connections, and to derive meaning from it all. I’ll get into the meaning-creation in the final section, but for the moment, let me briefly describe our four options for file/note storage as I see it.<a href="#fn5">5</a></p>
+<ol type="1">
+<li><strong>Finder/<a href="www.cocoatech.com/pathfinder">PathFinder</a></strong>. This is the lowest-tech option. Basically, once you split your files up (see section two) you store them in folders and refer to them that way. I don’t find this option very attractive or useful, because it’s like a filing cabinet. Your ability to discover connections and to remember what’s in those folders is pretty limited. I don’t recommend this at all, but from conversations with other researchers and writers, it seems this is the default option.</li>
+<li><a href="www.evernote.com"><strong>Evernote</strong></a>. I include this here because it’s part of a workflow that we’ll cover later on. Evernote is great for all the reasons you can read about <a href="https://evernote.com/evernote/">on their site</a>. It syncs across all your mobile and desktop devices, it OCRs images so you can search for text captured inside photos you upload into your library of notes.</li>
+<li><strong><a href="http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html">DevonThink</a></strong>. This is my default ‘bucket’ for information, documents and notes. You can read up on the many (<a href="http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html">MANY</a>) things that DevonThink Pro Office or DTPO (<a href="http://www.devontechnologies.com/products/devonthink/comparison.html">the version you should get</a>, if you’re getting this software) does. Not only does DTPO store your documents, but it allows you to access that information in a number of extremely useful formats. There is <a href="http://www.devontechnologies.com/products/devonthink/devonthink-to-go.html">a mobile app</a>, too, though it could do with a bit more work. The most interesting feature of DTPO is its search and discovery functionality (using some magic sauce algorithms). They don’t make as much of this on their website as they used to, but I’d strongly recommend you check out these two articles (<a href="http://www.nytimes.com/2005/01/30/books/review/30JOHNSON.html">one</a>, and <a href="http://www.stevenberlinjohnson.com/movabletype/archives/000230.html">two</a>) by Steve Berlin Johnson which explain a little of the wonderful things DevonThink can do for your notes. As with the next recommendation, it’s not cheap. But powerful doesn’t always come cheap. It’s a solid investment if you spend the time getting to know this piece of software.</li>
+<li><strong><a href="http://www.eastgate.com/Tinderbox/">Tinderbox</a></strong>. I discussed this at some length on the <a href="www.sourcesandmethods.com/podcast/2014/10/17/sources-and-methods-5-mark-bernstein">Sources &amp; Methods podcast with Mark Bernstein</a>, so I’d recommend you listen to that as your first port of call. Tinderbox is not an <a href="http://www.markbernstein.org/Feb09/EverythingBuckets.html">everything-bucket</a> in the way that Evernote and DevonThink are, and I use it slightly differently, but it’s a great place to actually do the work of thinking, organising and writing once you have something (i.e.&nbsp;a project of some sort) for which you want to use all your notes. I’ll explain more about this in section three.</li>
+</ol>
+<p>I’d recommend getting to know the different bits of software to get a sense of what they can do. DevonThink has <a href="http://www.devontechnologies.com/solutions.html">a handy section</a> of their website where you can see how people use it in their work lives. Tinderbox has something similar, with <a href="www.eastgate.com/Tinderbox/Projects.html">some case studies</a> of usage.</p>
+<p>For DevonThink, it’s generally good to keep your ‘buckets’/databases of files separated by topic. I have a mix of these kinds of databases (50 in total): some are country-specific, some are project-specific (i.e.&nbsp;to contain the research that goes into a book or a long report), and some are topic-specific (i.e.&nbsp;I have one for clippings and notes relating to Mathematics, one for things relating to Cardiology etc). I’d also recommend you give Steve Berlin Johnson’s book <a href="http://www.amazon.com/gp/product/1594485380/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1594485380&amp;linkCode=as2&amp;tag=soumet-20&amp;linkId=4SNJUYK5QW2N6VPD">Where Good Ideas Come From</a> a read, particularly chapter 4.</p>
+<p>Given the learning curve with some aspects of the workflow that follows, you might want to consider introducing these pieces of software one-by-one, or as needed. That way you’re using only what you understand and can implement things without being too overwhelmed by the novelty of the systems. It took me years (almost a decade) to implement and iterate the systems described below, and I’m still not finished modifying as the tools change.</p>
+</section>
+<section id="clipping-splitting" class="level2">
+<h2 class="anchored" data-anchor-id="clipping-splitting">2. Clipping &amp; Splitting</h2>
+<p>This section is all about getting materials off mobile devices and onto your computer where you can put them into some sort of overarching database.</p>
+<section id="accessing-your-amazon-kindle-clippings" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-your-amazon-kindle-clippings">Accessing Your Amazon Kindle Clippings</h3>
+<p>First let’s sort out how best to get notes from a kindle onto your Mac. Don’t use Amazon’s <a href="kindle.amazon.com">website</a>. It’s going to create all sorts of problems for you in terms of formatting.</p>
+<p>First thing’s first: sync your kindle to the cloud. Just turn on the wifi/3G and select the “Sync” option. This will ensure all your highlights are backed up to the cloud.</p>
+<p>Then plug your Kindle into your computer via USB. Then go into the “Documents” folder, and search for a file called “My Clippings.txt”. If you’ve been using your kindle for a while, it’s probably going to be quite large. Nevertheless, copy that file to your desktop. Feel free to eject your Kindle from your laptop now. We won’t be needing it any more.</p>
+<p>[caption id=“” align=“alignnone” width=“1634”]<img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/646c39110e47_image-asset.avif" class="img-fluid" alt="An example of what you might see when you open your"> An example of what you might see when you open your “My Clippings.txt” file [/caption]</p>
+<p>If you open the txt file that is now saved to your desktop, you’ll find all your clippings and annotations preserved in a useful plaintext format. This may solve your problems straightaway, in which case, congratulations: you now have all your annotations in a useful format that you can use however you wish.</p>
+<p>If you want to take it to the next level, though, you’ll want to split this file up. At the moment, you have a very large plaintext file which contains all your notes. You’re likely to have notes from a wide variety of topics and books in here, so it doesn’t make sense for you to keep them all in a single location. The ideal solution is for you to have a single file for every clipping, a single file for every annotation.<a href="#fn6">6</a></p>
+<p>This is where <a href="https://dl.dropboxusercontent.com/u/530416/Split-ter.scpt.zip">Split-ter.scpt</a> comes in. I’m afraid I don’t know who to credit for this wonderful piece of code. I downloaded it somewhere on the internet some years back and can’t seem to find a link to the author either in the code or elsewhere online. (Whoever you are, thank you!)</p>
+<p>This script works with another piece of software mentioned above — <a href="http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html">DevonThink Pro Office</a>. For now, I’ll ask you to ignore that bit, and focus on what’s happening to the file. I use the script to convert our “My Clippings.txt” file into multiple files. It goes in, finds a delimiter (any piece of text or syntax that repeats itself in the original file) and creates a new note/file every time it comes across this delimiter. In this way, you’ll quite quickly from the file shown above to something like this:</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/b6f9d87464c7_image-asset.avif" class="img-fluid"></p>
+<p>Now you have a note for every annotation and/or clipping. This is then something you can dump into Evernote, or keep in DevonThink. Again, more about the difference between these programmes in the next section. (Note, that you can use Tinderbox to split up the “MyClippings.txt” file as well using the “Explode” tool).</p>
+<p>UPDATE (a little later on Friday night): Seb Pearce has <a href="https://twitter.com/_sebu_/status/525732003044683776">just let me know</a> that there are other options available for dealing with the ‘My Clippings.txt’ file. <a href="http://sebpearce.com/blog/firewood/">Check them out on his site</a>.</p>
+<p>The second problem raised on the <a href="http://fourhourworkweek.com/2014/10/21/brain-pickings/">Tim Ferriss podcast</a> was Amazon’s limitations for clippings. This differs from publisher to publisher, it seems, so there’s no way of predicting it. An unfortunate rule of thumb: the more useful the book, the more likely the publisher has locked it down. When you’re making clippings inside the book, Amazon gives you no notification that you’ve reached the book’s limitations. But when you go to check your “My Clippings.txt” file to start using your notes, then you may find the note says:</p>
+<blockquote class="blockquote">
+<p>“<you have="" reached="" the="" clipping="" limit="" set="" by="" publishers="">”</you></p>
+</blockquote>
+<p>All the work you’ve done selecting pieces of text are for nothing, it would seem. The publisher has prevented you from using your book.</p>
+<p>One solution is to <a href="http://www.wired.com/2011/01/how-to-strip-drm-from-kindle-e-books-and-others/">remove the DRM from the book</a> before you put it on your kindle. This is legal so long as you’re not sharing the book with other people (as this process would theoretically allow you to do).<a href="#fn7">7</a> Follow this link to find out how to de-DRM your Kindle and iBooks documents. You can also visit &lt;libgen.org&gt; to download an already-DRMed copy of the book you’ve purchased. These will often be in .epub format so you’ll have to convert these over to a .mobi format if you want to use them on your kindle device. (To convert from .epub to .mobi, use the <a href="calibre-ebook.com">free Calibre cross-platform software</a>.)</p>
+<p>If you read a de-DRMed copy of a kindle book on your kindle device, there will be no limitations as to how much you can annotate. The publishers limitations will all be gone. So that’s one option.</p>
+<p>For those who aren’t comfortable removing the DRM on your books, you can get all your annotations out, but it comes with a little bit of hassle.</p>
+<p>Here’s an example of what I mean (screenshot from my DevonThink library). I was reading in Hegghammer’s excellent <em><a href="http://www.amazon.com/gp/product/0521732360/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0521732360&amp;linkCode=as2&amp;tag=soumet-20&amp;linkId=HMU6UB34V7SLYVVX">Jihad in Saudi Arabia</a></em> and making highlights (at 4:06am, apparently) but at some point I hit the limit imposed by the publisher.</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/321a6f13d76d_image-asset.avif" class="img-fluid"></p>
+<p>The workaround to bypass this limit from the publisher is to first export all your notes out of your “MyClippings.txt” file. So all your clippings are saved, even though some of them may not work. Let’s say, for the sake of argument, that the final three notes aren’t working because of the publisher’s limitatations. That’s the case in the screenshot above. What you do is (again, once you’ve backed up the clippings txt file) delete three of the earlier clippings that you already have. Then you sync your Kindle to the server and it will think that you have clipped three less quotes, so these will then become available (both in the myclippings.txt file and on <a href="kindle.amazon.com">the website</a>. Like I said, it’s a bit fiddly. I would much rather remove the DRM completely and not have this hassle at all, though when you do that Amazon will not sync your clippings to the cloud and to their &lt;kindle.amazon.com&gt; database. You’ll have to export them using the tools I mentioned above.</p>
+</section>
+<section id="keeping-up-with-the-joneses-or-how-to-use-instapaper-to-clip-web-articles" class="level3">
+<h3 class="anchored" data-anchor-id="keeping-up-with-the-joneses-or-how-to-use-instapaper-to-clip-web-articles">Keeping Up With The Joneses, or How to Use Instapaper to Clip Web Articles</h3>
+<p>This may be something completely idiosyncratic to my own workflow, but I don’t enjoy reading articles in a web browser. I’d also prefer not to be hijacked into reading all these articles. For instance, when I’m in <a href="http://tapbots.com/software/tweetbot/mac/">Tweetbot</a>/<a href="https://twitter.com">Twitter</a> or <a href="http://facebook.com">Facebook</a> and I see a link that I like, I will almost never read that article then and there. Rather, I’ll send it to my Instapaper queue.</p>
+<p>First, a quick word about <a href="http://instapaper.com">Instapaper</a> vs <a href="http://getpocket.com">Pocket</a>. I use Instapaper. I started off with them, switched over to Pocket for about two years, and now I’m back with Instapaper. They’re both more or less the same. Instapaper happens to be what I’ve chosen for myself because of their handy Kindle service. (If you have articles in your queue, you can have Instapaper send the most recent articles to your Kindle at a particular time (i.e.&nbsp;first thing in the morning) which you can then clip and archive to your heart’s content.) Both Pocket and Instapaper work with what follows, so just pick one and stick to it. I’d recommend Instapaper because they allow for the sharing of the full texts of articles and because of the Kindle digest feature.</p>
+<p>I find I have so much to stay on top of and keep tracking online, I can’t just click around and read things as and when I see them online. I schedule time apart for reading of my Instapaper queue (and for reading books on my Kindle) and only read during those times. (I do the same with email, only checking and responding to email between the hours of 12-1pm and 5-6pm each day. The rest of the day email is off and disabled. I even deleted my email account on my iPhone as inspired by <a href="https://medium.com/life-hacks/my-year-with-a-distraction-free-iphone-and-how-to-start-your-own-experiment-6ff74a0e7a50">this medium.com post</a>.)</p>
+<p>My workflow with web articles is to follow as much as possible via RSS. I prune the sites I’m following every three months, but in general the number is stable around 650. I use <a href="https://www.newsblur.com/">Newsblur</a> as my RSS reader, and every time I find an article I’d like to read (later), I use the handy ‘send to instapaper’ bookmarklet. This sends the article to my Instapaper queue.</p>
+<p>The same goes for twitter. <a href="https://twitter.com/strickvl/following">I follow enough people</a> on Twitter for it to be impossible for me to read every post that passes through my stream. I will dip once or twice a day, however, to see what people are saying. I use two services to monitor my Twitter and Facebook streams to pick out the most-shared articles to ensure that I don’t miss the big sharks of the day. They’re both free, and I’d strongly recommend you signing up and getting their daily summaries of what people were talking about on Twitter that day. <a href="http://news.me/">News.me</a> has been around for a while and I trust their article selection. <a href="http://nuzzel.com/">Nuzzel</a> is newer, but it seems to have a few more options. I guess you could probably do with picking only one of the two.</p>
+<p>After reading articles on my Kindle (or sometimes on a mobile device like my iPad or iPhone), you can clip the article if you want to save it (just like making a clipping inside a book, only the entire article is saved).</p>
+<p>[caption id=“” align=“alignnone” width=“2448”]<img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/63b0658369bd_image-asset.avif" class="img-fluid" alt="This is what you see in an article when you click to"> This is what you see in an article when you click to “Clip This Article” on a kindle… [/caption]</p>
+<p>Then your clippings will be captured in the ‘MyClippings.txt’ file as explained above and you can export them directly to DevonThink or Evernote or Tinderbox. (The main downside to doing things this way is that when the kindle clips it, all formatting is lost (including paragraph breaks)).</p>
+<p>Alternatively, you can ‘Favourite’ the article. I use this setting because it then sends the article and URL to my <a href="https://twitter.com/stricklinks"><span class="citation" data-cites="stricklinks">@stricklinks</span></a> twitter account, something I created to share the best things I was reading. It also saves the full text of the article to Pinboard (a service I’ve already written about on my blog <a href="http://www.alexstrick.com/a-different-place/2013/01/useful-tools-pinboard">here</a>) and to Evernote. (I use <a href="https://ifttt.com/">If This Then That</a> to facilitate this.)</p>
+<p>Once I’m done reading, I can go into Evernote and all my articles are waiting for me to be sorted through. Because I use DevonThink as my everything-bucket, and because all the sorting and discoverability features are there, I have a separate stage of exporting my notes out of Evernote into DevonThink. I’ve already probably taken you a little too far down the rabbit-hole of my workflow, but this is an important stage because otherwise you can’t do anything with your notes.</p>
+<p>Luckily, someone has written <a href="http://veritrope.com/code/evernote-to-devonthink-exporter/">a script</a> which makes this possible. Many many thanks to <a href="http://veritrope.com/about/">the good people at Veritrope</a> for updating the script every time updates to the software get released. It’s fairly self-explanatory. You select the notes that you want to export, choose which DevonThink folder you want to export to and then it goes to work. It can occasionally be buggy and stop half-way through, but usually a little trial-and-error will let you pinpoint which Evernote note is causing the problem and you can transport that one over manually.</p>
+<p>I usually do an export session to bring everything from Evernote into my DevonThink inbox once a week. This way the number of clippings doesn’t get too out of control, and I’m not constantly playing around with this during the week. You might find this all is overkill, but it has become an essential part of my workflow to store the various things I’m reading on a daily basis.</p>
+</section>
+<section id="pillaging-your-hard-copies-aka-living-the-paperless-dream" class="level3">
+<h3 class="anchored" data-anchor-id="pillaging-your-hard-copies-aka-living-the-paperless-dream">Pillaging Your Hard Copies, AKA Living the Paperless Dream</h3>
+<p>You may have hardcover copies of books that you want to use as part of this system. One way to use them is to scan the books into your DevonThink library. DevonThink Pro Office comes with an OCR package (via <a href="http://finereader.abbyy.com/">ABBYY FineReader</a>) so whatever you scan can then become searchable and useful.</p>
+<p>In the past, particularly with books I’ve purchased in Afghanistan and Pakistan that are unlikely (read: never) to be made available as electronic versions, I take a <a href="https://en.wikipedia.org/wiki/Utility_knife">Stanley knife</a> to the bindings, feed the pages into my <a href="http://www.fujitsu.com/us/services/computing/peripherals/scanners/scansnap/">ScanSnap scanner</a> which scans both sides and compiles all the scans into a single PDF document that is searchable on my laptop. The whole process is destructive of the book, but it gives the text inside a new life. Given how fast the new ScanSnap models work (around 25 pages per minute, both sides), this is an attractive way to get digital access to materials that are only available in paper form.</p>
+<p>You can highlight text within the resulting PDFs and then later export your clippings from those PDFs as notes into DevonThink. There’s <a href="http://www.organognosi.com/export-skim-notes-according-to-their-highlight-colors/">another useful script</a> to help with that. It only works with the free <a href="http://skim-app.sourceforge.net/">Skim PDF reader</a>, but that’s my default PDF reader so it works out well.</p>
+<p>For more on paperless workflows, check out <a href="https://twitter.com/macsparky">David Sparks’</a> <a href="http://macsparky.com/paperless/">Field Guide on the topic</a>.</p>
+</section>
+</section>
+<section id="discovery-meaning" class="level2">
+<h2 class="anchored" data-anchor-id="discovery-meaning">3. Discovery &amp; Meaning</h2>
+<p>If you made it this far, congratulations. This is the section where all the fiddling with export starts to take on some meaning. After all, we’re not reading and exporting these notes purely because we are hoarders or to fetishise the art of collection (though in some cases, that may be what’s going on). No, we are taking notes because we are trying to understand difficult topics, because we are trying to solve important problems.</p>
+<section id="discovering-links-and-connections" class="level3">
+<h3 class="anchored" data-anchor-id="discovering-links-and-connections">Discovering Links and Connections</h3>
+<p>The Steve Berlin Johnson articles referenced earlier are an essential first stop, particularly in demonstrating how <a href="www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> can add some serendipity into how you use your individual notes. To give you an example of how this works, here’s a screenshot from my ‘TalQaeda’ database that I put together while working on <a href="www.anenemywecreated.com">An Enemy We Created</a>:</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/4cbc64293299_image-asset.avif" class="img-fluid"></p>
+<p>In the upper part you can see a bunch of notes relating to the Haqqani family. The lower left part is the contents of a note (Note: exported from <a href="http://instapaper.com">Instapaper</a>). The bottom right list of documents (under “See Also”) is a list of notes that may be related to this particular quote. This is the magic algorithmic sauce I mentioned earlier that makes <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> so powerful.</p>
+<p>If I click through to some of those suggested notes, I’m taken to similar quotes on the same topics, two PDFs of reports (of dubious analytic value, but that’s a separate issue), three clippings from Kindle books where people are making reference to the relationship between the Haqqanis and al-Qaeda (the subject of the original note). Note that I didn’t have to pre-tag documents for this ‘see also’ functionality to work its magic. It analyses inside the text and makes its suggestions based on the similarities it identifies. (Needless to say, it’s not simply a matter of matching individual words. Some of the suggested notes don’t mention al-Qaeda or the Haqqanis by name, but they are implied; <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> catches this all).</p>
+<p>Once you start to build up a decent database of notes (my Afghanistan database has just under 65 million words of notes, including 12,800+ PDFs) this ‘See Also’ functionality really allows for some unexpected links to be made, especially when you’re at the stage of writing up a project/book. One note will lead to another note, which will lead to another note. If you follow these trails of notes (like breadcrumbs) you can develop a pretty idiosyncratic picture.</p>
+<p><em>I do not know of a manual method which allows for this kind of process.</em></p>
+<p><a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> has an extremely robust search function which allows you to find things along similar principles (including a very useful ‘fuzzy spelling’ option, perfect when checking my database for notes on someone whose first name could be spelt Mohammad, Muhammad, Mohammed or any of the other variations).</p>
+</section>
+<section id="figuring-out-what-it-all-means" class="level3">
+<h3 class="anchored" data-anchor-id="figuring-out-what-it-all-means">Figuring Out What It All Means</h3>
+<p>Once you have an idea of the outlines of the topic, once you’ve been taking notes for a while, your database in <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> is probably starting to fill with useful information.</p>
+<p>If you’re writing a book, though, you’ll want to start writing alongside this gathering process. (Check out Michael Lopp’s <a href="http://randsinrepose.com/archives/how-to-write-a-book/">overview of the process</a> of writing a large research book, which, to my mind, is fairly accurate.)</p>
+<p>I don’t find <a href="www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> a particularly pleasant place to write, so I do that elsewhere. Before I write things out in long form, I usually do some outlining, particularly if it’s something where the dense collection of factual detail is important to the development of the argument (as was the case with <a href="anenemywecreated.com">An Enemy We Created</a>). For this, I find Tinderbox indispensable for working up an overview of what I know, for figuring out how I’m going to structure it, and for helping me put together my first draft.</p>
+<p>Tinderbox can display notes in a number of different ways. You can view your documents as outlines, as maps, or even as timelines:</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/58b07a0edc6e_Screen_Shot_2014-10-24_at_18.42.06.avif" class="img-fluid"></p>
+<p>In this image you can see the information arranged as an outline, but here (below) you see the same information organised as a map (mirroring the actual layout of the map of those districts in a particular part of Kandahar):</p>
+<p><img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/ea96ad9bb425_image-asset.avif" class="img-fluid"></p>
+<p>Just to show you that it can handle complexity, here’s a map created by <a href="http://felixkuehn.com">Felix</a> to help him figure out how people involved in militant Islamism were/are connected across different geographical sectors:</p>
+<p>[caption id=“” align=“alignnone” width=“1966”]<img src="images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cf88aec723b3_image-asset.avif" class="img-fluid" alt="It’s complicated…"> It’s complicated… [/caption]</p>
+<p>I’ll often use Tinderbox maps to store outlines for how I’ll write a particular section or chapter, making notes inside the document, dragging quotes in from DevonThink to supplement the argument that’s being constructed.</p>
+<p>Getting to the point where you can actually start writing on the basis of your notes is the whole point of all of this. Technology is useful, but mainly when directed at a specific problem or goal. All the tips, tricks and software described in this post has helped me write books, reports and (coming soon!) even <a href="https://www.kcl.ac.uk/sspp/departments/warstudies/people/phd/strickvanlinschoten.aspx">my doctoral thesis/PhD</a>. I have encountered only a few (barely a handful) researchers who use their computers for this collation, sifting and discovery process. There’s no way to keep it all in your head. Here’s hoping more people start adopting these tools…</p>
+<p><strong>Footnotes:</strong></p>
+<ol type="1">
+<li>For many years, Amazon offered users the ability to let publishers know that you wanted to see title X or Y on a Kindle format, but they failed to make this piece of interaction useful by keeping track of what you’d requested of publishers (so as then to be able to let you know when it was finally released in Kindle format). <a href="#ffn1">↩︎</a></li>
+<li>Excerpt From: Mark Bernstein. “The Tinderbox Way.” iBooks. <a href="#ffn2">↩︎</a></li>
+<li>Selective transcript from around the 50-minute mark in the podcast audio. Needless to say, the rest of this blogpost constitutions a ‘viable solution’. <a href="#ffn3">↩︎</a></li>
+<li>Most of these are derived from other people, I should say. I try to give credit where I can, but sometimes I can’t remember where I first read something or who first recommended a particular tool or trick. <a href="#ffn4">↩︎</a></li>
+<li>Yes yes, I know, I’m going to leave out some mentions for useful software here. This is an overview, and I’m just trying to describe some options for what might work in certain situations. <a href="#ffn5">↩︎</a></li>
+<li>A clipping is when you have selected and copied a passage from the book for safe-keeping, and an annotation is when you yourself write a note connected to a particular passage. <a href="#ffn6">↩︎</a></li>
+<li>Needless to say, don’t take legal advice from me. <a href="#ffn7">↩︎</a></li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

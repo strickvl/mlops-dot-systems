@@ -1,447 +1,1595 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mlops.systems/posts/2021-11-27-safety-vulnerability-checker.html</loc>
-    <lastmod>2025-06-04T15:57:42.791Z</lastmod>
+    <loc>https://alexstrick.com/about.html</loc>
+    <lastmod>2026-01-18T17:11:50.157Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-10-24-foundations-mnist-basics.html</loc>
-    <lastmod>2025-06-04T15:57:43.543Z</lastmod>
+    <loc>https://alexstrick.com/index.html</loc>
+    <lastmod>2026-01-18T17:11:52.815Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-06-redaction-classification-chapter-2.html</loc>
-    <lastmod>2025-06-04T15:57:43.991Z</lastmod>
+    <loc>https://alexstrick.com/personal.html</loc>
+    <lastmod>2026-01-18T17:11:59.661Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-03-03-model-improvements.html</loc>
-    <lastmod>2025-06-04T15:57:44.327Z</lastmod>
+    <loc>https://alexstrick.com/til.html</loc>
+    <lastmod>2026-01-18T17:12:00.034Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-03-25-paperspace-docker-icevision.html</loc>
-    <lastmod>2025-06-04T15:57:44.663Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-01-01-5-books-everyone-should-read-about-afghanistan.html</loc>
+    <lastmod>2026-01-18T17:12:00.398Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-03-18-stable-eights-part-two.html</loc>
-    <lastmod>2025-06-04T15:57:45.350Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-01-01-new-year-new-website.html</loc>
+    <lastmod>2026-01-18T17:12:00.748Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-09-07-serialisation.html</loc>
-    <lastmod>2025-06-04T15:57:45.873Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-01-08-staying-apart.html</loc>
+    <lastmod>2026-01-18T17:12:01.172Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-11-27-pipeline-conversations.html</loc>
-    <lastmod>2025-06-04T15:57:46.188Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-01-13-presenting-mullah-zaeef.html</loc>
+    <lastmod>2026-01-18T17:12:01.552Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-03-robust-python-3.html</loc>
-    <lastmod>2025-06-04T15:57:46.576Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-01-30-talking-to-terrorists.html</loc>
+    <lastmod>2026-01-18T17:12:01.934Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-05-29-balochi-language-dataset.html</loc>
-    <lastmod>2025-06-04T15:57:46.913Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-02-02-john-nagl-and-the-future-of-counterinsurgency.html</loc>
+    <lastmod>2026-01-18T17:12:02.373Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-04-28-removing-git-commits.html</loc>
-    <lastmod>2025-06-04T15:57:47.606Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-02-05-mistakes-in-the-financial-times.html</loc>
+    <lastmod>2026-01-18T17:12:02.740Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</loc>
-    <lastmod>2025-06-04T15:57:48.020Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-02-08-real-people-real-war.html</loc>
+    <lastmod>2026-01-18T17:12:03.116Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-06-03-isafpr-evaluating-baseline.html</loc>
-    <lastmod>2025-06-04T15:57:48.623Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-11-back-home.html</loc>
+    <lastmod>2026-01-18T17:12:03.511Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-02-08-robust-python-10.html</loc>
-    <lastmod>2025-06-04T15:57:49.033Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-12-civilian-casualties-from-zheray.html</loc>
+    <lastmod>2026-01-18T17:12:03.878Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-08-baseline-mlops-understanding.html</loc>
-    <lastmod>2025-06-04T15:57:49.381Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-12-hearts-and-minds.html</loc>
+    <lastmod>2026-01-18T17:12:04.236Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-06-03-training-custom-balochi-tokenizer.html</loc>
-    <lastmod>2025-06-04T15:57:50.024Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-12-overheardinkandahar.html</loc>
+    <lastmod>2026-01-18T17:12:04.575Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-10-25-debugging.html</loc>
-    <lastmod>2025-06-04T15:57:50.396Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-16-so-how-is-it.html</loc>
+    <lastmod>2026-01-18T17:12:04.918Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-18-writing-code.html</loc>
-    <lastmod>2025-06-04T15:57:50.711Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-18-kandahar-survey.html</loc>
+    <lastmod>2026-01-18T17:12:05.307Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html</loc>
-    <lastmod>2025-06-04T15:57:51.125Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-19-mullah-omar-captured.html</loc>
+    <lastmod>2026-01-18T17:12:05.654Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-07-23-maths-prompt-rust-project.html</loc>
-    <lastmod>2025-06-04T15:57:51.691Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-23-kandahars-electricity-problems.html</loc>
+    <lastmod>2026-01-18T17:12:06.019Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-06-01-why-tokenisation.html</loc>
-    <lastmod>2025-06-04T15:57:52.199Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-24-jere-van-dyks-captive.html</loc>
+    <lastmod>2026-01-18T17:12:06.369Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</loc>
-    <lastmod>2025-06-04T15:57:52.591Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-25-newish-kandahar-blogs.html</loc>
+    <lastmod>2026-01-18T17:12:06.746Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</loc>
-    <lastmod>2025-06-04T15:57:53.022Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-26-ask-the-scholars-when-and-where-was-mullah-mohammad-omar-born.html</loc>
+    <lastmod>2026-01-18T17:12:07.157Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-11-fashion-mnist-pixel-similarity.html</loc>
-    <lastmod>2025-06-04T15:57:53.626Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-04-29-kandahar-chronology-september-2001-october-2009.html</loc>
+    <lastmod>2026-01-18T17:12:07.502Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-14-python-versioning-package-managers.html</loc>
-    <lastmod>2025-06-04T15:57:54.052Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-05-01-from-ghazal-by-shin-gul-aajiz.html</loc>
+    <lastmod>2026-01-18T17:12:07.827Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-12-29-robust-python-1.html</loc>
-    <lastmod>2025-06-04T15:57:54.416Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-05-14-kandahar-portraits.html</loc>
+    <lastmod>2026-01-18T17:12:08.137Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html</loc>
-    <lastmod>2025-06-04T15:57:54.791Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-05-22-on-experts.html</loc>
+    <lastmod>2026-01-18T17:12:08.442Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-10-16-notational-precedence.html</loc>
-    <lastmod>2025-06-04T15:57:55.131Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-06-21-kandahar-timeline-1979-2010.html</loc>
+    <lastmod>2026-01-18T17:12:08.754Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html</loc>
-    <lastmod>2025-06-04T15:57:55.604Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-07-03-hope-is-not-a-strategy.html</loc>
+    <lastmod>2026-01-18T17:12:09.063Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-05-23-error-analysis-to-find-failure-modes.html</loc>
-    <lastmod>2025-06-04T15:57:56.383Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-07-07-irish-parallels.html</loc>
+    <lastmod>2026-01-18T17:12:09.404Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</loc>
-    <lastmod>2025-06-04T15:57:56.768Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-11-07-marie-colvin-in-kandahar-for-the-sunday-times.html</loc>
+    <lastmod>2026-01-18T17:12:09.723Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html</loc>
-    <lastmod>2025-06-04T15:57:57.322Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-11-13-fly-freely-afghan-womens-poetry.html</loc>
+    <lastmod>2026-01-18T17:12:10.024Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-30-robust-python-8.html</loc>
-    <lastmod>2025-06-04T15:57:57.664Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-11-22-petraeus-lisbon-and-the-great-pr-push.html</loc>
+    <lastmod>2026-01-18T17:12:10.339Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-04-26-data-validation-great-expectations-part-2.html</loc>
-    <lastmod>2025-06-04T15:57:58.103Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-11-23-foreign-fighters-down-south.html</loc>
+    <lastmod>2026-01-18T17:12:10.654Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/saba.html</loc>
-    <lastmod>2025-06-04T15:57:58.391Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-11-26-taliban-realism-over-the-september-11-attacks.html</loc>
+    <lastmod>2026-01-18T17:12:10.956Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-11-21-on-failure.html</loc>
-    <lastmod>2025-06-04T15:57:58.688Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-05-no-comment.html</loc>
+    <lastmod>2026-01-18T17:12:11.275Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html</loc>
-    <lastmod>2025-06-04T15:57:59.137Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-11-an-open-letter-to-president-obama.html</loc>
+    <lastmod>2026-01-18T17:12:11.596Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-05-02-logarithms-exponents-mu123.html</loc>
-    <lastmod>2025-06-04T15:57:59.527Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-14-open-letter-the-response.html</loc>
+    <lastmod>2026-01-18T17:12:11.977Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html</loc>
-    <lastmod>2025-06-04T15:57:59.903Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-18-the-best-books-of-2010.html</loc>
+    <lastmod>2026-01-18T17:12:12.405Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-07-24-database-backups-tarsnap.html</loc>
-    <lastmod>2025-06-04T15:58:00.487Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-22-deedee-derksen-picks-her-2010-books.html</loc>
+    <lastmod>2026-01-18T17:12:12.742Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-13-sgd-whole-game.html</loc>
-    <lastmod>2025-06-04T15:58:00.915Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-22-real-people-as-agents.html</loc>
+    <lastmod>2026-01-18T17:12:13.049Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-02-10-synthetic-image-data.html</loc>
-    <lastmod>2025-06-04T15:58:01.469Z</lastmod>
+    <loc>https://alexstrick.com/personal/2010-12-28-an-appeal.html</loc>
+    <lastmod>2026-01-18T17:12:13.420Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html</loc>
-    <lastmod>2025-06-04T15:58:02.843Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-01-10-an-enemy-we-created-the-website.html</loc>
+    <lastmod>2026-01-18T17:12:13.733Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-02-pet-cat-image-classifier-fastai.html</loc>
-    <lastmod>2025-06-04T15:58:03.267Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-01-21-helmand-refugee-appeal-update-distribution-day.html</loc>
+    <lastmod>2026-01-18T17:12:14.158Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</loc>
-    <lastmod>2025-06-04T15:58:03.686Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-01-30-afghanistans-child-soldiers.html</loc>
+    <lastmod>2026-01-18T17:12:14.458Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</loc>
-    <lastmod>2025-06-04T15:58:04.244Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-04-03-the-kill-team.html</loc>
+    <lastmod>2026-01-18T17:12:14.771Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</loc>
-    <lastmod>2025-06-04T15:58:04.678Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-05-01-the-petraeus-effect.html</loc>
+    <lastmod>2026-01-18T17:12:15.085Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-12-30-robust-python-2.html</loc>
-    <lastmod>2025-06-04T15:58:05.053Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-05-03-the-afghan-taliban-react-to-bin-ladens-death.html</loc>
+    <lastmod>2026-01-18T17:12:15.419Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-10-chapter1and2recall.html</loc>
-    <lastmod>2025-06-04T15:58:05.409Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-05-13-talqaeda-the-timeline.html</loc>
+    <lastmod>2026-01-18T17:12:15.734Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-12-11-redaction-progress-week-one.html</loc>
-    <lastmod>2025-06-04T15:58:05.772Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-05-15-kandahar-prison-escape-the-talibans-tale.html</loc>
+    <lastmod>2026-01-18T17:12:16.327Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</loc>
-    <lastmod>2025-06-04T15:58:06.276Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-05-16-more-isaf-press-release-data.html</loc>
+    <lastmod>2026-01-18T17:12:16.663Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-16-ch4-tensors.html</loc>
-    <lastmod>2025-06-04T15:58:06.814Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-05-17-isaf-press-release-word-clouds.html</loc>
+    <lastmod>2026-01-18T17:12:16.978Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-04-04-ml-portfolio-best-practices.html</loc>
-    <lastmod>2025-06-04T15:58:07.167Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-08-20-an-appeal-for-funding.html</loc>
+    <lastmod>2026-01-18T17:12:17.303Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-11-25-entr-reruns-tests.html</loc>
-    <lastmod>2025-06-04T15:58:07.477Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-09-13-those-40-al-qaeda-insurgents.html</loc>
+    <lastmod>2026-01-18T17:12:17.662Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-05-14-mu123-complete-maths.html</loc>
-    <lastmod>2025-06-04T15:58:07.782Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-09-19-vietnams-kill-capture-raids.html</loc>
+    <lastmod>2026-01-18T17:12:18.015Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-15-fashion-mnist-neural-network.html</loc>
-    <lastmod>2025-06-04T15:58:08.163Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-12-07-entropy-and-insurgent-radicalisation-an-isaf-goal.html</loc>
+    <lastmod>2026-01-18T17:12:18.362Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html</loc>
-    <lastmod>2025-06-04T15:58:08.792Z</lastmod>
+    <loc>https://alexstrick.com/personal/2011-12-28-talibantwitterfight-the-news-story-that-wasnt.html</loc>
+    <lastmod>2026-01-18T17:12:18.897Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html</loc>
-    <lastmod>2025-06-04T15:58:09.160Z</lastmod>
+    <loc>https://alexstrick.com/personal/2012-11-26-writing-the-history-of-the-taliban-movement.html</loc>
+    <lastmod>2026-01-18T17:12:19.235Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-11-26-environment-variables.html</loc>
-    <lastmod>2025-06-04T15:58:09.512Z</lastmod>
+    <loc>https://alexstrick.com/personal/2012-12-10-catching-up-aan-report-on-isaf-night-raids.html</loc>
+    <lastmod>2026-01-18T17:12:19.559Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-06-nbdev-early-impressions.html</loc>
-    <lastmod>2025-06-04T15:58:09.875Z</lastmod>
+    <loc>https://alexstrick.com/personal/2012-12-16-catching-up-an-enemy-we-created.html</loc>
+    <lastmod>2026-01-18T17:12:19.889Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-02-05-robust-python-9.html</loc>
-    <lastmod>2025-06-04T15:58:10.260Z</lastmod>
+    <loc>https://alexstrick.com/personal/2012-12-22-catching-up-poetry-of-the-taliban.html</loc>
+    <lastmod>2026-01-18T17:12:20.204Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-18-reading-python.html</loc>
-    <lastmod>2025-06-04T15:58:10.602Z</lastmod>
+    <loc>https://alexstrick.com/personal/2012-12-29-some-things-i-read.html</loc>
+    <lastmod>2026-01-18T17:12:20.524Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-12-15-redaction-taxonomy.html</loc>
-    <lastmod>2025-06-04T15:58:10.991Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-01-02-useful-tools-pinboard.html</loc>
+    <lastmod>2026-01-18T17:12:20.838Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</loc>
-    <lastmod>2025-06-04T15:58:11.399Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-01-07-5-things-i-wish-someone-had-told-me-about-learning-languages.html</loc>
+    <lastmod>2026-01-18T17:12:21.296Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-31-redaction-production-introduction.html</loc>
-    <lastmod>2025-06-04T15:58:11.914Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-01-13-a-jedi-mind-trick-and-three-other-approaches-to-learning-vocabulary.html</loc>
+    <lastmod>2026-01-18T17:12:21.813Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-08-robust-python-4.html</loc>
-    <lastmod>2025-06-04T15:58:12.274Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-01-15-isafs-first-fifteen-days.html</loc>
+    <lastmod>2026-01-18T17:12:22.153Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-14-sgd-fashion-mnist.html</loc>
-    <lastmod>2025-06-04T15:58:12.741Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-01-22-following-pakistans-elections.html</loc>
+    <lastmod>2026-01-18T17:12:22.512Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</loc>
-    <lastmod>2025-06-04T15:58:13.161Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-02-04-learning-to-code.html</loc>
+    <lastmod>2026-01-18T17:12:22.878Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-07-redaction-mvp-huggingface.html</loc>
-    <lastmod>2025-06-04T15:58:13.626Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-04-20-translators-sought-job-opening.html</loc>
+    <lastmod>2026-01-18T17:12:23.238Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-18-robust-python-5.html</loc>
-    <lastmod>2025-06-04T15:58:14.014Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-07-20-book-of-the-week-al-shabab-in-somalia.html</loc>
+    <lastmod>2026-01-18T17:12:23.617Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-03-25-tricks-are-the-thing.html</loc>
-    <lastmod>2025-06-04T15:58:14.335Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-09-23-taliban-time-travel-or-how-our-understanding-is-almost-always-two-years-old.html</loc>
+    <lastmod>2026-01-18T17:12:23.967Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-05-22-balochi-language-model-harms.html</loc>
-    <lastmod>2025-06-04T15:58:15.038Z</lastmod>
+    <loc>https://alexstrick.com/personal/2013-12-27-the-best-books-i-read-in-2013.html</loc>
+    <lastmod>2026-01-18T17:12:24.359Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-11-30-vfnet-basics.html</loc>
-    <lastmod>2025-06-04T15:58:15.356Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-08-05-how-to-learn-a-language-to-fluency-interview-with-gabe-wyner.html</loc>
+    <lastmod>2026-01-18T17:12:24.717Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-24-data-versioning-dvc.html</loc>
-    <lastmod>2025-06-04T15:58:16.041Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-08-09-two-new-co-authored-reports-on-afghanistan.html</loc>
+    <lastmod>2026-01-18T17:12:25.089Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-16-midway-report-redaction-project.html</loc>
-    <lastmod>2025-06-04T15:58:16.444Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-09-05-an-ankified-urdu-frequency-dictionary.html</loc>
+    <lastmod>2026-01-18T17:12:25.481Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-04-19-data-validation-great-expectations-part-1.html</loc>
-    <lastmod>2025-06-04T15:58:16.952Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-09-07-sources-methods-or-why-i-started-a-podcast.html</loc>
+    <lastmod>2026-01-18T17:12:25.845Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-09-auto-reload-external-libraries.html</loc>
-    <lastmod>2025-06-04T15:58:17.261Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-09-16-our-first-publication-i-am-akbar-agha.html</loc>
+    <lastmod>2026-01-18T17:12:26.299Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</loc>
-    <lastmod>2025-06-04T15:58:17.709Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-10-23-fa8eri6cf9zjmigzx2hasdgg8pek57.html</loc>
+    <lastmod>2026-01-18T17:12:26.686Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-06-15-isafpr-first-finetune.html</loc>
-    <lastmod>2025-06-04T15:58:18.725Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read.html</loc>
+    <lastmod>2026-01-18T17:12:27.523Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-04-29-exploring-legacy-terraform-repository.html</loc>
-    <lastmod>2025-06-04T15:58:19.453Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-12-10-new-book-an-educators-tale.html</loc>
+    <lastmod>2026-01-18T17:12:27.894Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-06-22-input-variables-terraform.html</loc>
-    <lastmod>2025-06-04T15:58:20.117Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-12-22-some-books-and-other-things-from-2014.html</loc>
+    <lastmod>2026-01-18T17:12:28.348Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-05-21-balochi-language-modelling.html</loc>
-    <lastmod>2025-06-04T15:58:20.475Z</lastmod>
+    <loc>https://alexstrick.com/personal/2014-12-31-north-waziristan-a-reading-list.html</loc>
+    <lastmod>2026-01-18T17:12:28.844Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-03-21-docker-in-a-month.html</loc>
-    <lastmod>2025-06-04T15:58:21.172Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-02-25-2015-2-apocalypse-then-a-short-review-of-filius-apocalypse-in-islam-2011.html</loc>
+    <lastmod>2026-01-18T17:12:29.238Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-22-robust-python-6.html</loc>
-    <lastmod>2025-06-04T15:58:21.838Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-03-21-2015-3-how-i-use-goodreads-to-pick-what-i-read.html</loc>
+    <lastmod>2026-01-18T17:12:29.599Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-11-29-prodigy-object-detection-training.html</loc>
-    <lastmod>2025-06-04T15:58:22.614Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-06-07-2015-6-arabic-language-update-i-did-it-almost.html</loc>
+    <lastmod>2026-01-18T17:12:29.994Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</loc>
-    <lastmod>2025-06-04T15:58:22.959Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-08-28-2015-8-afp-covers-the-taliban-sources-project.html</loc>
+    <lastmod>2026-01-18T17:12:30.421Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-02-07-ai-engineering-chapter-9.html</loc>
-    <lastmod>2025-06-04T15:58:24.453Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school.html</loc>
+    <lastmod>2026-01-18T17:12:31.133Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-03-16-learnings-building-llms.html</loc>
-    <lastmod>2025-06-04T15:58:24.979Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-09-09-2015-9-sources-and-methods-back-for-season-2.html</loc>
+    <lastmod>2026-01-18T17:12:31.479Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-01-01-counter.html</loc>
-    <lastmod>2025-06-04T15:58:25.317Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-09-18-2015-9-ecolinguism-and-the-ethics-of-learning-new-languages.html</loc>
+    <lastmod>2026-01-18T17:12:31.810Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-12-seven-steps-gradient-calculations.html</loc>
-    <lastmod>2025-06-04T15:58:25.726Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-09-24-2015-9-taliban-public-punishments-19962001.html</loc>
+    <lastmod>2026-01-18T17:12:32.165Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-09-11-tfx-paper.html</loc>
-    <lastmod>2025-06-04T15:58:26.142Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-10-13-four-colours.html</loc>
+    <lastmod>2026-01-18T17:12:32.506Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2021-12-29-j-language.html</loc>
-    <lastmod>2025-06-04T15:58:26.523Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-11-01-afghanistan-fades-away.html</loc>
+    <lastmod>2026-01-18T17:12:32.812Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-06-04-token-odds-and-sods.html</loc>
-    <lastmod>2025-06-04T15:58:27.103Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-11-08-misquoting-mohammad-meets-sources-methods.html</loc>
+    <lastmod>2026-01-18T17:12:33.170Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-05-21-nlp-redaction-classifier.html</loc>
-    <lastmod>2025-06-04T15:58:28.046Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-11-15-upcoming-maniac-week.html</loc>
+    <lastmod>2026-01-18T17:12:33.516Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</loc>
-    <lastmod>2025-06-04T15:58:28.911Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-11-22-on-untangling-syrias-socially-mediated-war.html</loc>
+    <lastmod>2026-01-18T17:12:33.893Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-04-28-data-validation-great-expectations-part-3.html</loc>
-    <lastmod>2025-06-04T15:58:29.420Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html</loc>
+    <lastmod>2026-01-18T17:12:34.303Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-02-27-python-parsers.html</loc>
-    <lastmod>2025-06-04T15:58:29.769Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-12-16-the-best-books-i-read-in-2015.html</loc>
+    <lastmod>2026-01-18T17:12:34.748Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-04-01-publishing-afghanwire-dataset.html</loc>
-    <lastmod>2025-06-04T15:58:30.123Z</lastmod>
+    <loc>https://alexstrick.com/personal/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying.html</loc>
+    <lastmod>2026-01-18T17:12:35.773Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-03-12-fiftyone-computervision.html</loc>
-    <lastmod>2025-06-04T15:58:30.588Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-05-25-2016-5-memorisation-language-ninja.html</loc>
+    <lastmod>2026-01-18T17:12:36.126Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</loc>
-    <lastmod>2025-06-04T15:58:30.978Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-07-24-2016-7-chondrichthyan-fun-a-review-of-shark-mooc.html</loc>
+    <lastmod>2026-01-18T17:12:36.603Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2024-06-17-one-click-finetuning.html</loc>
-    <lastmod>2025-06-04T15:58:31.534Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-15-2016-8-on-learning-new-skills.html</loc>
+    <lastmod>2026-01-18T17:12:37.121Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-02-11-starting-the-hugging-face-agents-course.html</loc>
-    <lastmod>2025-06-04T15:58:31.934Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-18-2016-8-jordan-diaries-start-with-geography.html</loc>
+    <lastmod>2026-01-18T17:12:37.531Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2022-04-06-synthetic-data-results.html</loc>
-    <lastmod>2025-06-04T15:58:32.409Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-18-2016-8-remove-your-colour.html</loc>
+    <lastmod>2026-01-18T17:12:37.913Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-02-09-ai-eg-chapter-10.html</loc>
-    <lastmod>2025-06-04T15:58:32.833Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-19-2016-8-walking-amman.html</loc>
+    <lastmod>2026-01-18T17:12:38.323Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2023-03-05-stable-eights-adversarial.html</loc>
-    <lastmod>2025-06-04T15:58:33.393Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-21-learn-afghanistan-districts-anki.html</loc>
+    <lastmod>2026-01-18T17:12:38.710Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</loc>
-    <lastmod>2025-06-04T15:58:33.809Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-22-2016-8-phd-tools-beeminder.html</loc>
+    <lastmod>2026-01-18T17:12:39.141Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/posts/2025-02-21-beeminder-mcp.html</loc>
-    <lastmod>2025-06-04T15:58:34.283Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-23-2016-8-walking-with-words.html</loc>
+    <lastmod>2026-01-18T17:12:39.573Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/til.html</loc>
-    <lastmod>2025-06-04T15:58:34.657Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-24-2016-8-phd-tools-trello.html</loc>
+    <lastmod>2026-01-18T17:12:39.961Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/index.html</loc>
-    <lastmod>2025-06-04T15:58:37.203Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-25-phd-tools-tinderbox.html</loc>
+    <lastmod>2026-01-18T17:12:40.411Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/about.html</loc>
-    <lastmod>2025-06-04T15:58:37.528Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-26-phd-tools-devonthink.html</loc>
+    <lastmod>2026-01-18T17:12:40.881Z</lastmod>
   </url>
   <url>
-    <loc>https://mlops.systems/til/2024-09-16-what-is-the-rust-prelude.html</loc>
-    <lastmod>2025-06-04T15:58:37.871Z</lastmod>
+    <loc>https://alexstrick.com/personal/2016-08-29-2016-8-phd-tools-pinboard.html</loc>
+    <lastmod>2026-01-18T17:12:41.317Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-08-30-2016-8-phd-tools-scrivener.html</loc>
+    <lastmod>2026-01-18T17:12:41.738Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-08-31-phd-tools-bookends.html</loc>
+    <lastmod>2026-01-18T17:12:42.125Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-01-phd-tools-mellel.html</loc>
+    <lastmod>2026-01-18T17:12:42.514Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-02-2016-8-phd-tools-rescuetime.html</loc>
+    <lastmod>2026-01-18T17:12:42.947Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-02-existential-battles-climbing-amman.html</loc>
+    <lastmod>2026-01-18T17:12:43.422Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-04-learning-icelandic.html</loc>
+    <lastmod>2026-01-18T17:12:43.805Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-05-phd-tools-freedom.html</loc>
+    <lastmod>2026-01-18T17:12:44.245Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-06-phd-tools-backup.html</loc>
+    <lastmod>2026-01-18T17:12:44.638Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-07-phd-tools-omnifocus.html</loc>
+    <lastmod>2026-01-18T17:12:45.106Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-08-spaced-repetition-foundation.html</loc>
+    <lastmod>2026-01-18T17:12:45.571Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-09-phd-tools-the-secret-to-finishing-your-phd.html</loc>
+    <lastmod>2026-01-18T17:12:46.108Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going.html</loc>
+    <lastmod>2026-01-18T17:12:46.519Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-13-phd-tools-freewriting.html</loc>
+    <lastmod>2026-01-18T17:12:46.916Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-13-phdtools-pen-paper.html</loc>
+    <lastmod>2026-01-18T17:12:47.313Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-14-phd-tools-primary-sources.html</loc>
+    <lastmod>2026-01-18T17:12:47.686Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-15-phd-tools-goodreads.html</loc>
+    <lastmod>2026-01-18T17:12:48.067Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-16-2016-9-phd-tools-sleep-movement.html</loc>
+    <lastmod>2026-01-18T17:12:48.455Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-17-coding-chronicles-failure.html</loc>
+    <lastmod>2026-01-18T17:12:48.854Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-19-phd-tools-tea.html</loc>
+    <lastmod>2026-01-18T17:12:49.231Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-24-turn-off-facebook.html</loc>
+    <lastmod>2026-01-18T17:12:49.591Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-27-lessons-learnt-language-study-habits.html</loc>
+    <lastmod>2026-01-18T17:12:50.028Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-28-three-climbing-books.html</loc>
+    <lastmod>2026-01-18T17:12:50.440Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-09-29-learning-without-seams.html</loc>
+    <lastmod>2026-01-18T17:12:50.819Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-05-taliban-reader-announcement.html</loc>
+    <lastmod>2026-01-18T17:12:51.215Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-11-exist.html</loc>
+    <lastmod>2026-01-18T17:12:51.659Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-13-demise-afghanistannewscenter.html</loc>
+    <lastmod>2026-01-18T17:12:52.027Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-13-keep-moving.html</loc>
+    <lastmod>2026-01-18T17:12:52.391Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-15-skills-development-foundations.html</loc>
+    <lastmod>2026-01-18T17:12:52.846Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-16-fundamentals-versus-hacks.html</loc>
+    <lastmod>2026-01-18T17:12:53.229Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-17-future-language-learning.html</loc>
+    <lastmod>2026-01-18T17:12:53.584Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-18-spaced-repetition-uses.html</loc>
+    <lastmod>2026-01-18T17:12:53.992Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-21-letting-go.html</loc>
+    <lastmod>2026-01-18T17:12:54.337Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-24-udacity-ipnd.html</loc>
+    <lastmod>2026-01-18T17:12:54.730Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-27-kael-weston-podcast.html</loc>
+    <lastmod>2026-01-18T17:12:55.065Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-28-greengeeks-ecological-footprint.html</loc>
+    <lastmod>2026-01-18T17:12:55.438Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-10-30-scratch-below-surface-dhh.html</loc>
+    <lastmod>2026-01-18T17:12:55.798Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-05-finishing-elements.html</loc>
+    <lastmod>2026-01-18T17:12:56.136Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-05-fuheis-climbing-2.html</loc>
+    <lastmod>2026-01-18T17:12:56.481Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-05-python-side-project-approach.html</loc>
+    <lastmod>2026-01-18T17:12:56.865Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-11-squarespace-goes-ssl.html</loc>
+    <lastmod>2026-01-18T17:12:57.258Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-12-music-sound-technology.html</loc>
+    <lastmod>2026-01-18T17:12:57.633Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-14-kukicha-twig-tea.html</loc>
+    <lastmod>2026-01-18T17:12:58.002Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-17-encrypt-your-dropbox-files.html</loc>
+    <lastmod>2026-01-18T17:12:58.367Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-20-different-kinds-of-climbing.html</loc>
+    <lastmod>2026-01-18T17:12:58.752Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-22-learning-a-language-try-a-new-approach.html</loc>
+    <lastmod>2026-01-18T17:12:59.180Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-23-inner-game-review.html</loc>
+    <lastmod>2026-01-18T17:12:59.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-11-29-arrival-faces.html</loc>
+    <lastmod>2026-01-18T17:13:00.049Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-02-climbing-routes-without-numbers.html</loc>
+    <lastmod>2026-01-18T17:13:00.427Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-02-himal-article-2014.html</loc>
+    <lastmod>2026-01-18T17:13:00.819Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-02-knot1-solitary-confinement-digital-security.html</loc>
+    <lastmod>2026-01-18T17:13:01.289Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-02-memory-course-positive-feedback.html</loc>
+    <lastmod>2026-01-18T17:13:01.684Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-07-taliban-on-the-clintons.html</loc>
+    <lastmod>2026-01-18T17:13:02.105Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-08-nutritional-density.html</loc>
+    <lastmod>2026-01-18T17:13:02.482Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-09-highlights-app-review.html</loc>
+    <lastmod>2026-01-18T17:13:02.872Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-09-knot2-translation-as-trauma.html</loc>
+    <lastmod>2026-01-18T17:13:03.317Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read.html</loc>
+    <lastmod>2026-01-18T17:13:03.759Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-11-daddybot.html</loc>
+    <lastmod>2026-01-18T17:13:04.119Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-13-notification-zero.html</loc>
+    <lastmod>2026-01-18T17:13:04.494Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-15-broken-pots.html</loc>
+    <lastmod>2026-01-18T17:13:04.861Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-16-into-eternity-review.html</loc>
+    <lastmod>2026-01-18T17:13:05.240Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-17-knot3-encryption-race-tunnels.html</loc>
+    <lastmod>2026-01-18T17:13:05.670Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-18-seeking-python-code-mentor.html</loc>
+    <lastmod>2026-01-18T17:13:06.031Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-19-devonthink-resurgent.html</loc>
+    <lastmod>2026-01-18T17:13:06.378Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-20-django-vs-flask.html</loc>
+    <lastmod>2026-01-18T17:13:06.717Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-21-best-books-2016.html</loc>
+    <lastmod>2026-01-18T17:13:07.149Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-21-reading-american-revolution.html</loc>
+    <lastmod>2026-01-18T17:13:07.521Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-21-two-charities-support.html</loc>
+    <lastmod>2026-01-18T17:13:07.868Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-23-gift-language-coaching.html</loc>
+    <lastmod>2026-01-18T17:13:08.237Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-25-syria-revolution-first-draft.html</loc>
+    <lastmod>2026-01-18T17:13:08.614Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-26-podcast-gabe-weatherhead.html</loc>
+    <lastmod>2026-01-18T17:13:08.961Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-28-knot4-empathy-tech-climate.html</loc>
+    <lastmod>2026-01-18T17:13:09.436Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-29-dinner-party-decision-matrix.html</loc>
+    <lastmod>2026-01-18T17:13:09.823Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2016-12-30-master-arabic-preorder.html</loc>
+    <lastmod>2026-01-18T17:13:10.225Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-01-2017-1-new-year-new-arabic-language-podcast.html</loc>
+    <lastmod>2026-01-18T17:13:10.591Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-02-lynne-kelly-podcast.html</loc>
+    <lastmod>2026-01-18T17:13:10.957Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-02-tech-switching.html</loc>
+    <lastmod>2026-01-18T17:13:11.332Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-03-everything-you-need-to-study-jordanian-arabic.html</loc>
+    <lastmod>2026-01-18T17:13:12.013Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-04-internal-vs-external-goals.html</loc>
+    <lastmod>2026-01-18T17:13:12.438Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-05-2017-1-taskpaper-omnifocus.html</loc>
+    <lastmod>2026-01-18T17:13:12.800Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-05-randomise-your-learning.html</loc>
+    <lastmod>2026-01-18T17:13:13.229Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-06-2017-1-introducing-coachbot-your-personal-language-taskmaster.html</loc>
+    <lastmod>2026-01-18T17:13:13.645Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-08-language-coach-how-to.html</loc>
+    <lastmod>2026-01-18T17:13:14.060Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-09-classical-arabic-sources-methods.html</loc>
+    <lastmod>2026-01-18T17:13:14.446Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-11-podcasts-data-science-programming.html</loc>
+    <lastmod>2026-01-18T17:13:14.861Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-11-resetting-baseline-caffeine.html</loc>
+    <lastmod>2026-01-18T17:13:15.241Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-12-master-arabic-whats-in-the-premium-edition.html</loc>
+    <lastmod>2026-01-18T17:13:15.653Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-13-developing-android-udacity.html</loc>
+    <lastmod>2026-01-18T17:13:16.013Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-15-clozemaster.html</loc>
+    <lastmod>2026-01-18T17:13:16.388Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-15-master-arabic-behind-cover.html</loc>
+    <lastmod>2026-01-18T17:13:16.753Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-16-introducing-taylor.html</loc>
+    <lastmod>2026-01-18T17:13:17.232Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-17-trello-markdown-chrome-extension.html</loc>
+    <lastmod>2026-01-18T17:13:17.573Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-23-adjustments-deep-end.html</loc>
+    <lastmod>2026-01-18T17:13:18.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-27-how-to-learn-a-page-of-verbs.html</loc>
+    <lastmod>2026-01-18T17:13:18.412Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-01-31-variations-on-a-pomodoro.html</loc>
+    <lastmod>2026-01-18T17:13:18.767Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-03-actual-fluency.html</loc>
+    <lastmod>2026-01-18T17:13:19.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-04-deepening-my-studies.html</loc>
+    <lastmod>2026-01-18T17:13:19.573Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-13-master-arabic-out-now.html</loc>
+    <lastmod>2026-01-18T17:13:19.919Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-14-how-to-learn-languages-without-teachers.html</loc>
+    <lastmod>2026-01-18T17:13:20.302Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-18-llj-keeping-pace.html</loc>
+    <lastmod>2026-01-18T17:13:20.720Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-23-core-language-learning-beliefs.html</loc>
+    <lastmod>2026-01-18T17:13:21.082Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-02-26-three-podcast-recommendations.html</loc>
+    <lastmod>2026-01-18T17:13:21.426Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-03-03-walk-around-the-block.html</loc>
+    <lastmod>2026-01-18T17:13:21.795Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-03-06-guinea-pigs-reading-list.html</loc>
+    <lastmod>2026-01-18T17:13:22.158Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-03-10-language-transfer.html</loc>
+    <lastmod>2026-01-18T17:13:22.490Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-03-12-why-are-arabic-fonts-so-small.html</loc>
+    <lastmod>2026-01-18T17:13:22.889Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-03-20-leaving-qasid.html</loc>
+    <lastmod>2026-01-18T17:13:23.299Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-04-09-independent-study.html</loc>
+    <lastmod>2026-01-18T17:13:23.703Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-04-15-arabic-reading-importance-part1.html</loc>
+    <lastmod>2026-01-18T17:13:24.130Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-04-17-on-reading-in-arabic-the-evidence.html</loc>
+    <lastmod>2026-01-18T17:13:24.575Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-04-29-guest-post-can-robots-be-language-coaches.html</loc>
+    <lastmod>2026-01-18T17:13:24.968Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-04-30-spoken-fluency-taylor.html</loc>
+    <lastmod>2026-01-18T17:13:25.388Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-05-24-meaningful-leisure.html</loc>
+    <lastmod>2026-01-18T17:13:25.808Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-06-04-optician-lampedusa.html</loc>
+    <lastmod>2026-01-18T17:13:26.178Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-06-19-big-long-book.html</loc>
+    <lastmod>2026-01-18T17:13:26.520Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-06-22-italian-mini-challenge.html</loc>
+    <lastmod>2026-01-18T17:13:26.869Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-06-26-the-exile-review.html</loc>
+    <lastmod>2026-01-18T17:13:27.231Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-06-27-srs-without-computers.html</loc>
+    <lastmod>2026-01-18T17:13:27.553Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-08-13-phone-calls-timed-breaks.html</loc>
+    <lastmod>2026-01-18T17:13:28.023Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2017-10-20-language-learners-journal-homestay-edition.html</loc>
+    <lastmod>2026-01-18T17:13:28.490Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-01-17-tabula-extracting-data-pdfs.html</loc>
+    <lastmod>2026-01-18T17:13:28.857Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-01-23-lists-shuffling-numpy.html</loc>
+    <lastmod>2026-01-18T17:13:29.186Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-01-24-postgresql-install-mac.html</loc>
+    <lastmod>2026-01-18T17:13:29.527Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-01-25-tweet-void.html</loc>
+    <lastmod>2026-01-18T17:13:29.898Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-01-31-fuzzy-search.html</loc>
+    <lastmod>2026-01-18T17:13:30.267Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-05-06-prisoner345translation.html</loc>
+    <lastmod>2026-01-18T17:13:30.620Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-04-ml-with-weka.html</loc>
+    <lastmod>2026-01-18T17:13:31.004Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-05-new-book-taliban-reader.html</loc>
+    <lastmod>2026-01-18T17:13:31.367Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-13-ai-to-brahms.html</loc>
+    <lastmod>2026-01-18T17:13:31.735Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-17-testing-workflow-golang.html</loc>
+    <lastmod>2026-01-18T17:13:32.124Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-18-diagnosing-diabetes-with-weka-machine-learning.html</loc>
+    <lastmod>2026-01-18T17:13:32.699Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-18-go-table-tests.html</loc>
+    <lastmod>2026-01-18T17:13:33.075Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-23-real-world-go-with-referenced-functions.html</loc>
+    <lastmod>2026-01-18T17:13:33.472Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-23-splitting-pdfs-with-python.html</loc>
+    <lastmod>2026-01-18T17:13:33.884Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-06-24-python-virtual-environments-testing-environments-and-markdown-strikethrough.html</loc>
+    <lastmod>2026-01-18T17:13:34.275Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-07-08-regex-python-search.html</loc>
+    <lastmod>2026-01-18T17:13:34.654Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-11-05-pashto-podcasts.html</loc>
+    <lastmod>2026-01-18T17:13:35.042Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-11-07-learn-persian-farsi-dari-with-podcasts.html</loc>
+    <lastmod>2026-01-18T17:13:35.463Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-11-13-in-afghanistan-watching-someone-learn-to-code-for-the-first-time.html</loc>
+    <lastmod>2026-01-18T17:13:35.896Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-12-02-linux-essentials-certification.html</loc>
+    <lastmod>2026-01-18T17:13:36.295Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2018-12-31-raspberrylpic-new-series-setup-steps.html</loc>
+    <lastmod>2026-01-18T17:13:36.683Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-01-31-pain-love-story.html</loc>
+    <lastmod>2026-01-18T17:13:37.474Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-02-13-ruby-zip.html</loc>
+    <lastmod>2026-01-18T17:13:37.833Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-02-16-solid-study-habits-for-coders.html</loc>
+    <lastmod>2026-01-18T17:13:38.568Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-02-25-using-rubys-digits-method.html</loc>
+    <lastmod>2026-01-18T17:13:38.918Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-03-12-sources-and-methods-does-technology.html</loc>
+    <lastmod>2026-01-18T17:13:39.257Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-03-21-mastery-based-learning-with-launch-school.html</loc>
+    <lastmod>2026-01-18T17:13:39.607Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2019-09-10-taliban-mutmain-preorder.html</loc>
+    <lastmod>2026-01-18T17:13:39.974Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-01-29-how-the-internet-works.html</loc>
+    <lastmod>2026-01-18T17:13:40.444Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-02-12-two-ruby-patterns-around-map-and-reduce.html</loc>
+    <lastmod>2026-01-18T17:13:40.808Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-06-11-dil-dhadakne-do.html</loc>
+    <lastmod>2026-01-18T17:13:41.136Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-06-11-kapoor-amp-sons.html</loc>
+    <lastmod>2026-01-18T17:13:41.506Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-06-14-sholay.html</loc>
+    <lastmod>2026-01-18T17:13:41.852Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-10-12-working-with-javascripts-object-prototype-model.html</loc>
+    <lastmod>2026-01-18T17:13:42.188Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-10-13-what-is-lexical-scope.html</loc>
+    <lastmod>2026-01-18T17:13:42.550Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-10-15-understanding-the-use-cases-for-closures-in-javascript.html</loc>
+    <lastmod>2026-01-18T17:13:42.873Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-11-10-turning-array-like-objects-into-arrays-with-javascript.html</loc>
+    <lastmod>2026-01-18T17:13:43.222Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-11-12-using-css-selectors-with-javascript-dom-methods.html</loc>
+    <lastmod>2026-01-18T17:13:43.584Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-11-14-different-ways-of-accessing-the-text-contents-of-dom-nodes-in-javascript.html</loc>
+    <lastmod>2026-01-18T17:13:43.923Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-12-02-the-four-positions-for-inserting-elements-into-the-dom.html</loc>
+    <lastmod>2026-01-18T17:13:44.261Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-12-03-how-events-drive-programming-for-the-web.html</loc>
+    <lastmod>2026-01-18T17:13:44.611Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-12-04-using-apis-to-make-things-happen-on-the-web.html</loc>
+    <lastmod>2026-01-18T17:13:44.948Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-12-10-a-basic-overview-of-how-to-use-handlebars.html</loc>
+    <lastmod>2026-01-18T17:13:45.379Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2020-12-10-how-to-use-jquery-and-handlebars-in-your-website.html</loc>
+    <lastmod>2026-01-18T17:13:45.703Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-23-deep-learning-best-in-show.html</loc>
+    <lastmod>2026-01-18T17:13:46.039Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-23-held-back-by-misunderstanding.html</loc>
+    <lastmod>2026-01-18T17:13:46.375Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-23-pdp-a-precursor-to-modern-neural-networks.html</loc>
+    <lastmod>2026-01-18T17:13:46.708Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-23-removing-barriers-deep-learning-edition.html</loc>
+    <lastmod>2026-01-18T17:13:47.056Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-23-rosenblatts-mark-i-perceptron.html</loc>
+    <lastmod>2026-01-18T17:13:47.391Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-23-small-unexpectedly-powerful-boxes.html</loc>
+    <lastmod>2026-01-18T17:13:47.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-26-arabic-language-plateau-principles.html</loc>
+    <lastmod>2026-01-18T17:13:48.206Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html</loc>
+    <lastmod>2026-01-18T17:13:48.554Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-26-telling-cats-from-dogs.html</loc>
+    <lastmod>2026-01-18T17:13:48.898Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-27-fastai-lesson-zero.html</loc>
+    <lastmod>2026-01-18T17:13:49.342Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2021-05-28-on-the-interpretability-of-models.html</loc>
+    <lastmod>2026-01-18T17:13:49.670Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2022-12-27-2022-readings.html</loc>
+    <lastmod>2026-01-18T17:13:50.020Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2023-02-19-vermeer-at-the-rijksmuseum.html</loc>
+    <lastmod>2026-01-18T17:13:50.354Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2023-07-15-automating-social-media-posting.html</loc>
+    <lastmod>2026-01-18T17:13:50.730Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school.html</loc>
+    <lastmod>2026-01-18T17:13:51.312Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2023-08-10-language-study-zero-to-hero.html</loc>
+    <lastmod>2026-01-18T17:13:51.882Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/personal/2025-01-05-first-stitches-on-learning-to-knit.html</loc>
+    <lastmod>2026-01-18T17:13:52.301Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-06-redaction-classification-chapter-2.html</loc>
+    <lastmod>2026-01-18T17:13:52.792Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-08-baseline-mlops-understanding.html</loc>
+    <lastmod>2026-01-18T17:13:53.124Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-09-auto-reload-external-libraries.html</loc>
+    <lastmod>2026-01-18T17:13:53.455Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-11-tfx-paper.html</loc>
+    <lastmod>2026-01-18T17:13:54.208Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-14-python-versioning-package-managers.html</loc>
+    <lastmod>2026-01-18T17:13:54.616Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-18-reading-python.html</loc>
+    <lastmod>2026-01-18T17:13:54.990Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-18-writing-code.html</loc>
+    <lastmod>2026-01-18T17:13:55.333Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-10-25-debugging.html</loc>
+    <lastmod>2026-01-18T17:13:55.718Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-21-on-failure.html</loc>
+    <lastmod>2026-01-18T17:13:56.053Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-25-entr-reruns-tests.html</loc>
+    <lastmod>2026-01-18T17:13:56.411Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-26-environment-variables.html</loc>
+    <lastmod>2026-01-18T17:13:56.736Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-27-pipeline-conversations.html</loc>
+    <lastmod>2026-01-18T17:13:57.061Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-27-safety-vulnerability-checker.html</loc>
+    <lastmod>2026-01-18T17:13:57.429Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-29-prodigy-object-detection-training.html</loc>
+    <lastmod>2026-01-18T17:13:57.851Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-11-30-vfnet-basics.html</loc>
+    <lastmod>2026-01-18T17:13:58.174Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-12-11-redaction-progress-week-one.html</loc>
+    <lastmod>2026-01-18T17:13:58.539Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-12-15-redaction-taxonomy.html</loc>
+    <lastmod>2026-01-18T17:13:58.898Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-12-29-j-language.html</loc>
+    <lastmod>2026-01-18T17:13:59.248Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-12-29-robust-python-1.html</loc>
+    <lastmod>2026-01-18T17:13:59.591Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-12-30-robust-python-2.html</loc>
+    <lastmod>2026-01-18T17:13:59.947Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-01-counter.html</loc>
+    <lastmod>2026-01-18T17:14:00.297Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-03-robust-python-3.html</loc>
+    <lastmod>2026-01-18T17:14:00.641Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-06-nbdev-early-impressions.html</loc>
+    <lastmod>2026-01-18T17:14:01.050Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-08-robust-python-4.html</loc>
+    <lastmod>2026-01-18T17:14:01.454Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-16-midway-report-redaction-project.html</loc>
+    <lastmod>2026-01-18T17:14:01.821Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-18-robust-python-5.html</loc>
+    <lastmod>2026-01-18T17:14:02.252Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-22-robust-python-6.html</loc>
+    <lastmod>2026-01-18T17:14:02.610Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-01-30-robust-python-8.html</loc>
+    <lastmod>2026-01-18T17:14:02.970Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-02-05-robust-python-9.html</loc>
+    <lastmod>2026-01-18T17:14:03.347Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-02-08-robust-python-10.html</loc>
+    <lastmod>2026-01-18T17:14:03.768Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-02-10-synthetic-image-data.html</loc>
+    <lastmod>2026-01-18T17:14:04.322Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-02-27-python-parsers.html</loc>
+    <lastmod>2026-01-18T17:14:04.660Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-03-03-model-improvements.html</loc>
+    <lastmod>2026-01-18T17:14:05.028Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-03-12-fiftyone-computervision.html</loc>
+    <lastmod>2026-01-18T17:14:05.491Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-03-21-docker-in-a-month.html</loc>
+    <lastmod>2026-01-18T17:14:06.152Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-03-25-paperspace-docker-icevision.html</loc>
+    <lastmod>2026-01-18T17:14:06.513Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-04-04-ml-portfolio-best-practices.html</loc>
+    <lastmod>2026-01-18T17:14:06.924Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-04-06-synthetic-data-results.html</loc>
+    <lastmod>2026-01-18T17:14:07.403Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-04-19-data-validation-great-expectations-part-1.html</loc>
+    <lastmod>2026-01-18T17:14:07.925Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-04-26-data-validation-great-expectations-part-2.html</loc>
+    <lastmod>2026-01-18T17:14:08.398Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-04-28-data-validation-great-expectations-part-3.html</loc>
+    <lastmod>2026-01-18T17:14:08.917Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-02-pet-cat-image-classifier-fastai.html</loc>
+    <lastmod>2026-01-18T17:14:09.360Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-07-redaction-mvp-huggingface.html</loc>
+    <lastmod>2026-01-18T17:14:09.868Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-24-data-versioning-dvc.html</loc>
+    <lastmod>2026-01-18T17:14:10.626Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-31-redaction-production-introduction.html</loc>
+    <lastmod>2026-01-18T17:14:11.191Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-09-07-serialisation.html</loc>
+    <lastmod>2026-01-18T17:14:11.759Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-10-16-notational-precedence.html</loc>
+    <lastmod>2026-01-18T17:14:12.125Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html</loc>
+    <lastmod>2026-01-18T17:14:12.742Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-01-01-on-mathematical-literacy.html</loc>
+    <lastmod>2026-01-18T17:14:13.111Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-03-25-tricks-are-the-thing.html</loc>
+    <lastmod>2026-01-18T17:14:13.835Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-04-28-removing-git-commits.html</loc>
+    <lastmod>2026-01-18T17:14:14.425Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-04-29-exploring-legacy-terraform-repository.html</loc>
+    <lastmod>2026-01-18T17:14:15.188Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-05-02-logarithms-exponents-mu123.html</loc>
+    <lastmod>2026-01-18T17:14:15.559Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-05-14-mu123-complete-maths.html</loc>
+    <lastmod>2026-01-18T17:14:15.927Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-05-21-balochi-language-modelling.html</loc>
+    <lastmod>2026-01-18T17:14:16.337Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-05-22-balochi-language-model-harms.html</loc>
+    <lastmod>2026-01-18T17:14:16.739Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-05-29-balochi-language-dataset.html</loc>
+    <lastmod>2026-01-18T17:14:17.136Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-06-04-token-odds-and-sods.html</loc>
+    <lastmod>2026-01-18T17:14:17.480Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-06-22-input-variables-terraform.html</loc>
+    <lastmod>2026-01-18T17:14:18.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-07-23-maths-prompt-rust-project.html</loc>
+    <lastmod>2026-01-18T17:14:18.730Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-07-24-database-backups-tarsnap.html</loc>
+    <lastmod>2026-01-18T17:14:19.397Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html</loc>
+    <lastmod>2026-01-18T17:14:19.883Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html</loc>
+    <lastmod>2026-01-18T17:14:20.634Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-04-01-publishing-afghanwire-dataset.html</loc>
+    <lastmod>2026-01-18T17:14:21.040Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-06-25-evaluation-finetuning-manual-dataset.html</loc>
+    <lastmod>2026-01-18T17:14:21.518Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html</loc>
+    <lastmod>2026-01-18T17:14:21.971Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html</loc>
+    <lastmod>2026-01-18T17:14:22.375Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html</loc>
+    <lastmod>2026-01-18T17:14:22.777Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</loc>
+    <lastmod>2026-01-18T17:14:23.193Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</loc>
+    <lastmod>2026-01-18T17:14:23.598Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</loc>
+    <lastmod>2026-01-18T17:14:24.048Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</loc>
+    <lastmod>2026-01-18T17:14:24.502Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</loc>
+    <lastmod>2026-01-18T17:14:24.978Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</loc>
+    <lastmod>2026-01-18T17:14:25.486Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</loc>
+    <lastmod>2026-01-18T17:14:25.952Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</loc>
+    <lastmod>2026-01-18T17:14:26.372Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-02-07-ai-engineering-chapter-9.html</loc>
+    <lastmod>2026-01-18T17:14:26.842Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</loc>
+    <lastmod>2026-01-18T17:14:27.278Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-02-11-starting-the-hugging-face-agents-course.html</loc>
+    <lastmod>2026-01-18T17:14:27.682Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</loc>
+    <lastmod>2026-01-18T17:14:28.713Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-02-21-beeminder-mcp.html</loc>
+    <lastmod>2026-01-18T17:14:29.125Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-03-16-learnings-building-llms.html</loc>
+    <lastmod>2026-01-18T17:14:29.637Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</loc>
+    <lastmod>2026-01-18T17:14:30.042Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-05-20-how-to-think-about-evals.html</loc>
+    <lastmod>2026-01-18T17:14:30.512Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-05-23-error-analysis-to-find-failure-modes.html</loc>
+    <lastmod>2026-01-18T17:14:31.013Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html</loc>
+    <lastmod>2026-01-18T17:14:31.527Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</loc>
+    <lastmod>2026-01-18T17:14:32.339Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</loc>
+    <lastmod>2026-01-18T17:14:32.808Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/til/2024-09-16-what-is-the-rust-prelude.html</loc>
+    <lastmod>2026-01-18T17:14:33.681Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-10-chapter1and2recall.html</loc>
+    <lastmod>2026-01-18T17:14:34.097Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2021-09-16-ch4-tensors.html</loc>
+    <lastmod>2026-01-18T17:14:34.690Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-11-fashion-mnist-pixel-similarity.html</loc>
+    <lastmod>2026-01-18T17:14:35.349Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-12-seven-steps-gradient-calculations.html</loc>
+    <lastmod>2026-01-18T17:14:35.788Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-13-sgd-whole-game.html</loc>
+    <lastmod>2026-01-18T17:14:36.272Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-14-sgd-fashion-mnist.html</loc>
+    <lastmod>2026-01-18T17:14:36.779Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-15-fashion-mnist-neural-network.html</loc>
+    <lastmod>2026-01-18T17:14:37.202Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-05-21-nlp-redaction-classifier.html</loc>
+    <lastmod>2026-01-18T17:14:37.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2022-10-24-foundations-mnist-basics.html</loc>
+    <lastmod>2026-01-18T17:14:38.492Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-03-05-stable-eights-adversarial.html</loc>
+    <lastmod>2026-01-18T17:14:39.121Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-03-18-stable-eights-part-two.html</loc>
+    <lastmod>2026-01-18T17:14:39.883Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-06-01-why-tokenisation.html</loc>
+    <lastmod>2026-01-18T17:14:40.417Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2023-06-03-training-custom-balochi-tokenizer.html</loc>
+    <lastmod>2026-01-18T17:14:41.053Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-06-02-isafpr-prompting-baseline.html</loc>
+    <lastmod>2026-01-18T17:14:41.675Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-06-03-isafpr-evaluating-baseline.html</loc>
+    <lastmod>2026-01-18T17:14:42.317Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-06-15-isafpr-first-finetune.html</loc>
+    <lastmod>2026-01-18T17:14:43.112Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-06-17-one-click-finetuning.html</loc>
+    <lastmod>2026-01-18T17:14:43.687Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexstrick.com/posts/2024-07-01-full-finetuned-model-evaluation.html</loc>
+    <lastmod>2026-01-18T17:14:45.147Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2016-09-12">
+<meta name="description" content="How I used the Pomodoro Technique and Vitamin-R to build focused work sessions during my PhD.">
+
+<title>Alex Strick van Linschoten - PhD Tools: Vitamin-R and the Pomodoro Technique for Getting Going</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - PhD Tools: Vitamin-R and the Pomodoro Technique for Getting Going">
+<meta property="og:description" content="How I used the Pomodoro Technique and Vitamin-R to build focused work sessions during my PhD.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - PhD Tools: Vitamin-R and the Pomodoro Technique for Getting Going">
+<meta name="twitter:description" content="How I used the Pomodoro Technique and Vitamin-R to build focused work sessions during my PhD.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PhD Tools: Vitamin-R and the Pomodoro Technique for Getting Going</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">phd</div>
+    <div class="quarto-category">productivity</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">useful-tools</div>
+    <div class="quarto-category">tools</div>
+    <div class="quarto-category">work</div>
+    <div class="quarto-category">writing</div>
+    <div class="quarto-category">technology</div>
+    <div class="quarto-category">phdtoolsseries</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    How I used the Pomodoro Technique and Vitamin-R to build focused work sessions during my PhD.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 12, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><em>[This is part of a series on the tools I used to write my PhD. Check out <a href="../blog?tag=phdtoolsseries">the other parts here</a>.]</em></p>
+<p><img src="images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/821034d8ced9_image-asset.avif" class="img-fluid"></p>
+<p>In my last post I mentioned the way I divide my work into timed segments. The ideal timing for me, I felt, was 45 mins on : 15 minutes off. The canonical division, however, is 25 minutes on : 5 minutes off. This is a technique commonly referred to as <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique">the Pomodoro Technique</a> (named after a tomato-shaped kitchen timer, I think). You might find that starting off at 45:15 is too much at the beginning, particularly if you’re not used to focused stretches of work, and that you have to slowly work your way up to that ratio, increasing the minutes incrementally.</p>
+<p>I like the idea of splitting work into timed units as an alternative to the usual task-based approach. This way, you make sure to take regular breaks, and you develop a healthy appreciation for the fact that some tasks take longer than you were expecting. I used to be someone who would claim to work from 8am-6pm on a particular project. I now realise that that is an illusion. Nobody can concentrate for that long, and the work you’ll be producing by the end of that session will most likely be worthless. Far better to have focused core sessions and then be honest about where you’re spending your time. Working 8am-6pm day-in-day-out is also a surefire way to burn out from what you’re doing.</p>
+<p>Another advantage to pomodoros is that they are small enough to appear unthreatening to <a href="http://99u.com/videos/5822/seth-godin-quieting-the-lizard-brain">your emotional lizard brain</a>. Confronted with two options (either working for 25 minutes on a particular problem, or an unboxed task instruction to ‘complete this particular task’) I know I feel far more comfortable taking a bash at starting to work if I just have to get through 25 minutes. If I place the entire responsibility and expectation of completing a section or a problem from the outset, I’m far more likely to find ways to avoid starting, to procrastinate (even if everything is switched off and I have no access to the internet; it’s amazing how creative the mind can be at avoiding hunkering down and tackling a difficult task).</p>
+<p>There are many (many) pomodoro timers available online. FWIW, the ones that I’ve used and found work well for me are: <a href="http://focustimeapp.com/">FocusTime</a>, <a href="http://pomodoneapp.com/">PomoDone</a> (which hooks into <a href="../blog?tag=trello">Trello</a> boards).</p>
+<p>Around the time when I started my routine of ‘Four Perfect Hours’ each day, I discovered something called <a href="http://www.publicspace.net/Vitamin-R/">Vitamin-R</a>. This is probably overkill for many of you, but if you’re inclined to monitor your data and your stats and your progress, then it might be worth exploring.</p>
+<p>The programme works on your laptop and your phone (though I almost exclusively used the Mac app) and you set up your time ratios (i.e.&nbsp;my 45 mins on, 15 minutes rest routine). You specify what you’ll be doing during the coming 45 minutes. This is useful in forcing you to clarify what you will be doing, since being specific about this makes it likely that you’ll make progress instead of just browsing about a bit in your sources and so on. It gives you alerts and alarms at the start and end of your pomodoros, as well as periodic ‘tick-tock’ noises at random moments to just remind you that this is a period of focused. Some people might find this annoying; I found it useful to occasionally break me out of a daydream or from going down some not-particularly-useful line of approach.</p>
+<p>At the end of each session, it asks you how focused you felt while working. This is really useful for building up (over time) a picture of which times of the day are more useful than others in terms of your focus.</p>
+<p>[caption id=“” align=“alignnone” width=“1450”]<img src="images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/19aa911789d4_image-asset.avif" class="img-fluid" alt="One of the charts that Vitamin-R generates"> One of the charts that Vitamin-R generates [/caption]</p>
+<p>You can see that my early mornings were generally my core work time. You will usually have an instinctual understanding of this truth, but Vitamin-R allows you to confirm it and to keep track of just how many hours you’re spending in ‘Deep Work’.</p>
+<p>I happened to have a Beeminder goal for ‘Deep Work’ at the time, and I filled it with data from Vitamin-R. At the end of every day, I’d update it with however many minutes Vitamin-R said I’d tracked as having been devoted to that deep work. That kept me honest, and it was also nice to see the cumulative core hours add up over time.</p>
+<p>[caption id=“” align=“alignnone” width=“1348”]<img src="images/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going/f88d05b0025e_image-asset.avif" class="img-fluid" alt="Here you can see the 187 or so hours I tracked in the first half of 2016"> Here you can see the 187 or so hours I tracked in the first half of 2016 [/caption]</p>
+<p>Most won’t need or want this level of specificity or tracking. Any phone (even a dumb phone’) comes with a countdown timer, and that’s enough to get started with the pomodoro technique. I recommend it because it encourages regular breaks. If you find this useful, please do let me know. It’s always good to hear from others in the ‘trenches’ of knowledge work.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2017-03-12">
+<meta name="description" content="Why Arabic fonts appear smaller than English text on websites, and what’s causing this design oversight.">
+
+<title>Alex Strick van Linschoten - Why do Arabic fonts appear so small? (and how to fix it)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Why do Arabic fonts appear so small? (and how to fix it)">
+<meta property="og:description" content="Why Arabic fonts appear smaller than English text on websites, and what's causing this design oversight.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Why do Arabic fonts appear so small? (and how to fix it)">
+<meta name="twitter:description" content="Why Arabic fonts appear smaller than English text on websites, and what's causing this design oversight.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Why do Arabic fonts appear so small? (and how to fix it)</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">arabic</div>
+    <div class="quarto-category">language</div>
+    <div class="quarto-category">coding</div>
+    <div class="quarto-category">languages</div>
+    <div class="quarto-category">design</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Why Arabic fonts appear smaller than English text on websites, and what’s causing this design oversight.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 12, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>[caption id=“” align=“alignnone” width=“600”]<img src="images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.avif" class="img-fluid" alt="This is what a Wikipedia site looks like in Arabic"> This is what a Wikipedia site looks like in Arabic [/caption]</p>
+<p>Anyone who’s ever studied Arabic and attempted to increase their exposure to the language through the internet will have encountered this problem: Arabic fonts are always two or three sizes smaller than their English/Roman alphabet equivalent. This can make navigating the web a dispiriting experience. Most big websites take a lot of time and effort to get their browsing experience just right, with fonts that are appropriately scaled and optimised for reading. (Get a sense of how much thought goes into typefaces <a href="https://www.quora.com/Which-typefaces-does-The-New-York-Times-use">here</a>, for example, at the New York Times.)</p>
+<p>So why does this happen? At first I thought it was just a case of Arabic fonts being very much a sideshow in the what-doesn’t-everyone-else-speak-english show that encompasses so much of Silicon Valley’s design mentality. The most-used products are generally designed for an English-speaking audience, with people writing from left-to-right. Apple and Android’s operating systems both work and function much better / logically when set to a Roman alphabet / layout. I happen to have my phones and computers set to an Arabic alphabet, and it’s blindingly obvious that less thought went into designing the experience for such Arabic-speaking users. (For a more detailed explanation of some of the deficiencies of Arabic fonts, <a href="http://www.arabictype.com/blog/articles/problems-of-arabic-typefaces/">read this</a> and <a href="https://www.wired.com/2015/10/why-its-so-hard-to-design-arabic-typefaces/">this</a>.)</p>
+<p>What’s worse, the consistency is subject to random change. To give one small example, iOS’s ‘Save to Evernote’ dialogue box allows me to save articles from <a href="https://www.instapaper.com/">Instapaper</a> into <a href="https://www.evernote.com/">Evernote</a>. (This is part of my somewhat laborious workflow for getting articles into <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a>. <a href="https://www.alexstrick.com/blog/2014/10/note-taking-jujitsu-or-how-i-make-sense-of-what-i-read">Read here</a> for more.) For years, I clicked a button in the right-hand corner to ‘save’, but a few months back they switched all the boxes around and now I have to click in the left-hand corner. The muscle memory is such that this is a hard one to fix. It’s not the end of the world, but it still is an indication (along with the many other times this happens, seemingly without plan) of how little thought goes into this design and user interface work.</p>
+<p>[caption id=“” align=“alignnone” width=“600”]<img src="images/2017-03-12-why-are-arabic-fonts-so-small/dd3014a7047e_image-asset.avif" class="img-fluid" alt="This is what the English version of Wikipedia looks like"> This is what the English version of Wikipedia looks like [/caption]</p>
+<p>Coming back to fonts, the real reason for why this happens has to do with the amount of vertical space that letters take up. Thomas Phinney of FontLab <a href="https://www.quora.com/Why-are-default-Arabic-fonts-so-small">explained it clearly</a> over on Quora when he wrote:</p>
+<p><em>“Arabic letters have a smaller body relative to the extenders above and below, so the most common elements are smaller relative to everything else. Because the height of the font needs to more-or-less fit within the body size, Arabic looks smaller than Latin at the same point size.”</em></p>
+<p>There are three main approaches to solving this problem:</p>
+<ol type="1">
+<li>Deal with it. A lot of internet ‘advice’ tends towards this attitude. It’s probably wise, but not especially practical for those early on in their studies of Arabic, nor even particularly practical for general audiences who want a pleasant reading experience.</li>
+<li>Zoom in on the page. CTRL+ or CMD+ will do this on most browsers. Unfortunately, it messes with the rest of the design and functionality of the page, so you’ll usually have a pretty unpleasant experience if you do this.</li>
+<li>Install something to make the Arabic letters bigger. There are some scripts that will do this for you that you can have <a href="https://en.wikipedia.org/wiki/Greasemonkey">Greasemonkey</a> (in Firefox) or <a href="https://tampermonkey.net/">Tampermonkey</a> (in Chrome) handle. These two (<a href="https://www.reddit.com/r/learn_arabic/comments/1h3zte/arabic_font_too_small/">here</a> and <a href="https://www.reddit.com/r/csshelp/comments/13itgs/is_there_anyway_to_increase_the_font_size_of_text/">here</a>) seem to be the best known. I have tried both and couldn’t get them to work. Needless to say, this is pretty fiddly and not at all ideal.</li>
+</ol>
+<p>For now, it seems we’re stuck with a poor browser and operating system experience.</p>
+<p>UPDATE: Gerald Drißner (of ‘<a href="http://www.arabic-for-nerds.com/">Arabic for Nerds</a>’) suggested a Chrome extension, <a href="https://chrome.google.com/webstore/detail/huruf/lhdifindchogekmjooeiolmjdlheilae">Huruf</a>, which I have now installed and seems to work pretty well. Try that if you use Chrome!</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

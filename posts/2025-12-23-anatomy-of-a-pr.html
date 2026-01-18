@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2025-12-23">
+<meta name="description" content="Anatomy of a PR">
+
+<title>Alex Strick van Linschoten - Anatomy of a PR</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Anatomy of a PR">
+<meta property="og:description" content="Anatomy of a PR">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Anatomy of a PR">
+<meta name="twitter:description" content="Anatomy of a PR">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Anatomy of a PR</h1>
+                  <div>
+        <div class="description">
+          Anatomy of a PR
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">zenml</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">softwareengineering</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alex Strick van Linschoten </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 23, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#current-implementation" id="toc-current-implementation" class="nav-link active" data-scroll-target="#current-implementation">Current implementation</a></li>
+  <li><a href="#initial-improvement-ideas" id="toc-initial-improvement-ideas" class="nav-link" data-scroll-target="#initial-improvement-ideas">Initial improvement ideas</a></li>
+  <li><a href="#thinking-through-whether-to-include-a-model-check" id="toc-thinking-through-whether-to-include-a-model-check" class="nav-link" data-scroll-target="#thinking-through-whether-to-include-a-model-check">Thinking through whether to include a <code>Model</code> check</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>In <a href="https://github.com/zenml-io/zenml">ZenML</a> we have a CLI command that helps you clean up the artifacts from old pipeline runs. People use ZenML for automating their ML pipelines, so between experimentation as well as just ordinary production usage, you can probably imagine that people might want to clean up from time to time. We automatically version the inputs and outputs of steps within each pipeline run, so for certain types of workflows this can add up over time.</p>
+<p>At a certain point we added in a <code>zenml artifact prune</code> command which allowed users to clean up artifacts from pipeline runs which have already been deleted. The way ZenML works is that we connect to your pre-existing infrastructure (think: an S3 bucket, a GCS bucket, etc.) and store the artifacts there; ZenML doesn’t own the storage, it just points to it and stores related metadata.</p>
+<p>So the pre-existing CLI command allowed the user to clean these orphaned artifacts from both their storage as well as from ZenML’s metadata store. We had some CLI options that allowed you to pick how you wanted this to happen:</p>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Short</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--only-artifact</code></td>
+<td><code>-a</code></td>
+<td>Only delete artifact data from artifact store, keep metadata in DB</td>
+</tr>
+<tr class="even">
+<td><code>--only-metadata</code></td>
+<td><code>-m</code></td>
+<td>Only delete metadata from DB, keep artifact data in store</td>
+</tr>
+<tr class="odd">
+<td><code>--yes</code></td>
+<td><code>-y</code></td>
+<td>Skip confirmation prompt</td>
+</tr>
+<tr class="even">
+<td><code>--ignore-errors</code></td>
+<td><code>-i</code></td>
+<td>Continue to next artifact if deletion fails</td>
+</tr>
+</tbody>
+</table>
+<section id="current-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="current-implementation">Current implementation</h2>
+<p>This command was implemented back in 2022, so as far as ZenML’s concerned it’s a pretty old bit of the codebase and hasn’t really been modified much over past three years. I had occasion to use this command while testing out some new different feature and I noticed it was running much slower than I expected. Looking at the code, it was clear why this was happening.</p>
+<p>The current implementation goes like this:</p>
+<ol type="1">
+<li>We get a <code>List</code> of all the unused artifacts. (‘Unused’ here meaning that it isn’t referenced in some existing pipeline run, either as the input to a step or an output of a step.)</li>
+<li>We loop over this list and (depending on which options the user passed into the CLI invocation):</li>
+</ol>
+<ul>
+<li>delete the artifact version</li>
+<li>delete the artifact itself if there are no more versions of that artifact version that still exist</li>
+<li>delete the metadata / references to that artifact from the (ZenML) database</li>
+</ul>
+<p>The issue with this implementation is that it’s not very efficient. Even from this prose explanation of how the code works, you’ll have already noticed that we’re looping over the artifacts one by one, and each step of the loop is itself already potentially a multi-step process.</p>
+<p>I thought I’d make some improvements to this CLI command and so this blog is just my attempt to take you along for the ride.</p>
+</section>
+<section id="initial-improvement-ideas" class="level2">
+<h2 class="anchored" data-anchor-id="initial-improvement-ideas">Initial improvement ideas</h2>
+<p>Based on what I know of the current implementation so far, my initial thoughts were to firstly try to make this more efficient by running the deletion of artifacts in parallel. So instead of iterating over the items one by one, we can have a pool of workers that each handle the deletion of a single artifact.</p>
+<p>This seemed easy enough to implement, but I thought a bit more about how this command might otherwise have been improved:</p>
+<ul>
+<li>we already check to see whether the artifact is a step input or output, but we don’t check to see whether it’s referenced by a <code>Model</code> (ZenML has this concept of a ‘Model’ which is a bit different than just an ML model, but it includes things like data / metadata etc…). I’m not fully sure about the tradeoffs about including this check to see if there’s a reference inside a <code>Model</code>. Models were implemented much later than this CLI command, so it’s possible that we just forgot to include the check here, but it’s also possible that the check is redundant. I’ll have to think about this more.</li>
+<li>there’s relatively little feedback given to the user about what’s happening, or at least it could be much improved</li>
+<li>for a destructive operation like this, it would be nice to have a <code>--dry-run</code> option which shows which artifacts / versions / files would be deleted</li>
+<li>there are probably some improvements around filtering we could add in, like having an <code>--older-than</code> option where artifact versions would need to be older than some duration (e.g.&nbsp;7 days, 1 year etc)</li>
+<li>we could set a <code>--keep-latest N</code> option where the user would mean that we keep the N most recent artifact versions</li>
+<li>we could add a <code>--show-size</code> option which would display the total storage that would be freed (or that was freed) by running the command</li>
+<li>possibly we could have a <code>--project</code> and/or <code>--workspace</code> scoping that would only delete artifacts from a specific project / workspace</li>
+</ul>
+<p>There were some other more technical improvements that seemed useful to make:</p>
+<ul>
+<li>no need for multiple <code>Client()</code> instantiations. We can just reuse the one that has been made earlier in the code.</li>
+<li>there’s a pre-existing <code>client.prune_artifacts()</code> method that uses a more efficient batch SQL deletion operation so we might want to use that directly?</li>
+<li>it seems like there’s a stale data bug whereby we’re checking for the state artifact versions for an artifact but it’s not updated since we originally fetched it. For this reason as well, if multiple versions belong to the same parent artifact, we’ll try to delete the parent artifact multiple times.</li>
+</ul>
+</section>
+<section id="thinking-through-whether-to-include-a-model-check" class="level2">
+<h2 class="anchored" data-anchor-id="thinking-through-whether-to-include-a-model-check">Thinking through whether to include a <code>Model</code> check</h2>
+<p>In the current implementation we check to see whether an artifact is a step input or output in the following way:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>unused_filter <span class="op">=</span> and_(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    ArtifactVersionSchema.<span class="bu">id</span>.notin_(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        select(StepRunOutputArtifactSchema.artifact_id)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ArtifactVersionSchema.<span class="bu">id</span>.notin_(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        select(StepRunInputArtifactSchema.artifact_id)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That <code>and_</code> is a <code>sqlmodel</code> construct that returns a boolean expression that is true if both conditions are true. So we just are making sure that the artifact is not a step input or output. It does not check to see whether the artifact is a <code>Model</code> or not.</p>
+<p>At this point we can ask: can an artifact be linked to a <code>Model</code> without being linked to a <code>Step</code>? Absolutely! In code it might look something like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Outside any step context (e.g., in a script or notebook)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> zenml <span class="im">import</span> save_artifact, link_artifact_to_model, Model</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Create artifact outside step - no step link is created</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>artifact <span class="op">=</span> save_artifact(my_data, name<span class="op">=</span><span class="st">"training_data"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Link it to a model version</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Model(name<span class="op">=</span><span class="st">"fraud_detector"</span>, version<span class="op">=</span><span class="st">"production"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>link_artifact_to_model(artifact, model<span class="op">=</span>model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So if we did this, we’d have an artifact that is linked to a model but not to a step. When we did <code>zenml artifact prune</code>, this artifact would be deleted because we didn’t check to see whether it was linked to a <code>Model</code>.</p>
+<p>I think when a user runs <code>zenml artifact prune</code>, they would expect to delete artifacts that are truly orphaned, not referenced by anything meaningful, and that would include artifacts that are linked to a <code>Model</code> but not to a <code>Step</code>.</p>
+<p>Based on all of this, and looking at the <code>git</code> history a bit, I think we probably just forgot to add this check when the Model Control Plane feature and the <code>Model</code> data model (yes I can hear how this sounds!) was added.</p>
+<p>The fix is fairly straightforward: we add the missing check to see whether the artifact is linked to a <code>Model</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>unused_filter <span class="op">=</span> and_(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ArtifactVersionSchema.<span class="bu">id</span>.notin_(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        select(StepRunOutputArtifactSchema.artifact_id)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    ArtifactVersionSchema.<span class="bu">id</span>.notin_(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        select(StepRunInputArtifactSchema.artifact_id)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Missing check - should be added:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ArtifactVersionSchema.<span class="bu">id</span>.notin_(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        select(ModelVersionArtifactSchema.artifact_version_id)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I think there will be some tests that need updating to account for this change, and I think we might want also to consider an update to the <code>zenml artifact prune</code> command to add a <code>--models</code> option that would allow users to prune artifacts that are linked to a <code>Model</code> but not to a <code>Step</code>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

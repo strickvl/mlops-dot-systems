@@ -1,1 +1,1 @@
-Sitemap: https://mlops.systems/sitemap.xml
+Sitemap: https://alexstrick.com/sitemap.xml

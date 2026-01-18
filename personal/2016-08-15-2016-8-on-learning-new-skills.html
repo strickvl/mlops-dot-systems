@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2016-08-15">
+<meta name="description" content="Reflections on learning new skills and expanding literacy in data science, statistics, and Python—and the practical challenges that come with it.">
+
+<title>Alex Strick van Linschoten - On Learning New Skills, #showyourwork and other housekeeping</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - On Learning New Skills, #showyourwork and other housekeeping">
+<meta property="og:description" content="Reflections on learning new skills and expanding literacy in data science, statistics, and Python—and the practical challenges that come with it.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - On Learning New Skills, #showyourwork and other housekeeping">
+<meta name="twitter:description" content="Reflections on learning new skills and expanding literacy in data science, statistics, and Python—and the practical challenges that come with it.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#showyourwork" id="toc-showyourwork" class="nav-link active" data-scroll-target="#showyourwork">#showyourwork</a></li>
+  <li><a href="#housekeeping" id="toc-housekeeping" class="nav-link" data-scroll-target="#housekeeping">Housekeeping</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">On Learning New Skills, #showyourwork and other housekeeping</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">books</div>
+    <div class="quarto-category">jordan</div>
+    <div class="quarto-category">podcast</div>
+    <div class="quarto-category">coding</div>
+    <div class="quarto-category">tsp</div>
+    <div class="quarto-category">skills</div>
+    <div class="quarto-category">writing</div>
+    <div class="quarto-category">languages</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Reflections on learning new skills and expanding literacy in data science, statistics, and Python—and the practical challenges that come with it.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 15, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><img src="images/2016-08-15-2016-8-on-learning-new-skills/1a8b8bd4a5ba_image-asset.avif" class="img-fluid"></p>
+<p>Newly released from life under the PhD regime, I have been exploring new interests and indulging my curiosity down new pathways. Last time I wrote, I explained how I had taken to <a href="http://www.alexstrick.com/blog/2016/7/chondrichthyan-fun-a-review-of-shark-mooc">studying sharks</a> and various aspects of conservation and marine biology. There was a certain amount of training around higher-level concepts in that course: in particular, on the scientific method, ways to problem-solve and so on, but in general the emphasis was on the material rather than specific skills.</p>
+<p>I think that learning new skills – expanding the lenses you have through which to view the world, or giving yourself more options for a variety of perspectives – is an important part of becoming more useful. To that end, language learning was always an important part of getting to know any subject or place (either the implicit language of a particular domain, or the explicit language of a people or country).</p>
+<p>Recently, I’ve taken to trying to expand my numeric and digital literacy. I’ve always been technically literate, at least to the extent that I was able to solve my problems, fiddle with code <em>a little</em>&nbsp;and play around with technical tools and programmes for which I have no formal training. That said, there is a wide gulf between that position and a more confident data literacy, where I can interpret things through the lens(es) of statistics, use tools to analyse what is going on and so on. I’ve always felt like this was a core weakness in my ways of understanding the world, so I’m now trying to address or remedy that.</p>
+<p>My first step is to address the gaping holes. These are a mix of mathematics, statistics, probability as well as things like computational languages that will allow me to engage in these disciplines with more than a basic-level understanding. There is a <a href="https://www.youtube.com/watch?v=hxXIJnjC_HI">fair amount of debate</a> as to whether the name is useful or not, but for now, I’ll state that I’m training myself in ‘data science’.</p>
+<p>I learn these kinds of skills best through a practice- and feedback-rich environment, so I’m taking a project-based approach to my studies. <a href="http://khanacademy.org/">Khan Academy</a> (what a resource!) is my mentor for mathematics, and <a href="https://www.udacity.com/">Udacity</a> (whose courses I’ve taken in the past and been very impressed by) is helping with the <a href="https://en.wikipedia.org/wiki/Python_%28programming_language%29">Python</a>/coding aspect. Each skill group I learn is followed by a mini-project that allows me to use the skills in an applied context.</p>
+<p>All of this is by way of introduction to what I really wanted to talk about today, which is a recent problem that I encountered while completing my coursework. The details don’t matter <em>that much</em>, so I won’t get into them, but suffice it to say for now that I was trying to write a python function that calculated the number of days between one date and another date.</p>
+<p>One feature of coding that I find frustrating is the way <a href="http://www.teamten.com/lawrence/programming/intro/intro8.html">loops</a> (bits of code that repeat for as long as certain conditions remain met/unmet) can be included within loops, and sometimes maybe another set as well within the loop-within-a-loop. I’m new to this stuff, so this level of recursion (is that even the right word? I’m pretty sure recursion is used for something else) makes my brain hurt when I try to think about it too much. But think about it I must.</p>
+<p>So there I was, with some broken bit of code, no idea how to move forward. The answer to the problem was just one click away, but I didn’t want to just see the answer. I wanted to learn the thing that was absent. I wanted to learn how to get from my state of confusion to a state of understanding.</p>
+<p>This seems to be a common enough problem in my new studies that I thought it might be useful to describe. You can explain the solution, at which point you understand how that particular problem was solved, but how do you improve the likelihood that you’ll be able to solve a different problem in the future? Does looking at the solution help? Does spending a week staring at a piece of paper, wishing the solution to magically appear, help?</p>
+<p>In the end, what I’m trying to get better at is problem-solving. As far as I’ve been able to read so far (in books like Sebastian Gutierrez’s fantastic <a href="https://www.amazon.com/Data-Scientists-Work-Sebastian-Gutierrez-ebook/dp/B00M0EYG0Y/ref=sr_1_1_twi_kin_2?sr=8-1&amp;ie=UTF8&amp;keywords=data%2Bscientists%2Bat%2Bwork&amp;tag=soumet-20&amp;qid=1471282531"><em>Data Scientists at Work</em></a>), this skill is valued far above any specific skills like competence in one programming or computational language vs another. The specific languages can all be learnt. Getting better at solving problems, interviewees seem to constantly imply, that is much harder.</p>
+<p>Which is where I am, trying to solve hard (hard for me, at least)&nbsp;problems.</p>
+<p>My solution involved thinking about the problem more deliberately. Udacity hosts an online forum where students can post bits of code, questions etc. There’s usually someone who answers the question within 24 hours. The emphasis is on finding new ways to think about problems rather than just providing the answer. So, teaching you how to fish instead of giving you a fish. That old chestnut.</p>
+<p>I posted a question. In writing out the question, I was forced to be more deliberate in how I thought out the problem. By specifying the exact point where I saw something going wrong, I was forced to be more sequential, more methodical. I started to see new pathways forward to progress with the problem. I would then go off and work a bit more until I hit another roadblock, at which point I’d post a follow-up question. Then a bit more insight would follow the process of writing up the problem. Then a bit more work, another roadblock. You get the idea. I think I submitted 4 different questions/writeups in as many hours. By the end, I had thought my way out of the problem. Nobody needed to reply to my query; I had solved it myself.</p>
+<p>This is quite a simple insight, in many ways: writing things down, making them concrete… these are things that help with the process of thought. Thought, taken out of the mushy-tissue-filled black box that is our brains and put on paper, is something that benefits from being methodical. I’d long known (at least, theoretically or implicitly) that writing helps thought. Every time I’ve worked on an essay or on a book, the process has clarified my thought in ways that wouldn’t have been possible had I just remained satisfied with ‘thinking’ about things.</p>
+<p>There are a bunch of small project ideas I have and want to use as ways of practising my new / fledgeling skills. I have certain data sets from my time in Afghanistan that I’d like to work with. There are other interests that I’d like to stimulate by applying this new tool / set of tools.</p>
+<section id="showyourwork" class="level2">
+<h2 class="anchored" data-anchor-id="showyourwork">#showyourwork</h2>
+<p>This brings me neatly to my second point. I finished <a href="http://austinkleon.com/show-your-work/">a book</a> by <a href="http://austinkleon.com/">Austin Kleon</a> recently and it revolves around similar-ish ideas. Kleon talks about the importance of sharing the process of work as well as the work itself. He explains a bunch of the reasons why this is a smart idea, and he discusses various ways that you can enact this as a guiding practice going forward.</p>
+<p>It reminded me that the last major learning experience I went through (not including languages or personal growth) was when I started travelling in and learning about Afghanistan. I was writing lots back then, either in emails to a group of friends and family, or later in blog form or in articles written for free for local magazines. (In my work for <a href="http://afghanwire.org/afghanwire/home.html">AfghanWire</a>, too, I drafted a mini-encyclopedia of sorts, with entries for the important pieces of context (people, places, events). Researching all of that was a huge task, but looking back I’m certain that I learnt a lot through the process.)</p>
+<p>The same thing happened when I started <a href="http://www.alexstrick.com/blog/2016/7/chondrichthyan-fun-a-review-of-shark-mooc">studying sharks</a>, as I explained last time. I used <a href="https://www.twitter.com/stricklinks">twitter</a> as a way of connecting with scholars and people who had already spent years studying the discipline. I used my podcast, <a href="http://www.sourcesandmethods.com/">Sources &amp; Methods</a>, to connect to at least one group (the <a href="http://www.gillsclub.org/">Gills Club</a> –&gt; see the <a href="http://www.sourcesandmethods.com/podcast/2016/8/4/sources-and-methods-29-gills-club">podcast here</a>) and to connect to talk about that new interest.</p>
+<p>All of which is a roundabout way of saying that I will be blogging more. Most blogs will not be as long as this, or previous posts. In the past, I would only consider it worth blogging if I had taken a week or few to gather together <em>all</em>&nbsp;the relevant insights to a particular topic or issue, but I’m not sure that’s reasonable any more (thanks to Kleon’s book) and I want to benefit from the power that comes from writing <em>through</em>&nbsp;problems on a more regular basis.</p>
+</section>
+<section id="housekeeping" class="level2">
+<h2 class="anchored" data-anchor-id="housekeeping">Housekeeping</h2>
+<p>I mentioned that I’m done with the <a href="http://www.kcl.ac.uk/sspp/departments/warstudies/people/phd/strickvanlinschoten.aspx">PhD</a>. So now the rest of my life starts. I haven’t decided on the next step just yet, and there still some loops that need tying off. I have some research/report-writing to finish, a novel written last year during a fit of PhD-procrastination to edit/rework, and more to be done with my Jordanian colloquial Arabic.</p>
+<p>One somewhat important development is that I’m moving to Amman (Jordan) this coming week. I’m not sure how long I’ll be there, but consider it my base from now on. If you’re ever passing through town, please do <a href="../contact">drop me a line</a>.</p>
+<p>My final piece of news is that <a href="http://www.felixkuehn.com/">Felix</a> and I have signed a contract to work on a new book for <a href="http://www.hurstpublishers.com/">Hurst</a> (title and all other details TBC) which will be an anthology of Taliban writings/statements. It’ll cover the whole gamut of their experience from the 1980s up until the present day. We’ll be drawing from the materials of the <a href="http://www.alexstrick.com/blog/2015/8/afp-covers-the-taliban-sources-project">Taliban Sources Project</a>&nbsp;as well as other sources we’ve gathered along the way in previous years. I’m quite excited about the project, and it’ll be an amazing resource once out. The problem for a lot of research, as I’ve mentioned <a href="http://www.alexstrick.com/blog/2015/12/reading-the-afghan-taliban-67-sources-you-should-be-studying">before</a>,&nbsp;is that the primary sources aren’t used half as much as they ought. We hope this project will offer a corrective in this respect.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

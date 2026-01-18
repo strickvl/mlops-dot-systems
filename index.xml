@@ -6,15 +6,398 @@
       version="2.0">
 <channel>
 <title>Alex Strick van Linschoten</title>
-<link>https://mlops.systems/index.html</link>
-<atom:link href="https://mlops.systems/index.xml" rel="self" type="application/rss+xml"/>
-<description></description>
+<link>https://alexstrick.com/index.html</link>
+<atom:link href="https://alexstrick.com/index.xml" rel="self" type="application/rss+xml"/>
+<description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.2.269</generator>
 <lastBuildDate>Tue, 03 Jun 2025 22:00:00 GMT</lastBuildDate>
 <item>
+  <title>Trying to instrument an agentic app with Arize Phoenix and litellm</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>It’s important to instrument your AI applications! I hope this can more or less be taken as given just as you’d expect a non-AI-infused app to capture logs. When you’re evaluating your LLM-powered system, you need to have capture the inputs and outputs both at an end-to-end level in terms of the way the user experiences things as well as with more fine-grained granularity for all the internal workings.</p>
+<p>My goal with this blog is to first demonstrate how Phoenix and <code>litellm</code> can work together, and then to make sure that we are able to group all spans together under a single trace.</p>
+<p>I’ll write the blog as I work so at this point I’m not sure exactly how this will turn out.</p>
+<section id="basic-logging-with-litellm-phoenix" class="level2">
+<h2 class="anchored" data-anchor-id="basic-logging-with-litellm-phoenix">Basic logging with litellm + phoenix</h2>
+<p>As a reminder, here’s how we make an LLM call with <code>litellm</code>:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb1-4">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb1-5">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb1-6">        {</span>
+<span id="cb1-7">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb1-8">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb1-9">        }</span>
+<span id="cb1-10">    ],</span>
+<span id="cb1-11">)</span>
+<span id="cb1-12"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span>
+<span id="cb1-13"><span class="co" style="color: #5E5E5E;"># prints 'Beijing'</span></span></code></pre></div>
+<p>The Phoenix docs explain how to set up basic logging for litellm:</p>
+<ul>
+<li>install the following pip packages:
+<ul>
+<li><code>arize-phoenix-otel</code></li>
+<li><code>openinference-instrumentation-litellm</code></li>
+<li>(<code>litellm</code>, obviously)</li>
+</ul></li>
+<li>set up the necessary environment variables with API key etc to ensure that traces get sent to the right account and endpoint</li>
+</ul>
+<p>Let’s assume we’re using the hosted Phoenix Cloud version for now. Then we can rerun our example, with some slight tweaks:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"></span>
+<span id="cb2-2"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb2-3"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="co" style="color: #5E5E5E;"># configure the Phoenix tracer</span></span>
+<span id="cb2-6">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb2-7">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb2-8">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb2-9">)</span>
+<span id="cb2-10"></span>
+<span id="cb2-11"></span>
+<span id="cb2-12">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb2-13">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb2-14">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb2-15">        {</span>
+<span id="cb2-16">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb2-17">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb2-18">        }</span>
+<span id="cb2-19">    ],</span>
+<span id="cb2-20">)</span>
+<span id="cb2-21"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
+<p>So we first register the Phoenix tracer, specify the project (already set up in Phoenix Cloud) and then run our litellm <code>completion</code> as previously. In the terminal we see he following logs:</p>
+<pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
+|  Phoenix Project: hinbox
+|  Span Processor: SimpleSpanProcessor
+|  Collector Endpoint: https://app.phoenix.arize.com/v1/traces
+|  Transport: HTTP + protobuf
+|  Transport Headers: {'api_key': '****', 'authorization': '****'}
+|  
+|  Using a default SpanProcessor. `add_span_processor` will overwrite this default.
+|  
+|  ⚠️ WARNING: It is strongly advised to use a BatchSpanProcessor in production environments.
+|  
+|  `register` has set this TracerProvider as the global OpenTelemetry default.
+|  To disable this behavior, call `register` with `set_global_tracer_provider=False`.
+
+Beijing</code></pre>
+<p>So immediately there are a lot of things to consider. It seems that we’ll want to use the <code>BatchSpanProcessor</code> that it suggests, and also it seems like I might not want to set this as the global tracing provider, too.</p>
+<p>In Phoenix Cloud, I see this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/first-phoenix.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Basic Phoenix tracing interface</figcaption><p></p>
+</figure>
+</div>
+<p>As you can see, we’ve captured the input and output messages for the completion, it’s tracked the latency of the call (1.16s, which seems pretty slow actually!). There is also some sort of an annotation interface though I’ll explore that down the line maybe. I immediately notice that I’m missing things like the system attributes for where the call was made, also metadata like the temperature and other settings. I’d also like to see things like token counts (which you <em>can</em> get in Phoenix but they’re sort of buried) as well as the estimated cost of the call(s) and so on. We can see about adding some of that down the line.</p>
+</section>
+<section id="batchspanprocessor-for-production-usage" class="level2">
+<h2 class="anchored" data-anchor-id="batchspanprocessor-for-production-usage"><code>BatchSpanProcessor</code> for production usage</h2>
+<p>Let’s next move on to adding <code>BatchSpanProcessor</code> as the message suggested, which is as simple as adding <code>batch=True</code> to the tracer provider registration code. What this does is make sure that spans are processed in batches before they’re exported to Arize. This takes away some of the network costs that you incur when sending the spans one by one. I’ve also made sure to turn off the registration of this tracing provider as the global one:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"></span>
+<span id="cb4-2"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb4-3"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb4-4"></span>
+<span id="cb4-5"><span class="co" style="color: #5E5E5E;"># configure the Phoenix tracer</span></span>
+<span id="cb4-6">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb4-7">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb4-8">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb4-9">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb4-10">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
+<span id="cb4-11">)</span>
+<span id="cb4-12"></span>
+<span id="cb4-13"></span>
+<span id="cb4-14">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb4-15">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb4-16">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb4-17">        {</span>
+<span id="cb4-18">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb4-19">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb4-20">        }</span>
+<span id="cb4-21">    ],</span>
+<span id="cb4-22">)</span>
+<span id="cb4-23"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
+<p>And I get this in the terminal:</p>
+<pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
+|  Phoenix Project: hinbox
+|  Span Processor: BatchSpanProcessor
+|  Collector Endpoint: https://app.phoenix.arize.com/v1/traces
+|  Transport: HTTP + protobuf
+|  Transport Headers: {'api_key': '****', 'authorization': '****'}
+|  
+|  Using a default SpanProcessor. `add_span_processor` will overwrite this default.
+
+Beijing</code></pre>
+<p>It’s actually somehow a bit annoying to still see a message about the fact that I’m using a default <code>SpanProcessor</code>. It’s unclear to me why I need to care that this is a default one. The message is taking up real estate in the logs and it seems important (otherwise why would they have included it?) but it’s also unclear to me what the alternative is and why I’d want to overwrite the default. I think for now I’ll leave it.</p>
+</section>
+<section id="using-the-litellm-callbacks-as-an-alternative" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-litellm-callbacks-as-an-alternative">Using the litellm callbacks as an alternative</h2>
+<p>If we stray away from the official supported way to handle tracing with Phoenix, there’s also <a href="https://docs.litellm.ai/docs/observability/phoenix_integration">the community-supported in-built litellm option</a>:</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb6-2"></span>
+<span id="cb6-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"arize_phoenix"</span>]</span>
+<span id="cb6-4"></span>
+<span id="cb6-5">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb6-6">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb6-7">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb6-8">        {</span>
+<span id="cb6-9">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
+<span id="cb6-10">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb6-11">        }</span>
+<span id="cb6-12">    ],</span>
+<span id="cb6-13">    metadata<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"PROJECT_NAME"</span>: <span class="st" style="color: #20794D;">"hinbox"</span>},</span>
+<span id="cb6-14">)</span>
+<span id="cb6-15"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
+<p>This achieves a similar result, though I was unable to get the trace to land anywhere other than the <code>default</code> project. <a href="https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-otel">Arize’s docs</a> mention a <code>PHOENIX_PROJECT_NAME</code> environment variable but it seems this isn’t respected or used by the <code>litellm</code> implementation. Indeed when I look at <a href="https://github.com/BerriAI/litellm/blob/main/litellm/integrations/arize/arize_phoenix.py">the implementation</a>, I don’t see this being used anywhere, so it seems that the community-driven implementation isn’t really the way forward.</p>
+<p>I just wanted to mention it, however, since some of the ‘callback’ integrations for tracing in litellm are really nicely implemented (like the one for Langfuse, e.g.) so I wanted to try it out at least.</p>
+</section>
+<section id="one-trace-multiple-spans" class="level2">
+<h2 class="anchored" data-anchor-id="one-trace-multiple-spans">One trace, multiple spans</h2>
+<p>For anything beyond a simple LLM call, which means most real-world LLM applications, we’ll want to be capturing multiple spans as part of a single trace.</p>
+<section id="llm-tracing-tools-naming-conventions-june-2025" class="level3">
+<h3 class="anchored" data-anchor-id="llm-tracing-tools-naming-conventions-june-2025">LLM Tracing Tools’ Naming Conventions (June 2025)</h3>
+<p>Side-note: I dug into how some of the major LLM tracing providers name their primitives. I was reassured that we seem to have coalesced around ‘trace -&gt; span’ and that the OpenTelemetry way seems to have been adopted by most.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/tracing_nomenclature.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Tracing nomenclature (June 2025)</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="grouping-spans-under-a-single-trace" class="level3">
+<h3 class="anchored" data-anchor-id="grouping-spans-under-a-single-trace">Grouping spans under a single trace</h3>
+<p>I updated the code such that we now have a function that makes two separate LLM calls. I’d want them to both be registered as spans under the same trace:</p>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb7-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb7-3"></span>
+<span id="cb7-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb7-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb7-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb7-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb7-8">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
+<span id="cb7-9">)</span>
+<span id="cb7-10"></span>
+<span id="cb7-11"></span>
+<span id="cb7-12"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb7-13">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb7-14">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb7-15">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb7-16">            {</span>
+<span id="cb7-17">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb7-18">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb7-19">            }</span>
+<span id="cb7-20">        ],</span>
+<span id="cb7-21">    )</span>
+<span id="cb7-22">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb7-23"></span>
+<span id="cb7-24"></span>
+<span id="cb7-25"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb7-26">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb7-27">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb7-28">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb7-29"></span>
+<span id="cb7-30"></span>
+<span id="cb7-31"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb7-32">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>But these just get registered as two separate traces/calls. The key bit of the documentation is <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/instrument-python">the ‘Using Phoenix Decorator’ section</a>, it seems. If I add a decorator on top of my function and get the specific tracer, it seems I <em>am</em> able to start to group things together:</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb8-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb8-3"></span>
+<span id="cb8-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb8-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb8-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb8-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb8-8">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
+<span id="cb8-9">)</span>
+<span id="cb8-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
+<span id="cb8-11"></span>
+<span id="cb8-12"></span>
+<span id="cb8-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb8-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb8-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb8-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb8-17">            {</span>
+<span id="cb8-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb8-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb8-20">            }</span>
+<span id="cb8-21">        ],</span>
+<span id="cb8-22">    )</span>
+<span id="cb8-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb8-24"></span>
+<span id="cb8-25"></span>
+<span id="cb8-26"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb8-27"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb8-28">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb8-29">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb8-30">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
+<span id="cb8-31"></span>
+<span id="cb8-32"></span>
+<span id="cb8-33"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb8-34">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>This works and I see this in the Phoenix Cloud dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Grouped traces under a single span</figcaption><p></p>
+</figure>
+</div>
+<p>See how it’s taken the function name as the name of the span. And it’s grouped those two LLM calls that happen within the function as we wanted. We can also update the decorator to denote different kinds of spans that we want to capture:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/open_inference_span_kinds.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The kinds of spans you can choose from</figcaption><p></p>
+</figure>
+</div>
+<p>I’m immediately a bit confused by the interface again, because when you click on the ‘Traces’ tab in Phoenix Cloud you actually still just see ‘spans’:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/traces_spans_phoenix.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Spans in the Traces tab</figcaption><p></p>
+</figure>
+</div>
+<p>In the documentation it isn’t clear to me how to create a trace that includes an <code>llm</code> span and an <code>embedding</code> span, for example. What’s even more frustrating is that the <code>tracer</code> decorator object doesn’t implement <em>all</em> the span types, just <code>agent</code>, <code>chain</code> and <code>llm</code> it seems. I tried something <a href="https://gist.github.com/strickvl/3e682c28278eeb850e9bf195a2b2cb44">like this</a> but it just ended up producing 3 separate traces in Phoenix Cloud.</p>
+<p>I looked at <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/custom-spans">the documentation for using base OTEL</a> instead of the Phoenix decorators, but there was also nothing in there on how to denote the trace instead of just the span.</p>
+<p>I was wondering if <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-sessions">their ‘Sessions’ primitive</a> was the way forward here, but they’re pretty clear in stating that a <code>Session</code> is a “sequence of traces”.</p>
+<p>So I’m at a bit of a dead end with Phoenix for now. I might return to Braintrust or Langfuse since these seem to have better support for what I’m trying to do (i.e.&nbsp;group spans together underneath a trace). I’m really reluctant to try to instrument <code>hinbox</code> with Phoenix when I’m unable even to get this basic grouping working properly with some dummy code.</p>
+</section>
+</section>
+<section id="update-solution-from-the-arize-team" class="level2">
+<h2 class="anchored" data-anchor-id="update-solution-from-the-arize-team">Update: solution from the Arize team</h2>
+<p>I posted this blog on the Arize slack and they got back to me with a solution:</p>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb9-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb9-3"></span>
+<span id="cb9-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb9-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb9-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb9-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb9-8">)</span>
+<span id="cb9-9">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
+<span id="cb9-10"></span>
+<span id="cb9-11"></span>
+<span id="cb9-12"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb9-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb9-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb9-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb9-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb9-17">            {</span>
+<span id="cb9-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb9-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb9-20">            }</span>
+<span id="cb9-21">        ],</span>
+<span id="cb9-22">    )</span>
+<span id="cb9-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb9-24"></span>
+<span id="cb9-25"></span>
+<span id="cb9-26"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb9-27"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb9-28">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
+<span id="cb9-29"></span>
+<span id="cb9-30"></span>
+<span id="cb9-31"><span class="at" style="color: #657422;">@tracer.chain</span></span>
+<span id="cb9-32"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb9-33">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb9-34">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb9-35">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
+<span id="cb9-36">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1)</span>
+<span id="cb9-37"></span>
+<span id="cb9-38"></span>
+<span id="cb9-39"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb9-40">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>And you can see how this looks in the Phoenix Cloud dashboard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/arize-updated-solution-grouped.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Grouped spans</figcaption><p></p>
+</figure>
+</div>
+<p>Judging from the code it seems like the way the span is constructed simply depends on how you assemble the hierarchy of spans. For instance, if I wanted to consider the top-level entity for this ‘trace’ (i.e.&nbsp;a grouping of spans) then I could use this code:</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
+<span id="cb10-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
+<span id="cb10-3"></span>
+<span id="cb10-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
+<span id="cb10-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
+<span id="cb10-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
+<span id="cb10-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
+<span id="cb10-8">    <span class="co" style="color: #5E5E5E;"># batch=True,</span></span>
+<span id="cb10-9">)</span>
+<span id="cb10-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
+<span id="cb10-11"></span>
+<span id="cb10-12"></span>
+<span id="cb10-13"><span class="at" style="color: #657422;">@tracer.llm</span></span>
+<span id="cb10-14"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-15">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
+<span id="cb10-16">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
+<span id="cb10-17">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
+<span id="cb10-18">            {</span>
+<span id="cb10-19">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
+<span id="cb10-20">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
+<span id="cb10-21">            }</span>
+<span id="cb10-22">        ],</span>
+<span id="cb10-23">    )</span>
+<span id="cb10-24">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
+<span id="cb10-25"></span>
+<span id="cb10-26"></span>
+<span id="cb10-27"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb10-28"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-29">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
+<span id="cb10-30"></span>
+<span id="cb10-31"></span>
+<span id="cb10-32"><span class="at" style="color: #657422;">@tracer.tool</span>(name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"query_embedding"</span>, description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Query embedding"</span>)</span>
+<span id="cb10-33"><span class="kw" style="color: #003B4F;">def</span> query_embedding(prompt: <span class="bu" style="color: null;">str</span>):</span>
+<span id="cb10-34">    <span class="cf" style="color: #003B4F;">return</span> [<span class="fl" style="color: #AD0000;">0.1</span>, <span class="fl" style="color: #AD0000;">0.2</span>, <span class="fl" style="color: #AD0000;">0.3</span>]</span>
+<span id="cb10-35"></span>
+<span id="cb10-36"></span>
+<span id="cb10-37"><span class="at" style="color: #657422;">@tracer.agent</span></span>
+<span id="cb10-38"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
+<span id="cb10-39">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb10-40">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
+<span id="cb10-41">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
+<span id="cb10-42">    embedding1 <span class="op" style="color: #5E5E5E;">=</span> query_embedding(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
+<span id="cb10-43">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1, embedding1)</span>
+<span id="cb10-44"></span>
+<span id="cb10-45"></span>
+<span id="cb10-46"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
+<span id="cb10-47">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
+<p>And now instead of this trace being of kind ‘chain’, it’s now of kind ‘agent’, which some internal spans also being of kind ‘agent’. In a conversation in the Arize Slack I got the following clarification:</p>
+<blockquote class="blockquote">
+<p>“Traces as the concept under”signals” is basically a unique identifier of spans (think “span” of time). See https://opentelemetry.io/docs/concepts/signals/traces/ In most cases if you filter spans by “roots” (e.g.&nbsp;spans that don’t have parents) and or look at the collective set of “traces” they will roughly look the same. Most of the time this is the view you want when looking at telemetry. Spans are too noisy to be looking at in isolation. While the two tabs feel largely overlapping, it’s a bit intentional as there’s actually no real object called a trace - it’s just a series of spans. You will see these abstractions in most observability platform.”</p>
+</blockquote>
+<p>The line that:</p>
+<blockquote class="blockquote">
+<p>“there’s actually no real object called a trace - it’s just a series of spans”</p>
+</blockquote>
+<p>Was extremely clarifying, actually. It explains the fuzziness between the spans and traces tab in the Phoenix dashboard.</p>
+<p>I also got some clarification around the missing <code>@tracer.embbeding</code> and <code>@tracer.reranker</code> decorators:</p>
+<blockquote class="blockquote">
+<p>“We emit spans for embedding text to vectors (like”adda”), guardrailing via thinks like guardrals or content moderation, and reranking things via things like cohere. However it’s sorta rare for people to manually write these. We will have decorators for them but right now they are typically emitted from autoinstrumentors like langgraph where there are common patterns for these things. We will have decorators for them very soon - but things like reranking are much more complex than things like tool calling so we are codifying these primitives now.”</p>
+</blockquote>
+<p>So there you have it! Some clarity. I’ll have to play around to see whether I go with the Langfuse route or the Phoenix route and which feels most ergonomic in the <code>hinbox</code> codebase. Appreciate the quick feedback from the Phoenix team, though!</p>
+
+
+</section>
+
+ ]]></description>
+  <category>llms</category>
+  <category>agents</category>
+  <category>evals-course</category>
+  <category>evaluation</category>
+  <category>miniproject</category>
+  <category>hinbox</category>
+  <guid>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</guid>
+  <pubDate>Tue, 03 Jun 2025 22:00:00 GMT</pubDate>
+  <media:content url="https://alexstrick.com/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png" medium="image" type="image/png" height="85" width="144"/>
+</item>
+<item>
   <title>Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</link>
+  <link>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</link>
   <description><![CDATA[ 
 
 
@@ -45,7 +428,7 @@
 <p>You can pass in a <code>project_id</code> or a <code>project_name</code> and the traces will be routed there. Here’s what it looks like in the Braintrust dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Our first trace logged in Braintrust</figcaption><p></p>
 </figure>
 </div>
@@ -159,7 +542,7 @@
 <p>We specify <code>langfuse</code> for the callback and each llm call is logged as a separate trace + span. Here you can see what this looks like in the dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/langfuse-dashboard.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/braintrust-langfuse-litellm/langfuse-dashboard.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Basic trace and span in Langfuse dashboard</figcaption><p></p>
 </figure>
 </div>
@@ -204,14 +587,14 @@
 <p>This looks like this in the Langfuse dashboard:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/langfuse_grouped_spans.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/braintrust-langfuse-litellm/langfuse_grouped_spans.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Spans grouped into traces</figcaption><p></p>
 </figure>
 </div>
 <p>This is honestly most of what I’m looking for in terms of my tracing. If I were to use a non-OpenRouter model, moreover, I’d also get full costs in the Langfuse dashboard, e.g.:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/braintrust-langfuse-litellm/costs-langfuse.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/braintrust-langfuse-litellm/costs-langfuse.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">LLM costs in Langfuse dashboard</figcaption><p></p>
 </figure>
 </div>
@@ -228,397 +611,14 @@
   <category>evaluation</category>
   <category>miniproject</category>
   <category>hinbox</category>
-  <guid>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</guid>
+  <guid>https://alexstrick.com/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html</guid>
   <pubDate>Tue, 03 Jun 2025 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" medium="image" type="image/png" height="105" width="144"/>
-</item>
-<item>
-  <title>Trying to instrument an agentic app with Arize Phoenix and litellm</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>It’s important to instrument your AI applications! I hope this can more or less be taken as given just as you’d expect a non-AI-infused app to capture logs. When you’re evaluating your LLM-powered system, you need to have capture the inputs and outputs both at an end-to-end level in terms of the way the user experiences things as well as with more fine-grained granularity for all the internal workings.</p>
-<p>My goal with this blog is to first demonstrate how Phoenix and <code>litellm</code> can work together, and then to make sure that we are able to group all spans together under a single trace.</p>
-<p>I’ll write the blog as I work so at this point I’m not sure exactly how this will turn out.</p>
-<section id="basic-logging-with-litellm-phoenix" class="level2">
-<h2 class="anchored" data-anchor-id="basic-logging-with-litellm-phoenix">Basic logging with litellm + phoenix</h2>
-<p>As a reminder, here’s how we make an LLM call with <code>litellm</code>:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb1-4">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb1-5">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb1-6">        {</span>
-<span id="cb1-7">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb1-8">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb1-9">        }</span>
-<span id="cb1-10">    ],</span>
-<span id="cb1-11">)</span>
-<span id="cb1-12"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span>
-<span id="cb1-13"><span class="co" style="color: #5E5E5E;"># prints 'Beijing'</span></span></code></pre></div>
-<p>The Phoenix docs explain how to set up basic logging for litellm:</p>
-<ul>
-<li>install the following pip packages:
-<ul>
-<li><code>arize-phoenix-otel</code></li>
-<li><code>openinference-instrumentation-litellm</code></li>
-<li>(<code>litellm</code>, obviously)</li>
-</ul></li>
-<li>set up the necessary environment variables with API key etc to ensure that traces get sent to the right account and endpoint</li>
-</ul>
-<p>Let’s assume we’re using the hosted Phoenix Cloud version for now. Then we can rerun our example, with some slight tweaks:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"></span>
-<span id="cb2-2"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb2-3"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
-<span id="cb2-4"></span>
-<span id="cb2-5"><span class="co" style="color: #5E5E5E;"># configure the Phoenix tracer</span></span>
-<span id="cb2-6">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
-<span id="cb2-7">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
-<span id="cb2-8">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
-<span id="cb2-9">)</span>
-<span id="cb2-10"></span>
-<span id="cb2-11"></span>
-<span id="cb2-12">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb2-13">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb2-14">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb2-15">        {</span>
-<span id="cb2-16">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb2-17">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb2-18">        }</span>
-<span id="cb2-19">    ],</span>
-<span id="cb2-20">)</span>
-<span id="cb2-21"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
-<p>So we first register the Phoenix tracer, specify the project (already set up in Phoenix Cloud) and then run our litellm <code>completion</code> as previously. In the terminal we see he following logs:</p>
-<pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
-|  Phoenix Project: hinbox
-|  Span Processor: SimpleSpanProcessor
-|  Collector Endpoint: https://app.phoenix.arize.com/v1/traces
-|  Transport: HTTP + protobuf
-|  Transport Headers: {'api_key': '****', 'authorization': '****'}
-|  
-|  Using a default SpanProcessor. `add_span_processor` will overwrite this default.
-|  
-|  ⚠️ WARNING: It is strongly advised to use a BatchSpanProcessor in production environments.
-|  
-|  `register` has set this TracerProvider as the global OpenTelemetry default.
-|  To disable this behavior, call `register` with `set_global_tracer_provider=False`.
-
-Beijing</code></pre>
-<p>So immediately there are a lot of things to consider. It seems that we’ll want to use the <code>BatchSpanProcessor</code> that it suggests, and also it seems like I might not want to set this as the global tracing provider, too.</p>
-<p>In Phoenix Cloud, I see this:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/first-phoenix.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Basic Phoenix tracing interface</figcaption><p></p>
-</figure>
-</div>
-<p>As you can see, we’ve captured the input and output messages for the completion, it’s tracked the latency of the call (1.16s, which seems pretty slow actually!). There is also some sort of an annotation interface though I’ll explore that down the line maybe. I immediately notice that I’m missing things like the system attributes for where the call was made, also metadata like the temperature and other settings. I’d also like to see things like token counts (which you <em>can</em> get in Phoenix but they’re sort of buried) as well as the estimated cost of the call(s) and so on. We can see about adding some of that down the line.</p>
-</section>
-<section id="batchspanprocessor-for-production-usage" class="level2">
-<h2 class="anchored" data-anchor-id="batchspanprocessor-for-production-usage"><code>BatchSpanProcessor</code> for production usage</h2>
-<p>Let’s next move on to adding <code>BatchSpanProcessor</code> as the message suggested, which is as simple as adding <code>batch=True</code> to the tracer provider registration code. What this does is make sure that spans are processed in batches before they’re exported to Arize. This takes away some of the network costs that you incur when sending the spans one by one. I’ve also made sure to turn off the registration of this tracing provider as the global one:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"></span>
-<span id="cb4-2"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb4-3"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
-<span id="cb4-4"></span>
-<span id="cb4-5"><span class="co" style="color: #5E5E5E;"># configure the Phoenix tracer</span></span>
-<span id="cb4-6">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
-<span id="cb4-7">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
-<span id="cb4-8">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
-<span id="cb4-9">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb4-10">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb4-11">)</span>
-<span id="cb4-12"></span>
-<span id="cb4-13"></span>
-<span id="cb4-14">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb4-15">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb4-16">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb4-17">        {</span>
-<span id="cb4-18">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb4-19">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb4-20">        }</span>
-<span id="cb4-21">    ],</span>
-<span id="cb4-22">)</span>
-<span id="cb4-23"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
-<p>And I get this in the terminal:</p>
-<pre class="shell"><code>🔭 OpenTelemetry Tracing Details 🔭
-|  Phoenix Project: hinbox
-|  Span Processor: BatchSpanProcessor
-|  Collector Endpoint: https://app.phoenix.arize.com/v1/traces
-|  Transport: HTTP + protobuf
-|  Transport Headers: {'api_key': '****', 'authorization': '****'}
-|  
-|  Using a default SpanProcessor. `add_span_processor` will overwrite this default.
-
-Beijing</code></pre>
-<p>It’s actually somehow a bit annoying to still see a message about the fact that I’m using a default <code>SpanProcessor</code>. It’s unclear to me why I need to care that this is a default one. The message is taking up real estate in the logs and it seems important (otherwise why would they have included it?) but it’s also unclear to me what the alternative is and why I’d want to overwrite the default. I think for now I’ll leave it.</p>
-</section>
-<section id="using-the-litellm-callbacks-as-an-alternative" class="level2">
-<h2 class="anchored" data-anchor-id="using-the-litellm-callbacks-as-an-alternative">Using the litellm callbacks as an alternative</h2>
-<p>If we stray away from the official supported way to handle tracing with Phoenix, there’s also <a href="https://docs.litellm.ai/docs/observability/phoenix_integration">the community-supported in-built litellm option</a>:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb6-2"></span>
-<span id="cb6-3">litellm.callbacks <span class="op" style="color: #5E5E5E;">=</span> [<span class="st" style="color: #20794D;">"arize_phoenix"</span>]</span>
-<span id="cb6-4"></span>
-<span id="cb6-5">completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb6-6">    model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb6-7">    messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb6-8">        {</span>
-<span id="cb6-9">            <span class="st" style="color: #20794D;">"content"</span>: <span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>,</span>
-<span id="cb6-10">            <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb6-11">        }</span>
-<span id="cb6-12">    ],</span>
-<span id="cb6-13">    metadata<span class="op" style="color: #5E5E5E;">=</span>{<span class="st" style="color: #20794D;">"PROJECT_NAME"</span>: <span class="st" style="color: #20794D;">"hinbox"</span>},</span>
-<span id="cb6-14">)</span>
-<span id="cb6-15"><span class="bu" style="color: null;">print</span>(completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content)</span></code></pre></div>
-<p>This achieves a similar result, though I was unable to get the trace to land anywhere other than the <code>default</code> project. <a href="https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-otel">Arize’s docs</a> mention a <code>PHOENIX_PROJECT_NAME</code> environment variable but it seems this isn’t respected or used by the <code>litellm</code> implementation. Indeed when I look at <a href="https://github.com/BerriAI/litellm/blob/main/litellm/integrations/arize/arize_phoenix.py">the implementation</a>, I don’t see this being used anywhere, so it seems that the community-driven implementation isn’t really the way forward.</p>
-<p>I just wanted to mention it, however, since some of the ‘callback’ integrations for tracing in litellm are really nicely implemented (like the one for Langfuse, e.g.) so I wanted to try it out at least.</p>
-</section>
-<section id="one-trace-multiple-spans" class="level2">
-<h2 class="anchored" data-anchor-id="one-trace-multiple-spans">One trace, multiple spans</h2>
-<p>For anything beyond a simple LLM call, which means most real-world LLM applications, we’ll want to be capturing multiple spans as part of a single trace.</p>
-<section id="llm-tracing-tools-naming-conventions-june-2025" class="level3">
-<h3 class="anchored" data-anchor-id="llm-tracing-tools-naming-conventions-june-2025">LLM Tracing Tools’ Naming Conventions (June 2025)</h3>
-<p>Side-note: I dug into how some of the major LLM tracing providers name their primitives. I was reassured that we seem to have coalesced around ‘trace -&gt; span’ and that the OpenTelemetry way seems to have been adopted by most.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/tracing_nomenclature.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Tracing nomenclature (June 2025)</figcaption><p></p>
-</figure>
-</div>
-</section>
-<section id="grouping-spans-under-a-single-trace" class="level3">
-<h3 class="anchored" data-anchor-id="grouping-spans-under-a-single-trace">Grouping spans under a single trace</h3>
-<p>I updated the code such that we now have a function that makes two separate LLM calls. I’d want them to both be registered as spans under the same trace:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb7-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
-<span id="cb7-3"></span>
-<span id="cb7-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
-<span id="cb7-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
-<span id="cb7-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
-<span id="cb7-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb7-8">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb7-9">)</span>
-<span id="cb7-10"></span>
-<span id="cb7-11"></span>
-<span id="cb7-12"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb7-13">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb7-14">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb7-15">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb7-16">            {</span>
-<span id="cb7-17">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb7-18">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb7-19">            }</span>
-<span id="cb7-20">        ],</span>
-<span id="cb7-21">    )</span>
-<span id="cb7-22">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb7-23"></span>
-<span id="cb7-24"></span>
-<span id="cb7-25"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb7-26">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb7-27">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb7-28">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
-<span id="cb7-29"></span>
-<span id="cb7-30"></span>
-<span id="cb7-31"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb7-32">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
-<p>But these just get registered as two separate traces/calls. The key bit of the documentation is <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/instrument-python">the ‘Using Phoenix Decorator’ section</a>, it seems. If I add a decorator on top of my function and get the specific tracer, it seems I <em>am</em> able to start to group things together:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb8-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
-<span id="cb8-3"></span>
-<span id="cb8-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
-<span id="cb8-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
-<span id="cb8-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
-<span id="cb8-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb8-8">    batch<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,</span>
-<span id="cb8-9">)</span>
-<span id="cb8-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
-<span id="cb8-11"></span>
-<span id="cb8-12"></span>
-<span id="cb8-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb8-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb8-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb8-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb8-17">            {</span>
-<span id="cb8-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb8-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb8-20">            }</span>
-<span id="cb8-21">        ],</span>
-<span id="cb8-22">    )</span>
-<span id="cb8-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb8-24"></span>
-<span id="cb8-25"></span>
-<span id="cb8-26"><span class="at" style="color: #657422;">@tracer.llm</span></span>
-<span id="cb8-27"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb8-28">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb8-29">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb8-30">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2)</span>
-<span id="cb8-31"></span>
-<span id="cb8-32"></span>
-<span id="cb8-33"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb8-34">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
-<p>This works and I see this in the Phoenix Cloud dashboard:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Grouped traces under a single span</figcaption><p></p>
-</figure>
-</div>
-<p>See how it’s taken the function name as the name of the span. And it’s grouped those two LLM calls that happen within the function as we wanted. We can also update the decorator to denote different kinds of spans that we want to capture:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/open_inference_span_kinds.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">The kinds of spans you can choose from</figcaption><p></p>
-</figure>
-</div>
-<p>I’m immediately a bit confused by the interface again, because when you click on the ‘Traces’ tab in Phoenix Cloud you actually still just see ‘spans’:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/traces_spans_phoenix.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Spans in the Traces tab</figcaption><p></p>
-</figure>
-</div>
-<p>In the documentation it isn’t clear to me how to create a trace that includes an <code>llm</code> span and an <code>embedding</code> span, for example. What’s even more frustrating is that the <code>tracer</code> decorator object doesn’t implement <em>all</em> the span types, just <code>agent</code>, <code>chain</code> and <code>llm</code> it seems. I tried something <a href="https://gist.github.com/strickvl/3e682c28278eeb850e9bf195a2b2cb44">like this</a> but it just ended up producing 3 separate traces in Phoenix Cloud.</p>
-<p>I looked at <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/custom-spans">the documentation for using base OTEL</a> instead of the Phoenix decorators, but there was also nothing in there on how to denote the trace instead of just the span.</p>
-<p>I was wondering if <a href="https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-sessions">their ‘Sessions’ primitive</a> was the way forward here, but they’re pretty clear in stating that a <code>Session</code> is a “sequence of traces”.</p>
-<p>So I’m at a bit of a dead end with Phoenix for now. I might return to Braintrust or Langfuse since these seem to have better support for what I’m trying to do (i.e.&nbsp;group spans together underneath a trace). I’m really reluctant to try to instrument <code>hinbox</code> with Phoenix when I’m unable even to get this basic grouping working properly with some dummy code.</p>
-</section>
-</section>
-<section id="update-solution-from-the-arize-team" class="level2">
-<h2 class="anchored" data-anchor-id="update-solution-from-the-arize-team">Update: solution from the Arize team</h2>
-<p>I posted this blog on the Arize slack and they got back to me with a solution:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb9-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
-<span id="cb9-3"></span>
-<span id="cb9-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
-<span id="cb9-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
-<span id="cb9-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
-<span id="cb9-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb9-8">)</span>
-<span id="cb9-9">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
-<span id="cb9-10"></span>
-<span id="cb9-11"></span>
-<span id="cb9-12"><span class="at" style="color: #657422;">@tracer.llm</span></span>
-<span id="cb9-13"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb9-14">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb9-15">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb9-16">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb9-17">            {</span>
-<span id="cb9-18">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb9-19">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb9-20">            }</span>
-<span id="cb9-21">        ],</span>
-<span id="cb9-22">    )</span>
-<span id="cb9-23">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb9-24"></span>
-<span id="cb9-25"></span>
-<span id="cb9-26"><span class="at" style="color: #657422;">@tracer.agent</span></span>
-<span id="cb9-27"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb9-28">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
-<span id="cb9-29"></span>
-<span id="cb9-30"></span>
-<span id="cb9-31"><span class="at" style="color: #657422;">@tracer.chain</span></span>
-<span id="cb9-32"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb9-33">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb9-34">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb9-35">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
-<span id="cb9-36">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1)</span>
-<span id="cb9-37"></span>
-<span id="cb9-38"></span>
-<span id="cb9-39"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb9-40">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
-<p>And you can see how this looks in the Phoenix Cloud dashboard:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/arize-updated-solution-grouped.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Grouped spans</figcaption><p></p>
-</figure>
-</div>
-<p>Judging from the code it seems like the way the span is constructed simply depends on how you assemble the hierarchy of spans. For instance, if I wanted to consider the top-level entity for this ‘trace’ (i.e.&nbsp;a grouping of spans) then I could use this code:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;">import</span> litellm</span>
-<span id="cb10-2"><span class="im" style="color: #00769E;">from</span> phoenix.otel <span class="im" style="color: #00769E;">import</span> register</span>
-<span id="cb10-3"></span>
-<span id="cb10-4">tracer_provider <span class="op" style="color: #5E5E5E;">=</span> register(</span>
-<span id="cb10-5">    project_name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hinbox"</span>,  <span class="co" style="color: #5E5E5E;"># Default is 'default'</span></span>
-<span id="cb10-6">    auto_instrument<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>,  <span class="co" style="color: #5E5E5E;"># Auto-instrument your app based on installed OI dependencies</span></span>
-<span id="cb10-7">    set_global_tracer_provider<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>,</span>
-<span id="cb10-8">    <span class="co" style="color: #5E5E5E;"># batch=True,</span></span>
-<span id="cb10-9">)</span>
-<span id="cb10-10">tracer <span class="op" style="color: #5E5E5E;">=</span> tracer_provider.get_tracer(<span class="va" style="color: #111111;">__name__</span>)</span>
-<span id="cb10-11"></span>
-<span id="cb10-12"></span>
-<span id="cb10-13"><span class="at" style="color: #657422;">@tracer.llm</span></span>
-<span id="cb10-14"><span class="kw" style="color: #003B4F;">def</span> query_llm(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb10-15">    completion_response <span class="op" style="color: #5E5E5E;">=</span> litellm.completion(</span>
-<span id="cb10-16">        model<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"openrouter/google/gemma-3n-e4b-it:free"</span>,</span>
-<span id="cb10-17">        messages<span class="op" style="color: #5E5E5E;">=</span>[</span>
-<span id="cb10-18">            {</span>
-<span id="cb10-19">                <span class="st" style="color: #20794D;">"content"</span>: prompt,</span>
-<span id="cb10-20">                <span class="st" style="color: #20794D;">"role"</span>: <span class="st" style="color: #20794D;">"user"</span>,</span>
-<span id="cb10-21">            }</span>
-<span id="cb10-22">        ],</span>
-<span id="cb10-23">    )</span>
-<span id="cb10-24">    <span class="cf" style="color: #003B4F;">return</span> completion_response.choices[<span class="dv" style="color: #AD0000;">0</span>].message.content</span>
-<span id="cb10-25"></span>
-<span id="cb10-26"></span>
-<span id="cb10-27"><span class="at" style="color: #657422;">@tracer.agent</span></span>
-<span id="cb10-28"><span class="kw" style="color: #003B4F;">def</span> query_agent(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb10-29">    <span class="cf" style="color: #003B4F;">return</span> <span class="st" style="color: #20794D;">"I am an agent."</span></span>
-<span id="cb10-30"></span>
-<span id="cb10-31"></span>
-<span id="cb10-32"><span class="at" style="color: #657422;">@tracer.tool</span>(name<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"query_embedding"</span>, description<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"Query embedding"</span>)</span>
-<span id="cb10-33"><span class="kw" style="color: #003B4F;">def</span> query_embedding(prompt: <span class="bu" style="color: null;">str</span>):</span>
-<span id="cb10-34">    <span class="cf" style="color: #003B4F;">return</span> [<span class="fl" style="color: #AD0000;">0.1</span>, <span class="fl" style="color: #AD0000;">0.2</span>, <span class="fl" style="color: #AD0000;">0.3</span>]</span>
-<span id="cb10-35"></span>
-<span id="cb10-36"></span>
-<span id="cb10-37"><span class="at" style="color: #657422;">@tracer.agent</span></span>
-<span id="cb10-38"><span class="kw" style="color: #003B4F;">def</span> my_llm_application():</span>
-<span id="cb10-39">    query1 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb10-40">    query2 <span class="op" style="color: #5E5E5E;">=</span> query_llm(<span class="st" style="color: #20794D;">"What's the capital of Japan? Just give me the name."</span>)</span>
-<span id="cb10-41">    agent1 <span class="op" style="color: #5E5E5E;">=</span> query_agent(<span class="st" style="color: #20794D;">"Who are you?"</span>)</span>
-<span id="cb10-42">    embedding1 <span class="op" style="color: #5E5E5E;">=</span> query_embedding(<span class="st" style="color: #20794D;">"What's the capital of China? Just give me the name."</span>)</span>
-<span id="cb10-43">    <span class="cf" style="color: #003B4F;">return</span> (query1, query2, agent1, embedding1)</span>
-<span id="cb10-44"></span>
-<span id="cb10-45"></span>
-<span id="cb10-46"><span class="cf" style="color: #003B4F;">if</span> <span class="va" style="color: #111111;">__name__</span> <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"__main__"</span>:</span>
-<span id="cb10-47">    <span class="bu" style="color: null;">print</span>(my_llm_application())</span></code></pre></div>
-<p>And now instead of this trace being of kind ‘chain’, it’s now of kind ‘agent’, which some internal spans also being of kind ‘agent’. In a conversation in the Arize Slack I got the following clarification:</p>
-<blockquote class="blockquote">
-<p>“Traces as the concept under”signals” is basically a unique identifier of spans (think “span” of time). See https://opentelemetry.io/docs/concepts/signals/traces/ In most cases if you filter spans by “roots” (e.g.&nbsp;spans that don’t have parents) and or look at the collective set of “traces” they will roughly look the same. Most of the time this is the view you want when looking at telemetry. Spans are too noisy to be looking at in isolation. While the two tabs feel largely overlapping, it’s a bit intentional as there’s actually no real object called a trace - it’s just a series of spans. You will see these abstractions in most observability platform.”</p>
-</blockquote>
-<p>The line that:</p>
-<blockquote class="blockquote">
-<p>“there’s actually no real object called a trace - it’s just a series of spans”</p>
-</blockquote>
-<p>Was extremely clarifying, actually. It explains the fuzziness between the spans and traces tab in the Phoenix dashboard.</p>
-<p>I also got some clarification around the missing <code>@tracer.embbeding</code> and <code>@tracer.reranker</code> decorators:</p>
-<blockquote class="blockquote">
-<p>“We emit spans for embedding text to vectors (like”adda”), guardrailing via thinks like guardrals or content moderation, and reranking things via things like cohere. However it’s sorta rare for people to manually write these. We will have decorators for them but right now they are typically emitted from autoinstrumentors like langgraph where there are common patterns for these things. We will have decorators for them very soon - but things like reranking are much more complex than things like tool calling so we are codifying these primitives now.”</p>
-</blockquote>
-<p>So there you have it! Some clarity. I’ll have to play around to see whether I go with the Langfuse route or the Phoenix route and which feels most ergonomic in the <code>hinbox</code> codebase. Appreciate the quick feedback from the Phoenix team, though!</p>
-
-
-</section>
-
- ]]></description>
-  <category>llms</category>
-  <category>agents</category>
-  <category>evals-course</category>
-  <category>evaluation</category>
-  <category>miniproject</category>
-  <category>hinbox</category>
-  <guid>https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html</guid>
-  <pubDate>Tue, 03 Jun 2025 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm/grouped_traces.png" medium="image" type="image/png" height="85" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/braintrust-langfuse-litellm/braintrust-logging.png" medium="image" type="image/png" height="105" width="144"/>
 </item>
 <item>
   <title>Building hinbox: An agentic research tool for historical document analysis</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html</link>
+  <link>https://alexstrick.com/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html</link>
   <description><![CDATA[ 
 
 
@@ -628,7 +628,7 @@ Beijing</code></pre>
 <p>The tool works by ingesting batches of documents and intelligently identifying entities across sources. What makes it interesting is the iterative improvement aspect: as you feed more documents into the system, entity profiles become richer and more comprehensive. When <code>hinbox</code> encounters a person or organization it’s seen before, it updates their profile with new information rather than creating duplicates. I’ve been testing it extensively with Guantánamo Bay media sources - a domain where I have deep expertise from my previous career as a historian - which allows me to rigorously evaluate the quality of its extractions.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/hinbox/organizations-view.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/hinbox/organizations-view.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">The organisations view</figcaption><p></p>
 </figure>
 </div>
@@ -662,7 +662,7 @@ Beijing</code></pre>
 <p>The system centres around domain-specific configuration - you define the research area you’re interested in through a set of configuration files that specify your extraction targets and prompts. For my testing, I’ve been using Guantánamo Bay historical sources as the test domain since I can rigorously evaluate the quality of extractions in an area where I have deep expertise.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/hinbox/organization-profile.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/hinbox/organization-profile.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">An example organisation profile</figcaption><p></p>
 </figure>
 </div>
@@ -670,7 +670,7 @@ Beijing</code></pre>
 <p>Once configured, <code>hinbox</code> processes your document collection article by article, extracting people, organisations, locations, and events according to your specifications. The interesting part is the intelligent merging: rather than creating duplicate entries, the system attempts to recognise when newly extracted entities match existing profiles and updates them accordingly. This iterative enrichment means profiles become more comprehensive as you process additional sources.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/hinbox/processing-logs.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/hinbox/processing-logs.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Data processing logs</figcaption><p></p>
 </figure>
 </div>
@@ -722,25 +722,25 @@ Beijing</code></pre>
   <category>miniproject</category>
   <category>hinbox</category>
   <category>research</category>
-  <guid>https://mlops.systems/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html</guid>
+  <guid>https://alexstrick.com/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html</guid>
   <pubDate>Thu, 29 May 2025 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/hinbox/frontpage.png" medium="image" type="image/png" height="83" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/hinbox/frontpage.png" medium="image" type="image/png" height="83" width="144"/>
 </item>
 <item>
   <title>Error analysis to find failure modes</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-05-23-error-analysis-to-find-failure-modes.html</link>
+  <link>https://alexstrick.com/posts/2025-05-23-error-analysis-to-find-failure-modes.html</link>
   <description><![CDATA[ 
 
 
 
 
 <p>I came across this quote in a happy coincidence after attending the second session of the evals course:</p>
-<p><img src="https://mlops.systems/posts/images/2025-05-23-error-analysis-to-find-failure-modes/patchett-quote.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-05-23-error-analysis-to-find-failure-modes/patchett-quote.png" class="img-fluid"></p>
 <p>It’s obviously a bit abstract, but I thought it was a nice oblique reflection on the topic being discussed. Both the main session and the office hours were mostly focused on the first part of the analyse-measure-improve loop that was introduced <a href="https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html">earlier in the week</a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyze_focus.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyze_focus.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Focus on the ‘analyse’ part of the LLM application improvement loop</figcaption><p></p>
 </figure>
 </div>
@@ -748,7 +748,7 @@ Beijing</code></pre>
 <p>A quick reminder of the context: we have an application of some kind, and we want to improve it. LLMs have lots of quirks that make them hard to narrow down exactly how they’re failing, so we’re working through a process that allows you to do just that. This was framed as a five-step process by Hamel + Shreya:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">The five parts of the ‘analyse’ loop</figcaption><p></p>
 </figure>
 </div>
@@ -824,14 +824,14 @@ Beijing</code></pre>
   <category>llms</category>
   <category>llmops</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-05-23-error-analysis-to-find-failure-modes.html</guid>
+  <guid>https://alexstrick.com/posts/2025-05-23-error-analysis-to-find-failure-modes.html</guid>
   <pubDate>Thu, 22 May 2025 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png" medium="image" type="image/png" height="119" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-05-23-error-analysis-to-find-failure-modes/analyse-cover.png" medium="image" type="image/png" height="119" width="144"/>
 </item>
 <item>
   <title>How to think about evals</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html</link>
+  <link>https://alexstrick.com/posts/2025-05-20-how-to-think-about-evals.html</link>
   <description><![CDATA[ 
 
 
@@ -850,7 +850,7 @@ Beijing</code></pre>
 <p>So there’s this image that they shared in the book chapter preview discussion that came up again during the lesson today:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/three-gulfs.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-05-20-how-to-think-about-evals/three-gulfs.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">The three gulfs of LLM application development</figcaption><p></p>
 </figure>
 </div>
@@ -896,7 +896,7 @@ On Tools vs Process
 <p>We also got a high-level overview of the loop that allows you to iteratively improve an LLM application:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/analyze-measure-improve-loop.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-05-20-how-to-think-about-evals/analyze-measure-improve-loop.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">The analyse, measure and improve loop; adapted from an image used in the course</figcaption><p></p>
 </figure>
 </div>
@@ -909,7 +909,7 @@ On Tools vs Process
 <p>At this point Shreya got into some points around what kinds of things went into a good prompt but I think I’ll write a separate blog on that and I don’t want to just regurgitate what we listened to. Today was more of a high-level introduction, and in any case it was much more about the outer-loop process instead of the inner loop (where tooling + specific techniques play more of a role.)</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/inner-vs-outer-loop.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-05-20-how-to-think-about-evals/inner-vs-outer-loop.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">A slide from a talk I gave about the inner loop vs the outer loop of GenAI development</figcaption><p></p>
 </figure>
 </div>
@@ -939,14 +939,14 @@ On Tools vs Process
   <category>llms</category>
   <category>llmops</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html</guid>
+  <guid>https://alexstrick.com/posts/2025-05-20-how-to-think-about-evals.html</guid>
   <pubDate>Mon, 19 May 2025 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-05-20-how-to-think-about-evals/maven-course.png" medium="image" type="image/png" height="81" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-05-20-how-to-think-about-evals/maven-course.png" medium="image" type="image/png" height="81" width="144"/>
 </item>
 <item>
   <title>First impressions of the new Gemini Deep Research (with 2.5 Pro)</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</link>
+  <link>https://alexstrick.com/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</link>
   <description><![CDATA[ 
 
 
@@ -991,14 +991,14 @@ On Tools vs Process
   <category>tools</category>
   <category>openai</category>
   <category>research</category>
-  <guid>https://mlops.systems/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</guid>
+  <guid>https://alexstrick.com/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html</guid>
   <pubDate>Tue, 08 Apr 2025 22:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/cover-gdr.png" medium="image" type="image/png" height="89" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/cover-gdr.png" medium="image" type="image/png" height="89" width="144"/>
 </item>
 <item>
   <title>Learnings from a week of building with local LLMs</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-03-16-learnings-building-llms.html</link>
+  <link>https://alexstrick.com/posts/2025-03-16-learnings-building-llms.html</link>
   <description><![CDATA[ 
 
 
@@ -1032,7 +1032,7 @@ On Tools vs Process
 <p>A significant portion of my experimentation involved <a href="https://repoprompt.com">RepoPrompt</a>, a tool that recently transitioned from free beta to a paid license model. RepoPrompt addresses the challenge of getting your codebase into an LLM-friendly format. Unlike standard CLI tools that simply export code to clipboard or text files, RepoPrompt generates a structured XML representation that, when modified by an LLM and pasted back, creates a reviewable diff of the proposed changes. At least, that’s one of the things it allows you to do! It’s actually a bit more powerful / flexible than that and here’s a video so you can see it in action:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://www.youtube.com/watch?v=8zIY0zxcafE%20%22RepoPrompt%20Demo%20Video%20using%20O1%20Pro%22"><img src="https://mlops.systems/posts/https:/img.youtube.com/vi/8zIY0zxcafE/0.jpg" class="img-fluid figure-img"></a></p>
+<p><a href="https://www.youtube.com/watch?v=8zIY0zxcafE%20%22RepoPrompt%20Demo%20Video%20using%20O1%20Pro%22"><img src="https://alexstrick.com/posts/https:/img.youtube.com/vi/8zIY0zxcafE/0.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">RepoPrompt Demo Video</figcaption><p></p>
 </figure>
 </div>
@@ -1082,14 +1082,14 @@ On Tools vs Process
   <category>prompt-engineering</category>
   <category>softwareengineering</category>
   <category>tools</category>
-  <guid>https://mlops.systems/posts/2025-03-16-learnings-building-llms.html</guid>
+  <guid>https://alexstrick.com/posts/2025-03-16-learnings-building-llms.html</guid>
   <pubDate>Sat, 15 Mar 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/learnings-building-llms/cover.png" medium="image" type="image/png" height="114" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/learnings-building-llms/cover.png" medium="image" type="image/png" height="114" width="144"/>
 </item>
 <item>
   <title>Building an MCP Server for Beeminder: Connecting AI Assistants to Personal Data</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-02-21-beeminder-mcp.html</link>
+  <link>https://alexstrick.com/posts/2025-02-21-beeminder-mcp.html</link>
   <description><![CDATA[ 
 
 
@@ -1098,7 +1098,7 @@ On Tools vs Process
 <p>I spent the morning <a href="https://github.com/strickvl/mcp-beeminder">building an MCP server</a> for <a href="https://www.beeminder.com">Beeminder</a>, bridging the gap between AI assistants and my personal goal tracking data. This project emerged from a practical need — ok, desire :) — to interact more effectively with my Beeminder data through AI interfaces like Claude Desktop and Cursor.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://mlops.systems/posts/images/mcp-bm.png" class="img-fluid figure-img"></p>
+<p><img src="https://alexstrick.com/posts/images/mcp-bm.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">The MCP-Beeminder mashup in action!</figcaption><p></p>
 </figure>
 </div>
@@ -1136,14 +1136,14 @@ On Tools vs Process
   <category>anthropic</category>
   <category>claude</category>
   <category>miniproject</category>
-  <guid>https://mlops.systems/posts/2025-02-21-beeminder-mcp.html</guid>
+  <guid>https://alexstrick.com/posts/2025-02-21-beeminder-mcp.html</guid>
   <pubDate>Thu, 20 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/mcp-bm.png" medium="image" type="image/png" height="172" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/mcp-bm.png" medium="image" type="image/png" height="172" width="144"/>
 </item>
 <item>
   <title>Tinbox: an LLM-based document translation tool</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</link>
+  <link>https://alexstrick.com/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</link>
   <description><![CDATA[ 
 
 
@@ -1281,14 +1281,14 @@ On Tools vs Process
   <category>miniproject</category>
   <category>python</category>
   <category>tools</category>
-  <guid>https://mlops.systems/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</guid>
+  <guid>https://alexstrick.com/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html</guid>
   <pubDate>Sat, 15 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/tinbox-gh-small.png" medium="image" type="image/png" height="99" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/tinbox-gh-small.png" medium="image" type="image/png" height="99" width="144"/>
 </item>
 <item>
   <title>Starting the Hugging Face Agents course</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-02-11-starting-the-hugging-face-agents-course.html</link>
+  <link>https://alexstrick.com/posts/2025-02-11-starting-the-hugging-face-agents-course.html</link>
   <description><![CDATA[ 
 
 
@@ -1352,14 +1352,14 @@ On Tools vs Process
   <category>skillbuilding</category>
   <category>llmops</category>
   <category>llms</category>
-  <guid>https://mlops.systems/posts/2025-02-11-starting-the-hugging-face-agents-course.html</guid>
+  <guid>https://alexstrick.com/posts/2025-02-11-starting-the-hugging-face-agents-course.html</guid>
   <pubDate>Mon, 10 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/agents-certificate.png" medium="image" type="image/png" height="101" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/agents-certificate.png" medium="image" type="image/png" height="101" width="144"/>
 </item>
 <item>
   <title>AI Engineering Architecture and User Feedback</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-02-09-ai-eg-chapter-10.html</link>
+  <link>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</link>
   <description><![CDATA[ 
 
 
@@ -1371,17 +1371,17 @@ On Tools vs Process
 <p>The evolution of AI engineering architecture typically follows a pattern of increasing complexity and capability. Each stage builds upon the previous one, adding new functionality while managing increased complexity.</p>
 <section id="base-layer-direct-model-integration" class="level3">
 <h3 class="anchored" data-anchor-id="base-layer-direct-model-integration">Base Layer: Direct Model Integration</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/simple.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/simple.png" class="img-fluid"></p>
 <p>The simplest architectural pattern begins with direct queries to model APIs. While straightforward, this approach lacks the sophistication needed for most production applications.</p>
 </section>
 <section id="enhancement-layer-context-augmentation" class="level3">
 <h3 class="anchored" data-anchor-id="enhancement-layer-context-augmentation">Enhancement Layer: Context Augmentation</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/context.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/context.png" class="img-fluid"></p>
 <p>The first major enhancement comes through <strong>Retrieval-Augmented Generation (RAG)</strong>. This layer enriches model responses by incorporating custom data and sources into LLM queries, significantly improving response quality and relevance.</p>
 </section>
 <section id="protection-layer-guardrails-implementation" class="level3">
 <h3 class="anchored" data-anchor-id="protection-layer-guardrails-implementation">Protection Layer: Guardrails Implementation</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/guardrails.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/guardrails.png" class="img-fluid"></p>
 <blockquote class="blockquote">
 <p><strong>Guardrails</strong>: Protective mechanisms that filter both inputs and outputs to ensure system safety and reliability.</p>
 </blockquote>
@@ -1405,7 +1405,7 @@ On Tools vs Process
 </section>
 <section id="routing-layer-gateway-and-model-selection" class="level3">
 <h3 class="anchored" data-anchor-id="routing-layer-gateway-and-model-selection">Routing Layer: Gateway and Model Selection</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/extra_modules.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/extra_modules.png" class="img-fluid"></p>
 <p>This layer introduces two key components:</p>
 <blockquote class="blockquote">
 <p><strong>AI Gateway</strong>: A centralized access point for LLM interactions that manages costs, usage tracking, and API key abstraction.</p>
@@ -1417,7 +1417,7 @@ On Tools vs Process
 </section>
 <section id="performance-layer-caching-strategies" class="level3">
 <h3 class="anchored" data-anchor-id="performance-layer-caching-strategies">Performance Layer: Caching Strategies</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/cache.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/cache.png" class="img-fluid"></p>
 <p>The architecture implements two distinct caching approaches:</p>
 <ol type="1">
 <li><p><strong>Exact Caching</strong>:</p>
@@ -1444,7 +1444,7 @@ On Tools vs Process
 </section>
 <section id="agent-layer-advanced-functionality" class="level3">
 <h3 class="anchored" data-anchor-id="agent-layer-advanced-functionality">Agent Layer: Advanced Functionality</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/write.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/write.png" class="img-fluid"></p>
 <p>The final architectural layer introduces agent patterns, enabling:</p>
 <ul>
 <li>Retry loops for reliability</li>
@@ -1541,14 +1541,14 @@ On Tools vs Process
   <category>llms</category>
   <category>llmops</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-02-09-ai-eg-chapter-10.html</guid>
+  <guid>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</guid>
   <pubDate>Sat, 08 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-02-09-ai-eg-chapter-10/write.png" medium="image" type="image/png" height="103" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/write.png" medium="image" type="image/png" height="103" width="144"/>
 </item>
 <item>
   <title>Notes on ‘AI Engineering’ chapter 9: Inference Optimisation</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-02-07-ai-engineering-chapter-9.html</link>
+  <link>https://alexstrick.com/posts/2025-02-07-ai-engineering-chapter-9.html</link>
   <description><![CDATA[ 
 
 
@@ -1671,7 +1671,7 @@ On Tools vs Process
 </section>
 <section id="model-optimization-techniques" class="level2">
 <h2 class="anchored" data-anchor-id="model-optimization-techniques">Model Optimization Techniques</h2>
-<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/inference-optimization-differences.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/inference-optimization-differences.png" class="img-fluid"></p>
 <section id="core-approaches" class="level3">
 <h3 class="anchored" data-anchor-id="core-approaches">Core Approaches</h3>
 <ol type="1">
@@ -1699,7 +1699,7 @@ On Tools vs Process
 </section>
 <section id="advanced-decoding-strategies" class="level3">
 <h3 class="anchored" data-anchor-id="advanced-decoding-strategies">Advanced Decoding Strategies</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/pytorch-llama3-optimization.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/pytorch-llama3-optimization.png" class="img-fluid"></p>
 <section id="speculative-decoding" class="level4">
 <h4 class="anchored" data-anchor-id="speculative-decoding">Speculative Decoding</h4>
 <p>This approach combines a large model with a smaller, faster model:</p>
@@ -1713,7 +1713,7 @@ On Tools vs Process
 </section>
 <section id="inference-with-reference" class="level4">
 <h4 class="anchored" data-anchor-id="inference-with-reference">Inference with Reference</h4>
-<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/inference_with_reference.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/inference_with_reference.png" class="img-fluid"></p>
 <ul>
 <li>Performs mini-RAG operations during decoding</li>
 <li>Retrieves relevant context from input query</li>
@@ -1749,7 +1749,7 @@ On Tools vs Process
 <li>Flash Attention 3 for H100 GPUs</li>
 </ul></li>
 </ol>
-<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" class="img-fluid"></p>
 </section>
 </section>
 </section>
@@ -1791,7 +1791,7 @@ On Tools vs Process
 </section>
 <section id="prompt-caching" class="level3">
 <h3 class="anchored" data-anchor-id="prompt-caching">Prompt Caching</h3>
-<p><img src="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/prompt_caching.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/prompt_caching.png" class="img-fluid"></p>
 <ul>
 <li>Stores computations for overlapping text segments</li>
 <li>Offered by providers like Gemini and Anthropic</li>
@@ -1856,14 +1856,14 @@ On Tools vs Process
   <category>llm</category>
   <category>llms</category>
   <category>hardware</category>
-  <guid>https://mlops.systems/posts/2025-02-07-ai-engineering-chapter-9.html</guid>
+  <guid>https://alexstrick.com/posts/2025-02-07-ai-engineering-chapter-9.html</guid>
   <pubDate>Thu, 06 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" medium="image" type="image/png" height="83" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" medium="image" type="image/png" height="83" width="144"/>
 </item>
 <item>
   <title>Dataset Engineering: The Art and Science of Data Preparation</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</link>
+  <link>https://alexstrick.com/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</link>
   <description><![CDATA[ 
 
 
@@ -2044,14 +2044,14 @@ On Tools vs Process
   <category>llm</category>
   <category>llms</category>
   <category>finetuning</category>
-  <guid>https://mlops.systems/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</guid>
+  <guid>https://alexstrick.com/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</guid>
   <pubDate>Tue, 04 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/ch8-proportions.png" medium="image" type="image/png" height="50" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/ch8-proportions.png" medium="image" type="image/png" height="50" width="144"/>
 </item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</link>
+  <link>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</link>
   <description><![CDATA[ 
 
 
@@ -2102,7 +2102,7 @@ On Tools vs Process
 </section>
 <section id="progressive-implementation-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="progressive-implementation-workflow">Progressive Implementation Workflow</h2>
-<p><img src="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/prompting_to_rag_to_finetuning.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/prompting_to_rag_to_finetuning.png" class="img-fluid"></p>
 <p>The chapter outlines a thoughtful progression of implementation strategies, suggesting organisations should:</p>
 <ol type="1">
 <li>Begin with prompt engineering optimisation</li>
@@ -2173,7 +2173,7 @@ On Tools vs Process
 <li>Layer stacking</li>
 <li>Concatenation (generally not recommended due to memory implications)</li>
 </ul>
-<p><img src="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/model_merging.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/model_merging.png" class="img-fluid"></p>
 <p>There’s a lot of detail in this section (much more than I’d expected) but it was interesting to read about something that I haven’t much practical expertise with.</p>
 </section>
 </section>
@@ -2268,14 +2268,14 @@ On Tools vs Process
   <category>finetuning</category>
   <category>llm</category>
   <category>llms</category>
-  <guid>https://mlops.systems/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</guid>
   <pubDate>Sat, 25 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png" medium="image" type="image/png" height="99" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png" medium="image" type="image/png" height="99" width="144"/>
 </item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 6</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</link>
+  <link>https://alexstrick.com/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</link>
   <description><![CDATA[ 
 
 
@@ -2314,7 +2314,7 @@ On Tools vs Process
 </section>
 <section id="retrieval-optimisation-techniques" class="level3">
 <h3 class="anchored" data-anchor-id="retrieval-optimisation-techniques">Retrieval Optimisation Techniques</h3>
-<p><img src="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/chunks-for-chunks.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/chunks-for-chunks.png" class="img-fluid"></p>
 <p>The chapter presents several sophisticated approaches to optimisation:</p>
 <p><strong>Chunking Strategies</strong>: While the section is brief, it addresses the critical trade-offs in how documents are segmented for retrieval.</p>
 <p><strong>Query Rewriting</strong>: A powerful but potentially complex technique that enhances initial queries with contextual information. For example, transforming a query like “how about her?” into “how about Aunt Mabel from the previous question?” Chip notes this can introduce latency issues and suggests careful consideration before implementation.</p>
@@ -2361,7 +2361,7 @@ On Tools vs Process
 </section>
 <section id="plan-execution-patterns" class="level3">
 <h3 class="anchored" data-anchor-id="plan-execution-patterns">Plan Execution Patterns</h3>
-<p><img src="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" class="img-fluid"></p>
 <p>The execution of agent plans reveals a fascinating interplay between computational patterns and practical implementation. Chip identifies several fundamental execution patterns that form the backbone of agent behaviour, each offering distinct advantages and trade-offs in different scenarios.</p>
 <blockquote class="blockquote">
 <p><strong>Execution Paradigms</strong>: The core patterns through which agents transform plans into actions, ranging from simple sequential execution to complex conditional logic.</p>
@@ -2464,14 +2464,14 @@ On Tools vs Process
   <category>agents</category>
   <category>rag</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</guid>
   <pubDate>Thu, 23 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" medium="image" type="image/png" height="91" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" medium="image" type="image/png" height="91" width="144"/>
 </item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 4</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</link>
+  <link>https://alexstrick.com/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</link>
   <description><![CDATA[ 
 
 
@@ -2621,7 +2621,7 @@ On Tools vs Process
 <p><strong>Data Slicing</strong>: The strategic separation of evaluation data into meaningful subsets to: - Identify performance variations across different use cases - Detect potential biases - Enable targeted improvement efforts - Avoid Simpson’s paradox in performance analysis</p>
 </blockquote>
 <p>The discussion of sample size is particularly practical, providing concrete guidelines based on statistical confidence levels and desired detection thresholds. The author cites OpenAI’s research suggesting that sample sizes between 100 and 1,000 are typically sufficient for most evaluation needs, depending on the required confidence level.</p>
-<p><img src="https://mlops.systems/posts/images/chip4-sample-number.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/chip4-sample-number.png" class="img-fluid"></p>
 </section>
 <section id="meta-evaluation-evaluating-your-evaluation" class="level3">
 <h3 class="anchored" data-anchor-id="meta-evaluation-evaluating-your-evaluation">Meta-Evaluation: Evaluating Your Evaluation</h3>
@@ -2647,14 +2647,14 @@ On Tools vs Process
   <category>llm</category>
   <category>llms</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</guid>
   <pubDate>Tue, 21 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/chip-ch4.png" medium="image" type="image/png" height="85" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/chip-ch4.png" medium="image" type="image/png" height="85" width="144"/>
 </item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 3</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</link>
+  <link>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</link>
   <description><![CDATA[ 
 
 
@@ -2783,7 +2783,7 @@ On Tools vs Process
 </section>
 <section id="implementation-considerations" class="level3">
 <h3 class="anchored" data-anchor-id="implementation-considerations">Implementation Considerations</h3>
-<p><img src="https://mlops.systems/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" class="img-fluid"></p>
 <ul>
 <li>Table 3-3 (page 139) provides an overview of different AI judge criteria used by various AI tools</li>
 <li>Notable lack of standardization across different platforms and approaches (see above)</li>
@@ -2870,14 +2870,14 @@ On Tools vs Process
   <category>llm</category>
   <category>llms</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</guid>
   <pubDate>Mon, 20 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" medium="image" type="image/png" height="66" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 <item>
   <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 1</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</link>
+  <link>https://alexstrick.com/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</link>
   <description><![CDATA[ 
 
 
@@ -2983,14 +2983,14 @@ On Tools vs Process
   <category>llms</category>
   <category>finetuning</category>
   <category>prompt-engineering</category>
-  <guid>https://mlops.systems/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</guid>
   <pubDate>Sat, 18 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/aieng1-small.png" medium="image" type="image/png" height="101" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/aieng1-small.png" medium="image" type="image/png" height="101" width="144"/>
 </item>
 <item>
   <title>Final notes on ‘Prompt Engineering for LLMs’</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</link>
+  <link>https://alexstrick.com/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</link>
   <description><![CDATA[ 
 
 
@@ -3132,21 +3132,21 @@ On Tools vs Process
   <category>prompt-engineering</category>
   <category>books-i-read</category>
   <category>evaluation</category>
-  <guid>https://mlops.systems/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html</guid>
   <pubDate>Thu, 16 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/chapter-10-prompt-eng.png" medium="image" type="image/png" height="98" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/chapter-10-prompt-eng.png" medium="image" type="image/png" height="98" width="144"/>
 </item>
 <item>
   <title>Assembling the Prompt: Notes on ‘Prompt Engineering for LLMs’ ch 6</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</link>
+  <link>https://alexstrick.com/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</link>
   <description><![CDATA[ 
 
 
 
 
 <p>Chapter 6 of “Prompt Engineering for LLMs” is devoted to how to structure the prompt and compose its various elements. We first learn about the different kinds of ‘documents’ that we can mimic with our prompts, then think about how to pick which pieces of context to include, and then think through how we might compose all of this together.</p>
-<p><img src="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" class="img-fluid"></p>
 <p>There’s a great figure to give you an idea of ‘the anatomy of a well-constructed prompt’ early on. The introduction is where you introduce the task, then you have the ‘valley of meh’ (which the LLM can struggle to recall or obey) and finally you have the refocusing and restatement of the task.</p>
 <p>There are two key tips at this point:</p>
 <ul>
@@ -3172,9 +3172,9 @@ On Tools vs Process
 <li>dependency (if you include one element, can you drop another and vice versa…)</li>
 </ul>
 <p>In the end, you have a kind of optimisation problem: given a theoretical unlimited potential prompt length, how to combine all the elements together to get the most value given the space limitations that the LLM dictates.</p>
-<p><img src="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/additive-greedy.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-13-assembling-the-prompt-ch-6/additive-greedy.png" class="img-fluid"></p>
 <p>And then what strategy do you use to get rid of elements that your prompt budget cannot afford; we learn about the ‘additive greedy approach’ and the ‘subtractive greedy approach’, all the while bearing in mind that these are all just basic prototypes to play around with.</p>
-<p><img src="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/subtr-greedy.png" class="img-fluid"></p>
+<p><img src="https://alexstrick.com/posts/images/2025-01-13-assembling-the-prompt-ch-6/subtr-greedy.png" class="img-fluid"></p>
 <p>The next chapter is all about the completion and how to make sure we receive meaningful and accurate responses from our LLM!</p>
 
 
@@ -3183,9 +3183,9 @@ On Tools vs Process
   <category>llm</category>
   <category>prompt-engineering</category>
   <category>books-i-read</category>
-  <guid>https://mlops.systems/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</guid>
+  <guid>https://alexstrick.com/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html</guid>
   <pubDate>Sun, 12 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://mlops.systems/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" medium="image" type="image/png" height="119" width="144"/>
+  <media:content url="https://alexstrick.com/posts/images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" medium="image" type="image/png" height="119" width="144"/>
 </item>
 </channel>
 </rss>

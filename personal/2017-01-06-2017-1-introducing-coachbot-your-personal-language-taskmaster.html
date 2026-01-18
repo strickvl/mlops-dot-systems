@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2017-01-06">
+<meta name="description" content="I built CoachBot to solve the choice paralysis I faced when studying intermediate languages—a tool that suggests randomized language-learning tasks based on your current situation and energy level.">
+
+<title>Alex Strick van Linschoten - Introducing CoachBot: Your Personal Language Taskmaster</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Introducing CoachBot: Your Personal Language Taskmaster">
+<meta property="og:description" content="I built CoachBot to solve the choice paralysis I faced when studying intermediate languages—a tool that suggests randomized language-learning tasks based on your current situation and energy level.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Introducing CoachBot: Your Personal Language Taskmaster">
+<meta name="twitter:description" content="I built CoachBot to solve the choice paralysis I faced when studying intermediate languages—a tool that suggests randomized language-learning tasks based on your current situation and energy level.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introducing CoachBot: Your Personal Language Taskmaster</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">coding</div>
+    <div class="quarto-category">useful-tools</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">language</div>
+    <div class="quarto-category">productivity</div>
+    <div class="quarto-category">languages</div>
+    <div class="quarto-category">pythonsideproject</div>
+    <div class="quarto-category">coachbot</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    I built CoachBot to solve the choice paralysis I faced when studying intermediate languages—a tool that suggests randomized language-learning tasks based on your current situation and energy level.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 6, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><img src="images/2017-01-06-2017-1-introducing-coachbot-your-personal-language-taskmaster/2a7c6225242d_image-asset.avif" class="img-fluid"></p>
+<p>For languages that aren’t new, I often feel like I’m stagnating and get bored when I reach the intermediate levels. This can reflect a lack of materials from which to study (as was the case with Pashto when I first started studying it) or — more commonly — a surfeit of materials. This creates a kind of choice paralysis where the number of options means I’m far less likely to sit down and pick one of them. (In a similar way, I’ll sometimes choose not to watch any of the in-flight entertainment because there are too many choices to pick from.)</p>
+<p>Studying a brand new language is (almost) always fun: you’re making quick progress, everything is new so you still have that nice-and-shiny feeling, and you feel like you’re really on your way to success. Continuing that study after two to four years of effort is a little harder. Like with any longer-term project, you start having to find ways to remind yourself of why you’re even working on it in the first place. It can often feel like you’ve lost that original magic somehow, even to the extent that you question whether you actually want to learn the language.</p>
+<p>It is useful to address some of these issues ahead of time. That way, when you hit a period of less energy or motivation, you have a pre-formulated plan of action (made by you when you weren’t consumed by whatever mood is dominant). For me, this takes the form of making lists of suggestions to my future-self. I have pre-made task lists for:</p>
+<ul>
+<li>When I’m travelling</li>
+<li>When I’m feeling sick</li>
+<li>When I have no time to study</li>
+<li>When I have oodles of time to study</li>
+<li>When I have lots of energy and enthusiasm for learning</li>
+<li>When I have no enthusiasm for learning</li>
+</ul>
+<p>Try to have at least 10 or 15 tasks in whatever lists you do end up creating. Maybe save a few pages at the back of your language notebook to list these tasks. This way, you always have them handy. It helps to have a good amount of variety in the tasks you pre-assign to yourself.</p>
+<p>I keep lists as described above, but they weren’t as effective as I’d hoped. I’d glance at the tasks, feel only a limited enthusiasm for the options available and then put the list to one side. I needed a different solution.</p>
+<p>I happened to be <a href="https://www.alexstrick.com/blog/?category=Coding">teaching myself to program/code</a> at around the same time, so I thought this might make an interesting practice problem to try to solve. (I was studying <a href="https://www.python.org/">Python</a> and so I found a way to make a web app that uses that to connect to <a href="http://flask.pocoo.org/">Flask</a>.)</p>
+<p><a href="http://www.languagecoach.io/coachbot">CoachBot</a> is the free tool I designed to solve the problem of study choice paralysis for language-learners. It’s still only a prototype, but I’m soft-launching it here now since I imagine it might help those reading who are in similar situations.</p>
+<p><a href="http://www.languagecoach.io/coachbot">CoachBot</a> gives you a task that you can complete within a specific time-frame. If you have only 5 minutes, it’ll pick a random task from the database that I curated and wrote myself. Have an hour? It’ll suggest a different kind of task. If you don’t want to do a particular task that it suggests, just click a button to get a new one.</p>
+<p>These are the kinds of tasks I suggest when <a href="http://languagecoach.io/coaching">working with students one-on-one</a>. They’re also the kinds of tasks I had written down in my lists. As of writing, there are 386 unique tasks in the database, which means that the suggestions are far more varied and creative than anything I was previously using.</p>
+<p>I’d suggest you use it as follows: if you ever feel like you don’t know what to do to keep going with your language studies, open up <a href="http://www.languagecoach.io/coachbot">CoachBot</a>, pick a time corresponding to your needs and do whatever it tells you to do. When you’re done, make a note of what you did and how long it took in your learning log. Consider doing another session.</p>
+<p>I’ve been using this for a few weeks already and can attest to its value. One of the key benefits I’ve found is just in getting started. Sometimes I’ll only need to do a five-minute task before I realise that there was something else that I wanted to read or study and then I’ll get busy working on that.</p>
+<p>There are lots of features that I hope to build in for future versions. I want to include user accounts and tracking of how much time you spend on the different tasks. I want to sub-divide by language skill (i.e.&nbsp;which skill is being trained) and eventually to build in some kind of guidance and interactivity to how the tool functions. But for now, use it as it is: get some studying done by outsourcing the choice of what you’ll be studying.</p>
+<p>There are more details on <a href="http://www.languagecoach.io/coachbot">the website itself</a>. You can click through to the <a href="https://trello.com/b/RVjGqGnV">project’s roadmap</a> where you can see an updated version of features coming soon. You can also make suggestions for tasks that you’d like included in the Bot and/or specific features you’d like me to build as part of the project.</p>
+<p><em>[Special thanks to Alex, Ian, Kevin and Peter for patiently answering my questions while I was building this initial prototype].</em></p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

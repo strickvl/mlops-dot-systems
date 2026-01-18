@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2016-09-07">
+<meta name="description" content="How I use OmniFocus and the Getting Things Done system to manage all the non-PhD tasks that pile up during a PhD.">
+
+<title>Alex Strick van Linschoten - PhD Tools: Omnifocus for Managing your Non-PhD Life</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - PhD Tools: Omnifocus for Managing your Non-PhD Life">
+<meta property="og:description" content="How I use OmniFocus and the Getting Things Done system to manage all the non-PhD tasks that pile up during a PhD.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - PhD Tools: Omnifocus for Managing your Non-PhD Life">
+<meta name="twitter:description" content="How I use OmniFocus and the Getting Things Done system to manage all the non-PhD tasks that pile up during a PhD.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PhD Tools: Omnifocus for Managing your Non-PhD Life</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">phd</div>
+    <div class="quarto-category">productivity</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">useful-tools</div>
+    <div class="quarto-category">mac</div>
+    <div class="quarto-category">omnifocus</div>
+    <div class="quarto-category">phdtoolsseries</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    How I use OmniFocus and the Getting Things Done system to manage all the non-PhD tasks that pile up during a PhD.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 7, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><em>[This is part of a series on the tools I used to write my PhD. Check out <a href="../blog?tag=phdtoolsseries">the other parts here</a>.]</em></p>
+<p><img src="images/2016-09-07-phd-tools-omnifocus/1ab5af6af19b_image-asset.avif" class="img-fluid"></p>
+<p>Discussions of task management systems have a tendency to devolve into disagreement and discord, so I’ll state upfront that the choice of how you manage the various projects and goals in your life is a very personal one. There <em>is</em>&nbsp;no one single ‘best’ software for task management; there is only the best one for <em>you</em>.</p>
+<p>One problem when writing a PhD is that it is impossible to completely isolate yourself to the extent that might be optimal for the wiriting of the PhD. Even if you’re lucky enough not to have to work while you’re doing your research/writeup (i.e.&nbsp;you have funding), you still have things to plan outside the work of your dissertation: you have to shop for food, you have to pay your taxes, you have to workout, and so on.</p>
+<p>If you’re anything like me, it’s easy to ignore these tasks and let them pile up in the absence of a system or a specific place where you’re storing these different commitments. There are many different approaches to both the storage of tasks as well as the precise way of implementing those tasks (the order in which you do them, for example), but the one that I’ve found most useful in my work and personal life is the <a href="https://lifehacker.com/productivity-101-a-primer-to-the-getting-things-done-1551880955">Getting Things Done (GTD) system</a> proposed by <a href="http://gettingthingsdone.com/">David Allen</a>.</p>
+<p>You could lose yourself on the internet reading about approaches to GTD and advocates have the reputation of being a little <em>intense</em>&nbsp;in their zeal to convert you to its glories. Suffice it to say for now that <a href="http://www.43folders.com/2004/09/08/getting-started-with-getting-things-done">the basic idea</a> is pretty simple: split all your tasks down into the smallest possible component and assign each task an overarching project and a context (i.e.&nbsp;‘working on my laptop’ could be a context, so could your phone, or a specific shop in town etc). Everything else is just icing on the cake.</p>
+<p>There has been a lot of debate as to how suitable a GTD approach is for creative professions (such as PhD writing) and I’ve changed my mind on this a number of times over the years since first reading Allen’s original classic book when I lived in Kandahar. My current position is a blend: I think GTD itself isn’t probably the best single system for the kind of complicated ‘knowledge work’ that creative pursuits demands. In particular, there is a certain encouragement to reduce all tasks down to little ‘widgets’ that doesn’t quite gel with how I write. (See the <a href="http://www.usingomnifocus.com/2016/08/gtd-creativity/">recent post</a> by Kouroush Dini which examines some of this). That said, I do think that GTD <em>is</em>&nbsp;pretty excellent as a system to contain and support everything else that goes alongside your creative pursuits. Again, I don’t have that much sense of the variety of everyone’s approaches to task management, but I have enough going on (and I suspect you do, too) that I need a system that is more flexible than a big long list. In particular, I need something that can ping me about things that will happen in the future (or that I have to do in the future). I don’t want to see those things in the interim period, mind you, so the system is already somewhat complex.</p>
+<p>For me, all these tools are not important or useful in and of themselves. They are means to an end, or means to a series of interwoven goals. The whole point of having a task management system should, I believe, be to reduce friction and to give you back as much time as possible to do the important work to which you are committed. This means a system that is flexible and light-weight in terms of maintenance. It means something I can carry everywhere with me (from my laptop to my phone). And it means something that won’t get in my way.</p>
+<p>With regards to the various tasks that formed my PhD process, I moved most of those over to a Trello board (as I’ve explained in <a href="http://www.alexstrick.com/blog/2016/8/phd-tools-trello">a separate blogpost here</a>). I generally have a specific place for creative work – either Trello, or <a href="http://www.eastgate.com/Tinderbox/">Tinderbox</a>, or perhaps just a specific notebook. Everything else goes in Omnifocus.</p>
+<p><a href="https://www.omnigroup.com/omnifocus">Omnifocus</a> itself is a Mac-and-iOS-only programme. There’s a popular competitor, <a href="https://culturedcode.com/things/">Things</a>, which others swear by and I used to use. For a more cloud-based approach, some love <a href="https://todoist.com/">Todoist</a>. All three offer are based around a GTD philosophy. I like how Omnifocus works, but it may just be because I’ve been using it for a long time and it’s what I’m used to. All have a free trial period, but you’ll only figure out whether they work for you over the longer term. I would not advise constantly changing task management systems. It takes a lot of time (relatively speaking) to get comfortable with how the software works (and how you fit it into your life and workflows). Moreover, these systems aren’t cheap, especially once you shoot for the mobile versions / licenses alongside the desktop version. For affordability, I think <a href="https://todoist.com/">Todoist</a> is probably your friend. For power and if you really find you click with it, <a href="https://www.omnigroup.com/omnifocus">Omnifocus</a> might be more suited.</p>
+<p>With all of these approaches, having a broader sense of what you want the software to do for you really comes in handy. I don’t think it is <em>essential</em>&nbsp;to read <a href="https://www.amazon.com/Getting-Things-Done-Stress-Free-Productivity-ebook/dp/B00KWG9M2E/ref=sr_1_1_twi_kin_2?sr=8-1&amp;ie=UTF8&amp;keywords=getting%2Bthings%2Bdone&amp;tag=soumet-20&amp;qid=1472649468">Allen’s Getting Things Done</a> prior to working with one of these systems, but I know my own use of them wouldn’t have been the same without a sense of the guiding principles. It’s a quick and easy read.</p>
+<p>Three things that I found really essential and stimulating from his book:</p>
+<p><strong>1) The idea of splitting things down to smaller chunks and the ‘next action’:</strong></p>
+<p>Let’s say you want to host a dinner party on the weekend. You could just write a line on a piece of paper, “prepare for dinner party” and be done with it. But, as Allen pretty convincingly shows in his book, without defining exactly what that means (using sentences that have verbs in them, in <a href="https://twitter.com/hotdogsladies">Merlin Mann’s</a> useful phrasing) then you’re likely to procrastinate about that particular task. You’re also likely to forget things, and you’ll probably feel like you’re juggling a thousand separate small balls prior to getting ready for the party.</p>
+<p>Similarly with something in the <a href="https://en.wikipedia.org/wiki/Knowledge_worker">knowledge work</a> field. If you’ve ever had a task like “write article” or “write chapter” or (even worse) “work on PhD” in your task list, you’re pretty sure to have avoided that at some point, probably often. It is the lack of specificity that really causes problems. So Allen encourages you to figure out what is the smallest single-action next step in order to move forward with your particular project. Maybe you need to read something before you can work on your next PhD chapter. But then you realise that you don’t have a copy of the book at home, so you’ll have to go to the library. But then you realise your library card needs renewing before you can take it out. Finding and specifying these chains of dependencies is a really great way, therefore, to get and keep moving with your work.</p>
+<p><strong>2) Regular reviews:</strong></p>
+<p>GTD encourages weekly reviews of your tasks and projects. Since reading Allen’s book, I’ve sometimes neglected my reviews, but I am certain that when I do block out an hour or so to make sure I am on track (or figure out what went wrong) each week, I feel much more in control of what’s going on. (I even have used <a href="http://www.alexstrick.com/blog/2016/8/phd-tools-beeminder">Beeminder</a> to make sure I keep doing my weekly reviews in the past).</p>
+<p>Reviews keep you aligned with the various levels of goals that you have. Allen talks about the runway level (the individual specific tasks you have to do), then the 10,000, 20,000 ft all the way up to the 50,000 ft perspective. At 50,000 ft, you’re starting to talk about your purpose as a human being on the planet. At 10,000 ft, this is your list of ongoing projects. And so on. At the beginning, I was much more focused on the day-to-day actionable side of GTD, but as the years have passed I’ve become more convinced of the use of having these higher-level goals and perspectives.</p>
+<p><strong>3) ‘Capture’, or an inbox to store random things during the day:</strong></p>
+<p>This was half from David Allen, half from Merlin Mann (who in turn was inspired by Allen). The idea here is that whenever you think of something that needs to be done, or an issue that you have to handle/tackle, make a note of it. If you just try to keep it in your head, you’ll either forget it, or you’ll lose energy and mental bandwidth because you have too many such items hanging around.</p>
+<p>I have a digital inbox in Omnifocus where I’ll make notes of tasks or things I need to handle as they occur to me. Adding it into my inbox is easy, and I know it won’t be forgotten because I’m reviewing everything at least once a week. In reality, I’m sorting through my task inbox once every day or two as well, so as to stay on top of these tasks.</p>
+<p>I also have a paper notebook, which I’ll use to jot notes down when I’m out and about, or when I don’t want to be using digital technology etc. I’ll transfer any tasks or notes from this notebook into Omnifocus usually at the end of every day, but if I’m particularly busy then I’ll just do it during my weekly review on Sundays.</p>
+<p>This turned out to be a longer post than expected. I barely scratched the surface of my workflow around <a href="https://www.omnigroup.com/omnifocus">Omnifocus</a> but I think you’ll have to develop your own if it is really to stick. Let me know if you find these concepts useful, or if you end up having some success with a task management system like <a href="https://www.omnigroup.com/omnifocus">Omnifocus</a>.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -6,15 +6,15 @@
       version="2.0">
 <channel>
 <title>Alex Strick van Linschoten</title>
-<link>https://mlops.systems/til.html</link>
-<atom:link href="https://mlops.systems/til.xml" rel="self" type="application/rss+xml"/>
-<description></description>
+<link>https://alexstrick.com/til.html</link>
+<atom:link href="https://alexstrick.com/til.xml" rel="self" type="application/rss+xml"/>
+<description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.2.269</generator>
 <lastBuildDate>Sun, 15 Sep 2024 22:00:00 GMT</lastBuildDate>
 <item>
   <title>What is the Rust prelude?</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://mlops.systems/til/2024-09-16-what-is-the-rust-prelude.html</link>
+  <link>https://alexstrick.com/til/2024-09-16-what-is-the-rust-prelude.html</link>
   <description><![CDATA[ 
 
 
@@ -38,7 +38,7 @@
   <category>rust</category>
   <category>learning</category>
   <category>TIL</category>
-  <guid>https://mlops.systems/til/2024-09-16-what-is-the-rust-prelude.html</guid>
+  <guid>https://alexstrick.com/til/2024-09-16-what-is-the-rust-prelude.html</guid>
   <pubDate>Sun, 15 Sep 2024 22:00:00 GMT</pubDate>
 </item>
 </channel>

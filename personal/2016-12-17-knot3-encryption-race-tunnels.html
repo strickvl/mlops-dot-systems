@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2016-12-17">
+<meta name="description" content="A roundup of articles on encryption, privacy policy, language funding, and creative responses to geopolitics.">
+
+<title>Alex Strick van Linschoten - Knot 3: Encryption, Race and Tunnels</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Knot 3: Encryption, Race and Tunnels">
+<meta property="og:description" content="A roundup of articles on encryption, privacy policy, language funding, and creative responses to geopolitics.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Knot 3: Encryption, Race and Tunnels">
+<meta name="twitter:description" content="A roundup of articles on encryption, privacy policy, language funding, and creative responses to geopolitics.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Knot 3: Encryption, Race and Tunnels</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">journalism</div>
+    <div class="quarto-category">knot</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">memory</div>
+    <div class="quarto-category">books</div>
+    <div class="quarto-category">race</div>
+    <div class="quarto-category">media</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A roundup of articles on encryption, privacy policy, language funding, and creative responses to geopolitics.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 17, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><img src="images/2016-12-17-knot3-encryption-race-tunnels/714a1d243b6e_67589.avif" class="img-fluid"></p>
+<p>More focus this week on finishing <a href="http://www.hurstpublishers.com/book/the-taliban-reader/">a big project</a>, so <a href="https://www.alexstrick.com/blog/notification-zero">less time</a> for books or outside reading, but nevertheless some articles to recommend.</p>
+<p><strong>Articles</strong></p>
+<ul>
+<li>Ursula Lindsey - “<a href="http://www.al-fanarmedia.org/2016/12/funds-cut-prominent-arabic-language-program/">Funds Cut for Prominent Arabic Language Program</a>” (Al-Fanar Media)</li>
+</ul>
+<p>An extremely short-sighted decision. The CASA programme has been a really important source of support over its forty-nine years. This is a decision that affects American students of Arabic, but we shouldn’t forget that it’s symptomatic of how language studies are treated elsewhere.</p>
+<ul>
+<li>Rosalind Adams - “<a href="https://www.buzzfeed.com/rosalindadams/intake?utm_term=.qmvwEy3r2#.sqRlJ0yXV">Intake: Locked On The Psych Ward</a>” (Buzzfeed)</li>
+</ul>
+<p>Anyone who still says Buzzfeed doesn’t do important reporting just isn’t reading. This piece looks at the way a for-profit system works to the disadvantage of patients’ welfare and the healthcare system in general. A must-read for an American audience, and for Europeans / Brits as a portent of what probably is headed our way.</p>
+<ul>
+<li>Bron Gondwana - “<a href="https://blog.fastmail.com/2016/12/10/why-we-dont-offer-pgp/">Why we don’t offer PGP</a>” (Fastmail Blog)</li>
+</ul>
+<p>PGP has been much discussed (more than usual, at any rate) this past week. This post offers a useful overview of some of the things that PGP can help protect against, versus some of the places where trust in what it can do are misplaced. Pair this article with Bjarni Rúnar’s “<a href="https://www.mailpile.is/blog/2016-12-13_Too_Cool_for_PGP.html">Too Cool for PGP</a>” to cover your bases.</p>
+<ul>
+<li>Annalee Newitz - “<a href="http://arstechnica.com/business/2016/12/evernote-admits-it-communicated-poorly-about-privacy/">Evernote apologizes for its new privacy policy</a>” (Ars Technica)</li>
+</ul>
+<p>A useful corrective from Ars Technica (one of the best places to go for informed reporting on science and technology) about Evernote’s recent policy changes relating to privacy. The important point to take away from all this is that Evernote probably isn’t where you want to be storing your notes if you care about your privacy. Try <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> instead for a far saner approach to encryption and storage.</p>
+<ul>
+<li>Amal el-Mohtar - “<a href="http://www.npr.org/2016/12/10/503068002/iraq-100-is-painful-but-dont-look-away">‘Iraq + 100’ Is Painful, But Don’t Look Away</a>” (NPR)</li>
+</ul>
+<p>This review of a new collection of stories seems (from the review, at any rate) like it is worth reading. Imaginative and creative responses to events on this scale are, I think, the kinds of things that will ultimately survive far longer than the political analysis and commentary that so far has dominated the discussion of what happened in Iraq. I look forward to reading this book.</p>
+<ul>
+<li>Ryan Holliday - “<a href="http://observer.com/2016/11/want-to-really-make-america-great-again-stop-reading-the-news/">Want to Really Make America Great Again? Stop Reading the News.</a>” (Observer)</li>
+</ul>
+<p>You can ignore the focus on US politics and still take away the broader argument, that following the day-to-day news cycle is (for the broad majority of us) unnecessary and probably actually detrimental to our health and ability to do work that really matters (to us or others). A useful reminder.</p>
+<ul>
+<li>Laura Reiley - “<a href="http://www.tampabay.com/projects/2016/food/farm-to-fable/restaurants/">Farm to Table: At Tampa Bay farm-to-table restaurants, you’re being fed fiction</a>” (Tampa Bay Times)</li>
+</ul>
+<p>A great piece of investigative work, Reiley shows how a lot of the promises of the farm-to-table movement in California are false claims. This piece is the first in a series that is worth reading in its entirety.</p>
+<ul>
+<li>Roger Cohen - “<a href="http://www.nytimes.com/2016/12/09/opinion/sunday/australia-refugee-prisons-manus-island.html?_r=0">Broken Men in Paradise</a>” (New York Times)</li>
+</ul>
+<p>This is an important reminder of the realities of life for those refugees refused entry to Australia following harrowing journeys across the seas. Authorities in the places they are sent to operate with seemingly little restraint or care for their wellbeing.</p>
+<ul>
+<li>Ta-Nehisi Coates — “<a href="https://www.theatlantic.com/magazine/archive/2017/01/my-president-was-black/508793/">My President Was Black: A history of the first African American White House—and of what came next</a>” (The Atlantic)</li>
+</ul>
+<p>This piece seems to capture a moment. Based on several interviews with Obama as well as his usual command of the context that explains this moment, this is a (long) must-read.</p>
+<ul>
+<li>Gideon Lewis-Kraus - “<a href="http://www.nytimes.com/2016/12/14/magazine/the-great-ai-awakening.html">The Great A.I. Awakening</a>” (New York Times)</li>
+</ul>
+<p>Important from perhaps a different angle, this is a long overview of the ways so-called artificial intelligence is poised to change our world. It views the transformation through the lens of developments in Google’s online translation service. It offers context and explanation to two different approaches to machine intelligence and the different algorithmic decisions being made. If you’re interested in technology and the ways that computers will continue to be embedded in our daily lives, you won’t want to miss this one.</p>
+<p><strong>Books</strong></p>
+<p>This week I read Lynne Kelly’s “<a href="https://www.amazon.com/Memory-Code-Secrets-Stonehenge-Monuments-ebook/dp/B01K5J6V9E/ref=mt_kindle?_encoding=UTF8&amp;me=&amp;tag=soumet-20">The Memory Code: The Secrets of Stonehenge, Easter Island and Other Ancient Monuments</a>” in preparation for an upcoming podcast episode interview. Dr Kelly makes a convincing case for how old archeological sites (like Stonehenge) were probably used as forms of memory aids to recall information important for local communities. The book is best accompanied by a glance at a truly fascinating <a href="http://www.lynnekelly.com.au/memory-experiments/">series of memory experiments</a> that she’s been working on. I also read Rebecca Solnit’s “<a href="https://www.amazon.com/Men-Explain-Things-Rebecca-Solnit-ebook/dp/B00IWGQ8PU/ref=sr_1_1_twi_kin_2?sr=8-1&amp;ie=UTF8&amp;keywords=men%2Bexplain%2Bthings&amp;tag=soumet-20&amp;qid=1480622707">Men Explain Things to Me</a>”, a very useful and sobering reminder of the ways that society works against women, whether directly through violence or other perhaps less visible means.</p>
+<p><strong>Films / TV</strong></p>
+<p><a href="https://www.alexstrick.com/blog/into-eternity-review">I wrote yesterday</a> about “Into Eternity” (trailer <a href="https://www.youtube.com/watch?v=qoyKe-HxmFk">here</a>), one of my favourite documentaries of the past year. It’s filmed with an idiosyncratic approach to detail and atmosphere. I am ignorant about where Finnish director Michael Madsen gets his influences from, but I certainly look forward to seeing more. Just today I saw another documentary, “<a href="http://www.imdb.com/title/tt5895028/">13th</a>”, which focuses on the ways that racial inequality has manifested itself in the United States, specifically in the prison system. This is a powerful statement, particularly for American viewers, I imagine, and it made me think about the ways that similar trends are to be found back in Europe.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

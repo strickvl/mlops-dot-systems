@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2016-12-02">
+<meta name="description" content="The inaugural post in a recurring feature linking to recent reads—covering solitary confinement in American prisons, AI applications in illegal fishing, data science in cancer research, Google account breaches, and HTTPS security.">
+
+<title>Alex Strick van Linschoten - Knot 1: Solitary Confinement &amp; Digital Security</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - Knot 1: Solitary Confinement &amp; Digital Security">
+<meta property="og:description" content="The inaugural post in a recurring feature linking to recent reads—covering solitary confinement in American prisons, AI applications in illegal fishing, data science in cancer research, Google…">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - Knot 1: Solitary Confinement &amp; Digital Security">
+<meta name="twitter:description" content="The inaugural post in a recurring feature linking to recent reads—covering solitary confinement in American prisons, AI applications in illegal fishing, data science in cancer research, Google…">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#articles" id="toc-articles" class="nav-link active" data-scroll-target="#articles"><strong>Articles</strong></a></li>
+  <li><a href="#books" id="toc-books" class="nav-link" data-scroll-target="#books"><strong>Books</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Knot 1: Solitary Confinement &amp; Digital Security</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">books</div>
+    <div class="quarto-category">knot</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">science</div>
+    <div class="quarto-category">links</div>
+    <div class="quarto-category">data</div>
+    <div class="quarto-category">reading</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    The inaugural post in a recurring feature linking to recent reads—covering solitary confinement in American prisons, AI applications in illegal fishing, data science in cancer research, Google account breaches, and HTTPS security.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 2, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><img src="images/2016-12-02-knot1-solitary-confinement-digital-security/0add8c69ede4_image-asset.avif" class="img-fluid"></p>
+<p>This is the first of what I hope will be a regular feature on this blog. <em>Knot</em> will link to recent things that I’ve been reading. It will include short articles as well as books and other things on the internet.</p>
+<section id="articles" class="level2">
+<h2 class="anchored" data-anchor-id="articles"><strong>Articles</strong></h2>
+<ul>
+<li>Martin Garbus — “<a href="http://www.nybooks.com/articles/2016/12/08/solitary-confinement-americas-invisible-inferno/">America’s Invisible Inferno</a>” (NYRB)</li>
+</ul>
+<p>This NYRB review of ‘<a href="https://www.amazon.com/Hell-Very-Small-Place-Confinement-ebook/dp/B016TX4F16/ref=sr_1_1_twi_kin_2?sr=8-1&amp;ie=UTF8&amp;keywords=hell%2Bis%2Ba%2Bvery%2Bsmall%2Bplace&amp;tag=soumet-20&amp;qid=1480674376">Hell Is A Very Small Place</a>’ covers the use of solitary confinement in the American prison system. It ends with unearned optimism, but nevertheless is a useful reminder of the importance of the issue.</p>
+<ul>
+<li>Mary Catherine O’Connor — “<a href="https://www.theguardian.com/sustainable-business/2016/nov/20/artificial-intelligence-illegal-fishing-tuna-sharks">The latest weapon in the fight against illegal fishing? Artificial intelligence</a>” (The Guardian)</li>
+</ul>
+<p>Interesting short piece on the use of machine learning combined with data science competition site, <a href="http://kaggle.com/">Kaggle</a>, to try to improve the efficiency and accuracy of fishing inspections. Hardly a day passes when a new initiative like this is launched, merging data science and crowdsourced solutions. I look forward to being able to contribute (one day in the hopefully-not-so-distant future).</p>
+<ul>
+<li>Meeri Kim — “<a href="https://www.washingtonpost.com/news/to-your-health/wp/2016/11/11/how-a-researcher-used-her-computational-know-how-to-beat-her-own-ovarian-cancer/">How a researcher used big data to beat her own ovarian cancer</a>” (Washington Post)</li>
+</ul>
+<p>More data science, though this is more at the N=1 edge of things than the previous fishery data story. The more data we are able to access and generate, the more there will be need for ways of analysing and processing these complex interactions. A lot of money is being invested in finding ways to automate this for non-technical users, though I imagine we’re still a little way away from that utopia.</p>
+<ul>
+<li>Check Point — “<a href="http://blog.checkpoint.com/2016/11/30/1-million-google-accounts-breached-gooligan/">More Than 1 Million Google Accounts Breached by Gooligan</a>” (CheckPoint Blog)</li>
+</ul>
+<p>I’m not quite sure why this isn’t a bigger story. I’ve long believed that anything stored by Google (in particular, emails) will at some point be leaked in a hack or by some disgruntled employee. This latest hack is pretty close to that scenario, with the caveat that we don’t know what was taken. Takeaway: move away from the Google ecosystem where possible.</p>
+<ul>
+<li>Scott Gilbertson — “<a href="http://arstechnica.co.uk/security/2016/07/https-is-not-a-magic-bullet-for-web-security/">HTTPS is not a magic bullet for Web security</a>” (Ars Technica)</li>
+</ul>
+<p>This is a few months old but offers a useful overview on HTTPS technology, what it can help with (and what it is less useful for). The headline is actually a bit deceptive since the article seems to make a strong case for the use of HTTPS.</p>
+<ul>
+<li>Shane Parrish — “<a href="https://medium.com/personal-growth/the-simple-plan-to-make-you-smarter-d2137a122676#.a0w04q1de">The Simple Plan To Read More</a>” (Farnham Street / Personal Growth)</li>
+</ul>
+<p>I’ve long ago taken this advice on board, but it’s a useful reminder. I enjoy reading, and I enjoy the diversity that comes from reading <em>widely</em> and <em>broadly</em>, so keeping up the pace and seeing it more as a habit to be done most days is, to my mind, the right way of looking at it.</p>
+</section>
+<section id="books" class="level2">
+<h2 class="anchored" data-anchor-id="books"><strong>Books</strong></h2>
+<p>I read three books this past week. Jim Klopman’s <a href="https://www.amazon.com/Balance-Power-Improve-Perform-Younger-ebook/dp/B01HQTHYHE/ref=sr_1_5?ie=UTF8&amp;sr=1-5&amp;s=digital-text&amp;keywords=balance&amp;tag=soumet-20&amp;qid=1479724904"><em>Balance Is Power</em></a> was my easy introduction to some of the science behind why it is useful to train balance in a focused way as a skill.</p>
+<p>I finished the second volume in Elena Ferrante’s tetralogy, <a href="https://www.amazon.com/Story-New-Name-Neapolitan-Novels-ebook/dp/B00ETSEZDC/ref=tmm_kin_swatch_0?qid=&amp;sr=&amp;tag=soumet-20&amp;_encoding=UTF8"><em>The Story of a New Name</em></a>, though I didn’t enjoy it quite as much as the first. I suspect I’ll have to return to it in a few weeks after the dust has settled.</p>
+<p>Finally, I devoured Paul Kalanathi’s <a href="https://www.amazon.com/When-Breath-Becomes-Paul-Kalanithi-ebook/dp/B00XSSYR50/ref=tmm_kin_swatch_0?qid=&amp;sr=&amp;tag=soumet-20&amp;_encoding=UTF8"><em>When Breath Becomes Air</em></a>, a beautifully written exploration of death, medicine, how we go through all these things as people, how illness affects not only the body but the mind and the spirit as well. It reminded me of Atul Gawande’s <a href="https://www.amazon.com/Being-Mortal-Medicine-What-Matters-ebook/dp/B00JCW0BCY/ref=sr_1_1?ie=UTF8&amp;sr=1-1&amp;s=digital-text&amp;keywords=atul%2Bgawande&amp;tag=soumet-20&amp;qid=1480675958"><em>Being Mortal</em></a>, which covered similar themes albeit with less of an intimately tragic outcome. I highly recommend giving <em>When Breath Becomes Air</em> a read.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

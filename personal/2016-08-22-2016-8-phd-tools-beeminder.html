@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2016-08-22">
+<meta name="description" content="How I used Beeminder to stay accountable on my PhD writing goals through financial commitment.">
+
+<title>Alex Strick van Linschoten - PhD Tools: Beeminder</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Alex Strick van Linschoten - PhD Tools: Beeminder">
+<meta property="og:description" content="How I used Beeminder to stay accountable on my PhD writing goals through financial commitment.">
+<meta property="og:site-name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Alex Strick van Linschoten - PhD Tools: Beeminder">
+<meta name="twitter:description" content="How I used Beeminder to stay accountable on my PhD writing goals through financial commitment.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html">
+ <span class="menu-text">Personal</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html">
+ <span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../index.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#minding-the-bees" id="toc-minding-the-bees" class="nav-link active" data-scroll-target="#minding-the-bees">Minding the Bees</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PhD Tools: Beeminder</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">phd</div>
+    <div class="quarto-category">productivity</div>
+    <div class="quarto-category">tech</div>
+    <div class="quarto-category">useful-tools</div>
+    <div class="quarto-category">tools</div>
+    <div class="quarto-category">accountability</div>
+    <div class="quarto-category">technology</div>
+    <div class="quarto-category">beeminder</div>
+    <div class="quarto-category">phdtoolsseries</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    How I used Beeminder to stay accountable on my PhD writing goals through financial commitment.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 22, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><em>[This is part of a series on the tools I used to write my PhD. Check out the <a href="../blog?tag=phdtoolsseries">other parts here</a>.]</em></p>
+<p><img src="images/2016-08-22-2016-8-phd-tools-beeminder/034c3aacebc7_image-asset.avif" class="img-fluid"></p>
+<p>I feel like I’ve mentioned the end of the PhD several times in recent posts (PHD IS OVER!). It occurred to me that it might be useful to go through some of the tools and principles that I found most useful in completing the doctoral thesis, the research and the work in general. Part of this is by way of giving thanks to the application or methodological creators, and the other part is me thinking that others (future / current PhD students?) might find this useful.</p>
+<p>It took me many years to finally settle on these tools. It would probably be unwise to adopt my entire writing style and process for yourself, because everyone’s unique. I read a lot of books, blogposts and discussed things in forums and at meetings with others. This is all the product of a lot of procrastination (some active, some just resulting from hanging out on twitter or subscribing to a bunch of productivity-related blogs in my <a href="https://www.newsblur.com/">RSS reader</a>).</p>
+<p>Each post will vary in size. For some I’ll go into a bit more detail because the principle will be somewhat unknown. Others are mega-players in the tech world so I’ll just tip my hat in their direction.</p>
+<section id="minding-the-bees" class="level2">
+<h2 class="anchored" data-anchor-id="minding-the-bees">Minding the Bees</h2>
+<p>My first pick is, of course, <a href="https://www.beeminder.com/">Beeminder</a>. (I’ve written about Beeminder before <a href="http://www.alexstrick.com/search?q=beeminder&amp;f_collectionId=544a2abfe4b017ad0e2a476a">here</a>.) The principle behind this service is pretty simple: you commit to doing a certain thing (or things) by a certain date (or regularly each day etc) and if you don’t do them, you’re penalised with money taken from your credit/debit card. The amount of money taken depends on whether you’re a first-time offender (free, or $5), but then it increases exponentially. Pretty soon you’ll be facing $270 or even higher fines.</p>
+<p>Needless to say, this is a pretty strong motivator. You can hear about some of the nitty-gritty details in <a href="http://www.sourcesandmethods.com/podcast/2015/12/2/sources-and-methods-23-beeminder">a podcast interview</a> I did with <a href="https://twitter.com/MattTrevithick">Matt Trevithick</a> and <a href="https://www.beeminder.com/aboutus">the founders of Beeminder</a>, Bethany Soule and Daniel Reeves.</p>
+<p>I have used Beeminder for a really wide variety of things – not just for my work but for my personal life, too – but in terms of my PhD, I had three main goals it supported:</p>
+<ol type="1">
+<li><p>tracking the amount of time I spent writing. You can hook up <a href="https://www.rescuetime.com/">RescueTime</a> (a passive activity tracker on your laptop) to <a href="https://www.beeminder.com/rescuetime">feed into</a> Beeminder. I can then say that I want to make sure I do a minimum of 1 hour of writing in Scrivener each day (for example), and Beeminder keeps track of the rest. This is a good thing to track because, ultimately, the PhD is all about keeping writing. You can get lost in the research, but after a certain point you just have to deliver it and ship the damn thing. This keeps you honest about the writing part, the sitting down in the chair and putting words on the page.</p></li>
+<li><p>words drafted – this one’s a bit more delicate, since often when you’re starting out, drafting a new section or chapter, the words that come out are useless drivel (or replace with a far less charitable way of describing their quality, and say hi to my inner voice while you’re there!). At the beginning, doing basic drafting, it’s hard to get started because you feel everything has to be perfect. The best antidote to this is to work on a ‘<a href="https://www.brainpickings.org/2013/11/22/bird-by-bird-anne-lamott/">shitty first draft</a>’. Here, the idea is simply to churn out enough thoughts to fill the blank space in the outline, or book, or chapter or wherever.<br>
+A specific example: I flew to Karachi in late 2012 to hammer out the first draft of my dissertation. I setup a Beeminder goal of having 100,000 words of text (approx the maximum word count allowed for submission to the university) and a date 6 weeks in the future, and I got writing. Beeminder calculates and tells you how many words you have to get done each day in order to stay ahead of the curve. (There are <a href="https://www.beeminder.com/featured">graphs</a>. They are awesome). As long as you keep writing, you’re ok. And I did it. Most was horrible, and some of it was inner conversations between myself and myself about the subject under consideration, almost all of which I had to rewrite in some shape or form later on. But… it was words on the page, and it was me thinking through the issues. It was essential.</p></li>
+<li><p>Sources Read – this might be unique to me, but at some point I had to return to the newly-gathered sources of the <a href="http://www.alexstrick.com/blog/2015/8/afp-covers-the-taliban-sources-project">Taliban Sources Project</a>. I looked in my <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a> database (about which, more to come in a future post) and saw I’d flagged 1000+ articles to reread, catalogue/tag and integrate into the main thesis argument. So I plugged those numbers into Beeminder, gave myself a workable daily rate (50 or 100, I think) and then it calculated the rest and kept me honest.</p></li>
+</ol>
+<p>So, to sum up:</p>
+<ul>
+<li>Beeminder forces you think backwards from your goal if you have a specific endpoint in mind.&nbsp;This is extremely valuable as it makes sure you’re not being overambitious.</li>
+<li>Beeminder gives you accountability. It keeps you honest. This is what I initially found was most valuable, but later on I needed this less. <a href="https://www.urbandictionary.com/define.php?term=ymmv">YMMV</a>.</li>
+<li>The community of Beeminder users is wonderful. The <a href="http://forum.beeminder.com/">forum</a>&nbsp;is a great place to get ideas, discuss approaches / failures etc.</li>
+<li>It works! <a href="https://www.beeminder.com/testimonials">Many people</a> have had great results using Beeminder.</li>
+</ul>
+<p>I’m not going to say I couldn’t have written my PhD without Beeminder, but I’m almost saying it. Go <a href="https://www.beeminder.com/">check it out</a>!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
