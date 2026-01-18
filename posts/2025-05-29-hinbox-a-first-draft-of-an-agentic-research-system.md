@@ -18,6 +18,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html"
 ---
 
 I've been working on a project called [`hinbox`](https://github.com/strickvl/hinbox) - a flexible entity extraction system designed to help historians and researchers build structured knowledge databases from collections of primary source documents. At its core, `hinbox` processes historical documents, academic papers, books and news articles to automatically extract and organize information about people, organizations, locations, and events.

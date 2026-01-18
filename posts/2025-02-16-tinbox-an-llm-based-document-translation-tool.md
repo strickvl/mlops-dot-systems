@@ -19,6 +19,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html"
 ---
 
 Large Language Models have transformed how we interact with text, offering capabilities that seemed like science fiction just a few years ago. They can write poetry, generate code, and engage in sophisticated reasoning. Yet surprisingly, one seemingly straightforward task – document translation – remains a significant challenge. This is a challenge I understand intimately, both as a developer and as a historian who has spent years working with multilingual primary sources.

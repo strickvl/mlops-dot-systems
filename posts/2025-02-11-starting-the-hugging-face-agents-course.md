@@ -16,6 +16,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-02-11-starting-the-hugging-face-agents-course.html"
 ---
 
 I finished the first unit of the [Hugging Face Agents course](https://huggingface.co/learn/agents-course/), at least the reading part. I still want to play around with the code a bit more, since I imagine we'll be doing that more going forward. In the meanwhile I wanted to write up some reflections on the course materials from unit one, in no particular order...

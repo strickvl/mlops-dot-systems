@@ -15,6 +15,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html"
 ---
 I enjoyed chapter 7 on finetuning. It jams a lot of detail into the 50 pages she takes to explain things. Some areas had more detail than you'd expect, and others less, but overall this was a solid summary / review.
 

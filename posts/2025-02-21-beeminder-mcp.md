@@ -15,6 +15,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-02-21-beeminder-mcp.html"
 ---
 
 I spent the morning [building an MCP server](https://github.com/strickvl/mcp-beeminder) for [Beeminder](https://www.beeminder.com), bridging the gap between AI assistants and my personal goal tracking data. This project emerged from a practical need — ok, desire :) —  to interact more effectively with my Beeminder data through AI interfaces like Claude Desktop and Cursor.

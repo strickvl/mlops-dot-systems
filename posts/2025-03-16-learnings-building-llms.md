@@ -19,6 +19,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-03-16-learnings-building-llms.html"
 ---
 
 I took the past week off to work on a little side project. More on that at some point, but at its heart it's an extension of what I worked on with my translation package [`tinbox`](https://mlops.systems/posts/2025-02-16-tinbox:-an-llm-based-document-translation-tool.html). (The new project uses translated sources to bootstrap a knowledge database.) Building in an environment which has less pressure / deadlines gives you space to experiment, so I both tried out a bunch of new tools and also experimented with different ways of using my tried-and-tested development tools/processes.

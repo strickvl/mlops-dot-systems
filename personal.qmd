@@ -1,0 +1,19 @@
+---
+title: "Personal Blog"
+listing:
+  contents: personal
+  sort: "date desc"
+  type: default
+  categories: cloud
+  sort-ui: false
+  filter-ui: false
+  feed: true
+page-layout: full
+title-block-banner: true
+---
+
+Writings on Afghanistan, books, languages, travel, and life.
+This is my personal blog, originally hosted at alexstrick.com/blog.
+
+For technical content on MLOps, machine learning, and software engineering,
+see the [technical blog](/).

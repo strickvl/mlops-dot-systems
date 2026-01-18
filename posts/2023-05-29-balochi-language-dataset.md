@@ -18,6 +18,8 @@ include-before-body:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-05-29-balochi-language-dataset.html"
 ---
 
 I'm working on building out some language models and utilities for the Balochi language. (Read [previous posts](https://mlops.systems/#category=balochi) in this series for the full context.) Even though there are some 8-10 million estimated speakers, it certainly falls into the category of being a 'low-resource' language. Many (most?) things that you'd take for granted when working with English-language models are either non-existent or bare bones for Balochi.

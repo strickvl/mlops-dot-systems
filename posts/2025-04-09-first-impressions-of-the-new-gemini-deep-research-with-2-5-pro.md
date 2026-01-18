@@ -16,6 +16,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-04-09-first-impressions-of-the-new-gemini-deep-research-with-2-5-pro.html"
 ---
 
 Google released an updated iteration of their Deep Research tool that uses the new 2.5 Pro model. This was taken from a post originally made on Twitter, so please excuse the terseness.

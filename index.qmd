@@ -1,5 +1,5 @@
 ---
-title: "MLOps.systems Blog"
+title: "Technical Blog"
 listing:
   contents: posts
   sort: "date desc"
@@ -11,5 +11,10 @@ listing:
 page-layout: full
 title-block-banner: true
 ---
+
+Writings on MLOps, machine learning, software engineering, and programming.
+
+For personal writings on Afghanistan, books, languages, and life,
+see the [personal blog](/personal.html).
 
 

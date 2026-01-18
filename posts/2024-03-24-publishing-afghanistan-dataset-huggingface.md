@@ -17,6 +17,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html"
 ---
 
 Yesterday I published [two](https://huggingface.co/datasets/strickvl/isafpressreleases) [datasets](https://huggingface.co/datasets/strickvl/isafpressreleasescomplete) to the Hugging Face Hub and I wanted to briefly add some context to them and what they might be useful for.

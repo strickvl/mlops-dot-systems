@@ -15,6 +15,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html"
 ---
 
 Here are the final notes from '[Prompt Engineering for LLMs](https://app.thestorygraph.com/books/8535f61d-1dcd-4610-9cd9-6bcaf774f392)', a book I've been reading over the past few days (and enjoying!).

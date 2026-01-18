@@ -16,6 +16,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html"
 ---
 
 Had the first of [a series of meet-ups](https://www.meetup.com/delft-fast-ai-study-group/) I'm organising in which we discuss Chip Huyen's new book. My notes from reading the chapter follow this, and then I'll try to summarise what we discussed in the group.

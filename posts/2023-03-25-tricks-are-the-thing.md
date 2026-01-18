@@ -15,6 +15,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
     utterances:
         repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-03-25-tricks-are-the-thing.html"
 ---
 
 I'm approaching the end of the [MU123 'Discovering Mathematics' module](https://www.open.ac.uk/courses/modules/mu123) and have really been enjoying some of the recent areas we've studied. In particular, quadratic equations really captured my attention and imagination. I'm starting to work on the trigonometry unit and it looks set to be equally amazing. What's even better is that I think I'm starting to see (the beginnings of) some of the connections between concepts and units [that I previous wrote about](https://mlops.systems/posts/2023-01-01-on-mathematical-literacy.html) which makes everything that much more compelling.

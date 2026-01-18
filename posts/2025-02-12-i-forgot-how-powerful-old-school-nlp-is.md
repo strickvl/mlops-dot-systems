@@ -16,6 +16,8 @@ draft: 'true'
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-02-12-i-forgot-how-powerful-old-school-nlp-is.html"
 ---
 
 [This is a long one. Sorry / not sorry. *TL;DR*: I automated the process of curating articles to be included in the a popular database I maintain by using Spacy to create a classifier that's only 2 MB in size!]

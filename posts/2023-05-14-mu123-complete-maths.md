@@ -16,6 +16,8 @@ include-before-body:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-05-14-mu123-complete-maths.html"
 ---
 
 I completed and submitted the final exam for the MU123 module that I've been studying since October last year. This module is the first step on my journey towards a BSc Mathematics degree from the Open University, something I'm really happy I have the time to do on the side of my full-time job.

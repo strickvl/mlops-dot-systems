@@ -16,6 +16,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html"
 ---
 
 If you're reading this blog, you've probably visited [the Huggingface website](https://huggingface.co/) and you've almost certainly tried out one of [their 'Spaces'](https://huggingface.co/spaces). These are deployed mini-applications hosted on Huggingface infrastructure. I've created spaces of my own, and at work [I added](https://github.com/zenml-io/zenml/pull/1427) a way for people to quickly deploy a ZenML server as a 'Space'. I love browsing all the spaces that exist and they're really a testament to the creativity, smartness and elbow-grease contributed by the thriving open-source community that Huggingface facilitates through their platform.

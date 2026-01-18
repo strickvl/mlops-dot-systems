@@ -1,13 +1,27 @@
 project:
   type: website
+  render:
+    - "**/*.qmd"
+    - "**/*.md"
+    - "**/*.ipynb"
+    - "!design/**"
+    - "!CLAUDE.md"
+    - "!**/README.md"
+    - "!scripts/**"
 
 website:
   title: "Alex Strick van Linschoten"
-  site-url: "https://mlops.systems"
+  description: "Personal and technical writings from Alex Strick van Linschoten"
+  site-url: "https://alexstrick.com"
   open-graph: true
   twitter-card:
     creator: "@strickvl"
   navbar:
+    left:
+      - text: "Technical"
+        file: index.qmd
+      - text: "Personal"
+        file: personal.qmd
     right:
       - text: "TIL"
         file: til.qmd
@@ -19,13 +33,18 @@ website:
         href: https://sigmoid.social/web/@alexstrick
       - icon: twitter
         href: https://twitter.com/strickvl
-      - icon: rss
-        href: https://mlops.systems/index.xml
+      - text: "RSS"
+        menu:
+          - text: "Technical RSS"
+            href: index.xml
+          - text: "Personal RSS"
+            href: personal.xml
+
 format:
   html:
     theme: cosmo
     css: styles.css
     include-in-header:
       text: |
-        <script defer data-domain="mlops.systems"
+        <script defer data-domain="alexstrick.com"
         src="https://plausible.io/js/script.js"></script>

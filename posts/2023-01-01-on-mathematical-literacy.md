@@ -14,6 +14,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
     utterances:
         repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-01-01-on-mathematical-literacy.html"
 ---
 
 I’m at the half-way point in [MU123](https://www.open.ac.uk/courses/modules/mu123), the first module in the mathematics degree I’m currently working towards. So far we’ve covered models, properties of numbers, some basic statistics, basic algebra and a starter kit on how to think about graphs.

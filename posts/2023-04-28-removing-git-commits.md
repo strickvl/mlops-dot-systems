@@ -16,6 +16,8 @@ include-before-body:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-04-28-removing-git-commits.html"
 ---
 
 I ran into a problem where a tool I was using auto-updated my git branch,

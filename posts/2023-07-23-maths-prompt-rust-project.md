@@ -23,6 +23,8 @@ include-before-body:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-07-23-maths-prompt-rust-project.html"
 ---
 
 **TL;DR:**

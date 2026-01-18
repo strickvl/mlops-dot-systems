@@ -17,6 +17,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html"
 ---
 
 This chapter was all about RAG and agents. It's only 50 pages, so clearly there's only so much of the details she can get into, but it was pretty good nonetheless and there were a few things in here I'd never really read. Also Chip does a good job bringing the RAG story into the story about agents, particularly in terms of how she defines agents. (Note that [the second half of this chapter](https://huyenchip.com/2025/01/07/agents.html), on agents, is available [on Chip's blog](https://huyenchip.com/2025/01/07/agents.html) as a free excerpt!)

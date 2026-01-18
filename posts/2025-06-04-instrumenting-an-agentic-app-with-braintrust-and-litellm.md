@@ -17,6 +17,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html"
 ---
 
 I [previously tried (and failed)](https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html) to setup LLM tracing for hinbox using Arize Phoenix and litellm. Since this is sort of a priority for being able to follow along with the [Hamel / Shreya evals course](https://maven.com/parlance-labs/evals) with my practical application, I'll take another stab using a tool with which I'm familiar: [Braintrust](https://www.braintrust.dev/). Let's start simple and then if it works the way we want we can set things up for `hinbox` as well.

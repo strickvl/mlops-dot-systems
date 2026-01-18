@@ -16,6 +16,8 @@ include-before-body:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-06-22-input-variables-terraform.html"
 ---
 
 When working with Terraform code, there are ways to take in user input at the time when you are applying whatever you've defined. To take a perhaps needlessly simple example, you might write a definition that allows you to deploy a new S3 bucket but you probably wouldn't want to hardcode the name of the new bucket; instead, you'd rather take that name at the point of deployment. So if we think of the terraform process as a big function call, our input variables are the inputs we pass into this function application.

@@ -17,6 +17,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html"
 ---
 
 It's important to instrument your AI applications! I hope this can more or less be taken as given just as you'd expect a non-AI-infused app to capture logs. When you're evaluating your LLM-powered system, you need to have capture the inputs and outputs both at an end-to-end level in terms of the way the user experiences things as well as with more fine-grained granularity for all the internal workings.

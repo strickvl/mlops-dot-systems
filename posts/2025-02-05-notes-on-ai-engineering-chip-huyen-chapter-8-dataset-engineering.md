@@ -17,6 +17,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html"
 ---
 
 Finally back on track and reading the next chapter of Chip Huyen's book, 'AI Engineering'. Here are my notes on the chapter.

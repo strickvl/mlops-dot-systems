@@ -17,6 +17,8 @@ include-before-body:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-05-21-balochi-language-modelling.html"
 ---
 
 Large Language Models are all the rage, but what do you do when the language you want to model is essentially unrepresented in the public datasets used for training? I have a few months before the start of my next maths module and I'd like to use the time in part to dive into the ins and outs of training your own language models from scratch.

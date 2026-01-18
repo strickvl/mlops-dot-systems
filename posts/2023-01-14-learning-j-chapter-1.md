@@ -15,6 +15,8 @@ include-before-body: '<script defer data-domain="mlops.systems" src="https://pla
 comments:
     utterances:
         repo: strickvl/mlops-dot-systems
+aliases:
+  - "/posts/2023-01-14-learning-j-chapter-1.html"
 ---
 
 I'm continuing my study of J, hoping to deepen my experience with the array language paradigm in general and J in specific. I'm hoping that I will (at some point) have enough experience with it to be able to support my mathematics explorations. To this end, instead of just bobbing around and looking at whatever feels shiniest, I'll work my way through [Roger Stokes' "Learning J"](https://www.jsoftware.com/help/learning/contents.htm). It seems to be a decent enough way to get going and explicitly doesn't assume too much of me going into things, unlike other introductory texts like ["J for C programmers"](https://www.jsoftware.com/help/jforc/contents.htm).
