@@ -7,7 +7,7 @@ categories:
 date: "2026-01-21"
 description: "Reframing the 'human vs AI' debate: what matters isn't whether AI was involved, but how many choices you made along the way. I call this 'choice density' - and it applies to writing, code, work communication, and everything else."
 layout: post
-title: "Choice Density: A Better Way to Think About AI and Authenticity"
+title: "Choice Density: How I Think About AI and Authenticity"
 toc: true
 comments:
   utterances:
