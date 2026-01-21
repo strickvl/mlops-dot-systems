@@ -67,6 +67,7 @@ aliases:
 
 ## Important Notes
 
+- **Publishing is manual**: After adding or editing blog posts, run `quarto publish gh-pages` to deploy changes to the live site. There is no automatic GitHub Actions workflow for publishing - only for image compression on PRs.
 - **DO NOT DELETE FILES without understanding what they are.** Only delete files that are clearly identified as build artifacts (`.html` files in source directories, `_files/` directories, `site_libs/`). If you see an unfamiliar file or directory in `git status`, ASK before deleting. The user may be working on new files in parallel.
 - **Image handling**: Do NOT manually save images into `posts/copied_from_nb/`. GitHub Actions automatically manages images there and may delete manually added files at build time.
 - **Image compression**: A GitHub Action automatically compresses images on PRs using calibreapp/image-actions.
