@@ -1,0 +1,39 @@
+---
+pagetitle: "Redirecting to Personal Blog..."
+page-layout: custom
+include-in-header:
+  text: |
+    <meta http-equiv="refresh" content="0; url=/personal.html">
+    <meta name="robots" content="noindex">
+---
+
+```{=html}
+<script>
+  (function () {
+    // Preserve any query string or hash
+    var target = "/personal.html" + window.location.search + window.location.hash;
+    window.location.replace(target);
+  })();
+</script>
+
+<main style="
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0D0D0F;
+  color: #F5F5F4;
+  text-align: center;
+  padding: 2rem;
+">
+  <h1 style="font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem;">
+    Redirecting...
+  </h1>
+  <p style="color: #A1A1A6;">
+    The blog has moved. If you're not redirected automatically,
+    <a href="/personal.html" style="color: #F9A875;">go to the personal blog</a>.
+  </p>
+</main>
+```

@@ -1,0 +1,55 @@
+---
+pagetitle: "404 — Page Not Found"
+page-layout: custom
+css: styles/404.css
+include-in-header:
+  text: |
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;1,400&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex">
+---
+
+```{=html}
+<main class="nf-main">
+  <section class="nf-hero">
+    <div class="nf-code">404</div>
+    <h1 class="nf-title">This page has wandered off</h1>
+    <p class="nf-subtitle">
+      The page you're looking for doesn't exist, or perhaps it moved somewhere else.
+    </p>
+    <code class="nf-path" id="nf-path"></code>
+  </section>
+
+  <nav class="nf-nav">
+    <a class="nf-card nf-card--home" href="/index.html">
+      <span class="nf-card__icon">⌂</span>
+      Home
+    </a>
+    <a class="nf-card nf-card--technical" href="/technical.html">
+      <span class="nf-card__icon">⚙</span>
+      Technical
+    </a>
+    <a class="nf-card nf-card--personal" href="/personal.html">
+      <span class="nf-card__icon">✎</span>
+      Personal
+    </a>
+  </nav>
+
+  <footer class="nf-footer">
+    <p>Or try <a href="/all.html">browsing all posts</a></p>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var el = document.getElementById("nf-path");
+    if (el && window.location.pathname !== "/404.html") {
+      el.textContent = window.location.pathname;
+      el.style.display = "inline-block";
+    } else if (el) {
+      el.style.display = "none";
+    }
+  })();
+</script>
+```
