@@ -23,7 +23,7 @@ aliases:
 
 I [previously](https://mlops.systems/posts/2024-06-17-one-click-finetuning.html) experimented with one-click LLM finetuning providers and now is a good time to return to the core of the matter: evaluating how well all these fine-tuned models and experiments are faring. I have a gut feeling that my fine-tuned models did pretty well, but we're not in the business of gut feeling so I'm hoping to be able to put some real numbers down to either prove or disprove this hypothesis.
 
-As a quick reminder if you didn't read [any of the previous posts in the series](https://mlops.systems/#category=isafpr), I'm building a model that can take a press release text like this:
+As a quick reminder if you didn't read [any of the previous posts in the series](/technical.html#category=isafpr), I'm building a model that can take a press release text like this:
 
 > "2011-11-S-011 ISAF Joint Command - Afghanistan For Immediate Release KABUL, Afghanistan (Nov. 7, 2011) — A combined Afghan and coalition security force conducted an operation in search of a Haqqani facilitator in Argo district, Badakshan province. The facilitator coordinates suicide attacks with other insurgent leaders in the area. During the operation, a local national male failed to comply with repeated verbal warnings and displayed hostile intent toward the security force. The security force engaged the individual, resulting in his death. The security force confiscated a shotgun and intelligence linking the local national to the Haqqani network. The security force also detained two suspected insurgents during the operation."
 

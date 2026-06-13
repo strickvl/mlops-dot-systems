@@ -22,7 +22,7 @@ aliases:
   - "/posts/2025-03-16-learnings-building-llms.html"
 ---
 
-I took the past week off to work on a little side project. More on that at some point, but at its heart it's an extension of what I worked on with my translation package [`tinbox`](https://mlops.systems/posts/2025-02-16-tinbox:-an-llm-based-document-translation-tool.html). (The new project uses translated sources to bootstrap a knowledge database.) Building in an environment which has less pressure / deadlines gives you space to experiment, so I both tried out a bunch of new tools and also experimented with different ways of using my tried-and-tested development tools/processes.
+I took the past week off to work on a little side project. More on that at some point, but at its heart it's an extension of what I worked on with my translation package [`tinbox`](/posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html). (The new project uses translated sources to bootstrap a knowledge database.) Building in an environment which has less pressure / deadlines gives you space to experiment, so I both tried out a bunch of new tools and also experimented with different ways of using my tried-and-tested development tools/processes.
 
 Along the way, there were a bunch of small insights which occurred to me so I thought I'd write them down. As usual with this blog, I'm mainly writing for my future self but I think there might be parts that are useful for others! Apologies for the somewhat rushed nature of these observations; better I get the blog finished and published than not at all!
 

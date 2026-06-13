@@ -19,7 +19,7 @@ aliases:
   - "/posts/2023-05-29-balochi-language-dataset.html"
 ---
 
-I'm working on building out some language models and utilities for the Balochi language. (Read [previous posts](https://mlops.systems/#category=balochi) in this series for the full context.) Even though there are some 8-10 million estimated speakers, it certainly falls into the category of being a 'low-resource' language. Many (most?) things that you'd take for granted when working with English-language models are either non-existent or bare bones for Balochi.
+I'm working on building out some language models and utilities for the Balochi language. (Read [previous posts](/technical.html#category=balochi) in this series for the full context.) Even though there are some 8-10 million estimated speakers, it certainly falls into the category of being a 'low-resource' language. Many (most?) things that you'd take for granted when working with English-language models are either non-existent or bare bones for Balochi.
 
 The experimentation phase of a project like this rewards a fast iteration speed, so I'm looking for ways to keep moving forward. I don't need to spend days running a single experiment to validate my ideas; I'm sufficiently green that small datasets and these frequent tweaks to what I'm doing will hopefully reward me.
 

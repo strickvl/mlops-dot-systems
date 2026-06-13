@@ -21,7 +21,7 @@ aliases:
 
 If you're reading this blog, you've probably visited [the Huggingface website](https://huggingface.co/) and you've almost certainly tried out one of [their 'Spaces'](https://huggingface.co/spaces). These are deployed mini-applications hosted on Huggingface infrastructure. I've created spaces of my own, and at work [I added](https://github.com/zenml-io/zenml/pull/1427) a way for people to quickly deploy a ZenML server as a 'Space'. I love browsing all the spaces that exist and they're really a testament to the creativity, smartness and elbow-grease contributed by the thriving open-source community that Huggingface facilitates through their platform.
 
-I've been working on my Terraform skills [for a while](https://mlops.systems/#category=terraform) and recently I thought up a little project that I hope will help deepen my skill-building as well as be useful for others. My goals were to build something that would:
+I've been working on my Terraform skills [for a while](/technical.html#category=terraform) and recently I thought up a little project that I hope will help deepen my skill-building as well as be useful for others. My goals were to build something that would:
 
 - allow people to deploy HF Spaces (using pre-build templates) using Terraform
 - allow for all the templates and not just `zenml`
