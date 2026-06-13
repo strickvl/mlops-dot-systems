@@ -4,7 +4,7 @@ listing:
   contents: personal
   sort: "date desc"
   type: grid
-  categories: false
+  categories: cloud
   sort-ui: false
   filter-ui: false
   feed: true

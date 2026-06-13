@@ -4,7 +4,7 @@ listing:
   contents: posts
   sort: "date desc"
   type: default
-  categories: false
+  categories: cloud
   sort-ui: false
   filter-ui: false
   feed: true

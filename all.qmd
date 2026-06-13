@@ -6,7 +6,7 @@ listing:
     - personal
   sort: "date desc"
   type: default
-  categories: false
+  categories: cloud
   sort-ui: false
   filter-ui: false
   fields: [title, date, categories]
