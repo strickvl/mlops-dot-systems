@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Quarto-based static blog combining technical content and personal content (migrated from Squarespace). The site is built locally with Quarto and served from **GitHub Pages** (the `gh-pages` branch) at **alexstrick.com**, with **Cloudflare in front as DNS + CDN** (so responses show `server: cloudflare` even though GitHub Pages is the origin). `mlops.systems` redirects to `alexstrick.com`. Content is written in Markdown (.md) and Jupyter notebooks (.ipynb).
 
-> **Domain Migration In Progress**: See `design/domain-migration-plan.md` for details. The canonical domain is `alexstrick.com`.
+> **Domain migration complete**: The canonical domain is `alexstrick.com` (migrated from `mlops.systems`, which now redirects there). See `design/domain-migration-plan.md` for historical context.
 
 The site has **two content sections** with separate RSS feeds:
 - **Technical** (`/technical.xml`) - MLOps, software engineering, AI/ML content
