@@ -1,1 +1,48 @@
 /* css styles */
+
+/* ===== Tag/category cloud in the right sidebar of listing pages =====
+   Scoped to the three listing pages by their body class so that post-page
+   tables-of-contents (which use the same #quarto-margin-sidebar) keep their
+   normal sticky-scroll behaviour. */
+
+/* Let the cloud flow down the page with everything else instead of sitting
+   in its own sticky, independently-scrolling frame (Quarto's default for
+   this sidebar). This removes the inner scrollbar. */
+body.technical-page #quarto-margin-sidebar,
+body.personal-page #quarto-margin-sidebar,
+body.all-page #quarto-margin-sidebar {
+    position: static !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* The "Categories" title is the first element in the sidebar, so the top
+   margin goes here to drop the whole block (title + tags) down to roughly
+   the level of the page heading. Muted grey so it reads as a quiet sidebar. */
+body.technical-page #quarto-margin-sidebar .quarto-listing-category-title,
+body.personal-page #quarto-margin-sidebar .quarto-listing-category-title,
+body.all-page #quarto-margin-sidebar .quarto-listing-category-title {
+    margin-top: 4rem;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+/* Lighter grey tags so the cloud doesn't compete with the post list.
+   Sizes still vary by usage (the category-cloud-N classes are untouched). */
+body.technical-page #quarto-margin-sidebar .category,
+body.personal-page #quarto-margin-sidebar .category,
+body.all-page #quarto-margin-sidebar .category {
+    color: #9ca3af;
+}
+
+/* Darken on hover (and the active/selected tag) for a clear clickable cue. */
+body.technical-page #quarto-margin-sidebar .category:hover,
+body.personal-page #quarto-margin-sidebar .category:hover,
+body.all-page #quarto-margin-sidebar .category:hover,
+body.technical-page #quarto-margin-sidebar .category.active,
+body.personal-page #quarto-margin-sidebar .category.active,
+body.all-page #quarto-margin-sidebar .category.active {
+    color: #4b5563;
+    cursor: pointer;
+}

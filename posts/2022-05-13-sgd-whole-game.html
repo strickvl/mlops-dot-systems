@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Stochastic Gradient Descent: a mini-example of the whole game – Alex Strick van Linschoten</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,15 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -254,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="an-end-to-end-example-of-sgd" class="level1">
 <h1>An End-To-End Example of SGD</h1>
-<p>In <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/seven-steps-gradient-calculations.html">the previous post</a> we learned about the high-level seven-step process that we can use to update the weights of our function or model. We can now replicate that process and try it out on a very simple function to show how it works from start to finish. We will iterate a few times so that the gradual improvement is visible and clear.</p>
+<p>In <a href="../posts/2022-05-12-seven-steps-gradient-calculations.html">the previous post</a> we learned about the high-level seven-step process that we can use to update the weights of our function or model. We can now replicate that process and try it out on a very simple function to show how it works from start to finish. We will iterate a few times so that the gradual improvement is visible and clear.</p>
 <p>Note this example is pretty closely taken from chapter 4 of the fastai fastbook, available for free <a href="https://github.com/fastai/fastbook/blob/master/04_mnist_basics.ipynb">here</a>.</p>
 <p>Let’s assume that we’re plotting out the speed a rollercoaster is running at as it climbs up to one of its peaks, slowing as it reaches the top but then accelerating as it passes over the peak.</p>
 <div id="678577e8" class="cell" data-execution_count="2">
@@ -344,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="calculate-the-gradient" class="level2">
 <h2 class="anchored" data-anchor-id="calculate-the-gradient">4. Calculate the gradient</h2>
-<p>As described <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/seven-steps-gradient-calculations.html">in the previous post</a>, we use PyTorch’s inbuilt ability to calculate gradients.</p>
+<p>As described <a href="../posts/2022-05-12-seven-steps-gradient-calculations.html">in the previous post</a>, we use PyTorch’s inbuilt ability to calculate gradients.</p>
 <div id="ff89f9cf" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>loss.backward()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>params.grad</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -368,7 +370,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="step-our-weights" class="level2">
 <h2 class="anchored" data-anchor-id="step-our-weights">5. Step our weights</h2>
-<p>We can step our parameters using the formula <a href="https://mlops.systems/fastai/computervision/pytorch/2022/05/12/seven-steps-gradient-calculations.html">previously described</a>: multiply the learning rate by the gradients.</p>
+<p>We can step our parameters using the formula <a href="../posts/2022-05-12-seven-steps-gradient-calculations.html">previously described</a>: multiply the learning rate by the gradients.</p>
 <div id="f7bc99b6" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>learning_rate <span class="op">=</span> <span class="fl">0.00001</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>params.data <span class="op">-=</span> learning_rate <span class="op">*</span> params.grad.data</span>

@@ -9,7 +9,7 @@
 <link>https://alexstrick.com/technical.html</link>
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
-<generator>quarto-1.8.27</generator>
+<generator>quarto-1.9.38</generator>
 <lastBuildDate>Tue, 03 Jun 2025 22:00:00 GMT</lastBuildDate>
 <item>
   <title>Trying to instrument an agentic app with Arize Phoenix and litellm</title>
@@ -1506,7 +1506,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <figcaption>The organisations view</figcaption>
 </figure>
 </div>
-<p>Right now, <code>hinbox</code> isn’t ready for broader use. The prompt engineering needs significant refinement, and the entity merging logic requires more sophisticated iteration loops. But that’s actually the point - I’ve been participating in Hamel and Shreya’s <a href="https://mlops.systems/#category=evals-course">AI evals course</a>, and I wanted a concrete project where I could apply the systematic evaluation and improvement techniques we’re learning.</p>
+<p>Right now, <code>hinbox</code> isn’t ready for broader use. The prompt engineering needs significant refinement, and the entity merging logic requires more sophisticated iteration loops. But that’s actually the point - I’ve been participating in Hamel and Shreya’s <a href="../technical.html#category=evals-course">AI evals course</a>, and I wanted a concrete project where I could apply the systematic evaluation and improvement techniques we’re learning.</p>
 <p>This project originally came together over a few intense days about two months ago, then sat dormant while work <a href="https://www.linkedin.com/feed/update/urn:li:activity:7333405837433999360/?updateEntityUrn=urn%3Ali%3Afs_updateV2%3A%28urn%3Ali%3Aactivity%3A7333405837433999360%2CFEED_DETAIL%2CEMPTY%2CDEFAULT%2Cfalse%29">got</a> <a href="https://www.linkedin.com/feed/update/urn:li:activity:7332696687515205650/?updateEntityUrn=urn%3Ali%3Afs_updateV2%3A%28urn%3Ali%3Aactivity%3A7332696687515205650%2CFEED_DETAIL%2CEMPTY%2CDEFAULT%2Cfalse%29">busy</a>. I’ve recently resurrected it specifically to serve as a practical laboratory for the evals course exercises. There’s something powerful about having a real application with measurable outputs where you can experiment with different approaches to prompt optimization, model selection, and systematic error analysis.</p>
 <p>The broader vision is creating a tool that could genuinely help researchers working with large document collections - transforming the traditional manual process of reading, noting, and cross-referencing into something more systematic and scalable. But first, it needs to work reliably, which is where the evals work comes in.</p>
 <section id="why-build-this-personal-research-history-meets-the-age-of-agents" class="level2">
@@ -1878,7 +1878,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
-<p>I took the past week off to work on a little side project. More on that at some point, but at its heart it’s an extension of what I worked on with my translation package <a href="https://mlops.systems/posts/2025-02-16-tinbox:-an-llm-based-document-translation-tool.html"><code>tinbox</code></a>. (The new project uses translated sources to bootstrap a knowledge database.) Building in an environment which has less pressure / deadlines gives you space to experiment, so I both tried out a bunch of new tools and also experimented with different ways of using my tried-and-tested development tools/processes.</p>
+<p>I took the past week off to work on a little side project. More on that at some point, but at its heart it’s an extension of what I worked on with my translation package <a href="../posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html"><code>tinbox</code></a>. (The new project uses translated sources to bootstrap a knowledge database.) Building in an environment which has less pressure / deadlines gives you space to experiment, so I both tried out a bunch of new tools and also experimented with different ways of using my tried-and-tested development tools/processes.</p>
 <p>Along the way, there were a bunch of small insights which occurred to me so I thought I’d write them down. As usual with this blog, I’m mainly writing for my future self but I think there might be parts that are useful for others! Apologies for the somewhat rushed nature of these observations; better I get the blog finished and published than not at all!</p>
 <section id="local-models" class="level2">
 <h2 class="anchored" data-anchor-id="local-models">🤖 Local Models</h2>
@@ -1906,7 +1906,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>A significant portion of my experimentation involved <a href="https://repoprompt.com">RepoPrompt</a>, a tool that recently transitioned from free beta to a paid license model. RepoPrompt addresses the challenge of getting your codebase into an LLM-friendly format. Unlike standard CLI tools that simply export code to clipboard or text files, RepoPrompt generates a structured XML representation that, when modified by an LLM and pasted back, creates a reviewable diff of the proposed changes. At least, that’s one of the things it allows you to do! It’s actually a bit more powerful / flexible than that and here’s a video so you can see it in action:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://www.youtube.com/watch?v=8zIY0zxcafE%20%22RepoPrompt%20Demo%20Video%20using%20O1%20Pro%22"><img src="https://img.youtube.com/vi/8zIY0zxcafE/0.jpg" class="img-fluid figure-img"></a></p>
+<p><a href="https://www.youtube.com/watch?v=8zIY0zxcafE" title="RepoPrompt Demo Video using O1 Pro"><img src="https://img.youtube.com/vi/8zIY0zxcafE/0.jpg" class="img-fluid figure-img"></a></p>
 <figcaption>RepoPrompt Demo Video</figcaption>
 </figure>
 </div>

@@ -9,7 +9,7 @@
 <link>https://alexstrick.com/til.html</link>
 <atom:link href="https://alexstrick.com/til.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
-<generator>quarto-1.8.27</generator>
+<generator>quarto-1.9.38</generator>
 <lastBuildDate>Sun, 15 Sep 2024 22:00:00 GMT</lastBuildDate>
 <item>
   <title>What is the Rust prelude?</title>
