@@ -2,6 +2,7 @@
   {
     "listing": "/technical.html",
     "items": [
+      "/posts/2026-06-13-rl-high-level-primer.html",
       "/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html",
       "/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html",
       "/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html",
@@ -113,6 +114,7 @@
   {
     "listing": "/all.html",
     "items": [
+      "/posts/2026-06-13-rl-high-level-primer.html",
       "/personal/2026-01-21-choice-density-ai-authenticity.html",
       "/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html",
       "/posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html",
