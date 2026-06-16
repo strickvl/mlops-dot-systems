@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2026-06-16">
+<meta name="description" content="The five stages of a reinforcement-learning setup for LLM agents — tasks, harness, rollout, reward, trainer — mapped onto my own structured-extraction work, and why reward design is the part that interests me most.">
+
+<title>The Five Stages of Reinforcement Learning – Alex Strick van Linschoten</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
+<meta property="og:title" content="The Five Stages of Reinforcement Learning – Alex Strick van Linschoten">
+<meta property="og:description" content="The five stages of a reinforcement-learning setup for LLM agents — tasks, harness, rollout, reward, trainer — mapped onto my own structured-extraction work, and why reward design is the part that interests me most.">
+<meta property="og:image" content="https://alexstrick.com/posts/images/finqa-rl-environment.avif">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="The Five Stages of Reinforcement Learning – Alex Strick van Linschoten">
+<meta name="twitter:description" content="The five stages of a reinforcement-learning setup for LLM agents — tasks, harness, rollout, reward, trainer — mapped onto my own structured-extraction work, and why reward design is the part that interests me most.">
+<meta name="twitter:image" content="https://alexstrick.com/posts/images/finqa-rl-environment.avif">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed technical-page quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../technical.html"> 
+<span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html"> 
+<span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../technical.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Five Stages of Reinforcement Learning</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">agents</div>
+    <div class="quarto-category">llms</div>
+    <div class="quarto-category">reinforcement-learning</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    The five stages of a reinforcement-learning setup for LLM agents — tasks, harness, rollout, reward, trainer — mapped onto my own structured-extraction work, and why reward design is the part that interests me most.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 16, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Last time I wrote we were talking at a high level about the different possible approaches to improving performance, especially when talking about more complex agentic workflows. Since then I’ve learned more about what exactly is involved in the reinforcement learning process and I’m going to lay that out today.</p>
+<p>While for supervised fine-tuning you have your (fixed) dataset, a model (to either update in part of more substantially) and a trainer, there are five broad pieces or stages that we can talk about for RL:</p>
+<ol type="1">
+<li>Tasks – the problems or input that you attempt to solve / handle</li>
+<li>Harness – the tools you use to attempt to solve the problems</li>
+<li>Rollout – a recorded attempt of solving the problem (with the full ‘trajectory’ of traces captured)</li>
+<li>Reward – a score for the attempt (how well did it solve it? which may or may not be whether it was a ‘correct’ answer)</li>
+<li>Trainer – a way to nudge the model’s weights to achieve higher scores using some algorithm (as of June 2026, this is usually something called GRPO)</li>
+</ol>
+<p>Note that there’s a lot of jargon here, and even some of the above terms have more equivalents. (For example, the model that you update is also known as a ‘policy’.) There are also some groupings of parts. For example, we can think of a split between the static parts (tasks, harness, rewards) and those which are more process or that touch training infrastructure and GPUs (like the trainer and the rollout). This split in turn is where you can find yet another (popular) term: ‘environment’, which is the combination of tasks, harness and rewards. It seems there is quite a large set of new terminology associated with the world of RL which you have to navigate in order to understand the frameworks used and the research being conducted. Here’s a helpful way of decomposing that, drawn from <a href="https://www.zenml.io/llmops-database/using-rl-to-make-a-4b-parameter-model-outperform-a-235b-parameter-model-on-financial-analysis-tool-use">a case study associated with Snorkel</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/finqa-rl-environment.avif" class="img-fluid figure-img"></p>
+<figcaption>FinQA RL environment breakdown</figcaption>
+</figure>
+</div>
+<p>It can be easy to think of ‘tasks’ as being a bit like the datasets used in SFT, but it’s still quite different. In SFT each example comes with the answer you want the model to <em>copy</em>; an RL task comes with a way to <em>score</em> an attempt, which may or may not involve a golden answer. (Sometimes there’s a correct answer to check against, sometimes only a rubric or a judge). The model learns by maximising that score across many attempts, not by copying a single target. The approach with RL is that the GRPO algorithm (during training) will attempt to solve those problems multiple times, and then it will use the reward to differentiate between those attempts and then based on which attempts were relatively stronger it will update weights of the model/policy accordingly.</p>
+<p>Perhaps we can ground this in an actual example. If you recall, previously <a href="https://alexstrick.com/technical.html#category=isafpr">I worked on a fine-tuning case study</a> where I extracted structured data from press release. I had labelled some data where I manually extracted the relevant parts from press releases, and then I fine-tuned some models on that data. A <em>very</em> naive translation of that work into the reinforcement learning template would look something like this:</p>
+<ul>
+<li>Tasks: this is literally the inputs of the dataset. As an example, that’d be one of the press releases out of which we wanted to extract some sort of structured data (i.e.&nbsp;where events took place, some quantitative numbers associated with those events and so on)</li>
+<li>Harness: in our most simplistic harness, we could simply have one tool (“extract_data”) available to our model where we passed the press release along with a prompt saying “please extract the data in so and so format”. A slightly more extended version could add tools for validating or double-checking the extracted values (checking the JSON formatting was correct and so on), potentially, as part of a longer agentic loop. The important thing is that these tools are defined in code and that they would be available to the model to use. When we’re talking about RL for these kinds of agent loops, what we really seem to be talking about is improving its ability to use the tools it has available to it.</li>
+<li>Rollout: Not much to say about this one. Fairly straightforward.</li>
+<li>Reward: in our naive version, we could simply check whether the extracted data matched the golden dataset’s <em>correct</em> equivalent for any particular press release. (Side note: it’s unclear to me whether RL would actually improve the ability of the model to do the extraction itself, or just to make sure that it would use the <code>extract_data</code> tool/function. I hope to answer this question soon! But let’s say we were doing the slightly extended version which had some validation and ‘checking’ tools available to it, then we can just say that we’d hope that the model would use these tools productively to check and correct its work before returning values back to the user.) We could think of many other parts to the reward function which aren’t just ‘was this correct’, too. We could deterministically check that the value returned was valid JSON, or check that we don’t have province names returned in the answer that weren’t in the press release, or that the numbers don’t add up to something non-sensical for that domain and so on. You can then weight these various parts to the reward function depending on their importance.</li>
+<li>Trainer: Not much to say about this except to say that this is usually done by different frameworks than what one is used to with standard machine learning or fine-tuning. Part of the difference is that you are doing actual inference during the training (multiple times over each problem so you can compare between them) so you are both serving the model and updating weights at the same time. (I <em>think</em> this basically means you have the model loaded into GPU memory (VRAM) roughly two times – one copy generating attempts, one copy training – which is why people quote a rough 50/50 memory split. Newer frameworks like Unsloth dodge the double-load by <em>sharing</em> the weights between the two, which is how GRPO now fits in as little as ~5GB of VRAM for a small model.)</li>
+</ul>
+<p>The interesting part in all of this for a domain expert (or a recovering domain expert like myself) is the reward. It seems there’s a lot of skill in determining how to test how well the model is doing at solving a problem. Because note that for many problems it won’t be as ‘easy’ as just extracting data out of some short paragraph (where there actually <em>is</em> a correct answer). In many long-running tasks where you might be attempting to make your agent better at conducting biological research, or better at coming up with nuanced responses to complicated legal queries etc, you are going to need quite nuanced ways of grading this.</p>
+<p>From what I read, it seems in 2025-2026 there was a shift away from hand-crafted <em>step-by-step</em> reward shaping – scoring the model at every intermediate step of its attempt, known as ‘dense’ or ‘process’ rewards – towards ‘sparse’ or outcome rewards that only score the final result. (One thing I had to untangle: ‘sparse’ doesn’t mean ‘simple’. The multi-part reward I sketched above for the extraction task – valid JSON <em>and</em> fields match <em>and</em> no invented provinces – is still a <em>sparse</em> reward, because it’s all computed once on the final answer. Dense vs sparse is about <em>when</em> you score across an attempt, not <em>how many</em> checks you bundle in.) Part of why outcome rewards seem to work (I think?) is that GRPO compares a whole group of attempts against each other, so even a coarse final score is enough to separate the stronger attempts from the weaker ones. There’s a lot of nuance here and I’m interested to learn why this happened and where it still makes sense to have domain experts in the loop creating these reward functions. It seems to me even if models are getting stronger and even if the algorithm is strong enough to update the weights based on much vaguer outcome rewards, there needs to be <em>some</em> more to it beyond just that…</p>
+<p>If it was that simple, after all, then effectively we’ve found a way to achieve self-improvement from fairly vaguely defined outcomes. It would be almost like if the best way to teach children at school would just be to define the curriculum they had to master by the end of the school year, and then every day school just consisted of the teacher saying, “you know, you’re smart, you can figure it out. I think you should just try harder. I know you have it in you!” And perhaps that’s a little bit the argument! i.e.&nbsp;maybe that tuition approach wouldn’t work for a 2-year old, but it might well work for a 16-year old whose brain is much more developed and can <em>actually</em> probably respond quite well to such a prompt/nudge. But looking forward to learning more about that soon!</p>
+<p>Some more questions that occurred to me as I went through all of this:</p>
+<ul>
+<li>what are the hard parts? for people working on using RL to improve their system, is the hard part setting up the training infrastructure and system in such a way or is it finding the right way to specify rewards or what? (My reading suggests that it’s all about the rewards and less about the narrow technical details, but I haven’t gone particularly deep so I might be wrong there.)</li>
+<li>How does this process work with teams doing RL? What are the personas involved? Is it possible (or common?) for a single person to be doing this, or if it’s more often a team, then what kinds of labels are given to the various people? Are they all engineers? Are there domain experts mixed in with the team?</li>
+<li>What tools map on to the different stages? (This is maybe the easiest question to answer and I assume during the course of my study I’ll build up a much more detailed picture of this. It’s also somehow the least interesting question.)</li>
+<li>For terminology, it occurred to me that I need to keep an ongoing list of terms and their equivalents, perhaps in a table form, so that I can track all the different ways that researchers and practitioners refer to the same thing in slightly different ways :)</li>
+<li>I’m very curious about the best practices for reward design. I assume there are some, and I assume that the very best practices are probably being hoarded by frontier labs, but I’m looking forward to seeing what I can discover.</li>
+<li>How do domain experts distinguish themselves in this field? I imagine it’s quite easy for mathematicians and scientists to work with the RL teams since they are already at least partly ‘technical’, but I’d be curious how experts from the humanities are being brought into the RL work. For example, for something like OpenAI’s “Deep Research” feature, were there non-engineers on the team that developed this?</li>
+<li>Connected to my previous work on <a href="https://alexstrick.com/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">hinbox</a>, I’m very interested in how we define (via the reward function) what a perfect profile is. This is a very qualitative evaluation and has many different facets to it. Do we give our answer based on the diff (i.e.&nbsp;how we just updated part of a particular profile) or do we give our answer based on the profile as a whole? Or both? or some blended answer?</li>
+<li>(How do RLMs fit into all of this? I’ve previously written about <a href="https://www.zenml.io/blog/rlms-in-production-what-happens-after-the-notebook">RLMS in the context of ZenML</a>) but it’s unclear to me how the two are related, if at all).</li>
+<li>How much of the RL energy and craze at the moment is big model hype? Will all of these techniques last? Who are the people who are challenging the rise of RL? Who are the people doing weird things in the space? Who are the people who really say it’s a waste of time? Really interested in all of this, since for sure it does feel like there’s a bit <em>too</em> much attention and effort being paid to it.</li>
+</ul>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
