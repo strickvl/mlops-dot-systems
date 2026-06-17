@@ -10,7 +10,661 @@
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Mon, 15 Jun 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 16 Jun 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Reward design for RL, grounded in a structured-extraction task</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2026-06-17-rl-terms-rewards.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>It probably would help to ground our discussion of some of this RL terminology to look at an example. I mentioned that we could use the old ISAF press releases task (structured data extraction) as a starting point, so here is some data from that:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">trace</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-2">    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"task_id"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"isaf-pr-2011-0487"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-3">    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"task"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-4">        <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"document"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"KABUL — An Afghan and coalition force detained three"</span></span>
+<span id="cb1-5">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" suspected insurgents in Kandahar on 20 Feb 2011..."</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-6">        <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"fields"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">[</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span><span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">,</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"province"</span><span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">,</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"event_type"</span><span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">,</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detained_count"</span><span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">]</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">},</span></span>
+<span id="cb1-8">    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"steps"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">[</span>                                  <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">#</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">one</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">action,</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">observation</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">}</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">per</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">turn</span></span>
+<span id="cb1-9">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"action"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"tool"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"emit_answer"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-10">                    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"args"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"date"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2011-02-20"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"province"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Kandahar"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-11">                             <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"event_type"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"detained_count"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">}},</span></span>
+<span id="cb1-12">         <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"observation"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">None</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">}</span><span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">,</span>               <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">#</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">nothing</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">comes</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">back;</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">it</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">just</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">answers</span></span>
+<span id="cb1-13">    <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">]</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-14">    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"output"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"date"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2011-02-20"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"province"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Kandahar"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-15">               <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"event_type"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"detained_count"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">},</span></span>
+<span id="cb1-16">    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"gold"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span>   <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">{</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"date"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2011-02-20"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"province"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Kandahar"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb1-17">               <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"event_type"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"detained_count"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">},</span></span>
+<span id="cb1-18">    <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">"reward"</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">:</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">None</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">,</span>                          <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">#</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">filled</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">in</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">by</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">score(),</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">next</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">session</span></span>
+<span id="cb1-19"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div></div>
+<p>So you can see a few things going on here:</p>
+<ul>
+<li>this is a ‘trace’, which is the record of what happened when we tried to run our system to extract the data from the press release.</li>
+<li>you can see the ‘task’ itself embedded within the trace</li>
+<li>you can see in the ‘steps’ what the system did in order to extract the data (it used the <code>emit_answer</code> tool, simply put)</li>
+<li>And you can see that we also have access to the golden annotation which will help us check whether this was correctly extracted.</li>
+</ul>
+<p>So let’s disambiguate these terms again, as well, for clarity:</p>
+<ul>
+<li><strong>task</strong>: the input plus how the input will be graded (“extract date, province, event_type, detained_count from this press release” and “you’re graded on how many fields match the golden annotation(s)”)</li>
+<li><strong>trace</strong>: a full record of an attempt at a task (including the tool calls used etc)</li>
+<li><strong>environment</strong>: the task, the tools it’s allowed or able to use, and the reward or grading function</li>
+</ul>
+<p>RL, it seems, has a LOT of terminology so it’s worth just walking through those to make sure we’re all talking about the same things.</p>
+<p>For our scoring function, a fairly simple version would look something like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> score(trace: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, Any]) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>:</span>
+<span id="cb2-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Reward for one ISAF trace: did it parse, and do fields match gold?"""</span></span>
+<span id="cb2-3">    out, gold <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> trace[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output"</span>], trace[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gold"</span>]</span>
+<span id="cb2-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">isinstance</span>(out, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>):          <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># didn't even produce a JSON object</span></span>
+<span id="cb2-5">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0</span></span>
+<span id="cb2-6">    fields <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> trace[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"task"</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fields"</span>]</span>
+<span id="cb2-7">    hits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> fields <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> out.get(f) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> gold[f])</span>
+<span id="cb2-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> hits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(fields)              <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># fraction of fields correct</span></span></code></pre></div></div>
+<p>Now it turns out that even with such a fairly simple way of grading outputs, there can be some interesting results. Here are four pairs of output vs the golden dataset equivalent:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1 — clean hit</span></span>
+<span id="cb3-2">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kandahar"</span>, eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"taliban"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>}</span>
+<span id="cb3-3">gold   <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kandahar"</span>, eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"taliban"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>}</span>
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2 — partial</span></span>
+<span id="cb3-6">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"helmand"</span>, eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"airstrike"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"haqqani"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>}</span>
+<span id="cb3-7">gold   <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"helmand"</span>, eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"airstrike"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"taliban"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>}</span>
+<span id="cb3-8"></span>
+<span id="cb3-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3 — malformed</span></span>
+<span id="cb3-10">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I think this was a detention operation somewhere near Kabul."</span>   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># a string, not a dict</span></span>
+<span id="cb3-11">gold   <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kabul"</span>, eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"taliban"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>}</span>
+<span id="cb3-12"></span>
+<span id="cb3-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4 — dirty gold</span></span>
+<span id="cb3-14">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktia"</span>,  eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"haqqani"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>}</span>
+<span id="cb3-15">gold   <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {province: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktya"</span>,  eventtype: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>, targetgroup: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"haqqani"</span>, minkilled: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, mincaptured: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>}</span></code></pre></div></div>
+<p>So for group 1, we score a full 1.0 since everything was correct and it was correct JSON. For group 2, we scored a partial hit since the target group extracted was the wrong one (compared to the golden dataset). For group 3, we score 0.0 because the output was a string and not parseable as JSON. That’s known as a ‘gate’, where we end early and return <code>0.0</code> because it doesn’t even parse as JSON.</p>
+<p>Group 4 is interesting, though, because here you can see that the only difference is the name of the province. Both are actually referring to the same place, only with alternative spellings. What’s even more interesting is that the spelling in the golden dataset’s version (‘paktya’) is itself an anomaly or outlier. Out of the 4822 items, 197 of them use ‘paktya’ as the spelling but the rest use ‘paktia’. So actually somehow this is a problem with the original dataset, but probably you’re not going to always be able to fix all these at the source, so you have to handle them within the reward.</p>
+<p>The decision about how to handle it in the reward function will be made by what your needs are. If ‘paktya’ is just as legitimate a spelling as ‘paktia’ for your purposes, then you’d want to rate them equally. If you wanted to incentivise one spelling over another, then you could slightly penalise the agent for having used the spelling that you don’t like.</p>
+<p>This is a clear argument, by the way, for ‘looking at your data’! These kinds of details are things that I imagine add up when you have a more complex agent, and it’s quite important to understand exactly how tasks are being graded if you want to have control over how your system is going to be optimised through the RL training process.</p>
+<section id="three-kinds-of-rewards" class="level2">
+<h2 class="anchored" data-anchor-id="three-kinds-of-rewards">Three kinds of rewards</h2>
+<p>The <code>score()</code> function we used above is an example of the first and most basic kind of rewards, but there are two other categories that are commonly found. Let’s walk through them all.</p>
+<p>Firstly we have <em>verifiable / procedural</em> rewards. This is the same ‘verifiable’ as is used in the term RLVR (“reinforcement learning with verifiable rewards”). Think cheap functions that are quick to run and where there’s an easy way to grade something. Did the JSON parse? Does the response match the correct one in the answer key? Does it pass a basic sanity count? These checks are hard to game or trick, though they still might lead to reward hacking and send your system in the direction of behaviours you don’t want to incentivise.</p>
+<p>Secondly we have <em>absolute LLM-as-a-judge</em>. For this, we pass the task and the response to an LLM and ask it to grade the response. It usually makes its assessment on the basis of a ‘rubric’ and is often used for things where it’s harder to come up with cheap functional evaluations of like we had with as in the verifiable/procedural rewards above.</p>
+<p>And thirdly, we have <em>relative / grouped judge</em> rewards. For this we aren’t making an absolute assessment as in the LLM-as-judge example. Instead, we make multiple attempts (four, or ten, let’s say) and then we use an LLM judge to just rank them or pick the best ones. This way we’re not necessarily saying that the best ones are perfect, but we do give signal that these best ones were good so steer the model/policy in that direction, and that the bad ones were bad so steer the model <em>away</em> from those kinds of responses.</p>
+<p>For our ISAF examples above, a simple procedural test could look like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># The canonical 34 — the authoritative external reference, NOT derived from the gold column.</span></span>
+<span id="cb4-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># (Deriving from gold would bless its dirt: the gold column carries junk values —</span></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#  misspellings, regions like "southern afghanistan", multi-value cells — that aren't real provinces.)</span></span>
+<span id="cb4-4">KNOWN_PROVINCES <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"badakhshan"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"badghis"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"baghlan"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"balkh"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kabul"</span>,</span>
+<span id="cb4-5">                   <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kandahar"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"khost"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kunar"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktia"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktika"</span>, ...}  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 34 total</span></span>
+<span id="cb4-6">ALIASES <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktya"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktia"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"nimroz"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"nimruz"</span>,</span>
+<span id="cb4-7">           <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dai kundi"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"daikundi"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sar-e pul"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sar-e-pol"</span>}</span>
+<span id="cb4-8"></span>
+<span id="cb4-9"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> _canon(p):                       <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># lower, strip, then de-alias</span></span>
+<span id="cb4-10">    p <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> p.strip().lower()</span>
+<span id="cb4-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> ALIASES.get(p, p)         <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># map a known misspelling, else leave it</span></span>
+<span id="cb4-12"></span>
+<span id="cb4-13"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> reward_field_match(pred, gold):   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># does it match the gold answer?</span></span>
+<span id="cb4-14">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.0</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> _canon(pred) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> _canon(gold) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0</span></span>
+<span id="cb4-15"></span>
+<span id="cb4-16"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> reward_province_exists(pred):     <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># source criticism: is it a REAL province at all?</span></span>
+<span id="cb4-17">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.0</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> _canon(pred) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> KNOWN_PROVINCES <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0</span></span></code></pre></div></div>
+<p>So here we have tests for whether we have a match <em>and</em> a sanity check for whether the province exists at all. Without the check for whether the province exists at all, we could conceivably start rewarding the model for producing provinces that don’t exist but that seem plausible. So you actually need both tests to ensure that the model learns to emit real provinces as well as the right provinces (based on the logic that’s part of the extraction task).</p>
+<p>You can of course compose these together. You can use some checks as a simple gate. The JSON parsing one above is a good example of this. There’s no point even using an LLM judge to check whether the extraction matched the input press release because improper JSON formatting makes the answer a non-starter.</p>
+<p>You can also weight the parts of a reward function together. Maybe you assign 30% of the weight to procedural checks and 70% to whatever the value the LLM judge comes back with. In reality, these kinds of compound reward functions are what’s found in production systems.</p>
+</section>
+<section id="reward-hacking-side-quest" class="level2">
+<h2 class="anchored" data-anchor-id="reward-hacking-side-quest">Reward hacking side-quest</h2>
+<p>I also took a look at <a href="https://shopify.engineering/building-production-ready-agentic-systems">a case study from Shopify</a> around their Sidekick agent system. (There’s also <a href="https://www.youtube.com/watch?v=xFW-oCpLa3w">a video here</a>.) It has a few interesting examples of some reward hacking that they encountered when using RL on their agent traces:</p>
+<pre><code>The model found creative ways to game our reward system:
+
+- Opt-out hacking: Instead of attempting difficult tasks, the model would explain why it couldn't help
+- Tag hacking: Using customer tags as a catch-all instead of proper field mappings
+- Schema violations: Hallucinating IDs or using incorrect enum values
+
+For example, when asked to "segment customers with status enabled," the model learned to create filters like customer_tags CONTAINS 'enabled' instead of the correct customer_account_status = 'ENABLED'.</code></pre>
+<p>As you can see, some of these are fairly subtle and I’m curious how they caught these. It seems that they had some automations / evals to help understand what was going on, but I imagine that they must also have been looking at the data during the process.</p>
+</section>
+<section id="catching-half-errors" class="level2">
+<h2 class="anchored" data-anchor-id="catching-half-errors">Catching half-errors</h2>
+<p>The examples above are fairly simplistic, but you can imagine that there are scenarios where you have to think carefully about exactly what behaviours you want to reward. For example, think about whether it’s worse to miss a field in a response, or to invent one? If a completely hallucinated value is worse than missing a field, then you’d want your reward function to punish those false values more than missing fields. And then if “I don’t know” is safe as an answer you can tolerate blank values.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>agents</category>
+  <category>llms</category>
+  <category>reinforcement-learning</category>
+  <category>isafpr</category>
+  <guid>https://alexstrick.com/posts/2026-06-17-rl-terms-rewards.html</guid>
+  <pubDate>Tue, 16 Jun 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>The Five Stages of Reinforcement Learning</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4298,119 +4952,6 @@ font-style: inherit;">\</span></span>
   <guid>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</guid>
   <pubDate>Mon, 20 Jan 2025 23:00:00 GMT</pubDate>
   <media:content url="https://alexstrick.com/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" medium="image" type="image/png" height="66" width="144"/>
-</item>
-<item>
-  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 1</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://alexstrick.com/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Had the first of <a href="https://www.meetup.com/delft-fast-ai-study-group/">a series of meet-ups</a> I’m organising in which we discuss Chip Huyen’s new book. My notes from reading the chapter follow this, and then I’ll try to summarise what we discussed in the group.</p>
-<p>At a high-level, I <em>really</em> enjoyed the final part of the chapter where she got into how she was thinking about the practice of ‘AI Engineering’ and how it differs from ML engineering. Also the use of the term ‘model adaptation’ was an interesting way of encompassing all the different things that engineers are doing to get the LLM to better follow their instructions.</p>
-<section id="chapter-1-notes" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-1-notes">Chapter 1 Notes</h2>
-<p>The chapter begins by establishing AI Engineering as the preferred term over alternatives like GenAI Ops or LLM Ops. This preference stems from a fundamental shift in the field, where application development has become increasingly central to working with AI models. The “ops” suffix inadequately captures the breadth and nature of work involved in modern AI applications.</p>
-<section id="foundation-models-and-language-models" class="level3">
-<h3 class="anchored" data-anchor-id="foundation-models-and-language-models">Foundation Models and Language Models</h3>
-<p>The text provides important technical context about different types of language models. A notable comparison shows that while Mistral 7B has a vocabulary of 32,000 tokens, GPT-4 possesses a much larger vocabulary of 100,256 tokens, highlighting the significant variation in model capabilities and design choices.</p>
-<p>Two primary categories of language models are discussed:</p>
-<ol type="1">
-<li>Masked Language Models (like BERT and modern BERT variants)</li>
-<li>Autoregressive Language Models (like those used in ChatGPT)</li>
-</ol>
-<p>The term “foundation model” carries dual significance, referring both to these models’ fundamental importance and their adaptability for various applications. This terminology also marks an important transition from task-specific models to general-purpose ones, especially relevant in the era of multimodal capabilities.</p>
-</section>
-</section>
-<section id="ai-engineering-vs-traditional-approaches" class="level2">
-<h2 class="anchored" data-anchor-id="ai-engineering-vs-traditional-approaches">AI Engineering vs Traditional Approaches</h2>
-<p>AI Engineering differs substantially from ML Engineering, warranting its distinct terminology. The key distinction lies in its focus on adapting and evaluating models rather than building them from scratch. Model adaptation techniques fall into two main categories:</p>
-<ol type="1">
-<li>Prompt-based techniques (prompt engineering) - These methods adapt models without updating weights</li>
-<li>Fine-tuning techniques - These approaches require weight updates</li>
-</ol>
-<p>The shift from ML Engineering to AI Engineering brings new challenges, particularly in handling open-ended outputs. While this flexibility enables a broader range of applications, it also introduces significant complexity in evaluation and implementation of guardrails.</p>
-</section>
-<section id="the-ai-engineering-stack" class="level2">
-<h2 class="anchored" data-anchor-id="the-ai-engineering-stack">The AI Engineering Stack</h2>
-<p>The framework consists of three distinct layers:</p>
-<section id="application-development-layer" class="level3">
-<h3 class="anchored" data-anchor-id="application-development-layer">1. Application Development Layer</h3>
-<ul>
-<li>Focuses on prompt crafting and context provision</li>
-<li>Requires rigorous evaluation methods</li>
-<li>Emphasizes interface design and user experience</li>
-<li>Primary responsibilities include evaluation, prompt engineering, and AI interface development</li>
-</ul>
-</section>
-<section id="model-development-layer" class="level3">
-<h3 class="anchored" data-anchor-id="model-development-layer">2. Model Development Layer</h3>
-<ul>
-<li>Provides tooling for model development</li>
-<li>Includes frameworks for training, functioning, and inference optimisation</li>
-<li>Requires systematic evaluation approaches</li>
-</ul>
-</section>
-<section id="infrastructure-layer" class="level3">
-<h3 class="anchored" data-anchor-id="infrastructure-layer">3. Infrastructure Layer</h3>
-<ul>
-<li>Handles model serving</li>
-<li>Manages underlying technical requirements</li>
-</ul>
-</section>
-</section>
-<section id="planning-ai-applications" class="level2">
-<h2 class="anchored" data-anchor-id="planning-ai-applications">Planning AI Applications</h2>
-<p>The chapter outlines a modern approach to AI application development that differs significantly from traditional ML projects. Rather than beginning with data collection and model training, AI engineering often starts with product development, leveraging existing models. This approach allows teams to validate product concepts before investing heavily in data and model development.</p>
-<p>Key planning considerations include:</p>
-<ul>
-<li>Setting appropriate expectations</li>
-<li>Determining user exposure levels</li>
-<li>Deciding between internal and external deployment</li>
-<li>Understanding maintenance requirements</li>
-</ul>
-<p>A notable insight is the “80/20” development pattern: while reaching 80% functionality can be relatively quick, achieving the final 20% often requires equal or greater effort than the initial development phase.</p>
-</section>
-<section id="evaluation-and-implementation-challenges" class="level2">
-<h2 class="anchored" data-anchor-id="evaluation-and-implementation-challenges">Evaluation and Implementation Challenges</h2>
-<p>The chapter emphasises that working with AI models presents unique evaluation challenges compared to traditional ML systems. This complexity stems from:</p>
-<ul>
-<li>The open-ended nature of outputs</li>
-<li>Difficulty in implementing strict guardrails</li>
-<li>Challenges in type enforcement</li>
-<li>The need for comprehensive evaluation strategies</li>
-</ul>
-</section>
-<section id="data-and-model-adaptation" class="level2">
-<h2 class="anchored" data-anchor-id="data-and-model-adaptation">Data and Model Adaptation</h2>
-<p>The text discusses how data set engineering and inference optimisation, while still relevant, take on different forms in AI engineering compared to traditional ML engineering. The focus shifts from raw data collection and processing to effective model adaptation and deployment strategies.</p>
-</section>
-<section id="modern-development-paradigm" class="level2">
-<h2 class="anchored" data-anchor-id="modern-development-paradigm">Modern Development Paradigm</h2>
-<p>A significant paradigm shift is highlighted in the development approach: unlike traditional ML engineering, which typically begins with data collection and model training, AI engineering enables a product-first approach. This allows teams to validate concepts using existing models before committing to extensive data collection or model development efforts.</p>
-</section>
-<section id="discussion-summary" class="level2">
-<h2 class="anchored" data-anchor-id="discussion-summary">Discussion summary</h2>
-<p>The conversation started with a bit on how AI Engineering represents an interesting shift in the software engineering landscape, potentially opening new career paths for traditional software engineers. While developers may not need deep mathematical knowledge of derivatives and linear algebra upfront, there’s a growing recognition that understanding how AI systems behave - their constraints and opportunities - is becoming increasingly valuable.</p>
-<p>A key tension emerged in the discussion around enterprise adoption. While there’s significant enthusiasm around AI applications, particularly on social media where developers showcase apps with substantial user bases, enterprise companies often maintain their traditional team structures. This creates an interesting dynamic where companies might maintain their existing ML engineering teams while simultaneously forming new “tiger teams” focused on generative AI initiatives, leading to organisational friction.</p>
-<p>The group discussed how while it’s now possible for software engineers to quickly build AI applications by calling APIs, they often hit limitations that require deeper understanding. This raises questions about whether the “shallow” approach of purely application-level development is sustainable, or whether engineers will inevitably need to develop deeper technical knowledge around model behaviour, evaluation, and fine-tuning.</p>
-<p>A particularly notable challenge discussed was handling the non-deterministic nature of AI systems. Traditional software engineering practices, like unit testing, don’t translate cleanly to systems where outputs can vary even with temperature set to zero. This highlights how AI Engineering requires new patterns and practices beyond traditional software engineering approaches.</p>
-<p>The discussion also touched on evaluation techniques, including the use of log probabilities to understand model confidence and improve prompts. This represents an emerging area where traditional ML evaluation meets new challenges in assessing large language model outputs.</p>
-
-
-</section>
-
- ]]></description>
-  <category>books-i-read</category>
-  <category>llm</category>
-  <category>llms</category>
-  <category>finetuning</category>
-  <category>prompt-engineering</category>
-  <guid>https://alexstrick.com/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html</guid>
-  <pubDate>Sat, 18 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://alexstrick.com/posts/images/aieng1-small.png" medium="image" type="image/png" height="101" width="144"/>
 </item>
 </channel>
 </rss>

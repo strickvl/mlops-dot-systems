@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2026-06-17">
+<meta name="description" content="Grounding RL vocabulary — trace, task, environment — and the three families of reward in a real structured-extraction task. With a dirty-gold-label gotcha that argues for looking at your data, composing rewards via gates and weights, and reward-hacking examples from Shopify’s Sidekick.">
+
+<title>Reward design for RL, grounded in a structured-extraction task – Alex Strick van Linschoten</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
+<meta property="og:title" content="Reward design for RL, grounded in a structured-extraction task – Alex Strick van Linschoten">
+<meta property="og:description" content="Grounding RL vocabulary — trace, task, environment — and the three families of reward in a real structured-extraction task. With a dirty-gold-label gotcha that argues for looking at your data, composing rewards via gates and weights, and reward-hacking examples from Shopify’s Sidekick.">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Reward design for RL, grounded in a structured-extraction task – Alex Strick van Linschoten">
+<meta name="twitter:description" content="Grounding RL vocabulary — trace, task, environment — and the three families of reward in a real structured-extraction task. With a dirty-gold-label gotcha that argues for looking at your data, composing rewards via gates and weights, and reward-hacking examples from Shopify’s Sidekick.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed technical-page quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../technical.html"> 
+<span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html"> 
+<span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../technical.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#three-kinds-of-rewards" id="toc-three-kinds-of-rewards" class="nav-link active" data-scroll-target="#three-kinds-of-rewards">Three kinds of rewards</a></li>
+  <li><a href="#reward-hacking-side-quest" id="toc-reward-hacking-side-quest" class="nav-link" data-scroll-target="#reward-hacking-side-quest">Reward hacking side-quest</a></li>
+  <li><a href="#catching-half-errors" id="toc-catching-half-errors" class="nav-link" data-scroll-target="#catching-half-errors">Catching half-errors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Reward design for RL, grounded in a structured-extraction task</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">agents</div>
+    <div class="quarto-category">llms</div>
+    <div class="quarto-category">reinforcement-learning</div>
+    <div class="quarto-category">isafpr</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Grounding RL vocabulary — trace, task, environment — and the three families of reward in a real structured-extraction task. With a dirty-gold-label gotcha that argues for looking at your data, composing rewards via gates and weights, and reward-hacking examples from Shopify’s Sidekick.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 17, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>It probably would help to ground our discussion of some of this RL terminology to look at an example. I mentioned that we could use the old ISAF press releases task (structured data extraction) as a starting point, so here is some data from that:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="er">trace</span> <span class="er">=</span> <span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"task_id"</span><span class="fu">:</span> <span class="st">"isaf-pr-2011-0487"</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"task"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"document"</span><span class="fu">:</span> <span class="st">"KABUL — An Afghan and coalition force detained three"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                    <span class="st">" suspected insurgents in Kandahar on 20 Feb 2011..."</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fields"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"date"</span><span class="ot">,</span> <span class="st">"province"</span><span class="ot">,</span> <span class="st">"event_type"</span><span class="ot">,</span> <span class="st">"detained_count"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"steps"</span><span class="fu">:</span> <span class="ot">[</span>                                  <span class="er">#</span> <span class="er">one</span> <span class="fu">{</span><span class="er">action,</span> <span class="er">observation</span><span class="fu">}</span> <span class="er">per</span> <span class="er">turn</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">"action"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"tool"</span><span class="fu">:</span> <span class="st">"emit_answer"</span><span class="fu">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"date"</span><span class="fu">:</span> <span class="st">"2011-02-20"</span><span class="fu">,</span> <span class="dt">"province"</span><span class="fu">:</span> <span class="st">"Kandahar"</span><span class="fu">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                             <span class="dt">"event_type"</span><span class="fu">:</span> <span class="st">"detention"</span><span class="fu">,</span> <span class="dt">"detained_count"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}},</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>         <span class="dt">"observation"</span><span class="fu">:</span> <span class="er">None</span><span class="fu">}</span><span class="ot">,</span>               <span class="er">#</span> <span class="er">nothing</span> <span class="er">comes</span> <span class="er">back;</span> <span class="er">it</span> <span class="er">just</span> <span class="er">answers</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"output"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"date"</span><span class="fu">:</span> <span class="st">"2011-02-20"</span><span class="fu">,</span> <span class="dt">"province"</span><span class="fu">:</span> <span class="st">"Kandahar"</span><span class="fu">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>               <span class="dt">"event_type"</span><span class="fu">:</span> <span class="st">"detention"</span><span class="fu">,</span> <span class="dt">"detained_count"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">},</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"gold"</span><span class="fu">:</span>   <span class="fu">{</span><span class="dt">"date"</span><span class="fu">:</span> <span class="st">"2011-02-20"</span><span class="fu">,</span> <span class="dt">"province"</span><span class="fu">:</span> <span class="st">"Kandahar"</span><span class="fu">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>               <span class="dt">"event_type"</span><span class="fu">:</span> <span class="st">"detention"</span><span class="fu">,</span> <span class="dt">"detained_count"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">},</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"reward"</span><span class="fu">:</span> <span class="er">None</span><span class="fu">,</span>                          <span class="er">#</span> <span class="er">filled</span> <span class="er">in</span> <span class="er">by</span> <span class="er">score(),</span> <span class="er">next</span> <span class="er">session</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>So you can see a few things going on here:</p>
+<ul>
+<li>this is a ‘trace’, which is the record of what happened when we tried to run our system to extract the data from the press release.</li>
+<li>you can see the ‘task’ itself embedded within the trace</li>
+<li>you can see in the ‘steps’ what the system did in order to extract the data (it used the <code>emit_answer</code> tool, simply put)</li>
+<li>And you can see that we also have access to the golden annotation which will help us check whether this was correctly extracted.</li>
+</ul>
+<p>So let’s disambiguate these terms again, as well, for clarity:</p>
+<ul>
+<li><strong>task</strong>: the input plus how the input will be graded (“extract date, province, event_type, detained_count from this press release” and “you’re graded on how many fields match the golden annotation(s)”)</li>
+<li><strong>trace</strong>: a full record of an attempt at a task (including the tool calls used etc)</li>
+<li><strong>environment</strong>: the task, the tools it’s allowed or able to use, and the reward or grading function</li>
+</ul>
+<p>RL, it seems, has a LOT of terminology so it’s worth just walking through those to make sure we’re all talking about the same things.</p>
+<p>For our scoring function, a fairly simple version would look something like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score(trace: <span class="bu">dict</span>[<span class="bu">str</span>, Any]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Reward for one ISAF trace: did it parse, and do fields match gold?"""</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    out, gold <span class="op">=</span> trace[<span class="st">"output"</span>], trace[<span class="st">"gold"</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(out, <span class="bu">dict</span>):          <span class="co"># didn't even produce a JSON object</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    fields <span class="op">=</span> trace[<span class="st">"task"</span>][<span class="st">"fields"</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> <span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> f <span class="kw">in</span> fields <span class="cf">if</span> out.get(f) <span class="op">==</span> gold[f])</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hits <span class="op">/</span> <span class="bu">len</span>(fields)              <span class="co"># fraction of fields correct</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Now it turns out that even with such a fairly simple way of grading outputs, there can be some interesting results. Here are four pairs of output vs the golden dataset equivalent:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 — clean hit</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> {province: <span class="st">"kandahar"</span>, eventtype: <span class="st">"detention"</span>, targetgroup: <span class="st">"taliban"</span>, minkilled: <span class="dv">0</span>, mincaptured: <span class="dv">3</span>}</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gold   <span class="op">=</span> {province: <span class="st">"kandahar"</span>, eventtype: <span class="st">"detention"</span>, targetgroup: <span class="st">"taliban"</span>, minkilled: <span class="dv">0</span>, mincaptured: <span class="dv">3</span>}</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2 — partial</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> {province: <span class="st">"helmand"</span>, eventtype: <span class="st">"airstrike"</span>, targetgroup: <span class="st">"haqqani"</span>, minkilled: <span class="dv">1</span>, mincaptured: <span class="dv">0</span>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>gold   <span class="op">=</span> {province: <span class="st">"helmand"</span>, eventtype: <span class="st">"airstrike"</span>, targetgroup: <span class="st">"taliban"</span>, minkilled: <span class="dv">2</span>, mincaptured: <span class="dv">0</span>}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 — malformed</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> <span class="st">"I think this was a detention operation somewhere near Kabul."</span>   <span class="co"># a string, not a dict</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gold   <span class="op">=</span> {province: <span class="st">"kabul"</span>, eventtype: <span class="st">"detention"</span>, targetgroup: <span class="st">"taliban"</span>, minkilled: <span class="dv">0</span>, mincaptured: <span class="dv">2</span>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 — dirty gold</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> {province: <span class="st">"paktia"</span>,  eventtype: <span class="st">"detention"</span>, targetgroup: <span class="st">"haqqani"</span>, minkilled: <span class="dv">0</span>, mincaptured: <span class="dv">1</span>}</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>gold   <span class="op">=</span> {province: <span class="st">"paktya"</span>,  eventtype: <span class="st">"detention"</span>, targetgroup: <span class="st">"haqqani"</span>, minkilled: <span class="dv">0</span>, mincaptured: <span class="dv">1</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>So for group 1, we score a full 1.0 since everything was correct and it was correct JSON. For group 2, we scored a partial hit since the target group extracted was the wrong one (compared to the golden dataset). For group 3, we score 0.0 because the output was a string and not parseable as JSON. That’s known as a ‘gate’, where we end early and return <code>0.0</code> because it doesn’t even parse as JSON.</p>
+<p>Group 4 is interesting, though, because here you can see that the only difference is the name of the province. Both are actually referring to the same place, only with alternative spellings. What’s even more interesting is that the spelling in the golden dataset’s version (‘paktya’) is itself an anomaly or outlier. Out of the 4822 items, 197 of them use ‘paktya’ as the spelling but the rest use ‘paktia’. So actually somehow this is a problem with the original dataset, but probably you’re not going to always be able to fix all these at the source, so you have to handle them within the reward.</p>
+<p>The decision about how to handle it in the reward function will be made by what your needs are. If ‘paktya’ is just as legitimate a spelling as ‘paktia’ for your purposes, then you’d want to rate them equally. If you wanted to incentivise one spelling over another, then you could slightly penalise the agent for having used the spelling that you don’t like.</p>
+<p>This is a clear argument, by the way, for ‘looking at your data’! These kinds of details are things that I imagine add up when you have a more complex agent, and it’s quite important to understand exactly how tasks are being graded if you want to have control over how your system is going to be optimised through the RL training process.</p>
+<section id="three-kinds-of-rewards" class="level2">
+<h2 class="anchored" data-anchor-id="three-kinds-of-rewards">Three kinds of rewards</h2>
+<p>The <code>score()</code> function we used above is an example of the first and most basic kind of rewards, but there are two other categories that are commonly found. Let’s walk through them all.</p>
+<p>Firstly we have <em>verifiable / procedural</em> rewards. This is the same ‘verifiable’ as is used in the term RLVR (“reinforcement learning with verifiable rewards”). Think cheap functions that are quick to run and where there’s an easy way to grade something. Did the JSON parse? Does the response match the correct one in the answer key? Does it pass a basic sanity count? These checks are hard to game or trick, though they still might lead to reward hacking and send your system in the direction of behaviours you don’t want to incentivise.</p>
+<p>Secondly we have <em>absolute LLM-as-a-judge</em>. For this, we pass the task and the response to an LLM and ask it to grade the response. It usually makes its assessment on the basis of a ‘rubric’ and is often used for things where it’s harder to come up with cheap functional evaluations of like we had with as in the verifiable/procedural rewards above.</p>
+<p>And thirdly, we have <em>relative / grouped judge</em> rewards. For this we aren’t making an absolute assessment as in the LLM-as-judge example. Instead, we make multiple attempts (four, or ten, let’s say) and then we use an LLM judge to just rank them or pick the best ones. This way we’re not necessarily saying that the best ones are perfect, but we do give signal that these best ones were good so steer the model/policy in that direction, and that the bad ones were bad so steer the model <em>away</em> from those kinds of responses.</p>
+<p>For our ISAF examples above, a simple procedural test could look like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The canonical 34 — the authoritative external reference, NOT derived from the gold column.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Deriving from gold would bless its dirt: the gold column carries junk values —</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  misspellings, regions like "southern afghanistan", multi-value cells — that aren't real provinces.)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>KNOWN_PROVINCES <span class="op">=</span> {<span class="st">"badakhshan"</span>, <span class="st">"badghis"</span>, <span class="st">"baghlan"</span>, <span class="st">"balkh"</span>, <span class="st">"kabul"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"kandahar"</span>, <span class="st">"khost"</span>, <span class="st">"kunar"</span>, <span class="st">"paktia"</span>, <span class="st">"paktika"</span>, ...}  <span class="co"># 34 total</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>ALIASES <span class="op">=</span> {<span class="st">"paktya"</span>: <span class="st">"paktia"</span>, <span class="st">"nimroz"</span>: <span class="st">"nimruz"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"dai kundi"</span>: <span class="st">"daikundi"</span>, <span class="st">"sar-e pul"</span>: <span class="st">"sar-e-pol"</span>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _canon(p):                       <span class="co"># lower, strip, then de-alias</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> p.strip().lower()</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ALIASES.get(p, p)         <span class="co"># map a known misspelling, else leave it</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reward_field_match(pred, gold):   <span class="co"># does it match the gold answer?</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1.0</span> <span class="cf">if</span> _canon(pred) <span class="op">==</span> _canon(gold) <span class="cf">else</span> <span class="fl">0.0</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reward_province_exists(pred):     <span class="co"># source criticism: is it a REAL province at all?</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1.0</span> <span class="cf">if</span> _canon(pred) <span class="kw">in</span> KNOWN_PROVINCES <span class="cf">else</span> <span class="fl">0.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>So here we have tests for whether we have a match <em>and</em> a sanity check for whether the province exists at all. Without the check for whether the province exists at all, we could conceivably start rewarding the model for producing provinces that don’t exist but that seem plausible. So you actually need both tests to ensure that the model learns to emit real provinces as well as the right provinces (based on the logic that’s part of the extraction task).</p>
+<p>You can of course compose these together. You can use some checks as a simple gate. The JSON parsing one above is a good example of this. There’s no point even using an LLM judge to check whether the extraction matched the input press release because improper JSON formatting makes the answer a non-starter.</p>
+<p>You can also weight the parts of a reward function together. Maybe you assign 30% of the weight to procedural checks and 70% to whatever the value the LLM judge comes back with. In reality, these kinds of compound reward functions are what’s found in production systems.</p>
+</section>
+<section id="reward-hacking-side-quest" class="level2">
+<h2 class="anchored" data-anchor-id="reward-hacking-side-quest">Reward hacking side-quest</h2>
+<p>I also took a look at <a href="https://shopify.engineering/building-production-ready-agentic-systems">a case study from Shopify</a> around their Sidekick agent system. (There’s also <a href="https://www.youtube.com/watch?v=xFW-oCpLa3w">a video here</a>.) It has a few interesting examples of some reward hacking that they encountered when using RL on their agent traces:</p>
+<pre><code>The model found creative ways to game our reward system:
+
+- Opt-out hacking: Instead of attempting difficult tasks, the model would explain why it couldn't help
+- Tag hacking: Using customer tags as a catch-all instead of proper field mappings
+- Schema violations: Hallucinating IDs or using incorrect enum values
+
+For example, when asked to "segment customers with status enabled," the model learned to create filters like customer_tags CONTAINS 'enabled' instead of the correct customer_account_status = 'ENABLED'.</code></pre>
+<p>As you can see, some of these are fairly subtle and I’m curious how they caught these. It seems that they had some automations / evals to help understand what was going on, but I imagine that they must also have been looking at the data during the process.</p>
+</section>
+<section id="catching-half-errors" class="level2">
+<h2 class="anchored" data-anchor-id="catching-half-errors">Catching half-errors</h2>
+<p>The examples above are fairly simplistic, but you can imagine that there are scenarios where you have to think carefully about exactly what behaviours you want to reward. For example, think about whether it’s worse to miss a field in a response, or to invent one? If a completely hallucinated value is worse than missing a field, then you’d want your reward function to punish those false values more than missing fields. And then if “I don’t know” is safe as an answer you can tolerate blank values.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
