@@ -10,7 +10,156 @@
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Tue, 16 Jun 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 17 Jun 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>GRPO without the maths: how an RL trainer nudges the weights</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2026-06-18-grpo-explained.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>So far we’ve been looking at the high-level processes and components of reinforcement learning for agents, but I just finished learning about how the trainer / training process works and wanted to give some thoughts on that.</p>
+<section id="grpo-explained" class="level2">
+<h2 class="anchored" data-anchor-id="grpo-explained">GRPO Explained</h2>
+<p>Group Relative Policy Optimisation (GRPO) is the algorithm that’s commonly used by the trainer component to nudge the model (aka ‘policy’) in the right direction during the training process. Last time I was <a href="https://alexstrick.com/posts/2026-06-17-rl-terms-rewards.html">focused on how to put together a good reward function</a> but now we’re interested on how you use those rewards to update the weights such that it improves the scores next time we attempt to answer the question / solve the problem.</p>
+<p>With GRPO, the high-level idea is fairly easy to understand. We attempt the same problem a few times and then we compare between the results to see which ones did better than the others. Based on the best ones of the group, we can update the weights to behave a bit more like those ones. What does this mean in practice and what are the terms of art here?</p>
+<ul>
+<li>‘the baseline’ – this is the average score for all the attempts or rollouts that were attempted. So if this happened 8 times, then we’d add up all the scores and then divide by 8.</li>
+<li>‘the advantage’ – for each attempt, calculate the distance from the baseline value. For some of them we might be above the baseline so we’d have +0.5 advantage, for example. But for others, we might not have performed so well so we’d be below the baseline (<code>-0.3</code> e.g.).</li>
+</ul>
+<p>During the training process we want to reward positive advantage. So we’d update the weights sufficiently (by some learning rate, just like in ‘traditional’ machine learning) a little bit such that we are hopefully more likely to see similar behaviours and performance.</p>
+<p>Here’s a simplified version of that training process in sort of pseudocode:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> step(probs, scores):</span>
+<span id="cb1-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1. sample a GROUP of attempts from the current policy</span></span>
+<span id="cb1-3">    idxs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> random_choices(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>), weights<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>probs, k<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)</span>
+<span id="cb1-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2. score each attempt</span></span>
+<span id="cb1-5">    rewards <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [scores[i] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> idxs]</span>
+<span id="cb1-6">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3. baseline = the group average   ("good compared to what?")</span></span>
+<span id="cb1-7">    baseline <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(rewards) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(rewards)</span>
+<span id="cb1-8">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4 + 5. advantage = reward − baseline; nudge each sampled answer by it</span></span>
+<span id="cb1-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i, r <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(idxs, rewards):</span>
+<span id="cb1-10">        probs[i] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.15</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> (r <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> baseline)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &gt;0 push up · &lt;0 push down</span></span>
+<span id="cb1-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> normalize(probs)            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># keep them a valid prob. distribution</span></span></code></pre></div></div>
+<p>I put a runnable version of this which you can use to <a href="https://gist.github.com/strickvl/fc7f1f209cbfb4f5fe4f54357dc02884">play around with the parameters here</a>. You can run it with <code>uv</code> easily and see how things change when you update various values.</p>
+<p>I made a little video where I walk through how the scoring is calculated and how it works in the trainer (at a very high level):</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/MGTbzOyUn7E" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="credit-assignment" class="level2">
+<h2 class="anchored" data-anchor-id="credit-assignment">Credit Assignment</h2>
+<p>This is a term of art relating to how the trainer works. When you think about a relatively simple process, usually it might be clear where an agent did something well or when it did something bad. If we had an agent that was meant to review code, but somewhere in the middle it started reading recipes and fan fiction then we might be able to confidently state that at step number <code>x</code> things started to go off the rails.</p>
+<p>But when we have a long-running task where the result is much more qualitatively graded (“Write a good research report about some topic” or something like that…) then it’s often going to be hard to specify when this happened.</p>
+<p>For GRPO, the advantage is that the algorithm doesn’t care. It grades you for the whole attempt and not the specific moments during the attempt. So if you got to the result but maybe you did some stupid reasoning or exploration at the beginning, GRPO doesn’t care so much or doesn’t necessarily make it less likely that we’ll see the bad behaviours after training. This can make it less suitable for long-running agents or things with many steps in the trace / trajectory.</p>
+</section>
+<section id="ppo-vs-grpo-for-long-running-tasks" class="level2">
+<h2 class="anchored" data-anchor-id="ppo-vs-grpo-for-long-running-tasks">PPO vs GRPO for long-running tasks</h2>
+<p>Actually there seems to be a really interesting fork developing around exactly this kind of agentic task. Yesterday saw the release of GLM-5.2, a new model from z.ai and they published a <a href="https://z.ai/blog/glm-5.2">blog about the training process</a> that included the following observations:</p>
+<blockquote class="blockquote">
+<p>“For GLM-5.2, long-horizon tasks produce substantially longer execution traces, and once a super-long trajectory is split by compaction into multiple sub-traces, different rollouts under the same prompt yield different numbers of trainable traces with highly variable lengths. We therefore move from group-wise optimization to a critic-based PPO formulation that learns from individual rollouts, relying on a critic to estimate token-level advantages rather than group-relative comparisons. This single-rollout formulation fits compaction naturally, as it places no constraint on how many traces a prompt produces or on their relative lengths: we bring compaction into training by including all compacted sub-traces as trainable trajectories, and apply a token-level loss to address their length imbalance.”</p>
+</blockquote>
+<p>PPO is something we haven’t talked about yet, but it’s sort of the earlier algorithm used for training RL that was superseded by GRPO.</p>
+<p>For PPO (Proximal Policy Optimization), we use a coach (model) which we ask to predict how well it thinks our agent will do. We actually have this coach or critic model do this at fine-grained intervals while it is working. So at the beginning maybe it might think that the agent has a good chance of solving it, but then after it sees it working a bit then it downgrades its chances and so on. And then the learning signal is basically what happens when the agent continues its work. So if the critic model predicts that it only has a 30% chance of success for our agent, but it actually gets a score of 60% or it outperforms somehow, then obviously we’d consider this to be a result worth updating the weights for. In other words, there is some behaviour in the attempt that just happened which we want to learn from.</p>
+<p>The advantage of the PPO approach is that we get to learn from the whole journey of how an agent reached its answer (good parts and bad), whereas unfortunately the fact that we have to train and maintain a whole second critic model is obviously going to take time and experience and it’s hard to get that right.</p>
+<p>So it’s really interesting after what I believe is a good amount of time (a little over a year?) where GRPO really ruled the waves, now we’re finding that actually maybe PPO had some advantages that we want to use because many labs building models are interested in these long-horizon agentic tasks.</p>
+<p>For my purposes, something like the work on <a href="https://github.com/strickvl/hinbox/">hinbox</a> is also a long-horizon task with many parts to it, so it might be the kind of thing I’d consider when working on that.</p>
+<p>I also saw that there’s a paper from this year (<a href="https://arxiv.org/pdf/2511.03527">“Learning Without Critics? Revisiting GRPO in Classical Reinforcement Learning Environments”</a>) where some researchers seem to have shown that the critic model approach is actually <em>necessary</em> for long-horizon tasks. In other words, you can’t just use GRPO if you have these tasks which require many steps to accomplish. This is obviously an important thing to understand about agentic RL. If your task is short enough, then maybe you can get away with GRPO, but as the horizon extends then in order to escape a performance ceiling you’ll have to try other techniques and algorithms for updating the weights.</p>
+</section>
+<section id="grpo-and-trainer-algorithm-intuitions" class="level2">
+<h2 class="anchored" data-anchor-id="grpo-and-trainer-algorithm-intuitions">GRPO and trainer algorithm intuitions</h2>
+<p>As you saw in the video above where I walk through some toy simulations, it seems clear that there are some things you have to watch out for when training with RL:</p>
+<ul>
+<li>how many steps are involved in the task? (This relates to the GRPO vs PPO debate. You might find you hit a ceiling with GRPO for long-horizon tasks.)</li>
+<li>how easy are the tasks? (If the tasks are too easy, then maybe all the attempts might give the same reward/score, and then there’s no advantage which means there’s no signal to update the weights. In the end, your model might just not learn anything.)</li>
+<li>Look at the traces! I think when you’re doing RL it probably is really important to sample in the comparison between attempts on the same task. You might notice that either the scores don’t match your intuition for what answers should be given, and you also might find out that there’s some reward hacking going on or other strange behaviours. I’m really curious what people use to do this in real-world scenarios. Is it just <code>wandb</code>-type tools or do people have custom interfaces (for long agentic traces etc) or are they using agent-specific tracing tools?</li>
+<li>Are the scores too high? In general, if your agent is scoring 100% on every single answer as given by your reward function, then this might just mean you have a very simple task, but it also might be cause for concern as your reward function might be measuring the wrong thing and so on. So in general be suspicious of perfect scores always!</li>
+</ul>
+</section>
+<section id="questions" class="level2">
+<h2 class="anchored" data-anchor-id="questions">Questions</h2>
+<p>As always, I have some questions at this point in my study!</p>
+<ul>
+<li>I may have written about this yesterday as well, but I’m really wondering when to use RL vs SFT? What are the calculations and thresholds? Is it when you have a certain kind of data? Or is it more the problem shape / type recommends it and you to RL? (Obviously the cost dimension also is part of the discussion.)</li>
+<li>How to handle systems with many models? RL helps you improve and iterate around one model, but what if an agent uses many models? (Or perhaps many models in some multi-agent scenario?) Do we just fix everything in place apart from one of the models and then we improve that one first?</li>
+<li>Are there other algorithms (aside from GRPO and PPO) being used out in the world? What are the tradeoffs or advantages of using those ones? I guess looking at what the frameworks support is an easy way to see what people are using! When would you use those other models?</li>
+<li>What’s the timeline for all this? When was GRPO released, when was PPO released? When were they both popular and adopted into the mainstream? Were they being used (or ever used?) in the frontier labs? Are there other special tricks that the labs seem to have that aren’t represented by things like GRPO and PPO?</li>
+<li>Is there any advantage to something like curriculum learning for RL? Where you start with either the hard tasks or the small ones, or you interleave the tasks or something like this?</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>agents</category>
+  <category>llms</category>
+  <category>reinforcement-learning</category>
+  <category>isafpr</category>
+  <category>agentic-rl</category>
+  <guid>https://alexstrick.com/posts/2026-06-18-grpo-explained.html</guid>
+  <pubDate>Wed, 17 Jun 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Reward design for RL, grounded in a structured-extraction task</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -662,6 +811,7 @@ For example, when asked to "segment customers with status enabled," the model le
   <category>llms</category>
   <category>reinforcement-learning</category>
   <category>isafpr</category>
+  <category>agentic-rl</category>
   <guid>https://alexstrick.com/posts/2026-06-17-rl-terms-rewards.html</guid>
   <pubDate>Tue, 16 Jun 2026 22:00:00 GMT</pubDate>
 </item>
@@ -721,6 +871,7 @@ For example, when asked to "segment customers with status enabled," the model le
   <category>agents</category>
   <category>llms</category>
   <category>reinforcement-learning</category>
+  <category>agentic-rl</category>
   <guid>https://alexstrick.com/posts/2026-06-16-rl-stages.html</guid>
   <pubDate>Mon, 15 Jun 2026 22:00:00 GMT</pubDate>
 </item>
@@ -1047,6 +1198,7 @@ font-style: inherit;">return</span> model</span></code></pre></div></div>
   <category>agents</category>
   <category>llms</category>
   <category>reinforcement-learning</category>
+  <category>agentic-rl</category>
   <guid>https://alexstrick.com/posts/2026-06-13-rl-high-level-primer.html</guid>
   <pubDate>Fri, 12 Jun 2026 22:00:00 GMT</pubDate>
 </item>
@@ -4729,229 +4881,6 @@ font-style: inherit;">\</span></span>
   <guid>https://alexstrick.com/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html</guid>
   <pubDate>Tue, 21 Jan 2025 23:00:00 GMT</pubDate>
   <media:content url="https://alexstrick.com/posts/images/chip-ch4.png" medium="image" type="image/png" height="85" width="144"/>
-</item>
-<item>
-  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 3</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Really enjoyed this chapter. My tidied notes from my readings follow below. 150 pages in and we’re starting to get to the good stuff :)</p>
-<section id="overview-and-context" class="level2">
-<h2 class="anchored" data-anchor-id="overview-and-context">Overview and Context</h2>
-<p>This chapter serves as the first of two chapters (Chapters 3 and 4) dealing with evaluation in AI Engineering. While Chapter 4 will delve into evaluation within systems, Chapter 3 addresses the fundamental question of how to evaluate open-ended responses from foundation models and LLMs at a high level. The importance of evaluation cannot be overstated, though the author perhaps takes this somewhat for granted. The chapter provides a comprehensive framework for understanding various evaluation methodologies and their applications.</p>
-</section>
-<section id="challenges-in-evaluating-foundation-models" class="level2">
-<h2 class="anchored" data-anchor-id="challenges-in-evaluating-foundation-models">Challenges in Evaluating Foundation Models</h2>
-<p>The evaluation of foundation models presents several unique and complex challenges that make systematic assessment difficult:</p>
-<ul>
-<li>Existing benchmarks become increasingly inadequate as models improve in their capabilities</li>
-<li>As models become better at writing and mimicking human-like responses, evaluation becomes more complex and nuanced</li>
-<li>Many foundation models are API-driven black boxes, limiting access to internal workings</li>
-<li>Models continuously develop new capabilities, requiring constant adaptation of evaluation methods</li>
-<li>There has been notably limited investment in evaluation studies and technologies compared to the extensive resources devoted to enhancing model capabilities</li>
-<li>The improvement in model performance necessitates the continuous development of new benchmarks</li>
-<li>Without a systematic approach to evaluation, progress can be hindered by various headwinds</li>
-</ul>
-</section>
-<section id="language-model-metrics" class="level2">
-<h2 class="anchored" data-anchor-id="language-model-metrics">Language Model Metrics</h2>
-<p>The chapter includes a technically detailed section on understanding language model metrics, which while math-heavy, provides fundamental insights into model capabilities:</p>
-<ul>
-<li>Entropy</li>
-<li>Cross-entropy</li>
-<li>Perplexity</li>
-</ul>
-<p>These metrics serve as underlying measures to understand what’s happening within the models and assess their power and conversational abilities. While this section spans 4-5 pages of technical content, it provides some useful foundational understanding of how we can measure a language model’s intrinsic capabilities.</p>
-</section>
-<section id="downstream-task-performance-measurement" class="level2">
-<h2 class="anchored" data-anchor-id="downstream-task-performance-measurement">Downstream Task Performance Measurement</h2>
-<p>The chapter transitions from intrinsic metrics to evaluating actual capabilities, dividing evaluation into exact and subjective approaches.</p>
-<section id="exact-evaluation" class="level3">
-<h3 class="anchored" data-anchor-id="exact-evaluation">Exact Evaluation</h3>
-<p>There are two principal approaches to exact evaluation:</p>
-<ol type="1">
-<li><p><strong>Functional Correctness Assessment</strong></p>
-<ul>
-<li>Evaluates whether the LLM can successfully complete its assigned tasks</li>
-<li>Focuses on practical capability rather than theoretical metrics</li>
-<li>Example: In coding tasks, checking if generated code passes all unit tests</li>
-<li>Provides clear, objective measures of success</li>
-</ul></li>
-<li><p><strong>Similarity Measurements Against Reference Data</strong> Four distinct methods are identified:</p>
-<ol type="a">
-<li><strong>Human Evaluator Judgment</strong>
-<ul>
-<li>Requires manual comparison of texts by human evaluators</li>
-<li>Highly accurate but time and resource-intensive</li>
-<li>Limited scalability due to human involvement</li>
-<li>Often considered the gold standard despite limitations</li>
-</ul></li>
-<li><strong>Exact Match Checking</strong>
-<ul>
-<li>Compares generated response against reference responses for exact matches</li>
-<li>Most effective with shorter, specific outputs</li>
-<li>Less useful for verbose or creative outputs</li>
-<li>Provides binary yes/no results</li>
-</ul></li>
-<li><strong>Lexical Similarity</strong>
-<ul>
-<li>Employs established metrics like BLEU, ROUGE, and METEOR</li>
-<li>Focuses on word overlap and structural similarities</li>
-<li>Known to be somewhat crude in their assessment</li>
-<li>Widely used despite limitations due to ease of implementation</li>
-</ul></li>
-<li><strong>Semantic Similarity</strong>
-<ul>
-<li>Utilizes embeddings for comparing textual meaning</li>
-<li>Less sensitive to specific word choices than lexical approaches</li>
-<li>Quality depends entirely on the underlying embeddings algorithm</li>
-<li>May require significant computational resources</li>
-<li>Generally provides more nuanced comparison than lexical methods</li>
-</ul></li>
-</ol></li>
-</ol>
-<p>The chapter includes a brief but relevant sidebar on embeddings and their significance in evaluation, though this digression seemed a bit out of place in the overall flow.</p>
-</section>
-</section>
-<section id="ai-as-judge" class="level2">
-<h2 class="anchored" data-anchor-id="ai-as-judge">AI as Judge</h2>
-<p>This section explores the increasingly popular approach of using AI systems to evaluate other AI systems.</p>
-<section id="benefits" class="level3">
-<h3 class="anchored" data-anchor-id="benefits">Benefits</h3>
-<ul>
-<li>Significantly faster than human evaluation processes</li>
-<li>Generally more cost-effective than human evaluation at scale</li>
-<li>Studies have shown strong correlation with human evaluations in many cases</li>
-<li>AI judges can provide detailed explanations for their decisions</li>
-<li>Offers greater flexibility in evaluation approaches</li>
-<li>Enables systematic and consistent evaluation at scale</li>
-</ul>
-</section>
-<section id="three-main-approaches" class="level3">
-<h3 class="anchored" data-anchor-id="three-main-approaches">Three Main Approaches</h3>
-<ol type="1">
-<li><strong>Individual Response Evaluation</strong>
-<ul>
-<li>Assesses response quality based solely on the original question</li>
-<li>Often implements numerical scoring systems (e.g., 1-5 scale)</li>
-<li>Evaluates responses in isolation without comparison</li>
-</ul></li>
-<li><strong>Reference Response Comparison</strong>
-<ul>
-<li>Evaluates generated response against established reference responses</li>
-<li>Usually produces binary (true/false) outcomes</li>
-<li>Helps ensure responses meet specific criteria</li>
-</ul></li>
-<li><strong>Generated Response Comparison</strong>
-<ul>
-<li>Compares two generated responses to determine relative quality</li>
-<li>Predicts likely user preferences between options</li>
-<li>Particularly useful for:
-<ul>
-<li>Post-training alignment</li>
-<li>Test-time compute optimization</li>
-<li>Model ranking through comparative evaluation</li>
-<li>Generating preference data</li>
-</ul></li>
-</ul></li>
-</ol>
-</section>
-<section id="implementation-considerations" class="level3">
-<h3 class="anchored" data-anchor-id="implementation-considerations">Implementation Considerations</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" class="img-fluid"></p>
-<ul>
-<li>Table 3-3 (page 139) provides an overview of different AI judge criteria used by various AI tools</li>
-<li>Notable lack of standardization across different platforms and approaches (see above)</li>
-<li>Various scoring systems available, each with their own trade-offs</li>
-<li>Adding examples to prompts can improve accuracy but increases token count and costs</li>
-<li>Careful balance needed between evaluation quality and resource consumption</li>
-</ul>
-</section>
-<section id="limitations-and-challenges" class="level3">
-<h3 class="anchored" data-anchor-id="limitations-and-challenges">Limitations and Challenges</h3>
-<ul>
-<li>AI judges can show inconsistency in their judgments</li>
-<li>Costs can escalate quickly, especially when using stronger models or including more context</li>
-<li>Evaluation criteria often remain ambiguous and difficult to standardize</li>
-<li>Several inherent biases identified:
-<ul>
-<li>Self-bias: Models tend to favor responses generated by themselves</li>
-<li>Verbosity bias: Tendency to favor longer, more detailed answers</li>
-<li>Other biases common to AI applications in general</li>
-</ul></li>
-</ul>
-</section>
-</section>
-<section id="specialized-judges" class="level2">
-<h2 class="anchored" data-anchor-id="specialized-judges">Specialized Judges</h2>
-<p>This section presents an innovative challenge to the conventional wisdom of using the strongest available model as a judge. The author introduces a compelling alternative approach:</p>
-<ul>
-<li>Small, specialized judges can be as effective as larger models for specific evaluation tasks</li>
-<li>More cost-effective and efficient than using large language models</li>
-<li>Can be trained for highly specific evaluation criteria</li>
-<li>Demonstrates comparable performance to larger models like GPT-4 in specific domains</li>
-</ul>
-<p>Three types of specialized judges are identified: 1. Reward models (evaluating prompt-response pairs) 2. Reference-based judges 3. Preference models</p>
-<p>This represents a novel approach that could significantly impact evaluation methodology in the field.</p>
-</section>
-<section id="comparative-evaluation-for-model-ranking" class="level2">
-<h2 class="anchored" data-anchor-id="comparative-evaluation-for-model-ranking">Comparative Evaluation for Model Ranking</h2>
-<section id="methodology" class="level3">
-<h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
-<ul>
-<li>Focuses on binary choices between two samples</li>
-<li>Simpler for both humans and AI to make comparative judgments</li>
-<li>Used in major leaderboards like LMSIS</li>
-<li>Requires evaluation of multiple combinations to establish rankings</li>
-<li>Various algorithms available for efficient comparison</li>
-</ul>
-</section>
-<section id="advantages" class="level3">
-<h3 class="anchored" data-anchor-id="advantages">Advantages</h3>
-<ul>
-<li>More intuitive evaluation process</li>
-<li>Often more reliable than absolute scoring</li>
-<li>Reduces cognitive load on evaluators</li>
-<li>Provides clear preference data</li>
-</ul>
-</section>
-<section id="challenges" class="level3">
-<h3 class="anchored" data-anchor-id="challenges">Challenges</h3>
-<ul>
-<li>Highly data-intensive nature affects scalability</li>
-<li>Lacks standardization across implementations</li>
-<li>Difficulty in converting comparative measures to absolute metrics</li>
-<li>Quality control remains a significant concern</li>
-<li>Number of required comparisons can grow rapidly with model count</li>
-</ul>
-</section>
-</section>
-<section id="key-takeaways-and-future-implications" class="level2">
-<h2 class="anchored" data-anchor-id="key-takeaways-and-future-implications">Key Takeaways and Future Implications</h2>
-<ol type="1">
-<li>The emergence of smaller, specialized judge models represents a significant shift from the traditional approach of using the largest available models</li>
-<li>Comparative evaluation offers promising approaches but requires careful consideration of scalability and implementation</li>
-<li>The field continues to evolve rapidly, requiring flexible and adaptable evaluation strategies</li>
-<li>Sets up crucial discussion for system-level evaluation in Chapter 4</li>
-<li>Highlights the ongoing tension between evaluation quality and resource efficiency</li>
-</ol>
-<p>The chapter effectively establishes the foundational understanding necessary for the more practical, system-focused evaluation discussions to follow in Chapter 4.</p>
-
-
-</section>
-
- ]]></description>
-  <category>books-i-read</category>
-  <category>llm</category>
-  <category>llms</category>
-  <category>evaluation</category>
-  <guid>https://alexstrick.com/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html</guid>
-  <pubDate>Mon, 20 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://alexstrick.com/posts/images/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3/ch3.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 </channel>
 </rss>
