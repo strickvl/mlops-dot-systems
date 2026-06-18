@@ -4,6 +4,7 @@ categories:
   - agents
   - llms
   - reinforcement-learning
+  - agentic-rl
 date: "2026-06-13"
 description: "Why and when you'd train your own model instead of paying for a frontier API: a practitioner's primer on distillation, graded SFT, and reinforcement learning for agents. I also get into some of the costs of this approach."
 layout: post

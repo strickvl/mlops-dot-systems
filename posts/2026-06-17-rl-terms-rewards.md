@@ -5,6 +5,7 @@ categories:
   - llms
   - reinforcement-learning
   - isafpr
+  - agentic-rl
 date: "2026-06-17"
 description: "Grounding RL vocabulary — trace, task, environment — and the three families of reward in a real structured-extraction task. With a dirty-gold-label gotcha that argues for looking at your data, composing rewards via gates and weights, and reward-hacking examples from Shopify's Sidekick."
 layout: post
