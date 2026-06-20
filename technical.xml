@@ -10,7 +10,733 @@
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Thu, 18 Jun 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 19 Jun 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>My first RL environment: three stages, no trainer</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2026-06-20-my-first-rl-environment.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Today’s the day I finally managed to start to put things into practice. <a href="https://alexstrick.com/technical.html#category=agentic-rl">So far</a> I’ve mainly looked at the RL process at a high level, sticking to things like <a href="https://alexstrick.com/posts/2026-06-16-rl-stages.html">the main stages of the process</a> and <a href="https://alexstrick.com/posts/2026-06-19-reading-rl-environment-landscape.html">some of the tools that exist</a>. I went into this all with the idea that I’d try to get my hands dirty so today I did some work with what happens to the data we feed into the training process, and I also used <code>verifiers</code> to construct my first RL environment.</p>
+<section id="shifting-from-labels-to-rewards" class="level2">
+<h2 class="anchored" data-anchor-id="shifting-from-labels-to-rewards">Shifting from Labels to Rewards</h2>
+<p>Let’s take a step back for a moment. One of the unique characteristics of RL is that we’re working with rewards rather than labels directly. I wanted to bridge the gap between these two positions, in part as a way of motivating the work we’re going to do practically with RL, so I spent a bit of time today exploring two intermediate positions that one could try to improve performance when using SFT.</p>
+<p>We can use my familiar example of the ISAF press releases as a way of grounding this. Currently I have <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">a labelled dataset</a>, but when we shift to RL, we’re going to be getting an LLM or an agent to extract structured data from press releases, and we’re going to get a mix of good and bad ones back. We’ll have way of checking how well it’s going (see <a href="https://alexstrick.com/posts/2026-06-17-rl-terms-rewards.html">this blog for more</a>) but there are some nuances to be aware of.</p>
+<p>Let’s specify some cases that will make all of this clear:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">traces <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb1-2">    {</span>
+<span id="cb1-3">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"task_id"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clean-hit"</span>,</span>
+<span id="cb1-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>: <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.00</span>,</span>
+<span id="cb1-5">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output"</span>: {</span>
+<span id="cb1-6">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"province"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kandahar"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"eventtype"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>,</span>
+<span id="cb1-7">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"targetgroup"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"taliban"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minkilled"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mincaptured"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb1-8">        },</span>
+<span id="cb1-9">    },</span>
+<span id="cb1-10">    {</span>
+<span id="cb1-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"task_id"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"partial"</span>,</span>
+<span id="cb1-12">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>: <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.60</span>,</span>
+<span id="cb1-13">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output"</span>: {</span>
+<span id="cb1-14">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"province"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"helmand"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"eventtype"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"airstrike"</span>,</span>
+<span id="cb1-15">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"targetgroup"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"haqqani"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minkilled"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mincaptured"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb1-16">        },</span>
+<span id="cb1-17">    },</span>
+<span id="cb1-18">    {</span>
+<span id="cb1-19">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"task_id"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"malformed"</span>,</span>
+<span id="cb1-20">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>: <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.00</span>,</span>
+<span id="cb1-21">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I think this was a detention near Kabul."</span>,</span>
+<span id="cb1-22">    },</span>
+<span id="cb1-23">    {</span>
+<span id="cb1-24">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"task_id"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dirty-gold"</span>,</span>
+<span id="cb1-25">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>: <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.80</span>,</span>
+<span id="cb1-26">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output"</span>: {</span>
+<span id="cb1-27">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"province"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"paktia"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"eventtype"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>,</span>
+<span id="cb1-28">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"targetgroup"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"haqqani"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minkilled"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mincaptured"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb1-29">        },</span>
+<span id="cb1-30">    },</span>
+<span id="cb1-31">]</span></code></pre></div></div>
+<p>If we tabulate this all out we’ll see the following:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>task_id</code></th>
+<th>reward</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clean-hit</code></td>
+<td>1.00</td>
+<td>all five fields match</td>
+</tr>
+<tr class="even">
+<td><code>partial</code></td>
+<td>0.60</td>
+<td>3 of 5 right (wrong group + kill count)</td>
+</tr>
+<tr class="odd">
+<td><code>malformed</code></td>
+<td>0.00</td>
+<td>output is prose, not a dict — the guard catches it</td>
+</tr>
+<tr class="even">
+<td><code>dirty-gold</code></td>
+<td>0.80</td>
+<td>model spelled “paktia” right; gold says “paktya” — the ruler is bent</td>
+</tr>
+</tbody>
+</table>
+<p>Some naive approaches that can help us with these different results:</p>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>We can just drop any data that doesn’t satisfy some criteria or rubric that we define. So we could just say “let’s just only take tasks that had an output that gave us a score <code>&gt;=1.0</code>. From the above examples, that would mean we’d only take the <code>clean-hit</code> datapoint. This has some obvious limitations:</p>
+<ul>
+<li>you might end up not having enough data to signal your model to update in the right way</li>
+<li>you actually end up <em>dropping</em> a bunch of signal because not only do you want to nudge your model in the direction of when it did good work, but you also want to nudge it <em>away</em> from bad work, and you might also want to offer partial rewards for work where you got somethings right and so on.</li>
+</ul>
+<p>This is even more important for things like agents with long trajectories, where it might often be the case that for hard problems the agent didn’t get the right answer, but it did good work for the first part until it hit some roadblock or whatever.</p>
+<p>What does this look like in code for our traces above?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># APPROACH 1 — Filter (rejection-sampling SFT)</span></span>
+<span id="cb2-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Hard cut: keep only traces above the threshold. Everything below</span></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># is thrown away — the model never sees it.</span></span>
+<span id="cb2-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> keep_above(traces, threshold <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.0</span>):</span>
+<span id="cb2-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [t <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> traces <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> t[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> threshold]</span>
+<span id="cb2-6">    </span>
+<span id="cb2-7">filtered <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> keep_above(traces, threshold<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.8</span>)</span>
+<span id="cb2-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># At 0.8: 'partial' (0.60) and 'malformed' (0.00) are dropped.</span></span>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 'dirty-gold' (0.80) survives — even though the model wrote 'paktia'</span></span>
+<span id="cb2-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># and the gold label is misspelled 'paktya'. Filtering trusts the grader.</span></span></code></pre></div></div>
+<p>It could literally be this simple to filter things out.</p>
+</section>
+<section id="weighting" class="level3">
+<h3 class="anchored" data-anchor-id="weighting">Weighting</h3>
+<p>Another approach is to weight the traces. So basically you could pass in a score along with the traces and say to the model (in this dreadfully anthropomorphised re-imagination of the training process) “this answer was not so great, so make sure not to learn any bad lessons from it please”.</p>
+<p>So here we’re keeping all the data but we only nudge the model in proportion to the reward assigned to each data point. Think of it as a sort of volume knob on the signal from each item.</p>
+<p>Let’s look at it in code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> math</span>
+<span id="cb3-2"></span>
+<span id="cb3-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># APPROACH 2a — Weight (reward-weighted regression, simple form)</span></span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Soft volume knob: keep all traces but scale each one's training</span></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># pull by its reward. A 0.0 trace goes quiet; it's never pushed against.</span></span>
+<span id="cb3-6"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> weight_by_reward(traces):</span>
+<span id="cb3-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [{<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>t, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"weight"</span>: t[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>]} <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> traces]</span>
+<span id="cb3-8"></span>
+<span id="cb3-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># malformed (i.e. not even proper JSON) → weight 0.00: silenced, but not aimed at</span></span></code></pre></div></div>
+<p><strong>Approach 2a — weight equals reward.</strong> Here we just use the reward as a weight. The weight column is just a copy of the reward, so nothing surprising falls out, but we can see the consequence of this: <code>malformed</code> gets a weight of exactly <code>0.00</code>, so the model is told to learn nothing from it.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>task_id</code></th>
+<th>reward</th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clean-hit</code></td>
+<td>1.00</td>
+<td>1.00</td>
+</tr>
+<tr class="even">
+<td><code>partial</code></td>
+<td>0.60</td>
+<td>0.60</td>
+</tr>
+<tr class="odd">
+<td><code>malformed</code></td>
+<td>0.00</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<td><code>dirty-gold</code></td>
+<td>0.80</td>
+<td>0.80</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># APPROACH 2b — Weight (softmax variant)</span></span>
+<span id="cb4-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Exponentiate then normalise so all weights sum to 1.0.</span></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Because exp(0) = 1 (not 0), the malformed trace can NEVER be fully</span></span>
+<span id="cb4-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># silenced — it gets a small but nonzero weight (~0.13 at T=1).</span></span>
+<span id="cb4-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> weight_softmax(traces, temperature<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.0</span>):</span>
+<span id="cb4-6">    exps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [math.exp(t[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reward"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> temperature) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> traces]</span>
+<span id="cb4-7">    total <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(exps)</span>
+<span id="cb4-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [{<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>t, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"weight"</span>: e <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> total} <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> t, e <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(traces, exps)]</span>
+<span id="cb4-9"></span>
+<span id="cb4-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># malformed → weight ≈ 0.129  (nonzero — softmax can quiet but not silence)</span></span>
+<span id="cb4-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># clean-hit  → weight ≈ 0.350  (highest pull)</span></span></code></pre></div></div>
+<p><strong>Approach 2b — softmax.</strong> This was a bit of a curveball that my (heavily-agent-driven) course suggested to me as we worked on problems that I had to work on from scratch. I had vague recollections of softmax from FastAI course days, but had forgotten completely how it worked. Also I have code completion turned off in Zed (my IDE of choice these days) so it was hard to know how to get started with this.</p>
+<p>Let’s look at the implementation first. We raise <code>e</code> to the power of each reward (<code>exp(reward)</code>) and then divide by the total, so all the weights sum to <code>1.0</code>. Two things to notice. First, <code>malformed</code> can no longer be fully silenced: because <code>exp(0) = 1</code> (not <code>0</code>), it keeps a small but non-zero weight of <code>0.13</code>. Second, the gaps get stretched — <code>clean-hit</code> ends up with the largest single share of the pull.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>task_id</code></th>
+<th>reward</th>
+<th><code>exp(reward)</code></th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clean-hit</code></td>
+<td>1.00</td>
+<td>2.72</td>
+<td>0.35</td>
+</tr>
+<tr class="even">
+<td><code>partial</code></td>
+<td>0.60</td>
+<td>1.82</td>
+<td>0.23</td>
+</tr>
+<tr class="odd">
+<td><code>malformed</code></td>
+<td>0.00</td>
+<td>1.00</td>
+<td>0.13</td>
+</tr>
+<tr class="even">
+<td><code>dirty-gold</code></td>
+<td>0.80</td>
+<td>2.23</td>
+<td>0.29</td>
+</tr>
+<tr class="odd">
+<td><strong>sum</strong></td>
+<td>—</td>
+<td>7.77</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<p>So with softmax what’s happening is that we’re able to really boost the signal of ‘good’ examples vs ‘bad’ examples, but we still see that bad examples still retain some signal. Moreover, the signal is positive, not negative (more on this below).</p>
+<p>In the case of our worked example above, we saw that the <code>dirty-gold</code> example scores high because it’s almost correct in our rewards that we specified, but this means we’re still somehow giving some signal that it’s ok to misspell province names. So we have to be careful with this!</p>
+<p>Some other things I explored or learned while working with the softmax implementation:</p>
+<ul>
+<li>the raising of <code>e</code> to the power of the reward is important because it stretches out the gaps between rewards. We normalise them (by dividing by the sum of the values) since I think this helps the signal for training.</li>
+<li>The floor is never zero. When a trace has a reward of <code>0.0</code>, softmax still computes <code>exp(0)</code> to equal <code>1</code> and not <code>0</code>. So even a completely wrong trace still contributes a <code>1</code> signal which (in our case) ends up being normalised to ~0.13 of the total. So I learned here that softmax can quieten the signal of a bad trace, but never silence it completely. Only a hard filter (or the pushing away of RL) can bring it to zero.</li>
+<li>I didn’t mention the temperature yet in my explanation of the code above, but it’s basically a way how to dial up the signal even more, relative to the other data. By default the temperature is <code>1</code> so no change happens normally, but as you can see from the GIF below, a low temperature value amplifies the gaps. It’s sort of like a soft filter. And a high temperature value shrinks all the rewards towards zero before we take the exponent, so the weights all then drift towards being the same value.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/temperature.gif" class="img-fluid figure-img"></p>
+<figcaption>Temperature dial sweeping the softmax weights: a low temperature sharpens the bars toward the best trace, a high temperature flattens them toward equal.</figcaption>
+</figure>
+</div>
+<ul>
+<li>Somehow in my mind I’d expected that higher temperature would mean more variance between the values (a little like how a higher temperature value for LLM inference can often mean more variance in the outputs) but the chart showed me the opposite was going on. A high T value flattens the bars towards each other. The reason for this is that there are two things going on here. The high T value flattens the <em>probabilities</em>, but actually the turbulence and variance that I had imagined <em>does</em> live on when you sample or draw from those probabilities. For our purposes right now, we’re not sampling from the weights. We’re just using softmax to weight the traces and so use the values directly.</li>
+<li>Somehow when I saw the temperature values changing and the distribution shifting, it seemed to me like maybe we might want to use the temperature starting at one end of the scale and ending at the other. This turns out to be called ‘scheduling’ and is also relating to ‘annealing’. A value that changes <em>during</em> training is called a <em>schedule</em>; a gradual decrease is <em>annealing</em>. (This is from metalwork where a slowly cooling metal allows the structure to set more reliably.
+<ul>
+<li>usually what happens is that (if you use scheduling at all here) you’d go from hot to cold. So intuitively you’d start off with small experiments which allow you to explore different parts of the territory, and then the further you get in the training process you’d turn up the signal of the ‘do it this way’ values. But as far as I understand, this isn’t really something that is tweaked so much. Rather, it’s the learning rate that is the knob that gets scheduled.</li>
+</ul></li>
+<li>I also took a guess that this might be a thing and apparently it has a name (“softmax with temperature’ and is what is used in something called <em>advantage-weighted regression (AWR)</em>: it weights training examples by <code>exp(advantage / β)</code>, where β is exactly the temperature dial.</li>
+<li>I had another idea that maybe we could first filter values and <em>then</em> use softmax to boost the survivors with weighted values, but this continues to suffer from the flaw that it trusts the grader’s results too much.</li>
+</ul>
+</section>
+<section id="full-rl" class="level3">
+<h3 class="anchored" data-anchor-id="full-rl">Full RL</h3>
+<p>With full RL, we actually are able to use a <em>negative</em> gradient where we can specify that we actively don’t want behaviour like whatever it was that produced a certain bad result.</p>
+<p>The filtering and weighting approaches can thus only push towards good outputs, but what RL adds is the ability to push away or to push downwards. (And even all of this is still in the realm of the datasets, mind… we still haven’t moved any weights yet.)</p>
+</section>
+</section>
+<section id="my-first-environment-with-verifiers" class="level2">
+<h2 class="anchored" data-anchor-id="my-first-environment-with-verifiers">My first environment with <code>verifiers</code></h2>
+<p>Let’s get into the good stuff now, though! As we previously saw, there are three parts that make up an environment and we’ll translate them all into concepts that make sense for <code>verifiers</code> library:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/verifiers-env-object.avif" class="img-fluid figure-img"></p>
+<figcaption>The verifiers environment object: <code>SingleTurnEnv</code> is the harness (stage 2) — the class itself, not an argument — while the <code>dataset</code> (stage 1, tasks) and <code>rubric</code> (stage 4, reward) are passed in. The trainer (stage 5) is deliberately not in the box, which is what makes verifiers an environment library rather than a trainer.</figcaption>
+</figure>
+</div>
+<p>We can look at this directly in code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> asyncio, json</span>
+<span id="cb5-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> verifiers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> vf</span>
+<span id="cb5-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datasets <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Dataset</span>
+<span id="cb5-4"></span>
+<span id="cb5-5">FIELDS <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"province"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"eventtype"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"targetgroup"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minkilled"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mincaptured"</span>]</span>
+<span id="cb5-6"></span>
+<span id="cb5-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># The reward function</span></span>
+<span id="cb5-8"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> extraction_reward(completion, answer) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>:</span>
+<span id="cb5-9">    text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> completion[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>]   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the model's last message</span></span>
+<span id="cb5-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb5-11">        pred <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> json.loads(text)</span>
+<span id="cb5-12">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">isinstance</span>(pred, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>):</span>
+<span id="cb5-13">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0</span></span>
+<span id="cb5-14">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> (json.JSONDecodeError, <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">TypeError</span>):</span>
+<span id="cb5-15">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0</span></span>
+<span id="cb5-16"></span>
+<span id="cb5-17">    gold <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> json.loads(answer)</span>
+<span id="cb5-18">    hits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(</span>
+<span id="cb5-19">        <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> FIELDS</span>
+<span id="cb5-20">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(pred.get(f)).strip().lower() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(gold.get(f)).strip().lower()</span>
+<span id="cb5-21">    )</span>
+<span id="cb5-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> hits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(FIELDS)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># e.g. 3 of 5 fields matched → 0.60</span></span>
+<span id="cb5-23"></span>
+<span id="cb5-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> build_env() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> vf.SingleTurnEnv:</span>
+<span id="cb5-25">    rows <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [{</span>
+<span id="cb5-26">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Extract the ISAF incident as JSON: 'detained 3 Taliban in Kandahar, no casualties.'"</span>,</span>
+<span id="cb5-27">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answer"</span>: json.dumps({</span>
+<span id="cb5-28">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"province"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kandahar"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"eventtype"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"detention"</span>,</span>
+<span id="cb5-29">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"targetgroup"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"taliban"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minkilled"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mincaptured"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb5-30">        }),</span>
+<span id="cb5-31">    }]</span>
+<span id="cb5-32">    dataset <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Dataset.from_dict({k: [r[k] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> r <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> rows] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> rows[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]})</span>
+<span id="cb5-33"></span>
+<span id="cb5-34">    rubric <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vf.Rubric(funcs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[extraction_reward])</span>
+<span id="cb5-35">    env    <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vf.SingleTurnEnv(dataset<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dataset, rubric<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>rubric)</span>
+<span id="cb5-36">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> env</span>
+<span id="cb5-37"></span>
+<span id="cb5-38">my_first_env <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
+<p>This is all fairly easy to understand.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>RL concept</th>
+<th><code>verifiers</code> equivalent (in the code above)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Task</strong> (stage 1) — a prompt plus the gold answer to grade against</td>
+<td>a row in the <code>dataset</code>, built with <code>Dataset.from_dict(...)</code></td>
+</tr>
+<tr class="even">
+<td><strong>Harness</strong> (stage 2) — the thing that runs one model turn per task</td>
+<td>the <code>vf.SingleTurnEnv</code> class</td>
+</tr>
+<tr class="odd">
+<td><strong>Reward</strong> (stage 4) — scores how good the output was</td>
+<td>the <code>extraction_reward</code> function, wrapped in <code>vf.Rubric(funcs=[...])</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note that we’re leaving out the trainer stage completely. <code>verifiers</code> is an <em>environment</em> library.</p>
+</section>
+<section id="questions-and-bigger-picture-reflection" class="level2">
+<h2 class="anchored" data-anchor-id="questions-and-bigger-picture-reflection">Questions and bigger picture reflection</h2>
+<p>So I got to the point now where I have a (very simple) environment constructed. I know the pieces that I have to put together. I guess I’ll soon move to uploading my full non-toy environment to the Environments Hub. I’m really looking forward to that as a little mini stage in my learning.</p>
+<p>I’m also curious to take a look around the environments that <em>do</em> exist already. I see that <a href="https://huggingface.co/spaces?category=agent-environment&amp;sort=created">Hugging Face</a> and <a href="https://openreward.ai/environments">OpenRewards</a> also have places to upload RL environments. Mainly interested about the range of complexity that exist with the public environments. Are they mostly single turn envs or are we seeing multi-turn ones already?</p>
+<p>I’m also very curious to look at <a href="https://docs.primeintellect.ai/verifiers/reference#rubric-classes">the <code>Rubric</code> object</a> from <code>verifiers</code>, since that is sort of at the core of what I’ll be working on (i.e.&nbsp;defining rewards of various kinds).</p>
+
+
+</section>
+
+ ]]></description>
+  <category>agents</category>
+  <category>llms</category>
+  <category>reinforcement-learning</category>
+  <category>agentic-rl</category>
+  <category>isafpr</category>
+  <guid>https://alexstrick.com/posts/2026-06-20-my-first-rl-environment.html</guid>
+  <pubDate>Fri, 19 Jun 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>How to read an RL framework without believing its README</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -4578,202 +5304,6 @@ font-style: inherit;">\</span></span>
   <guid>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</guid>
   <pubDate>Sat, 25 Jan 2025 23:00:00 GMT</pubDate>
   <media:content url="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png" medium="image" type="image/png" height="99" width="144"/>
-</item>
-<item>
-  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 6</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://alexstrick.com/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This chapter was all about RAG and agents. It’s only 50 pages, so clearly there’s only so much of the details she can get into, but it was pretty good nonetheless and there were a few things in here I’d never really read. Also Chip does a good job bringing the RAG story into the story about agents, particularly in terms of how she defines agents. (Note that <a href="https://huyenchip.com/2025/01/07/agents.html">the second half of this chapter</a>, on agents, is available <a href="https://huyenchip.com/2025/01/07/agents.html">on Chip’s blog</a> as a free excerpt!)</p>
-<p>As always, what follows is just my notes on the things that seemed interesting to me (and a high-level overview of the main points of the chapter just for future reference). YMMV!</p>
-<section id="chapter-structure-and-framing" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-structure-and-framing">Chapter Structure and Framing</h2>
-<p>This chapter undertakes the ambitious task of unifying two major paradigms in AI engineering: Retrieval-Augmented Generation (RAG) and Agents. At first glance, combining these topics might seem surprising given their scope and complexity. However, Chip creates a compelling framework that positions both as sophisticated approaches to <em>context construction</em>.</p>
-<p>The unifying thesis presents RAG as a specialised case of the agent pattern, where the retriever functions as a tool at the model’s disposal. Both patterns serve to transcend context limitations and maintain current information, though agents ultimately offer broader capabilities. This framing provides an elegant theoretical bridge between these technologies while acknowledging their distinct characteristics.</p>
-</section>
-<section id="retrieval-augmented-generation-rag" class="level2">
-<h2 class="anchored" data-anchor-id="retrieval-augmented-generation-rag">Retrieval-Augmented Generation (RAG)</h2>
-<section id="core-concepts-and-context-windows" class="level3">
-<h3 class="anchored" data-anchor-id="core-concepts-and-context-windows">Core Concepts and Context Windows</h3>
-<p>The discussion begins with a fundamental examination of RAG’s purpose: enhancing model outputs with query-specific context to produce more grounded and useful results. Chip introduces a fascinating variation on Parkinson’s Law:</p>
-<blockquote class="blockquote">
-<p><strong>Context Expansion Law</strong>: Application context tends to expand to fill the context limits supported by the model.</p>
-</blockquote>
-<p>This observation challenges the common assumption that RAG might become obsolete with infinite context models. Chip argues that larger context windows don’t necessarily solve the fundamental challenges RAG addresses, particularly noting that models often struggle with information buried in the middle of large context windows.</p>
-</section>
-<section id="retrieval-architecture-and-algorithms" class="level3">
-<h3 class="anchored" data-anchor-id="retrieval-architecture-and-algorithms">Retrieval Architecture and Algorithms</h3>
-<p>The retrieval architecture discussion introduces two primary paradigms:</p>
-<blockquote class="blockquote">
-<p><strong>Sparse Retrieval</strong>: Term-based approaches that rely on explicit matching of terms between queries and documents. The primary example is the <strong>TFIDF</strong> (Term Frequency-Inverse Document Frequency) algorithm, which evaluates term importance based on frequency patterns.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p><strong>Dense Retrieval</strong>: Embedding-based approaches that transform text into vector representations, requiring specialised vector databases for storage and sophisticated nearest-neighbour search algorithms for retrieval.</p>
-</blockquote>
-</section>
-<section id="cost-considerations-and-trade-offs" class="level3">
-<h3 class="anchored" data-anchor-id="cost-considerations-and-trade-offs">Cost Considerations and Trade-offs</h3>
-<p>A striking revelation emerges regarding the cost structure of RAG systems: vector database expenses often consume between one-fifth to half of a company’s total model API spending. This cost burden becomes particularly acute for systems requiring frequent embedding updates due to changing data. Chip notes that both vector storage and vector search queries can be surprisingly expensive operations.</p>
-</section>
-<section id="retrieval-optimisation-techniques" class="level3">
-<h3 class="anchored" data-anchor-id="retrieval-optimisation-techniques">Retrieval Optimisation Techniques</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/chunks-for-chunks.png" class="img-fluid"></p>
-<p>The chapter presents several sophisticated approaches to optimisation:</p>
-<p><strong>Chunking Strategies</strong>: While the section is brief, it addresses the critical trade-offs in how documents are segmented for retrieval.</p>
-<p><strong>Query Rewriting</strong>: A powerful but potentially complex technique that enhances initial queries with contextual information. For example, transforming a query like “how about her?” into “how about Aunt Mabel from the previous question?” Chip notes this can introduce latency issues and suggests careful consideration before implementation.</p>
-<p><strong>Contextual Retrieval</strong>: Introduces the innovative “chunks-for-chunks” approach, where each retrieved chunk triggers additional retrievals for supplementary context. This might include retrieving related tags or associated metadata to enrich the initial results.</p>
-<p><strong>Hybrid Search</strong>: Combines term-based and embedding-based retrieval, typically implementing a re-ranking process. A common pattern involves using term-based retrieval (like Elasticsearch) to obtain an initial set of ~50 (or however many!) documents, followed by embedding-based re-ranking to identify the most relevant subset.</p>
-</section>
-<section id="evaluation-framework" class="level3">
-<h3 class="anchored" data-anchor-id="evaluation-framework">Evaluation Framework</h3>
-<p>The evaluation framework centres on two primary metrics:</p>
-<blockquote class="blockquote">
-<p><strong>Context Precision</strong>: The percentage of retrieved documents that are relevant to the query. Generally easier to measure and optimise.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p><strong>Context Recall</strong>: The percentage of all relevant documents that are successfully retrieved. More challenging to measure as it requires comprehensive dataset annotation.</p>
-</blockquote>
-</section>
-</section>
-<section id="agents" class="level2">
-<h2 class="anchored" data-anchor-id="agents">Agents</h2>
-<section id="foundational-definition" class="level3">
-<h3 class="anchored" data-anchor-id="foundational-definition">Foundational Definition</h3>
-<p>Chip provides a clear definition of an agent:</p>
-<blockquote class="blockquote">
-<p><strong>Agent Definition</strong>: An entity capable of perceiving its environment and acting upon it, characterised by: - The environment it operates in (defined by use case) - The set of actions it can perform (augmented by tools)</p>
-</blockquote>
-</section>
-<section id="tool-types-and-capabilities" class="level3">
-<h3 class="anchored" data-anchor-id="tool-types-and-capabilities">Tool Types and Capabilities</h3>
-<p>The chapter delineates three primary categories of tools:</p>
-<p><strong>Knowledge Augmentation Tools</strong>: - RAG systems - Web search capabilities - API calls for information retrieval</p>
-<p><strong>Capability Extension Tools</strong>: - Code interpreters - Terminal access - Function execution capabilities These have been shown to significantly boost model performance compared to prompting or fine-tuning alone.</p>
-<p><strong>Write Actions</strong>: - Data manipulation capabilities - Storage and deletion operations</p>
-</section>
-<section id="planning-architecture" class="level3">
-<h3 class="anchored" data-anchor-id="planning-architecture">Planning Architecture</h3>
-<p>The planning process emerges as a four-stage cycle:</p>
-<ol type="1">
-<li><strong>Plan Generation</strong>: Task decomposition and strategy development</li>
-<li><strong>Initial Reflection</strong>: Plan evaluation and potential revision</li>
-<li><strong>Execution</strong>: Implementation of planned actions, often involving specific function calls</li>
-<li><strong>Final Reflection</strong>: Outcome evaluation and error correction</li>
-</ol>
-<p>Chip includes an interesting debate about foundation models as planners, noting Yan LeCun’s assertion that autoregressive models cannot truly plan, though this remains a point of discussion in the field.</p>
-</section>
-<section id="plan-execution-patterns" class="level3">
-<h3 class="anchored" data-anchor-id="plan-execution-patterns">Plan Execution Patterns</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" class="img-fluid"></p>
-<p>The execution of agent plans reveals a fascinating interplay between computational patterns and practical implementation. Chip identifies several fundamental execution patterns that form the backbone of agent behaviour, each offering distinct advantages and trade-offs in different scenarios.</p>
-<blockquote class="blockquote">
-<p><strong>Execution Paradigms</strong>: The core patterns through which agents transform plans into actions, ranging from simple sequential execution to complex conditional logic.</p>
-</blockquote>
-<p>The primary execution patterns include:</p>
-<p><strong>Sequential Execution</strong>: The most straightforward pattern, where actions are performed one after another in a predetermined order. This approach offers predictability and simplicity but may not maximise efficiency when actions could be performed concurrently.</p>
-<p><strong>Parallel Execution</strong>: Enables multiple actions to be performed simultaneously when dependencies permit. While this pattern can significantly improve performance, it introduces complexity in managing concurrent operations and handling potential conflicts.</p>
-<p><strong>Conditional Execution</strong>: Implements decision points through <code>if</code> statements, allowing agents to adapt their execution path based on intermediate results or environmental conditions. This pattern introduces crucial flexibility but requires careful handling of branch logic and state management.</p>
-<p><strong>Iterative Execution</strong>: Utilises <code>for</code> loops to handle repetitive tasks or process collections of items. This pattern is particularly powerful when dealing with datasets or when similar actions need to be performed multiple times with variations.</p>
-<blockquote class="blockquote">
-<p><strong>Pattern Selection</strong>: The choice of execution pattern often emerges from the intersection of task requirements, system constraints, and performance goals.</p>
-</blockquote>
-<p>The effectiveness of these patterns depends heavily on the underlying system architecture and the specific requirements of the task at hand. For instance, parallel execution might offer theoretical performance benefits but could introduce unnecessary complexity for simple, linear tasks. Similarly, conditional execution provides valuable flexibility but requires robust error handling and state management to maintain system reliability.</p>
-<p>Chip emphasises that these patterns aren’t mutually exclusive - sophisticated agent systems often combine multiple patterns to create more complex and capable execution strategies. This hybrid approach allows for the development of highly adaptable agents that can handle a wide range of tasks while maintaining system stability and performance.</p>
-</section>
-<section id="planning-optimisation" class="level3">
-<h3 class="anchored" data-anchor-id="planning-optimisation">Planning Optimisation</h3>
-<p>The chapter provides several practical tips for improving agent planning:</p>
-<ol type="1">
-<li>Enhance system prompts with more examples</li>
-<li>Provide better tool descriptions and parameter documentation</li>
-<li>Simplify complex functions through refactoring</li>
-<li>Consider using stronger models or fine-tuning for plan generation</li>
-</ol>
-</section>
-<section id="function-calling-implementation" class="level3">
-<h3 class="anchored" data-anchor-id="function-calling-implementation">Function Calling Implementation</h3>
-<p>The function calling architecture requires:</p>
-<ol type="1">
-<li>Tool inventory creation, including:
-<ul>
-<li>Function names and entry points</li>
-<li>Parameter specifications</li>
-<li>Comprehensive documentation</li>
-</ul></li>
-<li>Tool usage specification (required vs.&nbsp;optional)</li>
-<li>Version control for function names, parameters, and documentation</li>
-</ol>
-</section>
-<section id="planning-granularity" class="level3">
-<h3 class="anchored" data-anchor-id="planning-granularity">Planning Granularity</h3>
-<p>Chip introduces an important discussion of planning levels, analogous to temporal planning horizons (yearly plans vs.&nbsp;daily tasks). This presents a fundamental trade-off:</p>
-<blockquote class="blockquote">
-<p><strong>Planning Trade-off</strong>: Higher-level plans are easier to generate but harder to execute, while detailed plans are harder to generate but easier to execute.</p>
-</blockquote>
-</section>
-<section id="tool-selection-and-evaluation" class="level3">
-<h3 class="anchored" data-anchor-id="tool-selection-and-evaluation">Tool Selection and Evaluation</h3>
-<p>The chapter provides a systematic approach to tool selection:</p>
-<ol type="1">
-<li>Conduct ablation studies to measure performance impact</li>
-<li>Monitor tool usage patterns and error rates</li>
-<li>Analyze tool call distribution</li>
-<li>Consider model-specific tool preferences (noting that GPT-4 tends to use a wider tool set than ChatGPT)</li>
-</ol>
-</section>
-<section id="memory-systems" class="level3">
-<h3 class="anchored" data-anchor-id="memory-systems">Memory Systems</h3>
-<p>The memory architecture comprises two core functions:</p>
-<blockquote class="blockquote">
-<p><strong>Memory Functions</strong>: - Memory management - Memory retrieval</p>
-</blockquote>
-<p>The system supports three types of memory:</p>
-<ul>
-<li>Internal knowledge</li>
-<li>Short-term memory</li>
-<li>Long-term memory</li>
-</ul>
-<p>These systems prove crucial for:</p>
-<ul>
-<li>Managing information overflow</li>
-<li>Maintaining session persistence</li>
-<li>Ensuring model consistency</li>
-<li>Preserving data structural integrity</li>
-</ul>
-</section>
-<section id="evaluation-and-failure-modes" class="level3">
-<h3 class="anchored" data-anchor-id="evaluation-and-failure-modes">Evaluation and Failure Modes</h3>
-<p>The comprehensive evaluation framework considers:</p>
-<ul>
-<li>Planning effectiveness</li>
-<li>Tool execution accuracy</li>
-<li>System latency</li>
-<li>Overall efficiency</li>
-<li>Memory system performance</li>
-</ul>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>The unifying thread of context construction provides a compelling framework for understanding these technologies not as separate entities, but as complementary approaches to extending model capabilities.</p>
-
-
-</section>
-
- ]]></description>
-  <category>books-i-read</category>
-  <category>llm</category>
-  <category>llms</category>
-  <category>agents</category>
-  <category>rag</category>
-  <category>evaluation</category>
-  <guid>https://alexstrick.com/posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html</guid>
-  <pubDate>Thu, 23 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://alexstrick.com/posts/images/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6/agent-execution-order.png" medium="image" type="image/png" height="91" width="144"/>
 </item>
 </channel>
 </rss>

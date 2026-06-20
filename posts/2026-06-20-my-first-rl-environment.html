@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2026-06-20">
+<meta name="description" content="My first hands-on RL day. Before any weights move, three ways to shape good and bad structured-extraction traces — filter, reward-weight (with a surprise softmax-and-temperature detour), or push away with full RL — then my first verifiers environment: a dataset plus a rubric, no trainer.">
+
+<title>My first RL environment: three stages, no trainer – Alex Strick van Linschoten</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles/technical.css">
+<meta property="og:title" content="My first RL environment: three stages, no trainer – Alex Strick van Linschoten">
+<meta property="og:description" content="My first hands-on RL day. Before any weights move, three ways to shape good and bad structured-extraction traces — filter, reward-weight (with a surprise softmax-and-temperature detour), or push away with full RL — then my first verifiers environment: a dataset plus a rubric, no trainer.">
+<meta property="og:image" content="https://alexstrick.com/posts/images/temperature.gif">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="My first RL environment: three stages, no trainer – Alex Strick van Linschoten">
+<meta name="twitter:description" content="My first hands-on RL day. Before any weights move, three ways to shape good and bad structured-extraction traces — filter, reward-weight (with a surprise softmax-and-temperature detour), or push away with full RL — then my first verifiers environment: a dataset plus a rubric, no trainer.">
+<meta name="twitter:image" content="https://alexstrick.com/posts/images/temperature.gif">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed technical-page quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../technical.html"> 
+<span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html"> 
+<span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../technical.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#shifting-from-labels-to-rewards" id="toc-shifting-from-labels-to-rewards" class="nav-link active" data-scroll-target="#shifting-from-labels-to-rewards">Shifting from Labels to Rewards</a>
+  <ul class="collapse">
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering">Filtering</a></li>
+  <li><a href="#weighting" id="toc-weighting" class="nav-link" data-scroll-target="#weighting">Weighting</a></li>
+  <li><a href="#full-rl" id="toc-full-rl" class="nav-link" data-scroll-target="#full-rl">Full RL</a></li>
+  </ul></li>
+  <li><a href="#my-first-environment-with-verifiers" id="toc-my-first-environment-with-verifiers" class="nav-link" data-scroll-target="#my-first-environment-with-verifiers">My first environment with <code>verifiers</code></a></li>
+  <li><a href="#questions-and-bigger-picture-reflection" id="toc-questions-and-bigger-picture-reflection" class="nav-link" data-scroll-target="#questions-and-bigger-picture-reflection">Questions and bigger picture reflection</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">My first RL environment: three stages, no trainer</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">agents</div>
+    <div class="quarto-category">llms</div>
+    <div class="quarto-category">reinforcement-learning</div>
+    <div class="quarto-category">agentic-rl</div>
+    <div class="quarto-category">isafpr</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    My first hands-on RL day. Before any weights move, three ways to shape good and bad structured-extraction traces — filter, reward-weight (with a surprise softmax-and-temperature detour), or push away with full RL — then my first verifiers environment: a dataset plus a rubric, no trainer.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 20, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Today’s the day I finally managed to start to put things into practice. <a href="https://alexstrick.com/technical.html#category=agentic-rl">So far</a> I’ve mainly looked at the RL process at a high level, sticking to things like <a href="https://alexstrick.com/posts/2026-06-16-rl-stages.html">the main stages of the process</a> and <a href="https://alexstrick.com/posts/2026-06-19-reading-rl-environment-landscape.html">some of the tools that exist</a>. I went into this all with the idea that I’d try to get my hands dirty so today I did some work with what happens to the data we feed into the training process, and I also used <code>verifiers</code> to construct my first RL environment.</p>
+<section id="shifting-from-labels-to-rewards" class="level2">
+<h2 class="anchored" data-anchor-id="shifting-from-labels-to-rewards">Shifting from Labels to Rewards</h2>
+<p>Let’s take a step back for a moment. One of the unique characteristics of RL is that we’re working with rewards rather than labels directly. I wanted to bridge the gap between these two positions, in part as a way of motivating the work we’re going to do practically with RL, so I spent a bit of time today exploring two intermediate positions that one could try to improve performance when using SFT.</p>
+<p>We can use my familiar example of the ISAF press releases as a way of grounding this. Currently I have <a href="https://huggingface.co/datasets/strickvl/isafpressreleases">a labelled dataset</a>, but when we shift to RL, we’re going to be getting an LLM or an agent to extract structured data from press releases, and we’re going to get a mix of good and bad ones back. We’ll have way of checking how well it’s going (see <a href="https://alexstrick.com/posts/2026-06-17-rl-terms-rewards.html">this blog for more</a>) but there are some nuances to be aware of.</p>
+<p>Let’s specify some cases that will make all of this clear:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>traces <span class="op">=</span> [</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"task_id"</span>: <span class="st">"clean-hit"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reward"</span>: <span class="fl">1.00</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"output"</span>: {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"province"</span>: <span class="st">"kandahar"</span>, <span class="st">"eventtype"</span>: <span class="st">"detention"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"targetgroup"</span>: <span class="st">"taliban"</span>, <span class="st">"minkilled"</span>: <span class="dv">0</span>, <span class="st">"mincaptured"</span>: <span class="dv">3</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"task_id"</span>: <span class="st">"partial"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reward"</span>: <span class="fl">0.60</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"output"</span>: {</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"province"</span>: <span class="st">"helmand"</span>, <span class="st">"eventtype"</span>: <span class="st">"airstrike"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"targetgroup"</span>: <span class="st">"haqqani"</span>, <span class="st">"minkilled"</span>: <span class="dv">1</span>, <span class="st">"mincaptured"</span>: <span class="dv">0</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"task_id"</span>: <span class="st">"malformed"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reward"</span>: <span class="fl">0.00</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"output"</span>: <span class="st">"I think this was a detention near Kabul."</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"task_id"</span>: <span class="st">"dirty-gold"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reward"</span>: <span class="fl">0.80</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"output"</span>: {</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"province"</span>: <span class="st">"paktia"</span>, <span class="st">"eventtype"</span>: <span class="st">"detention"</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"targetgroup"</span>: <span class="st">"haqqani"</span>, <span class="st">"minkilled"</span>: <span class="dv">0</span>, <span class="st">"mincaptured"</span>: <span class="dv">1</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If we tabulate this all out we’ll see the following:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>task_id</code></th>
+<th>reward</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clean-hit</code></td>
+<td>1.00</td>
+<td>all five fields match</td>
+</tr>
+<tr class="even">
+<td><code>partial</code></td>
+<td>0.60</td>
+<td>3 of 5 right (wrong group + kill count)</td>
+</tr>
+<tr class="odd">
+<td><code>malformed</code></td>
+<td>0.00</td>
+<td>output is prose, not a dict — the guard catches it</td>
+</tr>
+<tr class="even">
+<td><code>dirty-gold</code></td>
+<td>0.80</td>
+<td>model spelled “paktia” right; gold says “paktya” — the ruler is bent</td>
+</tr>
+</tbody>
+</table>
+<p>Some naive approaches that can help us with these different results:</p>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>We can just drop any data that doesn’t satisfy some criteria or rubric that we define. So we could just say “let’s just only take tasks that had an output that gave us a score <code>&gt;=1.0</code>. From the above examples, that would mean we’d only take the <code>clean-hit</code> datapoint. This has some obvious limitations:</p>
+<ul>
+<li>you might end up not having enough data to signal your model to update in the right way</li>
+<li>you actually end up <em>dropping</em> a bunch of signal because not only do you want to nudge your model in the direction of when it did good work, but you also want to nudge it <em>away</em> from bad work, and you might also want to offer partial rewards for work where you got somethings right and so on.</li>
+</ul>
+<p>This is even more important for things like agents with long trajectories, where it might often be the case that for hard problems the agent didn’t get the right answer, but it did good work for the first part until it hit some roadblock or whatever.</p>
+<p>What does this look like in code for our traces above?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># APPROACH 1 — Filter (rejection-sampling SFT)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hard cut: keep only traces above the threshold. Everything below</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># is thrown away — the model never sees it.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> keep_above(traces, threshold <span class="op">=</span> <span class="fl">1.0</span>):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [t <span class="cf">for</span> t <span class="kw">in</span> traces <span class="cf">if</span> t[<span class="st">"reward"</span>] <span class="op">&gt;=</span> threshold]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>filtered <span class="op">=</span> keep_above(traces, threshold<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># At 0.8: 'partial' (0.60) and 'malformed' (0.00) are dropped.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 'dirty-gold' (0.80) survives — even though the model wrote 'paktia'</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># and the gold label is misspelled 'paktya'. Filtering trusts the grader.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It could literally be this simple to filter things out.</p>
+</section>
+<section id="weighting" class="level3">
+<h3 class="anchored" data-anchor-id="weighting">Weighting</h3>
+<p>Another approach is to weight the traces. So basically you could pass in a score along with the traces and say to the model (in this dreadfully anthropomorphised re-imagination of the training process) “this answer was not so great, so make sure not to learn any bad lessons from it please”.</p>
+<p>So here we’re keeping all the data but we only nudge the model in proportion to the reward assigned to each data point. Think of it as a sort of volume knob on the signal from each item.</p>
+<p>Let’s look at it in code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># APPROACH 2a — Weight (reward-weighted regression, simple form)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Soft volume knob: keep all traces but scale each one's training</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pull by its reward. A 0.0 trace goes quiet; it's never pushed against.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weight_by_reward(traces):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [{<span class="op">**</span>t, <span class="st">"weight"</span>: t[<span class="st">"reward"</span>]} <span class="cf">for</span> t <span class="kw">in</span> traces]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># malformed (i.e. not even proper JSON) → weight 0.00: silenced, but not aimed at</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Approach 2a — weight equals reward.</strong> Here we just use the reward as a weight. The weight column is just a copy of the reward, so nothing surprising falls out, but we can see the consequence of this: <code>malformed</code> gets a weight of exactly <code>0.00</code>, so the model is told to learn nothing from it.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>task_id</code></th>
+<th>reward</th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clean-hit</code></td>
+<td>1.00</td>
+<td>1.00</td>
+</tr>
+<tr class="even">
+<td><code>partial</code></td>
+<td>0.60</td>
+<td>0.60</td>
+</tr>
+<tr class="odd">
+<td><code>malformed</code></td>
+<td>0.00</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<td><code>dirty-gold</code></td>
+<td>0.80</td>
+<td>0.80</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># APPROACH 2b — Weight (softmax variant)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Exponentiate then normalise so all weights sum to 1.0.</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Because exp(0) = 1 (not 0), the malformed trace can NEVER be fully</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># silenced — it gets a small but nonzero weight (~0.13 at T=1).</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weight_softmax(traces, temperature<span class="op">=</span><span class="fl">1.0</span>):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    exps <span class="op">=</span> [math.exp(t[<span class="st">"reward"</span>] <span class="op">/</span> temperature) <span class="cf">for</span> t <span class="kw">in</span> traces]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="bu">sum</span>(exps)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [{<span class="op">**</span>t, <span class="st">"weight"</span>: e <span class="op">/</span> total} <span class="cf">for</span> t, e <span class="kw">in</span> <span class="bu">zip</span>(traces, exps)]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># malformed → weight ≈ 0.129  (nonzero — softmax can quiet but not silence)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># clean-hit  → weight ≈ 0.350  (highest pull)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Approach 2b — softmax.</strong> This was a bit of a curveball that my (heavily-agent-driven) course suggested to me as we worked on problems that I had to work on from scratch. I had vague recollections of softmax from FastAI course days, but had forgotten completely how it worked. Also I have code completion turned off in Zed (my IDE of choice these days) so it was hard to know how to get started with this.</p>
+<p>Let’s look at the implementation first. We raise <code>e</code> to the power of each reward (<code>exp(reward)</code>) and then divide by the total, so all the weights sum to <code>1.0</code>. Two things to notice. First, <code>malformed</code> can no longer be fully silenced: because <code>exp(0) = 1</code> (not <code>0</code>), it keeps a small but non-zero weight of <code>0.13</code>. Second, the gaps get stretched — <code>clean-hit</code> ends up with the largest single share of the pull.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>task_id</code></th>
+<th>reward</th>
+<th><code>exp(reward)</code></th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clean-hit</code></td>
+<td>1.00</td>
+<td>2.72</td>
+<td>0.35</td>
+</tr>
+<tr class="even">
+<td><code>partial</code></td>
+<td>0.60</td>
+<td>1.82</td>
+<td>0.23</td>
+</tr>
+<tr class="odd">
+<td><code>malformed</code></td>
+<td>0.00</td>
+<td>1.00</td>
+<td>0.13</td>
+</tr>
+<tr class="even">
+<td><code>dirty-gold</code></td>
+<td>0.80</td>
+<td>2.23</td>
+<td>0.29</td>
+</tr>
+<tr class="odd">
+<td><strong>sum</strong></td>
+<td>—</td>
+<td>7.77</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<p>So with softmax what’s happening is that we’re able to really boost the signal of ‘good’ examples vs ‘bad’ examples, but we still see that bad examples still retain some signal. Moreover, the signal is positive, not negative (more on this below).</p>
+<p>In the case of our worked example above, we saw that the <code>dirty-gold</code> example scores high because it’s almost correct in our rewards that we specified, but this means we’re still somehow giving some signal that it’s ok to misspell province names. So we have to be careful with this!</p>
+<p>Some other things I explored or learned while working with the softmax implementation:</p>
+<ul>
+<li>the raising of <code>e</code> to the power of the reward is important because it stretches out the gaps between rewards. We normalise them (by dividing by the sum of the values) since I think this helps the signal for training.</li>
+<li>The floor is never zero. When a trace has a reward of <code>0.0</code>, softmax still computes <code>exp(0)</code> to equal <code>1</code> and not <code>0</code>. So even a completely wrong trace still contributes a <code>1</code> signal which (in our case) ends up being normalised to ~0.13 of the total. So I learned here that softmax can quieten the signal of a bad trace, but never silence it completely. Only a hard filter (or the pushing away of RL) can bring it to zero.</li>
+<li>I didn’t mention the temperature yet in my explanation of the code above, but it’s basically a way how to dial up the signal even more, relative to the other data. By default the temperature is <code>1</code> so no change happens normally, but as you can see from the GIF below, a low temperature value amplifies the gaps. It’s sort of like a soft filter. And a high temperature value shrinks all the rewards towards zero before we take the exponent, so the weights all then drift towards being the same value.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/temperature.gif" class="img-fluid figure-img"></p>
+<figcaption>Temperature dial sweeping the softmax weights: a low temperature sharpens the bars toward the best trace, a high temperature flattens them toward equal.</figcaption>
+</figure>
+</div>
+<ul>
+<li>Somehow in my mind I’d expected that higher temperature would mean more variance between the values (a little like how a higher temperature value for LLM inference can often mean more variance in the outputs) but the chart showed me the opposite was going on. A high T value flattens the bars towards each other. The reason for this is that there are two things going on here. The high T value flattens the <em>probabilities</em>, but actually the turbulence and variance that I had imagined <em>does</em> live on when you sample or draw from those probabilities. For our purposes right now, we’re not sampling from the weights. We’re just using softmax to weight the traces and so use the values directly.</li>
+<li>Somehow when I saw the temperature values changing and the distribution shifting, it seemed to me like maybe we might want to use the temperature starting at one end of the scale and ending at the other. This turns out to be called ‘scheduling’ and is also relating to ‘annealing’. A value that changes <em>during</em> training is called a <em>schedule</em>; a gradual decrease is <em>annealing</em>. (This is from metalwork where a slowly cooling metal allows the structure to set more reliably.
+<ul>
+<li>usually what happens is that (if you use scheduling at all here) you’d go from hot to cold. So intuitively you’d start off with small experiments which allow you to explore different parts of the territory, and then the further you get in the training process you’d turn up the signal of the ‘do it this way’ values. But as far as I understand, this isn’t really something that is tweaked so much. Rather, it’s the learning rate that is the knob that gets scheduled.</li>
+</ul></li>
+<li>I also took a guess that this might be a thing and apparently it has a name (“softmax with temperature’ and is what is used in something called <em>advantage-weighted regression (AWR)</em>: it weights training examples by <code>exp(advantage / β)</code>, where β is exactly the temperature dial.</li>
+<li>I had another idea that maybe we could first filter values and <em>then</em> use softmax to boost the survivors with weighted values, but this continues to suffer from the flaw that it trusts the grader’s results too much.</li>
+</ul>
+</section>
+<section id="full-rl" class="level3">
+<h3 class="anchored" data-anchor-id="full-rl">Full RL</h3>
+<p>With full RL, we actually are able to use a <em>negative</em> gradient where we can specify that we actively don’t want behaviour like whatever it was that produced a certain bad result.</p>
+<p>The filtering and weighting approaches can thus only push towards good outputs, but what RL adds is the ability to push away or to push downwards. (And even all of this is still in the realm of the datasets, mind… we still haven’t moved any weights yet.)</p>
+</section>
+</section>
+<section id="my-first-environment-with-verifiers" class="level2">
+<h2 class="anchored" data-anchor-id="my-first-environment-with-verifiers">My first environment with <code>verifiers</code></h2>
+<p>Let’s get into the good stuff now, though! As we previously saw, there are three parts that make up an environment and we’ll translate them all into concepts that make sense for <code>verifiers</code> library:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/verifiers-env-object.avif" class="img-fluid figure-img"></p>
+<figcaption>The verifiers environment object: <code>SingleTurnEnv</code> is the harness (stage 2) — the class itself, not an argument — while the <code>dataset</code> (stage 1, tasks) and <code>rubric</code> (stage 4, reward) are passed in. The trainer (stage 5) is deliberately not in the box, which is what makes verifiers an environment library rather than a trainer.</figcaption>
+</figure>
+</div>
+<p>We can look at this directly in code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio, json</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> verifiers <span class="im">as</span> vf</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> Dataset</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>FIELDS <span class="op">=</span> [<span class="st">"province"</span>, <span class="st">"eventtype"</span>, <span class="st">"targetgroup"</span>, <span class="st">"minkilled"</span>, <span class="st">"mincaptured"</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># The reward function</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> extraction_reward(completion, answer) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> completion[<span class="op">-</span><span class="dv">1</span>][<span class="st">"content"</span>]   <span class="co"># the model's last message</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        pred <span class="op">=</span> json.loads(text)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(pred, <span class="bu">dict</span>):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> (json.JSONDecodeError, <span class="pp">TypeError</span>):</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    gold <span class="op">=</span> json.loads(answer)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> <span class="bu">sum</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="cf">for</span> f <span class="kw">in</span> FIELDS</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">str</span>(pred.get(f)).strip().lower() <span class="op">==</span> <span class="bu">str</span>(gold.get(f)).strip().lower()</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hits <span class="op">/</span> <span class="bu">len</span>(FIELDS)   <span class="co"># e.g. 3 of 5 fields matched → 0.60</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_env() <span class="op">-&gt;</span> vf.SingleTurnEnv:</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> [{</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"question"</span>: <span class="st">"Extract the ISAF incident as JSON: 'detained 3 Taliban in Kandahar, no casualties.'"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"answer"</span>: json.dumps({</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"province"</span>: <span class="st">"kandahar"</span>, <span class="st">"eventtype"</span>: <span class="st">"detention"</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>            <span class="st">"targetgroup"</span>: <span class="st">"taliban"</span>, <span class="st">"minkilled"</span>: <span class="dv">0</span>, <span class="st">"mincaptured"</span>: <span class="dv">3</span>,</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        }),</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    }]</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    dataset <span class="op">=</span> Dataset.from_dict({k: [r[k] <span class="cf">for</span> r <span class="kw">in</span> rows] <span class="cf">for</span> k <span class="kw">in</span> rows[<span class="dv">0</span>]})</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    rubric <span class="op">=</span> vf.Rubric(funcs<span class="op">=</span>[extraction_reward])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    env    <span class="op">=</span> vf.SingleTurnEnv(dataset<span class="op">=</span>dataset, rubric<span class="op">=</span>rubric)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> env</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>my_first_env <span class="op">=</span> build_env()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is all fairly easy to understand.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>RL concept</th>
+<th><code>verifiers</code> equivalent (in the code above)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Task</strong> (stage 1) — a prompt plus the gold answer to grade against</td>
+<td>a row in the <code>dataset</code>, built with <code>Dataset.from_dict(...)</code></td>
+</tr>
+<tr class="even">
+<td><strong>Harness</strong> (stage 2) — the thing that runs one model turn per task</td>
+<td>the <code>vf.SingleTurnEnv</code> class</td>
+</tr>
+<tr class="odd">
+<td><strong>Reward</strong> (stage 4) — scores how good the output was</td>
+<td>the <code>extraction_reward</code> function, wrapped in <code>vf.Rubric(funcs=[...])</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note that we’re leaving out the trainer stage completely. <code>verifiers</code> is an <em>environment</em> library.</p>
+</section>
+<section id="questions-and-bigger-picture-reflection" class="level2">
+<h2 class="anchored" data-anchor-id="questions-and-bigger-picture-reflection">Questions and bigger picture reflection</h2>
+<p>So I got to the point now where I have a (very simple) environment constructed. I know the pieces that I have to put together. I guess I’ll soon move to uploading my full non-toy environment to the Environments Hub. I’m really looking forward to that as a little mini stage in my learning.</p>
+<p>I’m also curious to take a look around the environments that <em>do</em> exist already. I see that <a href="https://huggingface.co/spaces?category=agent-environment&amp;sort=created">Hugging Face</a> and <a href="https://openreward.ai/environments">OpenRewards</a> also have places to upload RL environments. Mainly interested about the range of complexity that exist with the public environments. Are they mostly single turn envs or are we seeing multi-turn ones already?</p>
+<p>I’m also very curious to look at <a href="https://docs.primeintellect.ai/verifiers/reference#rubric-classes">the <code>Rubric</code> object</a> from <code>verifiers</code>, since that is sort of at the core of what I’ll be working on (i.e.&nbsp;defining rewards of various kinds).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
