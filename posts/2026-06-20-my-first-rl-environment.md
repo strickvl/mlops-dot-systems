@@ -238,7 +238,7 @@ Note that we're leaving out the trainer stage completely. `verifiers` is an *env
 
 ## Questions and bigger picture reflection
 
-So I got to the point now where I have a (very simple) environment constructed. I know the pieces that I have to put together. I guess I'll soon move to uploading my full non-toy environment to the Environments Hub. I'm really looking forward to that as a little mini stage in my learning.
+So I got to the point now where I have a (very simple) environment constructed. I know the pieces that I have to put together. I guess I'll soon move to uploading my full non-toy environment to the [Environments Hub](https://app.primeintellect.ai/dashboard/environments). I'm really looking forward to that as a little mini stage in my learning.
 
 I'm also curious to take a look around the environments that *do* exist already. I see that [Hugging Face](https://huggingface.co/spaces?category=agent-environment&sort=created) and [OpenRewards](https://openreward.ai/environments) also have places to upload RL environments. Mainly interested about the range of complexity that exist with the public environments. Are they mostly single turn envs or are we seeing multi-turn ones already?
 
