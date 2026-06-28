@@ -10,7 +10,75 @@
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Fri, 19 Jun 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 27 Jun 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Is this data actually good, or does it just look good?</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2026-06-28-cleaning-isaf-dataset-rigour.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I wanted to write a bit about the status of the underlying dataset we’ll use for my first environment / RL training, since as I was getting that together I realised a few things that needed attention and (aside from the heatwave that’s addled my brain this past week) that’s what I’ve mostly been busy with since I last wrote.</p>
+<p>I’ll go through the problems I hit and how I addressed those in the data.</p>
+<section id="the-answer-key-is-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="the-answer-key-is-wrong">The answer key is wrong</h2>
+<p>I noticed while looking at the data that some of the entries had misspelled province names. (As a quick recap, the data consists of press releases and then a bunch of extracted data points derived from the press releases.) So instead of using ‘paktia’ we saw 197 uses of ‘paktya’. When I looked into the values for that ‘province’ column, I saw actually 38 distinct values and not the 34 I was expecting (i.e.&nbsp;the number of Afghanistan’s provinces).</p>
+<p>More about the fix for this below.</p>
+</section>
+<section id="sorting-the-data-by-how-fixable-it-is" class="level2">
+<h2 class="anchored" data-anchor-id="sorting-the-data-by-how-fixable-it-is">Sorting the data by how fixable it is</h2>
+<p>I split our data quality issues into three tiers:</p>
+<ol type="1">
+<li>mechanical – where there’s a clear right answer and it’s fixable. In the case of the ‘paktia’/‘paktya’ misspelling, a simple lookup table can convert the misspelling into the correct version.</li>
+<li>judgement – this is where the dataset curator (i.e.&nbsp;me) brings some judgement and where there isn’t necessarily a single right answer. Part of this is driven by what I see the dataset as being used for, and part of it is just my judgement about how I consider it best to represent things. An example of this is that in the ‘province’ column I found some region descriptions like ‘southern Afghanistan’. In these cases, the original press release had <em>not</em> specified one province in particular, but it just vaguely referred to the cluster of provinces. One way round it would be to determine that for those cases, you could just assign them as ‘Kandahar’, or (which is what I chose) you could assign it as ‘unknown’ since we actually don’t know the province in specific.</li>
+<li>alarm / caution – here there was no obvious single answer in the value. So as an example of this, some press releases were assigning incidents to multiple provinces (again in an unclear way, whether deliberately obscuring the reality or not is something for a separate discussion). So I had values in the ‘province’ column like “khost;paktya”, and also “???” or “??”.</li>
+</ol>
+<p>Overall the takeaway here was that you need to separate out the status of fixes and your data so that you can make the right decisions. A blind ‘replace-all’ will likely result in errors otherwise.</p>
+</section>
+<section id="unknown-is-a-real-answer" class="level2">
+<h2 class="anchored" data-anchor-id="unknown-is-a-real-answer">“Unknown” is a real answer</h2>
+<p>For some rows where there is either unknown values or ambiguity, it’s totally fine to have ‘Unknown’ as a value. I mentioned above, but if the press releases specifically doesn’t mention a province, then we shouldn’t guess or assign some certainty to that value if it wasn’t there in the original source. At worst this will lead to silent inflation of inaccuracy and also give you a misplaced sense of confidence in the data. It also will be confusing for a model seeking to learn from the data when the ‘golden’ data assigns some province to a press release where it wasn’t warranted to do so.</p>
+<p>Note that there’s a really interesting (and I think well known?) study from <a href="https://arxiv.org/abs/2103.14749">Northcutt et al (2021)</a> which looked at this problem and they found that correcting the gold labels of the datasets altered which model ‘won’ a benchmark.</p>
+</section>
+<section id="remember-to-audit-all-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="remember-to-audit-all-your-data">Remember to audit all your data</h2>
+<p>I did a full audit of the data and then remembered that actually this dataset had both a ‘train’ and a ‘test’ split in the Huggingface dataset. It turns out that most of the fixes I’d made for the ‘train’ split also applied to the ‘test’ set, but there were some other failure patterns which I needed to handle.</p>
+</section>
+<section id="non-destructive-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="non-destructive-cleaning">Non-destructive cleaning</h2>
+<p>Huggingface datasets are just git repositories in the end, so I figured that when I change the dataset, I could just overwrite the ‘province’ column. After I thought about it a bit more, that seemed like it was needlessly aggressive.</p>
+<p>So instead of touching the original <code>province</code> column, I’ve created two new columns which I added to the dataset:</p>
+<ul>
+<li><code>province_clean</code> which contains the new value (post-clean)</li>
+<li><code>province_status</code> which explains whether any transformations etc were applied to the province column during the process.</li>
+</ul>
+<p>This way, the audit trail of the data is represented <em>in</em> the dataset itself and not just in the git log of changes.</p>
+<p>I also added in a <code>v1</code> tag to the old dataset before I pushed my changes. I also updated the datacard for the dataset which explained what had changed and why.</p>
+</section>
+<section id="some-final-leakage" class="level2">
+<h2 class="anchored" data-anchor-id="some-final-leakage">Some final leakage</h2>
+<p>One of the unique things about the dataset is that there are some press releases where a single text can represent 3 different incidents. So the text doesn’t split up the incidents into separate sections, but rather it’ll say something like “we made 3 separate attacks last night and we killed 3 people in kandahar and captured 2 in khost… etc”. So we have multiple entries in the dataset (one for each entry) but the source text is the same.</p>
+<p>This makes it maybe confusing for the model to learn from this, because there are multiple possible outputs for the same text.</p>
+<p>This is known (I think?) as <a href="https://doi.org/10.1016/j.patter.2023.100804">‘group leakage’</a>. What I did here was to audit cases where press releases existed on both sides of the train/test split. So I was willing to have the multiple outputs from one text, but it wouldn’t have been so great to have a press release from one of the training data set to show up in the test set.</p>
+<p>An even better solution going forward maybe would be to have the option for the model output to be <em>multiple</em> structured JSON objects for each press releases i.e.&nbsp;for multiple incidents, but then we’re departing a bit from the original experiment so I would defer that for now.</p>
+<p>We also hashed the input/output pairs now and so that gives us some honesty now to show that we’re not changing our train/test split or anything like that in order to boost our scores.</p>
+<p>=========================</p>
+<p>Up next (I hope!) is moving on to finally setting up the reward function and rollout for doing this via a <code>verifiers</code> environment…</p>
+
+
+</section>
+
+ ]]></description>
+  <category>agentic-rl</category>
+  <category>isafpr</category>
+  <category>datasets</category>
+  <category>datavalidation</category>
+  <category>huggingface</category>
+  <guid>https://alexstrick.com/posts/2026-06-28-cleaning-isaf-dataset-rigour.html</guid>
+  <pubDate>Sat, 27 Jun 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>My first RL environment: three stages, no trainer</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -5080,230 +5148,6 @@ font-style: inherit;">\</span></span>
   <guid>https://alexstrick.com/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html</guid>
   <pubDate>Tue, 04 Feb 2025 23:00:00 GMT</pubDate>
   <media:content url="https://alexstrick.com/posts/images/ch8-proportions.png" medium="image" type="image/png" height="50" width="144"/>
-</item>
-<item>
-  <title>Notes on ‘AI Engineering’ (Chip Huyen) chapter 7: Finetuning</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I enjoyed chapter 7 on finetuning. It jams a lot of detail into the 50 pages she takes to explain things. Some areas had more detail than you’d expect, and others less, but overall this was a solid summary / review.</p>
-<blockquote class="blockquote">
-<p><strong>Core Narrative</strong>: Fine-tuning represents a significant technical and organisational investment that should be approached as a last resort, not a first solution.</p>
-</blockquote>
-<p>The chapter’s essential message can be distilled into three key points:</p>
-<ol type="1">
-<li>The decision to fine-tune should follow exhausting simpler approaches like prompt engineering and RAG. At the end she sums it up: <em>fine-tuning is for form, while RAG is for facts</em>.</li>
-<li>Memory considerations dominate the technical landscape of fine-tuning, leading to the emergence of techniques like PEFT (particularly LoRA) that make fine-tuning more accessible. The chapter emphasises that while the actual process of fine-tuning isn’t necessarily complex, the surrounding infrastructure and maintenance requirements are substantial.</li>
-<li>A clear progression pathway emerges: start with prompt engineering, move to examples (up to ~50), implement RAG if needed, and only then consider fine-tuning. Even then, breaking down complex tasks into simpler components might be preferable to full fine-tuning.</li>
-</ol>
-<p>So fine-tuning can be incredibly powerful when applied judiciously, but it requires careful consideration of both technical capabilities and organisational readiness.</p>
-<section id="chapter-overview-and-context" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-overview-and-context">Chapter Overview and Context</h2>
-<p>This long chapter (approximately 50 pages, much like the others) was notably one of the most challenging for Chip to write. It presents fine-tuning as an advanced approach that moves beyond basic prompt engineering, covering everything from fundamental concepts to practical implementation strategies.</p>
-<p>The depth and breadth of the chapter reflect the complexity of fine-tuning as both a technical and organisational challenge, though the things she writes about doesn’t really cover the reality of what it’s like to work on these kinds of initiatives within a team.</p>
-</section>
-<section id="core-decision-when-to-fine-tune" class="level2">
-<h2 class="anchored" data-anchor-id="core-decision-when-to-fine-tune">Core Decision: When to Fine-tune</h2>
-<p>The decision to fine-tune should never be taken lightly. While the potential benefits are significant, including improved model quality and task-specific capabilities, the chapter emphasises that fine-tuning should be considered a last resort rather than a default approach.</p>
-<blockquote class="blockquote">
-<p><strong>Notable Case Study</strong>: Grammarly achieved remarkable results with their fine-tuned T5 models, which outperformed GPT-3 variants despite being 60 times smaller. This example illustrates how targeted fine-tuning can sometimes achieve better results than using larger, more general models.</p>
-</blockquote>
-<section id="reasons-to-avoid-fine-tuning" class="level3">
-<h3 class="anchored" data-anchor-id="reasons-to-avoid-fine-tuning">Reasons to Avoid Fine-tuning</h3>
-<p>The chapter presents several compelling reasons why organisations might want to exhaust other options before pursuing fine-tuning:</p>
-<ol type="1">
-<li>Performance Degradation: Fine-tuning can actually degrade model performance on tasks outside the specific target domain</li>
-<li>Engineering Complexity: The process introduces significant technical overhead</li>
-<li>Specialised Knowledge Requirements: Teams need expertise in model training</li>
-<li>Infrastructure Demands: Self-serving infrastructure becomes necessary</li>
-<li>Ongoing Maintenance: Requires dedicated policies and budgets for monitoring and updates</li>
-</ol>
-</section>
-<section id="fine-tuning-vs.-rag-a-critical-distinction" class="level3">
-<h3 class="anchored" data-anchor-id="fine-tuning-vs.-rag-a-critical-distinction">Fine-tuning vs.&nbsp;RAG: A Critical Distinction</h3>
-<p>One of the most important conceptual frameworks presented is the distinction between fine-tuning and RAG:</p>
-<ul>
-<li>Fine-tuning focuses on form - how the model expresses information</li>
-<li>RAG specialises in facts - what information the model can access and use</li>
-</ul>
-<p>This separation provides a clear decision framework, though the chapter acknowledges there are exceptions to this general rule.</p>
-</section>
-</section>
-<section id="progressive-implementation-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="progressive-implementation-workflow">Progressive Implementation Workflow</h2>
-<p><img src="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/prompting_to_rag_to_finetuning.png" class="img-fluid"></p>
-<p>The chapter outlines a thoughtful progression of implementation strategies, suggesting organisations should:</p>
-<ol type="1">
-<li>Begin with prompt engineering optimisation</li>
-<li>Expand to include more examples (up to approximately 50)</li>
-<li>Implement dynamic data source connections through RAG</li>
-<li>Consider advanced RAG methodologies</li>
-<li>Explore fine-tuning only after exhausting other options</li>
-<li>Consider task decomposition if still unsuccessful</li>
-</ol>
-</section>
-<section id="memory-bottlenecks-and-technical-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="memory-bottlenecks-and-technical-considerations">Memory Bottlenecks and Technical Considerations</h2>
-<section id="critical-memory-factors" class="level3">
-<h3 class="anchored" data-anchor-id="critical-memory-factors">Critical Memory Factors</h3>
-<p>The chapter emphasises three key contributors to a model’s memory footprint during fine-tuning:</p>
-<ul>
-<li>Parameter count</li>
-<li>Trainable parameter count</li>
-<li>Numeric representations</li>
-</ul>
-<blockquote class="blockquote">
-<p><strong>Technical Note</strong>: The relationship between trainable parameters and memory requirements becomes a key motivator for PEFT (Parameter Efficient Fine Tuning) approaches.</p>
-</blockquote>
-</section>
-<section id="quantisation-strategies" class="level3">
-<h3 class="anchored" data-anchor-id="quantisation-strategies">Quantisation Strategies</h3>
-<p>The chapter provides a detailed examination of quantisation approaches, particularly noting the distinction between:</p>
-<ol type="1">
-<li>Post-Training Quantisation (PTQ)
-<ul>
-<li>Most common approach</li>
-<li>Particularly relevant for AI application developers</li>
-<li>Supported by major frameworks with minimal code requirements</li>
-</ul></li>
-<li>Training Quantisation
-<ul>
-<li>Emerging approach gaining traction</li>
-<li>Aims to optimise both inference performance and training costs</li>
-</ul></li>
-</ol>
-</section>
-</section>
-<section id="advanced-fine-tuning-techniques" class="level2">
-<h2 class="anchored" data-anchor-id="advanced-fine-tuning-techniques">Advanced Fine-tuning Techniques</h2>
-<section id="peft-methodologies" class="level3">
-<h3 class="anchored" data-anchor-id="peft-methodologies">PEFT Methodologies</h3>
-<p>The chapter identifies two primary PEFT approaches:</p>
-<ol type="1">
-<li>Adapter-based methods (Additive):
-<ul>
-<li>LoRA emerges as the most popular implementation</li>
-<li>Includes variants like Dora and qDora from Anthropic</li>
-<li>Involves adding new modules to existing model weights</li>
-</ul></li>
-<li>Soft prompt-based methods:
-<ul>
-<li>Less common but growing in popularity</li>
-<li>Introduces trainable tokens for input processing modification</li>
-<li>Offers a middle ground between full fine-tuning and basic prompting, so maybe interesting for teams who don’t <em>really</em> want to go too deep into finetuning (?)</li>
-</ul></li>
-</ol>
-</section>
-<section id="model-merging-and-multitask-considerations" class="level3">
-<h3 class="anchored" data-anchor-id="model-merging-and-multitask-considerations">Model Merging and Multitask Considerations</h3>
-<p>The chapter presents model merging as an evolving science, requiring significant expertise. Three primary approaches are discussed:</p>
-<ul>
-<li>Summing</li>
-<li>Layer stacking</li>
-<li>Concatenation (generally not recommended due to memory implications)</li>
-</ul>
-<p><img src="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/model_merging.png" class="img-fluid"></p>
-<p>There’s a lot of detail in this section (much more than I’d expected) but it was interesting to read about something that I haven’t much practical expertise with.</p>
-</section>
-</section>
-<section id="core-approaches-to-model-merging" class="level2">
-<h2 class="anchored" data-anchor-id="core-approaches-to-model-merging">Core Approaches to Model Merging</h2>
-<p>The chapter outlines three fundamental approaches to model merging, each with its own technical considerations and trade-offs:</p>
-<blockquote class="blockquote">
-<p><strong>Technical Architecture</strong>: The three primary merging strategies</p>
-<ol type="1">
-<li><strong>Summing</strong>: Direct weight combination</li>
-<li><strong>Layer stacking</strong>: Vertical integration of model components</li>
-<li><strong>Concatenation</strong>: Horizontal expansion (though notably discouraged due to memory implications)</li>
-</ol>
-</blockquote>
-<p>The relative simplicity of these approaches belies their potential impact on model architecture and performance. Particularly interesting is how these techniques interface with the broader challenge of multitask learning.</p>
-</section>
-<section id="multitask-learning-a-new-paradigm" class="level2">
-<h2 class="anchored" data-anchor-id="multitask-learning-a-new-paradigm">Multitask Learning: A New Paradigm</h2>
-<p>Traditional approaches to multitask learning have typically forced practitioners into one of two suboptimal paths:</p>
-<ol type="1">
-<li><strong>Simultaneous Training</strong>
-<ul>
-<li>Requires creation of a comprehensive dataset containing examples for all tasks</li>
-<li>Necessitates careful balancing of task representation</li>
-<li>Often leads to compromise in per-task performance</li>
-</ul></li>
-<li><strong>Sequential Training</strong>
-<ul>
-<li>Fine-tunes the model on each task in sequence</li>
-<li>Risks catastrophic forgetting as new tasks overwrite previous learning</li>
-<li>Requires careful orchestration of task order and learning rates</li>
-</ul></li>
-</ol>
-<blockquote class="blockquote">
-<p><strong>Key Innovation</strong>: Model merging introduces a third path - parallel fine-tuning followed by strategic combination. This approach fundamentally alters the landscape of multitask learning optimisation.</p>
-</blockquote>
-</section>
-<section id="the-parallel-processing-advantage" class="level2">
-<h2 class="anchored" data-anchor-id="the-parallel-processing-advantage">The Parallel Processing Advantage</h2>
-<p>Model merging enables a particularly elegant solution to the multitask learning challenge through parallel processing:</p>
-<ol type="1">
-<li>Individual models can be fine-tuned for specific tasks independently</li>
-<li>Training can occur in parallel, optimising computational resource usage</li>
-<li>Models can be merged post-training, preserving task-specific optimisations</li>
-</ol>
-<p>This approach brings several compelling advantages:</p>
-<blockquote class="blockquote">
-<p><strong>Strategic Benefits</strong>: - Parallel training efficiency - Independent task optimisation - Flexible deployment options - Reduced risk of inter-task interference</p>
-</blockquote>
-</section>
-<section id="practical-implications" class="level2">
-<h2 class="anchored" data-anchor-id="practical-implications">Practical Implications</h2>
-<p>While the implementation details remain somewhat experimental, the potential applications are significant. Organisations can:</p>
-<ul>
-<li>Develop specialised models in parallel</li>
-<li>Optimise individual task performance without compromise</li>
-<li>Maintain flexibility in deployment architecture</li>
-<li>Scale their multitask capabilities more efficiently</li>
-</ul>
-</section>
-<section id="implementation-pathways" class="level2">
-<h2 class="anchored" data-anchor-id="implementation-pathways">Implementation Pathways</h2>
-<p>The chapter concludes with two distinct development approaches:</p>
-<section id="progression-path" class="level3">
-<h3 class="anchored" data-anchor-id="progression-path">Progression Path</h3>
-<ol type="1">
-<li>Begin with the most economical and fastest model</li>
-<li>Validate with a mid-tier model</li>
-<li>Push boundaries with the optimal model</li>
-<li>Map the price-performance frontier</li>
-<li>Select the most appropriate model based on requirements</li>
-</ol>
-</section>
-<section id="distillation-path" class="level3">
-<h3 class="anchored" data-anchor-id="distillation-path">Distillation Path</h3>
-<ol type="1">
-<li>Start with a small dataset and the strongest affordable model</li>
-<li>Generate additional training data using the fine-tuned model</li>
-<li>Train a more cost-effective model using the expanded dataset</li>
-</ol>
-</section>
-</section>
-<section id="final-observations" class="level2">
-<h2 class="anchored" data-anchor-id="final-observations">Final Observations</h2>
-<p>The chapter emphasises that while the technical process of fine-tuning isn’t necessarily complex, the surrounding context and implications are highly nuanced. Success requires careful consideration of business priorities, resource availability, and long-term maintenance capabilities. This holistic perspective is crucial for organisations considering fine-tuning as part of their AI strategy.</p>
-
-
-</section>
-
- ]]></description>
-  <category>books-i-read</category>
-  <category>finetuning</category>
-  <category>llm</category>
-  <category>llms</category>
-  <guid>https://alexstrick.com/posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html</guid>
-  <pubDate>Sat, 25 Jan 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://alexstrick.com/posts/images/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning/finetuning.png" medium="image" type="image/png" height="99" width="144"/>
 </item>
 </channel>
 </rss>
