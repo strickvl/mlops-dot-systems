@@ -189,7 +189,8 @@ cython_debug/
 .pypirc
 
 design/
-.claude/
+.claude/*
+!.claude/skills/
 
 **/*.quarto_ipynb
 _series.json
