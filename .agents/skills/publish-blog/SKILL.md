@@ -33,6 +33,12 @@ Starting point: Alex has just written a new post (in `posts/`, `personal/` or `t
 
 5. **Publish.** Run `quarto publish gh-pages --no-prompt`. It re-renders the whole site, which takes a few minutes, and pushes `_site/` to the `gh-pages` branch. Done when it exits 0 and `git fetch -q origin gh-pages && git show origin/gh-pages:<dir>/<slug>.html` shows the post. Check the branch, not the live URL, which can lag by a few minutes behind GitHub Pages and Cloudflare.
 
-6. **Draft the newsletter.** Run `uv run scripts/draft_newsletter.py <post path> --dry-run` and check the excerpt reads well: no stray markup, and the links point to alexstrick.com. Then run it without `--dry-run`. Skip this step if Alex asked for no email. Done when the script reports the draft was created (or reports that one already exists for this post).
+6. **Draft the newsletter.** Run `uv run scripts/draft_newsletter.py <post path> --dry-run` and check the excerpt reads well. The excerpt is the post's opening prose, about 180 words. Short lists are kept. It stops at the first table, code block or list too long to fit, and drops a sentence ending in `:` that introduced it. Check that:
+   - links point to alexstrick.com, and links to other posts end in `.html`, not `.md` or `.ipynb`
+   - no paragraph ends in `:` with nothing after it, and there's no stray markup
+
+   If the excerpt reads badly, fix the script rather than the post. Then run it without `--dry-run`. Skip this step if Alex asked for no email. Done when the script reports the draft was created (or reports that one already exists for this post).
+
+   **If the draft is already made and needs redoing** (the post's opening changed, or the script was fixed), run it again with `--force` to make a new draft. Tell Alex to delete the old draft in Buttondown, so only one is left to send. The script never deletes or edits drafts.
 
 7. **Report.** Give the live URL, the series part (if any), the five related posts, any fixes made in step 2, and remind Alex the email is a **draft** waiting at https://buttondown.com/emails for him to review and send.
