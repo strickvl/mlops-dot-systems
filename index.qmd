@@ -14,7 +14,7 @@ include-in-header:
   <div class="landing-intro">
     <h1 class="landing-name">Alex Strick van Linschoten</h1>
     <p class="landing-tagline">
-      Historian turned ML engineer, at ZenML since 2021.
+      Historian turned AI/ML engineer, at ZenML since 2021.
       Writing about <em>agents</em>, <em>evals</em> and <em>RL</em>, and about
       <em>Afghanistan</em>, <em>languages</em> and <em>books</em>.
     </p>
