@@ -79,6 +79,8 @@ These questions give hints at the kinds of evidence that are needed from whateve
 | Did a mid-run model change, rather than a coordination improvement, explain the change in results? | Effective model, human interventions, ordering |
 | Would the same starting state succeed under a different model or harness? | Environment, replay with stated guarantees |
 
+## Clustering the evidence we need to collect
+
 And then if we cluster all this together, we can start to put together a list of what needs capturing:
 
 | Area | What to capture | What it lets you answer |
