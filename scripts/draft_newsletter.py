@@ -30,6 +30,7 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
+from urllib.parse import urljoin
 
 import yaml
 
@@ -39,6 +40,7 @@ CONTENT_DIRS = ["posts", "personal", "til"]
 API = "https://api.buttondown.com/v1/emails"
 LOG = ROOT / "_cache" / "newsletter_drafts.json"
 EXCERPT_WORDS = 180
+LIST_ITEM = re.compile(r"^([-*+]|\d+[.)])\s")
 FRONTMATTER = re.compile(r"^---\s*\n(.*?)\n---\s*$", re.S | re.M)
 
 
@@ -67,27 +69,33 @@ def newest_post() -> Path:
 
 
 def absolute_links(paragraph: str, page_url: str) -> str:
-    base = page_url.rsplit("/", 1)[0]
-
     def fix(m: re.Match) -> str:
         target = m.group(2)
         if re.match(r"^[a-z]+:|^#", target):  # already absolute, or a link within the page
             return m.group(0)
-        return f"{m.group(1)}({SITE_URL + target if target.startswith('/') else f'{base}/{target}'})"
+        # links to other posts' source files (`other-post.md`) become the built page (`other-post.html`)
+        target = re.sub(r"\.(md|qmd|ipynb)(?=$|#)", ".html", target)
+        return f"{m.group(1)}({urljoin(page_url, target)})"
 
     return re.sub(r"(\[[^\]]*\])\(([^)\s]+)\)", fix, paragraph)
 
 
 def excerpt(body: str, url: str) -> str:
-    body = re.sub(r"```.*?```", "", body, flags=re.S)
+    body = re.sub(r"```.*?```", "\n\n```\n\n", body, flags=re.S)  # each code block becomes a bare "```" block
     keep, words = [], 0
     for para in re.split(r"\n\s*\n", body):
         p = para.strip()
-        # prose only: skip headings, images, HTML, Quarto divs/attributes, tables and list-heavy blocks
-        if not p or p.startswith(("#", "!", "<", ":::", "|", "{", "- ", "* ", "1. ")):
+        n = len(p.split())
+        # skip headings, images, HTML and Quarto divs/attributes, and keep reading
+        if not p or p.startswith(("#", "!", "<", ":::", "{")):
             continue
+        # stop at a table, code, or a list too long for the excerpt, and drop a sentence that introduced it
+        if p.startswith(("|", "```")) or (LIST_ITEM.match(p) and words + n > EXCERPT_WORDS):
+            if keep and keep[-1].endswith(":"):
+                keep.pop()
+            break
         keep.append(absolute_links(p, url))
-        words += len(p.split())
+        words += n
         if words >= EXCERPT_WORDS:
             break
     return "\n\n".join(keep)
