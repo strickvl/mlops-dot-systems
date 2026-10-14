@@ -2,14 +2,15 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
+#     "beautifulsoup4",
 #     "pyyaml",
 # ]
 # ///
 """
 Create a draft newsletter email in Buttondown for a published post.
 
-The email has the post's title as its subject, then its description, its
-opening paragraphs, and a link to read the rest on alexstrick.com. It is
+The email has the post's title as its subject, then its description and the
+whole post, taken from the built page in `_site/` (so render the post first). It is
 created as a DRAFT: nothing is sent until you open it in Buttondown and click
 send. Each post is recorded in `_cache/newsletter_drafts.json`, so running the
 script twice doesn't make a second draft (use --force to make one anyway).
@@ -26,6 +27,7 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -33,14 +35,16 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 import yaml
+from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE_URL = "https://alexstrick.com"
 CONTENT_DIRS = ["posts", "personal", "til"]
 API = "https://api.buttondown.com/v1/emails"
 LOG = ROOT / "_cache" / "newsletter_drafts.json"
-EXCERPT_WORDS = 180
-LIST_ITEM = re.compile(r"^([-*+]|\d+[.)])\s")
+# site-only parts of the built page: title block, contents, series box, related posts, sign-up form, comments
+SITE_ONLY = ("#title-block-header, #TOC, .series-box, .series-footer, .subscribe-box, #related-posts, #related-posts-home, "
+             "#quarto-appendix, script, style, .anchorjs-link, .code-copy-button")
 FRONTMATTER = re.compile(r"^---\s*\n(.*?)\n---\s*$", re.S | re.M)
 
 
@@ -68,45 +72,36 @@ def newest_post() -> Path:
     return max(candidates)[2]
 
 
-def absolute_links(paragraph: str, page_url: str) -> str:
-    def fix(m: re.Match) -> str:
-        target = m.group(2)
-        if re.match(r"^[a-z]+:|^#", target):  # already absolute, or a link within the page
-            return m.group(0)
-        # links to other posts' source files (`other-post.md`) become the built page (`other-post.html`)
-        target = re.sub(r"\.(md|qmd|ipynb)(?=$|#)", ".html", target)
-        return f"{m.group(1)}({urljoin(page_url, target)})"
-
-    return re.sub(r"(\[[^\]]*\])\(([^)\s]+)\)", fix, paragraph)
+def built_page(path: Path, meta: dict) -> Path:
+    rel = path.relative_to(ROOT)
+    page = ROOT / "_site" / rel.parent / (meta.get("output-file") or rel.with_suffix(".html").name)
+    if not page.exists():
+        sys.exit(f"draft_newsletter: {page.relative_to(ROOT)} doesn't exist; run `quarto render {rel}` first")
+    return page
 
 
-def excerpt(body: str, url: str) -> str:
-    body = re.sub(r"```.*?```", "\n\n```\n\n", body, flags=re.S)  # each code block becomes a bare "```" block
-    keep, words = [], 0
-    for para in re.split(r"\n\s*\n", body):
-        p = para.strip()
-        n = len(p.split())
-        # skip headings, images, HTML and Quarto divs/attributes, and keep reading
-        if not p or p.startswith(("#", "!", "<", ":::", "{")):
-            continue
-        # stop at a table, code, or a list too long for the excerpt, and drop a sentence that introduced it
-        if p.startswith(("|", "```")) or (LIST_ITEM.match(p) and words + n > EXCERPT_WORDS):
-            if keep and keep[-1].endswith(":"):
-                keep.pop()
-            break
-        keep.append(absolute_links(p, url))
-        words += n
-        if words >= EXCERPT_WORDS:
-            break
-    return "\n\n".join(keep)
+def post_body(page: Path, url: str) -> str:
+    """The post's text from the built page, without the parts that only make sense on the site, as markdown."""
+    main = BeautifulSoup(page.read_text(encoding="utf-8"), "html.parser").select_one("main#quarto-document-content")
+    for junk in main.select(SITE_ONLY):
+        junk.decompose()
+    for tag, attr in (("a", "href"), ("img", "src")):
+        for el in main.find_all(tag, attrs={attr: True}):
+            if not el[attr].startswith("#"):
+                el[attr] = urljoin(url, el[attr])
+    # pandoc rather than raw HTML: Buttondown reads the body as markdown, where blank lines inside HTML blocks break them
+    md = subprocess.run(["quarto", "pandoc", "-f", "html", "-t", "gfm-raw_html", "--wrap=none"],
+                        input=str(main), capture_output=True, text=True, check=True).stdout
+    return md.strip()
 
 
 def build_email(path: Path) -> tuple[str, str]:
-    meta, body = read_post(path)
+    meta, _ = read_post(path)
     url = post_url(path, meta)
     parts = [f"*{meta['description']}*"] if meta.get("description") else []
-    parts += [excerpt(body, url), f"**[Read the full post on alexstrick.com →]({url})**"]
-    return str(meta.get("title", path.stem)), "\n\n".join(p for p in parts if p)
+    parts += [f"[Read this on alexstrick.com]({url})", post_body(built_page(path, meta), url),
+              f"**[Comment on this post at alexstrick.com →]({url})**"]
+    return str(meta.get("title", path.stem)), "\n\n".join(parts)
 
 
 def api_key() -> str:
