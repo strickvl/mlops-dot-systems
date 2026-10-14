@@ -45,10 +45,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-df07115ad9f15e2ef3479c789e6873c8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -79,22 +83,193 @@ ul.task-list li input[type="checkbox"] {
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=bf50ae5665">
-<link rel="stylesheet" href="../styles/personal.css?v=f735ffb739">
+<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles/personal.css?v=9cdc99972f">
 <meta property="og:title" content="North Waziristan: A Reading List – Alex Strick van Linschoten">
 <meta property="og:description" content="I compiled a reading list of English-language sources on North Waziristan, focusing on factual accounts of names, dates, places and events rather than analysis alone.">
-<meta property="og:image" content="https://alexstrick.com/personal/images/2014-12-31-north-waziristan-a-reading-list/0f63842ab0ce_image-asset.avif">
 <meta property="og:site_name" content="Alex Strick van Linschoten">
-<meta property="og:image:alt" content="Technically, this is South Waziristan… Photo credit: Drregor (via Flickr )">
 <meta name="twitter:title" content="North Waziristan: A Reading List – Alex Strick van Linschoten">
 <meta name="twitter:description" content="I compiled a reading list of English-language sources on North Waziristan, focusing on factual accounts of names, dates, places and events rather than analysis alone.">
-<meta name="twitter:image" content="https://alexstrick.com/personal/images/2014-12-31-north-waziristan-a-reading-list/0f63842ab0ce_image-asset.avif">
 <meta name="twitter:creator" content="@strickvl">
-<meta name="twitter:image:alt" content="Technically, this is South Waziristan… Photo credit: Drregor (via Flickr )">
 <meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://alexstrick.com/cards/personal/2014-12-31-north-waziristan-a-reading-list.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://alexstrick.com/cards/personal/2014-12-31-north-waziristan-a-reading-list.png">
 </head>
 
-<body class="nav-fixed personal-page quarto-light">
+<body class="nav-fixed personal-page quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -152,6 +327,10 @@ ul.task-list li input[type="checkbox"] {
 </i> 
 <span class="menu-text"></span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../subscribe.html"> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">RSS</span>
@@ -170,6 +349,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -193,6 +373,7 @@ ul.task-list li input[type="checkbox"] {
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
+
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -238,7 +419,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>[caption id=“” align=“alignnone” width=“1596”][<img src="images/2014-12-31-north-waziristan-a-reading-list/0f63842ab0ce_image-asset.avif" class="img-fluid" alt="Technically, this is South Waziristan… Photo credit: Drregor (via Flickr )">](https://www.flickr.com/photos/drregor/4302412283) Technically, this is South Waziristan… Photo credit: Drregor (via Flickr ) [/caption]</p>
+<p><a href="https://www.flickr.com/photos/drregor/4302412283"><img src="images/2014-12-31-north-waziristan-a-reading-list/0f63842ab0ce_image-asset.avif" class="img-fluid"></a></p>
+<p><em>Technically, this is South Waziristan… Photo credit: Drregor (via Flickr)</em></p>
 <p>I’ve been doing a bit of reading about North Waziristan in the English-language sources that are available outside Pakistan. It took a bit of time to put together a decent collection that gave real information. By ‘real information’, I mean things that speak of names, dates, places and events. I wasn’t really interested in analysis, though that forms part of what follows. I was interested in the basic factual building blocks that must precede any analysis or understanding of a place. (That, and actually going there yourself). Most of these sources have are filled with stories and little details, all of which need triangulating with one another and with interviews on the ground.</p>
 <p>I can’t vouch for the veracity of any of it – my experience in Afghanistan has given me an innate distrust for anything I read in a report, particularly if it was assembled outside the country – yet this is what we have. There are, of course, thousands if not hundreds of thousands of news articles in the databases of Pakistan’s media outlets, but I didn’t trawl those yet. Needless to say, this is a work in progress and I will continue to update as and when I read more. It seems the area is also missing a well-sourced chronology akin to something like what I <a href="http://www.alexstrick.com/a-different-place/2010/06/kandahar-timeline-1979-2010">did for Kandahar</a> or <a href="http://www.alexstrick.com/a-different-place/2011/05/talqaeda-the-timeline">for the Taliban/Al-Qaeda relationship</a>. I don’t have the time at the moment to do this myself, but perhaps someone will be inspired to work on it. If you have any suggestions for additions to this list, please <a href="../contact-alex-1">let me know</a>.</p>
 <section id="books-core" class="level2">
@@ -320,7 +502,7 @@ ul.task-list li input[type="checkbox"] {
 <p>UPDATE: This continues to be added to as recommendations come in from various places here and there. (Last Update: January 3, 2015)</p>
 
 
-<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying.html">Reading the Afghan Taliban: 67 Sources You Should Be Studying</a><span>Personal · 2015</span></li><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2010-01-01-5-books-everyone-should-read-about-afghanistan.html">5 Books Everyone Should Read About Afghanistan</a><span>Personal · 2010</span></li><li><a href="../personal/2010-04-11-back-home.html">Back Home</a><span>Personal · 2010</span></li><li><a href="../personal/2010-06-21-kandahar-timeline-1979-2010.html">Kandahar Timeline 1979-2010</a><span>Personal · 2010</span></li></ul></nav></div><script>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying.html">Reading the Afghan Taliban: 67 Sources You Should Be Studying</a><span>Personal · 2015</span></li><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2010-01-01-5-books-everyone-should-read-about-afghanistan.html">5 Books Everyone Should Read About Afghanistan</a><span>Personal · 2010</span></li><li><a href="../personal/2010-04-11-back-home.html">Back Home</a><span>Personal · 2010</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li></ul></nav></div><script>
 (() => {
   const list = document.getElementById("related-posts");
   const sidebar = document.getElementById("quarto-margin-sidebar");
@@ -335,11 +517,37 @@ ul.task-list li input[type="checkbox"] {
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

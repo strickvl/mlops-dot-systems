@@ -101,3 +101,48 @@ body.all-page #quarto-margin-sidebar .category.active {
 #related-posts.in-sidebar h2 { font-size: .875rem; text-transform: none; letter-spacing: 0; color: var(--bs-body-color); font-weight: 500; }
 #related-posts.in-sidebar li a { color: var(--bs-secondary-color); }
 #related-posts.in-sidebar li a:hover { color: var(--bs-primary); }
+
+/* ===== Dark mode adjustments for the rules above ===== */
+body.quarto-dark #quarto-margin-sidebar .quarto-listing-category-title,
+body.quarto-dark #quarto-margin-sidebar .category { color: #6b7280; }
+body.quarto-dark #quarto-margin-sidebar .category:hover,
+body.quarto-dark #quarto-margin-sidebar .category.active { color: #d1d5db; }
+body.quarto-dark .series-ongoing { color: #5fd18f; }
+/* Darkly leaves Bootstrap's tertiary background and border colour at their
+   light values; give the series and related-posts components dark ones. */
+body.quarto-dark .series-box,
+body.quarto-dark .series-footer,
+body.quarto-dark #related-posts,
+body.quarto-dark.series-page {
+    --bs-tertiary-bg: rgba(255, 255, 255, 0.05);
+    --bs-border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* ===== Email sign-up (Buttondown) =====
+   _subscribe-form.html, added to the end of posts by filters/subscribe.lua
+   and to pages via the {{< subscribe >}} shortcode. */
+
+.subscribe-box {
+    margin: 2.5rem 0 1rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    background: var(--bs-tertiary-bg);
+}
+.subscribe-box h2 { font-size: 1.1rem; margin: 0 0 .3rem; border: 0; padding: 0; }
+.subscribe-box p { font-size: .9rem; color: var(--bs-secondary-color); margin: 0 0 .8rem; }
+.subscribe-form { display: flex; flex-wrap: wrap; gap: .5rem; }
+.subscribe-form input {
+    flex: 1 1 14rem; min-width: 0; font: inherit; font-size: .95rem; padding: .45rem .7rem;
+    border: 1px solid var(--bs-border-color); border-radius: 6px; background: var(--bs-body-bg); color: var(--bs-body-color);
+}
+.subscribe-form button {
+    font: inherit; font-size: .95rem; font-weight: 600; padding: .45rem 1.1rem; border: 0; border-radius: 6px;
+    background: var(--bs-primary); color: #fff; cursor: pointer;
+}
+.subscribe-form button:hover { filter: brightness(1.08); }
+.subscribe-form input:focus-visible, .subscribe-form button:focus-visible { outline: 2px solid var(--bs-primary); outline-offset: 2px; }
+body.quarto-dark .subscribe-box {
+    --bs-tertiary-bg: rgba(255, 255, 255, 0.05);
+    --bs-border-color: rgba(255, 255, 255, 0.14);
+}

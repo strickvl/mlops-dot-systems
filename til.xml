@@ -20,6 +20,7 @@
 
 
 
+
 <p>I’m studying Rust these days on the side and one thing that I keep hearing and seeing is the idea of the ‘prelude’. I thought I’d write a quick blog to cement exactly what’s going on here.</p>
 <p>At a very high level, the prelude is a bunch of functions, methods and other things that are automatically available to you when you start working on your project without you having to manually or explicitly import them. As <a href="https://doc.rust-lang.org/std/prelude/">the Rust docs</a> state:</p>
 <blockquote class="blockquote">
@@ -60,6 +61,18 @@ font-style: inherit;">}</span></span></code></pre></div></div>
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>rust</category>

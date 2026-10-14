@@ -20,7 +20,36 @@
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --header-bg: rgba(250, 251, 252, 0.85);
+    --tint-faint: rgba(0, 0, 0, 0.02);
+    --tint: rgba(0, 0, 0, 0.04);
+    --tint-strong: rgba(0, 0, 0, 0.08);
 }
+
+/* Dark mode: Quarto adds .quarto-dark to <body> when the dark theme is active */
+body.quarto-dark {
+    --bg-primary: #0F1115;
+    --bg-white: #171A20;
+    --bg-code: #1E222A;
+    --text-primary: #E6E8EB;
+    --text-secondary: #A9B0BA;
+    --text-muted: #737B87;
+    --accent-primary: #6EA8FE;
+    --accent-hover: #8DBBFF;
+    --accent-light: #1A2740;
+    --accent-rose: #E9967F;
+    --border-default: #2A2F37;
+    --border-hover: #3A404A;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    --header-bg: rgba(15, 17, 21, 0.85);
+    --tint-faint: rgba(255, 255, 255, 0.03);
+    --tint: rgba(255, 255, 255, 0.05);
+    --tint-strong: rgba(255, 255, 255, 0.09);
+    --bg-row-hover: #1C2028;
+}
+
 
 /* ===== BASE STYLES ===== */
 body.all-page {
@@ -33,7 +62,7 @@ body.all-page {
 
 /* ===== NAVBAR ===== */
 body.all-page #quarto-header {
-    background: rgba(250, 251, 252, 0.85) !important;
+    background: var(--header-bg) !important;
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-default) !important;
 }
@@ -62,7 +91,7 @@ body.all-page .navbar .nav-link {
 
 body.all-page .navbar .nav-link:hover {
     color: var(--text-primary) !important;
-    background: rgba(0, 0, 0, 0.04);
+    background: var(--tint);
 }
 
 /* ===== PAGE HEADER ===== */
@@ -142,7 +171,7 @@ body.all-page .quarto-listing-default .quarto-post:first-child {
 }
 
 body.all-page .quarto-listing-default .quarto-post:hover {
-    background: rgba(0, 0, 0, 0.02) !important;
+    background: var(--tint-faint) !important;
 }
 
 /* Date column - comes FIRST visually using order */
@@ -212,7 +241,7 @@ body.all-page .quarto-listing-default .listing-category {
     font-size: 0.6875rem !important;
     font-weight: 500;
     padding: 0.125rem 0.5rem;
-    background: rgba(0, 0, 0, 0.04) !important;
+    background: var(--tint) !important;
     color: var(--text-muted) !important;
     border-radius: 3px;
     text-decoration: none !important;
@@ -221,7 +250,7 @@ body.all-page .quarto-listing-default .listing-category {
 }
 
 body.all-page .quarto-listing-default .listing-category:hover {
-    background: rgba(0, 0, 0, 0.08) !important;
+    background: var(--tint-strong) !important;
     color: var(--text-secondary) !important;
 }
 

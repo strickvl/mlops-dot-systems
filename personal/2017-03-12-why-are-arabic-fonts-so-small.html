@@ -45,10 +45,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-df07115ad9f15e2ef3479c789e6873c8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -79,22 +83,193 @@ ul.task-list li input[type="checkbox"] {
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=bf50ae5665">
-<link rel="stylesheet" href="../styles/personal.css?v=f735ffb739">
+<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles/personal.css?v=9cdc99972f">
 <meta property="og:title" content="Why do Arabic fonts appear so small? (and how to fix it) – Alex Strick van Linschoten">
 <meta property="og:description" content="Why Arabic fonts appear smaller than English text on websites, and what’s causing this design oversight.">
-<meta property="og:image" content="https://alexstrick.com/personal/images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.avif">
 <meta property="og:site_name" content="Alex Strick van Linschoten">
-<meta property="og:image:alt" content="This is what a Wikipedia site looks like in Arabic">
 <meta name="twitter:title" content="Why do Arabic fonts appear so small? (and how to fix it) – Alex Strick van Linschoten">
 <meta name="twitter:description" content="Why Arabic fonts appear smaller than English text on websites, and what’s causing this design oversight.">
-<meta name="twitter:image" content="https://alexstrick.com/personal/images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.avif">
 <meta name="twitter:creator" content="@strickvl">
-<meta name="twitter:image:alt" content="This is what a Wikipedia site looks like in Arabic">
 <meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://alexstrick.com/cards/personal/2017-03-12-why-are-arabic-fonts-so-small.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://alexstrick.com/cards/personal/2017-03-12-why-are-arabic-fonts-so-small.png">
 </head>
 
-<body class="nav-fixed personal-page quarto-light">
+<body class="nav-fixed personal-page quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -152,6 +327,10 @@ ul.task-list li input[type="checkbox"] {
 </i> 
 <span class="menu-text"></span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../subscribe.html"> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">RSS</span>
@@ -170,6 +349,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -184,6 +364,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Why do Arabic fonts appear so small? (and how to fix it)</h1>
@@ -191,7 +372,6 @@ ul.task-list li input[type="checkbox"] {
     <div class="quarto-category">arabic</div>
     <div class="quarto-category">language</div>
     <div class="quarto-category">coding</div>
-    <div class="quarto-category">languages</div>
     <div class="quarto-category">design</div>
   </div>
   </div>
@@ -227,11 +407,21 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>[caption id=“” align=“alignnone” width=“600”]<img src="images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.avif" class="img-fluid" alt="This is what a Wikipedia site looks like in Arabic"> This is what a Wikipedia site looks like in Arabic [/caption]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2017-03-12-why-are-arabic-fonts-so-small/d05dfe5e1251_image-asset.avif" class="img-fluid figure-img"></p>
+<figcaption>This is what a Wikipedia site looks like in Arabic</figcaption>
+</figure>
+</div>
 <p>Anyone who’s ever studied Arabic and attempted to increase their exposure to the language through the internet will have encountered this problem: Arabic fonts are always two or three sizes smaller than their English/Roman alphabet equivalent. This can make navigating the web a dispiriting experience. Most big websites take a lot of time and effort to get their browsing experience just right, with fonts that are appropriately scaled and optimised for reading. (Get a sense of how much thought goes into typefaces <a href="https://www.quora.com/Which-typefaces-does-The-New-York-Times-use">here</a>, for example, at the New York Times.)</p>
 <p>So why does this happen? At first I thought it was just a case of Arabic fonts being very much a sideshow in the what-doesn’t-everyone-else-speak-english show that encompasses so much of Silicon Valley’s design mentality. The most-used products are generally designed for an English-speaking audience, with people writing from left-to-right. Apple and Android’s operating systems both work and function much better / logically when set to a Roman alphabet / layout. I happen to have my phones and computers set to an Arabic alphabet, and it’s blindingly obvious that less thought went into designing the experience for such Arabic-speaking users. (For a more detailed explanation of some of the deficiencies of Arabic fonts, <a href="http://www.arabictype.com/blog/articles/problems-of-arabic-typefaces/">read this</a> and <a href="https://www.wired.com/2015/10/why-its-so-hard-to-design-arabic-typefaces/">this</a>.)</p>
 <p>What’s worse, the consistency is subject to random change. To give one small example, iOS’s ‘Save to Evernote’ dialogue box allows me to save articles from <a href="https://www.instapaper.com/">Instapaper</a> into <a href="https://www.evernote.com/">Evernote</a>. (This is part of my somewhat laborious workflow for getting articles into <a href="http://www.devontechnologies.com/products/devonthink/overview.html">DevonThink</a>. <a href="https://www.alexstrick.com/blog/2014/10/note-taking-jujitsu-or-how-i-make-sense-of-what-i-read">Read here</a> for more.) For years, I clicked a button in the right-hand corner to ‘save’, but a few months back they switched all the boxes around and now I have to click in the left-hand corner. The muscle memory is such that this is a hard one to fix. It’s not the end of the world, but it still is an indication (along with the many other times this happens, seemingly without plan) of how little thought goes into this design and user interface work.</p>
-<p>[caption id=“” align=“alignnone” width=“600”]<img src="images/2017-03-12-why-are-arabic-fonts-so-small/dd3014a7047e_image-asset.avif" class="img-fluid" alt="This is what the English version of Wikipedia looks like"> This is what the English version of Wikipedia looks like [/caption]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2017-03-12-why-are-arabic-fonts-so-small/dd3014a7047e_image-asset.avif" class="img-fluid figure-img"></p>
+<figcaption>This is what the English version of Wikipedia looks like</figcaption>
+</figure>
+</div>
 <p>Coming back to fonts, the real reason for why this happens has to do with the amount of vertical space that letters take up. Thomas Phinney of FontLab <a href="https://www.quora.com/Why-are-default-Arabic-fonts-so-small">explained it clearly</a> over on Quora when he wrote:</p>
 <p><em>“Arabic letters have a smaller body relative to the extenders above and below, so the most common elements are smaller relative to everything else. Because the height of the font needs to more-or-less fit within the body size, Arabic looks smaller than Latin at the same point size.”</em></p>
 <p>There are three main approaches to solving this problem:</p>
@@ -244,7 +434,7 @@ ul.task-list li input[type="checkbox"] {
 <p>UPDATE: Gerald Drißner (of ‘<a href="http://www.arabic-for-nerds.com/">Arabic for Nerds</a>’) suggested a Chrome extension, <a href="https://chrome.google.com/webstore/detail/huruf/lhdifindchogekmjooeiolmjdlheilae">Huruf</a>, which I have now installed and seems to work pretty well. Try that if you use Chrome!</p>
 
 
-<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-15-master-arabic-behind-cover.html">Master Arabic: Behind the Cover</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-15-arabic-reading-importance-part1.html">You need to be reading more to get ahead in Arabic</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-17-on-reading-in-arabic-the-evidence.html">On Reading in Arabic: The Evidence</a><span>Personal · 2017</span></li><li><a href="../personal/2015-06-07-2015-6-arabic-language-update-i-did-it-almost.html">Arabic Language Update: I did it! (Almost)</a><span>Personal · 2015</span></li><li><a href="../personal/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read.html">The Two Books Every Intermediate Arabic Student Needs to Read</a><span>Personal · 2016</span></li></ul></nav></div><script>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-15-master-arabic-behind-cover.html">Master Arabic: Behind the Cover</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-15-arabic-reading-importance-part1.html">You need to be reading more to get ahead in Arabic</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-17-on-reading-in-arabic-the-evidence.html">On Reading in Arabic: The Evidence</a><span>Personal · 2017</span></li><li><a href="../personal/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read.html">The Two Books Every Intermediate Arabic Student Needs to Read</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-01-phd-tools-mellel.html">PhD Tools: Mellel for Layout and Final Presentation</a><span>Personal · 2016</span></li></ul></nav></div><script>
 (() => {
   const list = document.getElementById("related-posts");
   const sidebar = document.getElementById("quarto-margin-sidebar");
@@ -259,10 +449,35 @@ ul.task-list li input[type="checkbox"] {
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

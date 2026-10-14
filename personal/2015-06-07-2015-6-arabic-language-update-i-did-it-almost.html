@@ -45,10 +45,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-df07115ad9f15e2ef3479c789e6873c8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -79,22 +83,193 @@ ul.task-list li input[type="checkbox"] {
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=bf50ae5665">
-<link rel="stylesheet" href="../styles/personal.css?v=f735ffb739">
+<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles/personal.css?v=9cdc99972f">
 <meta property="og:title" content="Arabic Language Update: I did it! (Almost) – Alex Strick van Linschoten">
 <meta property="og:description" content="How I prepared for an intensive Arabic language course by logging 100 hours of study in June, using iTalki lessons, podcasts, and extensive reading to refresh skills I hadn’t used in a decade.">
-<meta property="og:image" content="https://alexstrick.com/personal/images/2015-06-07-2015-6-arabic-language-update-i-did-it-almost/1d8efe6fd0b6_image-asset.avif">
 <meta property="og:site_name" content="Alex Strick van Linschoten">
-<meta property="og:image:alt" content="My Beeminder accountability graph showing how I reached my goal for a study challenge in June">
 <meta name="twitter:title" content="Arabic Language Update: I did it! (Almost) – Alex Strick van Linschoten">
 <meta name="twitter:description" content="How I prepared for an intensive Arabic language course by logging 100 hours of study in June, using iTalki lessons, podcasts, and extensive reading to refresh skills I hadn’t used in a decade.">
-<meta name="twitter:image" content="https://alexstrick.com/personal/images/2015-06-07-2015-6-arabic-language-update-i-did-it-almost/1d8efe6fd0b6_image-asset.avif">
 <meta name="twitter:creator" content="@strickvl">
-<meta name="twitter:image:alt" content="My Beeminder accountability graph showing how I reached my goal for a study challenge in June">
 <meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://alexstrick.com/cards/personal/2015-06-07-2015-6-arabic-language-update-i-did-it-almost.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://alexstrick.com/cards/personal/2015-06-07-2015-6-arabic-language-update-i-did-it-almost.png">
 </head>
 
-<body class="nav-fixed personal-page quarto-light">
+<body class="nav-fixed personal-page quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -152,6 +327,10 @@ ul.task-list li input[type="checkbox"] {
 </i> 
 <span class="menu-text"></span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../subscribe.html"> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">RSS</span>
@@ -170,6 +349,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -184,6 +364,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Arabic Language Update: I did it! (Almost)</h1>
@@ -192,9 +373,7 @@ ul.task-list li input[type="checkbox"] {
     <div class="quarto-category">useful-tools</div>
     <div class="quarto-category">study</div>
     <div class="quarto-category">learning</div>
-    <div class="quarto-category">tools</div>
     <div class="quarto-category">middlebury</div>
-    <div class="quarto-category">languages</div>
     <div class="quarto-category">arabic</div>
   </div>
   </div>
@@ -230,7 +409,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>[caption id=“” align=“alignnone” width=“1366”]<img src="images/2015-06-07-2015-6-arabic-language-update-i-did-it-almost/1d8efe6fd0b6_image-asset.avif" class="img-fluid" alt="My Beeminder accountability graph showing how I reached my goal for a study challenge in June"> My Beeminder accountability graph showing how I reached my goal for a study challenge in June [/caption]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2015-06-07-2015-6-arabic-language-update-i-did-it-almost/1d8efe6fd0b6_image-asset.avif" class="img-fluid figure-img"></p>
+<figcaption>My Beeminder accountability graph showing how I reached my goal for a study challenge in June</figcaption>
+</figure>
+</div>
 <p>Just a short post as I’m off away on an intensive language course for most of the next three months. This is <a href="http://www.middlebury.edu/ls/arabic">the programme</a> run by Middlebury College, but held in Oakland, California (USA) at Mills College. I was extremely lucky to win a <a href="http://www.middlebury.edu/ls/finaid/fellowships/kwd">Kathryn Davis Fellowship</a> which covers the costs of the course and food and accommodation while I’m there. I have a BA degree in Arabic and Farsi from London’s <a href="http://www.soas.ac.uk/">School of Oriental and African Studies</a>, but 10 years in Afghanistan spent&nbsp;writing books and studying Dari and Pashto meant that my Arabic has atrophied considerably. I thought it was time to resurrect those old skills, in part as a way of deepening my understanding of some of the religious aspects of the Afghan Taliban and in part – let’s be honest here – as a way of covering my bases prior to Afghanistan completely falling off the map a few months from now.</p>
 <p>I’ll be writing a much longer post on how to get a high-beginner-to-mid-intermediate level out of the well-known “intermediate language plateau” after the course finishes, specifically focusing on what resources are available to Arabic-language students who have good basic skills but want to go beyond that to more advanced materials. (Read <a href="http://www.brighthubeducation.com/esl-teaching-tips/72742-how-to-move-past-the-language-learning-plateau/">these</a> <a href="http://jefflau.net/breaking-through-the-intermediate-plateau-of-language-learning/">three</a> <a href="http://www.lingholic.com/reaching-a-plateau-in-language-learning-how-to-get-out-of-it/">posts</a> for more on getting out of language plateaus in general terms.)</p>
 <p>The Middlebury course caters to various levels of language ability, and since I didn’t want to waste the opportunity just revising things I had already learnt at university, I had to do a good deal of preparatory work these past few months. I started getting serious about this preparation in February.&nbsp;This involved over&nbsp;75 hours of spoken/conversation practice (and some grammar work) with a number of different native Arabic&nbsp;speakers over Skype (lessons made possible through <a href="http://iTalki.com">iTalki.com</a>), as well as a lot of reading and listening. In June, as you can see on the <a href="https://www.beeminder.com/">Beeminder</a> graph displayed above, I challenged myself to get 100 hours of exposure to the Arabic language over a period of 30 days; this included some iTalki lessons, but was also a lot of listening to Arabic-language podcasts, time spent writing on <a href="http://lang-8.com/">lang-8</a> and lots of time spent doing so-called “extensive reading” (much more to follow on that in August/September). I managed 99.5 hours, in total, just short of&nbsp;the total required to successfully complete the challenge I’d set myself, but enough to really make my language proficiency come along in leaps and bounds.</p>
@@ -239,7 +423,7 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>UPDATE: I now offer one-on-one language coaching.&nbsp;<a href="http://www.alexstrick.com/language-coaching">Read more</a>&nbsp;about what it involves and what kinds of problems it’s best suited to addressing.</strong></p>
 
 
-<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school.html">How to Survive Middlebury's Arabic Summer School Programme</a><span>Personal · 2015</span></li><li><a href="../personal/2017-04-09-independent-study.html">Language Learner's Journal: Independent Study</a><span>Personal · 2017</span></li><li><a href="../personal/2017-03-20-leaving-qasid.html">Language Learner's Journal: Leaving Qasid</a><span>Personal · 2017</span></li><li><a href="../personal/2017-02-04-deepening-my-studies.html">Language Learner's Journal: Deepening My Studies</a><span>Personal · 2017</span></li><li><a href="../personal/2017-01-23-adjustments-deep-end.html">Language Learner's Journal: Adjustments at the Deep End</a><span>Personal · 2017</span></li></ul></nav></div><script>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-09-02-2015-9-surviving-middlebury-how-to-get-the-most-out-of-an-arabic-summer-school.html">How to Survive Middlebury's Arabic Summer School Programme</a><span>Personal · 2015</span></li><li><a href="../personal/2017-04-09-independent-study.html">Language Learner's Journal: Independent Study</a><span>Personal · 2017</span></li><li><a href="../personal/2017-03-20-leaving-qasid.html">Language Learner's Journal: Leaving Qasid</a><span>Personal · 2017</span></li><li><a href="../personal/2017-02-04-deepening-my-studies.html">Language Learner's Journal: Deepening My Studies</a><span>Personal · 2017</span></li><li><a href="../personal/2021-05-26-arabic-language-plateau-principles.html">Getting Out of the Intermediate Language Plateau: Arabic Edition / Principles</a><span>Personal · 2021</span></li></ul></nav></div><script>
 (() => {
   const list = document.getElementById("related-posts");
   const sidebar = document.getElementById("quarto-margin-sidebar");
@@ -254,10 +438,35 @@ ul.task-list li input[type="checkbox"] {
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

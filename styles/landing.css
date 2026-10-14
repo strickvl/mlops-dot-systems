@@ -286,3 +286,7 @@ body::before {
         transform: translateY(0);
     }
 }
+
+/* Row of text links under the social links (About, Series, Subscribe) */
+.landing-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 3rem; }
+.landing-links .landing-about-link { margin-top: 0; }

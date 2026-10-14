@@ -54,3 +54,5 @@
   .series-page .series-parts li { grid-template-columns: 2rem 1fr; }
   .series-page .series-date { display: none; }
 }
+
+body.quarto-dark.series-page { --series-personal: #e0a35a; --series-personal-soft: #2c2216; }

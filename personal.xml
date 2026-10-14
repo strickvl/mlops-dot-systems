@@ -20,6 +20,7 @@
 
 
 
+
 <p>I’ve been thinking about what it actually means to create something “with AI” versus creating something “yourself.” The usual framing treats this as binary: either you wrote it, or the machine did. Tools like <a href="https://www.pangram.com/">Pangram</a> try to detect AI-generated text. People unfollow accounts that seem to be posting slop. The implicit question is always: <em>was this made by a human or not?</em></p>
 <p>I don’t think that’s the right question.</p>
 <section id="the-choice-space" class="level2">
@@ -82,6 +83,19 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 
  ]]></description>
@@ -96,6 +110,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2025-01-05-first-stitches-on-learning-to-knit.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -163,6 +178,19 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 
  ]]></description>
@@ -180,6 +208,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2023-08-10-language-study-zero-to-hero.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -292,6 +321,19 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 
  ]]></description>
@@ -299,7 +341,6 @@
   <category>study</category>
   <category>learning</category>
   <category>education</category>
-  <category>languages</category>
   <category>languagecoaching</category>
   <guid>https://alexstrick.com/personal/2023-08-10-language-study-zero-to-hero.html</guid>
   <pubDate>Wed, 09 Aug 2023 22:00:00 GMT</pubDate>
@@ -309,6 +350,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -463,6 +505,19 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 </section>
 
@@ -482,6 +537,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2023-07-15-automating-social-media-posting.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -508,6 +564,18 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>productivity</category>
@@ -515,7 +583,6 @@
   <category>useful-tools</category>
   <category>automation</category>
   <category>social-media</category>
-  <category>technology</category>
   <guid>https://alexstrick.com/personal/2023-07-15-automating-social-media-posting.html</guid>
   <pubDate>Fri, 14 Jul 2023 22:00:00 GMT</pubDate>
 </item>
@@ -528,16 +595,34 @@
 
 
 
-<p>[caption id=“” align=“alignnone” width=“768”]<img src="https://alexstrick.com/personal/images/2023-02-19-vermeer-at-the-rijksmuseum/9f43da265fac_vermeer-sd.avif" class="img-fluid" alt="Not by Vermeer. This generated by my friend Stable Diffusion."> Not by Vermeer. This generated by my friend Stable Diffusion. [/caption]</p>
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/personal/images/2023-02-19-vermeer-at-the-rijksmuseum/9f43da265fac_vermeer-sd.avif" class="img-fluid figure-img"></p>
+<figcaption>Not by Vermeer. This generated by my friend Stable Diffusion.</figcaption>
+</figure>
+</div>
 <p>I visited <a href="https://www.rijksmuseum.nl/en/whats-on/exhibitions/vermeer">the bumper Vermeer exhibition</a> today in Amsterdam. I had previously seen many of the works separately in different galleries in the USA and here in the Netherlands, but there’s certainly a raw power to bringing them all together in the same space.</p>
 <p>Above all, it was the still city landscapes from Delft that left the biggest impression. These small scenes captured so much and seemed to pull you in as if weighted down from within.</p>
 <p>I’m glad I managed to get tickets to the exhibition, but will enjoy revisiting the two Delft paintings when they return to the Hague later in the year.</p>
 
 
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>art</category>
-  <category>reviews</category>
+  <category>review</category>
   <category>netherlands</category>
   <guid>https://alexstrick.com/personal/2023-02-19-vermeer-at-the-rijksmuseum.html</guid>
   <pubDate>Sat, 18 Feb 2023 23:00:00 GMT</pubDate>
@@ -547,6 +632,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2022-12-27-2022-readings.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -581,6 +667,18 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>books</category>
@@ -593,6 +691,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-28-on-the-interpretability-of-models.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -623,14 +722,24 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>science</category>
   <category>tech</category>
   <category>deep-learning</category>
   <category>data</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-28-on-the-interpretability-of-models.html</guid>
   <pubDate>Thu, 27 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -639,6 +748,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-27-fastai-lesson-zero.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -750,13 +860,24 @@
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>productivity</category>
   <category>deep-learning</category>
   <category>study</category>
   <category>fastai</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-27-fastai-lesson-zero.html</guid>
   <pubDate>Wed, 26 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -765,6 +886,7 @@
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-26-arabic-language-plateau-principles.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -836,6 +958,19 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 
  ]]></description>
@@ -844,7 +979,6 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <category>study</category>
   <category>learning</category>
   <category>skills</category>
-  <category>languages</category>
   <category>arabicintermediateplateau</category>
   <category>arabic</category>
   <guid>https://alexstrick.com/personal/2021-05-26-arabic-language-plateau-principles.html</guid>
@@ -855,6 +989,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -887,14 +1022,25 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>science</category>
   <category>deep-learning</category>
   <category>statistics</category>
   <category>machinelearning</category>
-  <category>technology</category>
-  <category>deeplearning</category>
+  <category>tech</category>
   <guid>https://alexstrick.com/personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html</guid>
   <pubDate>Tue, 25 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -903,6 +1049,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-26-telling-cats-from-dogs.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -932,12 +1079,23 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>deep-learning</category>
   <category>software</category>
-  <category>technology</category>
-  <category>deeplearning</category>
+  <category>tech</category>
   <guid>https://alexstrick.com/personal/2021-05-26-telling-cats-from-dogs.html</guid>
   <pubDate>Tue, 25 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -946,6 +1104,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-23-deep-learning-best-in-show.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -976,14 +1135,24 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>coding</category>
   <category>tech</category>
   <category>useful-tools</category>
   <category>deep-learning</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-23-deep-learning-best-in-show.html</guid>
   <pubDate>Sat, 22 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -992,6 +1161,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-23-held-back-by-misunderstanding.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1019,13 +1189,23 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>tech</category>
   <category>deep-learning</category>
   <category>academia</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-23-held-back-by-misunderstanding.html</guid>
   <pubDate>Sat, 22 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -1034,6 +1214,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-23-pdp-a-precursor-to-modern-neural-networks.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1075,13 +1256,23 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>tech</category>
   <category>deep-learning</category>
   <category>history</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-23-pdp-a-precursor-to-modern-neural-networks.html</guid>
   <pubDate>Sat, 22 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -1090,6 +1281,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-23-removing-barriers-deep-learning-edition.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1121,6 +1313,18 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>tech</category>
@@ -1128,8 +1332,6 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <category>deep-learning</category>
   <category>software</category>
   <category>education</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-23-removing-barriers-deep-learning-edition.html</guid>
   <pubDate>Sat, 22 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -1138,6 +1340,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-23-rosenblatts-mark-i-perceptron.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1154,14 +1357,24 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>Thankfully, some ignored the herd and stuck with it.</p>
 
 
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>tech</category>
   <category>coding</category>
   <category>useful-tools</category>
   <category>deep-learning</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-23-rosenblatts-mark-i-perceptron.html</guid>
   <pubDate>Sat, 22 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -1170,6 +1383,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2021-05-23-small-unexpectedly-powerful-boxes.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1200,13 +1414,23 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>tech</category>
   <category>useful-tools</category>
   <category>deep-learning</category>
-  <category>technology</category>
-  <category>deeplearning</category>
   <guid>https://alexstrick.com/personal/2021-05-23-small-unexpectedly-powerful-boxes.html</guid>
   <pubDate>Sat, 22 May 2021 22:00:00 GMT</pubDate>
 </item>
@@ -1215,6 +1439,7 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2020-12-10-a-basic-overview-of-how-to-use-handlebars.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1513,6 +1738,19 @@ var context={
   addEventListener("resize", place);
 })();
 </script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
 </section>
 
  ]]></description>
@@ -1520,7 +1758,7 @@ var context={
   <category>useful-tools</category>
   <category>javascript</category>
   <category>web</category>
-  <category>technology</category>
+  <category>tech</category>
   <category>launchschool</category>
   <guid>https://alexstrick.com/personal/2020-12-10-a-basic-overview-of-how-to-use-handlebars.html</guid>
   <pubDate>Wed, 09 Dec 2020 23:00:00 GMT</pubDate>
@@ -1530,6 +1768,7 @@ var context={
   <dc:creator>Alex Strick van Linschoten</dc:creator>
   <link>https://alexstrick.com/personal/2020-12-10-how-to-use-jquery-and-handlebars-in-your-website.html</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1547,6 +1786,18 @@ var context={
 <p>Note that jQuery is now modular, so you may want to consider whether you want to include the entire library. Above I chose to download it from Google’s CDN, but there are other options listed <a href="https://jquery.com/download/">here</a>.</p>
 
 
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
  ]]></description>
   <category>coding</category>
