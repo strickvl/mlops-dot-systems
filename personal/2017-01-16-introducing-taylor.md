@@ -17,6 +17,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 [*This is a guest blog, written by freelance journalist and (Arabic) language student, [Taylor Barnes](https://taylorkbarnes.com/). I'm [working with](http://languagecoach.io/coaching) Taylor to get her up and running as quickly and effectively as possible, and I suggested she might want to write about her learning progress along the way. She'll be posting here every week or two.*]

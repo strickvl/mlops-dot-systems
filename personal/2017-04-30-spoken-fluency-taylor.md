@@ -18,6 +18,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 ![](images/2017-04-30-spoken-fluency-taylor/d662c794623d_IMG_6022.avif)

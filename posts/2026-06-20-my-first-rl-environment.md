@@ -15,6 +15,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: [agentic-rl, isaf-press-releases]
 ---
 
 Today's the day I finally managed to start to put things into practice. [So far](https://alexstrick.com/technical.html#category=agentic-rl) I've mainly looked at the RL process at a high level, sticking to things like [the main stages of the process](https://alexstrick.com/posts/2026-06-16-rl-stages.html) and [some of the tools that exist](https://alexstrick.com/posts/2026-06-19-reading-rl-environment-landscape.html). I went into this all with the idea that I'd try to get my hands dirty so today I did some work with what happens to the data we feed into the training process, and I also used `verifiers` to construct my first RL environment.

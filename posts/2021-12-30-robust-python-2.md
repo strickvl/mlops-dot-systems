@@ -14,6 +14,7 @@ layout: post
 title: What's special about types in Python?
 toc: false
 
+series: robust-python
 ---
 
 The first section of

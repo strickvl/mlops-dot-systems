@@ -18,6 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html"
+series: isaf-press-releases
 ---
 
 My previous two blog posts — [here](https://mlops.systems/posts/2024-06-25-evaluation-finetuning-manual-dataset.html) and [here](https://mlops.systems/posts/2024-07-01-full-finetuned-model-evaluation.html) — were trending / on the front page of Hacker News, driving over 20,000 new visitors to this blog. Welcome! I learned a few new tricks (and some mistakes I'd made) during the ensuing discussion so I thought I'd share some of these here. Some of them might trigger some mini side-investigations into certain hypotheses, too, which is even more exciting. Let's dive in.

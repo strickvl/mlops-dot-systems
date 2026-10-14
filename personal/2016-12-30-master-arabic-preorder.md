@@ -19,6 +19,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: master-arabic
 ---
 
 [![](images/2016-12-30-master-arabic-preorder/7250983c713c_image-asset.avif)](http://gum.co/masterarabic-premium)

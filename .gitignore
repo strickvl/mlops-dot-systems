@@ -192,3 +192,4 @@ design/
 .claude/
 
 **/*.quarto_ipynb
+_series.json

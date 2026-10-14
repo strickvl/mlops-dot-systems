@@ -15,6 +15,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html"
+series: prompt-engineering-for-llms
 ---
 
 Chapter 6 of "Prompt Engineering for LLMs" is devoted to how to structure the prompt and compose its various elements. We first learn about the different kinds of 'documents' that we can mimic with our prompts, then think about how to pick which pieces of context to include, and then think through how we might compose all of this together.

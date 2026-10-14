@@ -18,6 +18,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 ![](images/2017-01-23-adjustments-deep-end/04ae6d7494d7_image-asset.avif)

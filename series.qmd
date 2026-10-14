@@ -1,0 +1,20 @@
+---
+title: "Series"
+page-layout: article
+body-classes: series-page
+css: styles/series.css
+---
+
+Some of my writing comes in runs: a project, a course or a book I worked through over weeks or months. Each series below is listed in reading order.
+
+{{< series-index >}}
+
+```{=html}
+<script>
+document.querySelectorAll(".series-filters button").forEach(btn => btn.addEventListener("click", () => {
+  const f = btn.dataset.filter;
+  document.querySelectorAll(".series-filters button").forEach(b => b.setAttribute("aria-pressed", b === btn));
+  document.querySelectorAll(".series-entry").forEach(s => { s.hidden = f !== "all" && s.dataset.section !== f; });
+}));
+</script>
+```

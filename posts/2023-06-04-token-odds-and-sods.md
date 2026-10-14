@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2023-06-04-token-odds-and-sods.html"
+series: balochi-language-model
 ---
 
 This is just a collection of various links and observations that I came across while learning about tokenisation during the past week that would otherwise have no other home.

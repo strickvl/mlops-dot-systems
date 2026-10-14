@@ -17,6 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2023-05-22-balochi-language-model-harms.html"
+series: balochi-language-model
 ---
 
 In thinking about my work to put together a language model or some utilities relating to the Balochi language, I thought a fair bit about whether I should even start. At a very high level, we can look at general risks that comes from language models, as highlighted in [the 2022 Deepmind paper](https://dl.acm.org/doi/pdf/10.1145/3531146.3533088) entitled "Taxonomy of Risks posed by Language Models" which covers

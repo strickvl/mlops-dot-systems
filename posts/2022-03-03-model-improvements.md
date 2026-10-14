@@ -14,6 +14,7 @@ layout: post
 title: Incremental Improvements to my Redaction Detection Model
 toc: true
 
+series: redaction-model
 ---
 
 *(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](/technical.html#category=redactionmodel).)*

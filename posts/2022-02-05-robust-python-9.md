@@ -15,6 +15,7 @@ layout: post
 title: Upgrade your Python dicts with data classes
 toc: false
 
+series: robust-python
 ---
 
 I've been curious about data classes since more or less my first day at work when someone mentioned to me that Pydantic was built on the shoulders of data classes. I hadn't taken the opportunity to dive into all the details of what data classes do until now, prompted by their being part of Patrick Viafore's book, '[Robust Python](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?_encoding=UTF8&me=&tag=soumet-20&qid=)', specifically chapter nine.

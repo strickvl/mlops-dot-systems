@@ -18,6 +18,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html"
+series: ai-engineering
 ---
 
 Finally back on track and reading the next chapter of Chip Huyen's book, 'AI Engineering'. Here are my notes on the chapter.

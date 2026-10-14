@@ -15,6 +15,7 @@ layout: post
 title: A Midway Report on my Computer Vision Project
 toc: false
 
+series: redaction-model
 ---
 
 (_This post is adapted from

@@ -20,6 +20,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: master-arabic
 ---
 
 ![](images/2017-02-13-master-arabic-out-now/ecdf9211a9c0_image-asset.avif)

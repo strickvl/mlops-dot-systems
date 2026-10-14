@@ -15,6 +15,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: [agentic-rl, isaf-press-releases]
 ---
 
 I wanted to write a bit about the status of the underlying dataset we'll use for my first environment / RL training, since as I was getting that together I realised a few things that needed attention and (aside from the heatwave that's addled my brain this past week) that's what I've mostly been busy with since I last wrote.

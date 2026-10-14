@@ -18,6 +18,7 @@ title: 'It takes a tribe: how I''m thinking about putting my object detection mo
   into production'
 toc: true
 
+series: redaction-model
 ---
 
 _(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](/technical.html#category=redactionmodel).)_

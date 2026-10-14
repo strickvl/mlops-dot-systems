@@ -19,6 +19,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: master-arabic
 ---
 
 ![](images/2017-01-04-internal-vs-external-goals/e8b5ffff7094_image-asset.avif)

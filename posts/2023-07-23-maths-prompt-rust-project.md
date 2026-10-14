@@ -22,6 +22,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2023-07-23-maths-prompt-rust-project.html"
+series: mu123
 ---
 
 **TL;DR:**

@@ -15,6 +15,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: [agentic-rl, isaf-press-releases]
 ---
 
 It probably would help to ground our discussion of some of this RL terminology to look at an example. I mentioned that we could use the old ISAF press releases task (structured data extraction) as a starting point, so here is some data from that:

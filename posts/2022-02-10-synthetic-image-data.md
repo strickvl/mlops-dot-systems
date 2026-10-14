@@ -17,6 +17,7 @@ title: 'It''s raining bboxes: how I wrote a Python script to create 2097 synthet
   images to help improve my machine learning model'
 toc: true
 
+series: redaction-model
 ---
 
 ![](images/synthetic-image-data/synthetic-images-cover.jpg)

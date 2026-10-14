@@ -18,6 +18,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 ![](images/2017-10-20-language-learners-journal-homestay-edition/eb28a2e11b46_7460.avif)

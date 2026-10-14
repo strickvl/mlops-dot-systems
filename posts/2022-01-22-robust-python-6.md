@@ -15,6 +15,7 @@ layout: post
 title: Using mypy for Python type checking
 toc: true
 
+series: robust-python
 ---
 
 The final two chapters of part one of Patrick Viafore's '[Robust Python](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&me=&tag=soumet-20&_encoding=UTF8)' cover more practical advice on how to actually use and implement type checking in either a new project or a legacy codebase.

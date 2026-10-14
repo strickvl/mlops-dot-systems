@@ -19,6 +19,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 ![](images/2017-02-18-llj-keeping-pace/a57a9c934e93_image-asset.avif)

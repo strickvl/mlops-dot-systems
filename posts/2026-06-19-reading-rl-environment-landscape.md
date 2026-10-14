@@ -14,6 +14,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: agentic-rl
 ---
 I'm mostly through my first pass at understanding the world of agentic RL at a conceptual level. As [a little refresher](https://alexstrick.com/posts/2026-06-16-rl-stages.html), here are the five concepts you really have to have in mind:
 

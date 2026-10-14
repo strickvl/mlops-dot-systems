@@ -15,6 +15,7 @@ layout: post
 title: "'I guess this is what data-centric AI is!': Performance boosts after training with synthetic data"
 toc: true
 
+series: redaction-model
 ---
 
 _(This is part of a series of blog posts documenting my work to train a model

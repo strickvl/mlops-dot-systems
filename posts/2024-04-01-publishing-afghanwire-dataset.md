@@ -19,6 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2024-04-01-publishing-afghanwire-dataset.html"
+series: isaf-press-releases
 ---
 
 I am excited to announce the release of a new dataset on the Hugging Face Hub: [the Afghanwire Dataset](https://huggingface.co/datasets/strickvl/afghanwire). This dataset is a comprehensive collection of translated Afghan media articles from the period of May 2006 to September 2009, created by the Afghanwire media agency, which I co-founded together with Felix Kuehn.

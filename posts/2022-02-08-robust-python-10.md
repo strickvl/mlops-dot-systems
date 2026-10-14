@@ -15,6 +15,7 @@ layout: post
 title: What are invariants and how can they help make your Python classes more robust?
 toc: true
 
+series: robust-python
 ---
 
 We've read [about enumerations](https://mlops.systems/robustpython/python/books-i-read/2022/01/30/robust-python-8.html) and we've read [about data classes](https://mlops.systems/robustpython/python/books-i-read/2022/02/05/robust-python-9.html). Now it's the turn of classes. Chapter 10 of Patrick Viafore's excellent book, '[Robust Python](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&me=&tag=soumet-20&_encoding=UTF8)', is the last of the user-defined types to be covered. Early on he makes a good point that classes are often taught really early to those new to Python and/or programming, and that maybe the story is a bit more complicated. As I've mentioned before, things like enums and data classes are more or less unmentioned in such educational materials and as such I found this book really helped me fill in the conceptual gaps.

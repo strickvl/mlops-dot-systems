@@ -13,6 +13,7 @@ layout: post
 title: A Taxonomy of Redaction
 toc: true
 
+series: redaction-model
 ---
 
 One of the things that makes it hard to train a model to detect redactions in documents is the fact that there are lots of kinds of redactions. Not only were different tools or methods used at different times, but even organisations and agencies from the same country or government didn't always share redaction practices.

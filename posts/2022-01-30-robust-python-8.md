@@ -14,6 +14,7 @@ layout: post
 title: How and where to use enums in Python
 toc: false
 
+series: robust-python
 ---
 
 The second part of Viafore's ['Robust Python'](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&me=&tag=soumet-20&_encoding=UTF8) is all about user-created types. We start simple in chapter eight and consider the `Enum` type as a way of defining a particular restricted set of values. An example might help get us started:

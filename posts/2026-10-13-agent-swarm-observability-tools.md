@@ -15,6 +15,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: agent-swarm-observability
 ---
 
 Companies at the frontier of model and agent development keep posting about their work on 'agent swarms'. There was the [Hugging Face](https://openai.com/index/hugging-face-incident-and-the-road-ahead/) / [OpenAI incident](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/), but also [Cursor has written](https://cursor.com/blog/agent-swarm-model-economics), as have [Prime Intellect](https://www.primeintellect.ai/blog/on-the-nature-of-the-swarm). Even Kevin Kelly recently [weighed in](https://kevinkelly.substack.com/p/swarm-intelligence).

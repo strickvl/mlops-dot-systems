@@ -19,6 +19,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: master-arabic
 ---
 
 This year, in combination with my [publishing a book](https://www.alexstrick.com/blog/master-arabic-preorder) about getting from intermediate-advanced level in Arabic, I wanted to find a way to stay committed to improving my own language. So I’ve started [a mostly-Arabic-only podcast](https://soundcloud.com/ma-wara-al-logha).

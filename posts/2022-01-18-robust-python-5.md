@@ -15,6 +15,7 @@ layout: post
 title: Using type annotation with collections in Python
 toc: true
 
+series: robust-python
 ---
 
 The fifth chapter of

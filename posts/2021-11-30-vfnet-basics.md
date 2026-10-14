@@ -12,6 +12,7 @@ layout: post
 title: What is VFNet?
 toc: false
 
+series: redaction-model
 ---
 
 VFNet is short for VariFocalNet. This method of object detection was first released in 2008 and it scored 55.1 on the COCO test-dev benchmark, state-of-the-art at the time. There have since been [other improvements](https://paperswithcode.com/sota/object-detection-on-coco).

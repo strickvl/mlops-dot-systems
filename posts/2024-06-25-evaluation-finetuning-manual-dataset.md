@@ -19,6 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2024-06-25-evaluation-finetuning-manual-dataset.html"
+series: isaf-press-releases
 ---
 
 I [previously](https://mlops.systems/posts/2024-06-17-one-click-finetuning.html) experimented with one-click LLM finetuning providers and now is a good time to return to the core of the matter: evaluating how well all these fine-tuned models and experiments are faring. I have a gut feeling that my fine-tuned models did pretty well, but we're not in the business of gut feeling so I'm hoping to be able to put some real numbers down to either prove or disprove this hypothesis.

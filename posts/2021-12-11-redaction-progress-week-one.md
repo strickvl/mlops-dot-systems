@@ -13,6 +13,7 @@ layout: post
 title: 73% accuracy for redaction object detection
 toc: true
 
+series: redaction-model
 ---
 
 Last time I wrote about my redaction model training project, [I explained how I used Prodigy](https://mlops.systems/redactionmodel/computervision/datalabelling/2021/11/29/prodigy-object-detection-training.html) to annotate and label a bunch of images. I subsequently spent a long evening going through the process, getting to know my data. I managed to make 663 annotations, though quite a few of those were negative annotations: I was stating that a certain document contained no redactions at all.

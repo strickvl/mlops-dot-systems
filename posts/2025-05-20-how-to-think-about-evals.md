@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-05-20-how-to-think-about-evals.html"
+series: evals-course
 ---
 
 Today was the first session of Hamel + Shreya's course, "[AI Evals for Engineers and PMs](maven.com/parlance-labs/evals/)". The first session was all about mental models for thinking about the topic as a whole, mixed in with some teasers of practical examples and advice.

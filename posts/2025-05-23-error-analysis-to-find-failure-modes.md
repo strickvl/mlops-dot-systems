@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-05-23-error-analysis-to-find-failure-modes.html"
+series: evals-course
 ---
 
 I came across this quote in a happy coincidence after attending the second session of the evals course:

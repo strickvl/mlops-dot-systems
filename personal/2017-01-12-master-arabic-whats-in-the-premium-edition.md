@@ -16,6 +16,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: master-arabic
 ---
 
 [![](images/2017-01-12-master-arabic-whats-in-the-premium-edition/fcec11f1ea55_image-asset.avif)](http://languagecoach.io/masterarabic)

@@ -19,6 +19,7 @@ title: Figuring out why my object detection model is underperforming with FiftyO
   a great tool you probably haven't heard of
 toc: true
 
+series: redaction-model
 ---
 
 *(This is part of a series of blog posts documenting my work to train a model that detects redactions in documents. To read other posts, check out [the `redactionmodel` taglist](/technical.html#category=redactionmodel).)*

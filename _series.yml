@@ -1,0 +1,76 @@
+# Series registry. Each post joins a series by adding `series: <id>` (or a
+# list of ids) to its frontmatter. Part numbers come from post dates, so you
+# never write them by hand. Read by scripts/build_series.py before each render.
+#
+#   id:            used in post frontmatter and as the anchor on /series.html
+#   title:         shown on the series page and in the box inside each post
+#   section:       technical | personal
+#   description:   one or two sentences for the series page
+#   ongoing:       true while you're still adding posts (optional)
+
+- id: agent-swarm-observability
+  title: Agent Swarm Observability
+  section: technical
+  ongoing: true
+  description: What it would take to understand swarms of thousands of agents, and why today's tracing tools fall short.
+
+- id: agentic-rl
+  title: Agentic RL
+  section: technical
+  ongoing: true
+  description: Learning reinforcement learning for agents from the ground up, using the ISAF extraction task as a running example.
+
+- id: evals-course
+  title: The Evals Course
+  section: technical
+  description: Notes and projects from working through an LLM evaluation course, covering error analysis, failure modes and tracing.
+
+- id: ai-engineering
+  title: Reading 'AI Engineering'
+  section: technical
+  description: Chapter-by-chapter notes on Chip Huyen's book.
+
+- id: prompt-engineering-for-llms
+  title: Reading 'Prompt Engineering for LLMs'
+  section: technical
+  description: Chapter notes on John Berryman and Albert Ziegler's book.
+
+- id: isaf-press-releases
+  title: ISAF Press Releases
+  section: technical
+  description: Turning thousands of ISAF press releases into structured data, from GPT-4 baselines to finetuned models and RL.
+
+- id: balochi-language-model
+  title: Balochi Language Model
+  section: technical
+  description: First steps towards language models for Balochi, a low-resource language. Risks, datasets and tokenisation.
+
+- id: mu123
+  title: MU123 Maths
+  section: technical
+  description: Going back to maths through the Open University's MU123 module.
+
+- id: robust-python
+  title: Reading 'Robust Python'
+  section: technical
+  description: Notes on Patrick Viafore's book about types, enums, data classes and invariants.
+
+- id: redaction-model
+  title: Redaction Model
+  section: technical
+  description: A year-long computer vision project detecting redactions in documents, from a first classifier to thinking about production.
+
+- id: language-learners-journal
+  title: Language Learner's Journal
+  section: personal
+  description: Following Taylor's Arabic studies in Amman, one check-in at a time.
+
+- id: master-arabic
+  title: Master Arabic
+  section: personal
+  description: Writing and launching 'Master Arabic', a book for intermediate students.
+
+- id: phd-tools
+  title: PhD Tools
+  section: personal
+  description: The software, habits and small comforts that got me through a PhD.

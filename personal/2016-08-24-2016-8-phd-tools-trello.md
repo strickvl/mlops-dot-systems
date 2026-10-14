@@ -18,6 +18,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: phd-tools
 ---
 
 *[This is part of a series on the tools I used to write my PhD. Check out the [other parts here](/blog?tag=phdtoolsseries).]*

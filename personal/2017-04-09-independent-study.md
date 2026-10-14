@@ -19,6 +19,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 *[This is a continuation of Taylor's blog series where she details some of the week-in-week-out lessons that she learns through her Arabic studies and* [*coaching work*](http://languagecoach.io/coaching)*together with me. For other posts in the series,*[*click here.*](https://www.alexstrick.com/blog/?tag=taylorjournal#show-archive)*]*

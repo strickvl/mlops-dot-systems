@@ -17,6 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-01-19-notes-on-ai-engineering-chapter-1.html"
+series: ai-engineering
 ---
 
 Had the first of [a series of meet-ups](https://www.meetup.com/delft-fast-ai-study-group/) I'm organising in which we discuss Chip Huyen's new book. My notes from reading the chapter follow this, and then I'll try to summarise what we discussed in the group.

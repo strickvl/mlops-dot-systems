@@ -17,6 +17,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-02-07-ai-engineering-chapter-9.html"
+series: ai-engineering
 ---
 
 What follows are my notes on chapter 9 of Chip Huyen's 'AI Engineering' book. This chapter was on optimising your inference and I learned a lot while reading it! There are interesting techniques like prompt caching and architectural considerations that I was vaguely aware of but hadn't fully appreciated how they might work in real inference systems.

@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html"
+series: prompt-engineering-for-llms
 ---
 
 I'm posting some of my summary notes while reading through John Berryman and Albert Ziegler's "Prompt Engineering for LLMs". What follows are my notes from the first two chapters. It was a bit too long for a post to LinkedIn so I'm posting my notes in full here.

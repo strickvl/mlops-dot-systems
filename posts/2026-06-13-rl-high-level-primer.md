@@ -14,6 +14,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: agentic-rl
 ---
 
 I’ve been reading about reinforcement learning around the edges for a long while, and recently it seems to be something that you can find people doing in production systems more and more. I thought I’d attempt a bit of directed study and focus on the topic, so what follows is the first in a series of blogs where I capture what I’m learning and how I think about it. As always, these are mostly for myself, but they might serve some purpose for others so I will publish them here as I progress.

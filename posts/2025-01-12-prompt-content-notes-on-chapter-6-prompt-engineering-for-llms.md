@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html"
+series: prompt-engineering-for-llms
 ---
 
 Chapter 5 of '[Prompt Engineering for LLMs](https://www.amazon.com/Prompt-Engineering-LLMs-Model-Based-Applications/dp/1098156153?tag=soumet-20)' tackles the kinds of things you might want to include in your prompt. (Chapter 6 thinks through the order, structuring and weighting of these different pieces of content, so this is purely about the 'what' and not the 'how').

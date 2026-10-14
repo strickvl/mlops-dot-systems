@@ -15,6 +15,7 @@ layout: post
 title: Getting practical with type annotations and `mypy`
 toc: false
 
+series: robust-python
 ---
 
 The third chapter of ['Robust Python'](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?_encoding=UTF8&me=&tag=soumet-20&qid=) offers a quick introduction to the practicalities of type annotations in Python. We also see tools like `mypy` being used to catch places where the reality of your code doesn't necessarily match the type annotations that you've stated.

@@ -41,6 +41,7 @@ uv run scripts/generate_descriptions.py --directory personal --dry-run
 - `personal.qmd` - Personal blog listing page (lists `personal/`)
 - `all.qmd` - Combined chronological archive (lists `posts/` + `personal/`)
 - `styles.css` - Global CSS (e.g. tag-cloud styling); each listing page also loads its own `styles/<page>.css`
+- `series.qmd` - Series timeline page; series are defined in `_series.yml` (see "Series" below)
 - `about.qmd`, `til.qmd` - Other main pages
 
 ## Blog Post Format
@@ -67,6 +68,13 @@ aliases:
 ```
 
 **Note on Analytics**: The global `_quarto.yml` config handles Plausible analytics (`data-domain="alexstrick.com"`). Do NOT add `include-before-body` to individual posts — legacy overrides are being removed.
+
+**Series**: Multi-part runs of posts (a project, course or book) are grouped into series, shown on `/series.html` (the "Series" navbar link) and in a box at the top and bottom of each member post with "Part N of M" and previous/next links. Part numbers come from post dates, so they are never written by hand.
+
+- **Add a post to an existing series**: add one line to its frontmatter, e.g. `series: agentic-rl`. A post in two series uses a list: `series: [agentic-rl, isaf-press-releases]`.
+- **Start a new series**: add an entry to `_series.yml` (`id`, `title`, `section: technical|personal`, `description`, and `ongoing: true` while still writing it), then put `series: <id>` in the post. When the series is finished, delete the `ongoing` line.
+- **How it works**: `scripts/build_series.py` runs as a Quarto `pre-render` step, reads `_series.yml` plus every post's `series:` field, and writes `_series.json` (gitignored). `filters/series-box.lua` uses that file to add the in-post box; the `{{< series-index >}}` shortcode in `series.qmd` (`filters/series-index.lua`) draws the timeline. A `series:` id missing from `_series.yml` stops the render with an error naming the post, so typos don't fail silently. Draft posts are left out.
+- Series are separate from categories: a post keeps its tags as before.
 
 **Category / tag links**: The listing pages use `categories: cloud`, which renders a clickable tag cloud and turns each post's category badges into filter links. When linking to a tag from post body text, point to `/technical.html#category=X` (or `/personal.html#category=X`) — NOT `index.html#category=X` (the landing page has no listing, so the filter silently does nothing) and NOT the old `mlops.systems/#category=X`.
 

@@ -15,6 +15,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2023-05-02-logarithms-exponents-mu123.html"
+series: mu123
 ---
 
 I just finished a unit of my Open University Maths degree that's all about exponents and logarithms (unit 13 of MU123). This is the penultimate unit and these final units are where the difficulty has started to stack up for me.

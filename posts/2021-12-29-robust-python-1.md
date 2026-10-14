@@ -14,6 +14,7 @@ layout: post
 title: What makes code robust?
 toc: false
 
+series: robust-python
 ---
 
 We use a lot of modern Python idioms, libraries and patterns at work, so I've been wanting to get up to speed on that and maybe even actively contribute to this general direction. A recently-published book, [Robust Python: Write Clean and Maintainable Code](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&me=&tag=soumet-20&_encoding=UTF8) by [Patrick Viafore](https://www.linkedin.com/in/patviafore/), seems like it answers many of the questions I have around this topic. It is quite dense in terms of the amount of new things per chapter, so I'll be working my way through it in the coming months and reflecting on things as I encounter them.

@@ -16,6 +16,7 @@ layout: post
 title: Different ways to constrain types in Python
 toc: true
 
+series: robust-python
 ---
 
 The fourth chapter of ['Robust Python'](https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?_encoding=UTF8&me=&tag=soumet-20&qid=) continues on from [where we left off](https://mlops.systems/robustpython/python/books-i-read/2022/01/03/robust-python-3.html) last time. We had previously learned about the benefits of type annotations in general terms, as well as started to understand how we might apply these annotations to simple code examples. But what if things are a bit more complicated? Then we have a few more options at our disposal.

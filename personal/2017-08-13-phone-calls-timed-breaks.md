@@ -19,6 +19,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: language-learners-journal
 ---
 
 ![](images/2017-08-13-phone-calls-timed-breaks/9c4f89baf9f4_image-asset.avif)

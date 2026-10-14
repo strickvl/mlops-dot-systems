@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html"
+series: ai-engineering
 ---
 
 This chapter represents a crucial bridge between academic research and production engineering practice in AI system evaluation. What sets it apart is the Chip's very balanced perspective - neither succumbing to the prevalent hype in the field nor becoming overly academic. Instead, she melds together practical insights with theoretical foundations, creating a useful framework for evaluation that acknowledges both technical and ethical considerations.

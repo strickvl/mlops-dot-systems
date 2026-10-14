@@ -21,6 +21,7 @@ aliases:
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: master-arabic
 ---
 
 [![](images/2017-01-03-everything-you-need-to-study-jordanian-arabic/47ffe2ebc919_image-asset.avif)](http://gum.co/masterarabic-premium)

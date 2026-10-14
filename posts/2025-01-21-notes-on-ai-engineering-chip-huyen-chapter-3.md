@@ -16,6 +16,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 aliases:
   - "/posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html"
+series: ai-engineering
 ---
 
 Really enjoyed this chapter. My tidied notes from my readings follow below. 150 pages in and we're starting to get to the good stuff :)

@@ -1,5 +1,6 @@
 project:
   type: website
+  pre-render: uv run scripts/build_series.py
   render:
     - "**/*.qmd"
     - "**/*.md"
@@ -27,6 +28,8 @@ website:
       - text: "All"
         file: all.qmd
     right:
+      - text: "Series"
+        file: series.qmd
       - text: "TIL"
         file: til.qmd
       - text: "About"
@@ -48,6 +51,10 @@ format:
   html:
     theme: cosmo
     css: styles.css
+    filters:
+      - filters/series-box.lua
+    shortcodes:
+      - filters/series-index.lua
     include-in-header:
       text: |
         <script defer data-domain="alexstrick.com"

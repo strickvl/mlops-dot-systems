@@ -16,6 +16,7 @@ layout: post
 title: A painless way to create an MVP demo using computer vision models
 toc: true
 
+series: redaction-model
 ---
 
 # 🚦 Motivation

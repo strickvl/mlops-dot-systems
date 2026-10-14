@@ -14,6 +14,7 @@ layout: post
 title: How to annotate image data for object detection with Prodigy
 toc: true
 
+series: redaction-model
 ---
 
 I'm back to working on [the redaction model](https://mlops.systems/fastai/redactionmodel/computervision/datalabelling/2021/09/06/redaction-classification-chapter-2.html), though this time with a slightly more focused objective: object detection.

@@ -15,6 +15,7 @@ draft: false
 comments:
   utterances:
     repo: strickvl/mlops-dot-systems
+series: [agentic-rl, isaf-press-releases]
 ---
 
 So far we've been looking at the high-level processes and components of reinforcement learning for agents, but I just finished learning about how the trainer / training process works and wanted to give some thoughts on that.

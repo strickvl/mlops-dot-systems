@@ -16,6 +16,7 @@ layout: post
 title: Avoiding BIDMAS, or how J does notation
 toc: false
 
+series: mu123
 ---
 
 One of the topics that comes up early on in Open University's [MU123 mathematics course](https://www.open.ac.uk/courses/modules/mu123) is precedence. Those who grew up in English-speaking countries will probably know this as [BODMAS or BIDMAS](https://www.bbc.co.uk/bitesize/topics/zxqnsk7/articles/znm8cmn). The order of precedence for execution of a mathematical expression gives us an idea for how to resolve expressions that don't make sense. For example, `3 + 1 x 4` can  either amount to 7 or 16, depending on how when you do the multiplication step.
