@@ -7,7 +7,6 @@ categories:
   - learning
   - vocabulary
   - italianchallenge
-  - languages
 date: "2017-06-22"
 description: "How I'm learning to read Italian in two months using Clozemaster and public accountability."
 layout: post

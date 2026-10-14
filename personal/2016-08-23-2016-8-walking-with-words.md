@@ -5,7 +5,7 @@ categories:
   - tech
   - useful-tools
   - movement
-  - podcasts
+  - podcast
   - audible
   - health
 date: "2016-08-23"

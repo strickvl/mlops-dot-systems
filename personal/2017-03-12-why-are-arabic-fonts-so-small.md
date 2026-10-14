@@ -4,7 +4,6 @@ categories:
   - arabic
   - language
   - coding
-  - languages
   - design
 date: "2017-03-12"
 description: "Why Arabic fonts appear smaller than English text on websites, and what's causing this design oversight."

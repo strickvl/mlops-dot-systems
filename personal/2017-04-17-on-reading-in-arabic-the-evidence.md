@@ -5,7 +5,6 @@ categories:
   - language
   - study
   - learning
-  - languages
   - reading
 date: "2017-04-17"
 description: "What ElSaid Badawi's 1970-1977 study on Arabic reading instruction teaches us about language learning."

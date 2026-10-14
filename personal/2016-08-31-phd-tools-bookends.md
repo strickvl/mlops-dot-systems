@@ -7,7 +7,6 @@ categories:
   - useful-tools
   - writing
   - research
-  - technology
   - phdtoolsseries
   - bookends
 date: "2016-08-31"

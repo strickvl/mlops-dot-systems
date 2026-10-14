@@ -5,7 +5,7 @@ author: Alex Strick van Linschoten
 categories:
 - python
 - fastai
-- tools
+- useful-tools
 - redactionmodel
 date: '2022-01-16'
 description: A report midway through my computer vision project to detect the presence

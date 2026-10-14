@@ -5,7 +5,6 @@ categories:
   - study
   - coaching
   - learning
-  - languages
   - languagecoaching
 date: "2017-01-08"
 description: "Tips for getting the most value out of working with a language coach."

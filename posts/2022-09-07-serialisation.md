@@ -7,7 +7,7 @@ categories:
 - computervision
 - mlops
 - python
-- tools
+- useful-tools
 - zenml
 date: '2022-09-07'
 description: I explain the basics around data serialisation and deserialisation, why

@@ -7,7 +7,6 @@ categories:
   - study
   - learning
   - education
-  - technology
 date: "2019-03-21"
 description: "A podcast episode where I spoke with Chris Lee from Launch School about mastery-based learning and the tradeoffs involved in designing an effective curriculum."
 layout: post

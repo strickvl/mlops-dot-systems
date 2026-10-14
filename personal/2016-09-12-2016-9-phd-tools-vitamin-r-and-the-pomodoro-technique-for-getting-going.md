@@ -5,10 +5,8 @@ categories:
   - productivity
   - tech
   - useful-tools
-  - tools
   - work
   - writing
-  - technology
   - phdtoolsseries
 date: "2016-09-12"
 description: "How I used the Pomodoro Technique and Vitamin-R to build focused work sessions during my PhD."

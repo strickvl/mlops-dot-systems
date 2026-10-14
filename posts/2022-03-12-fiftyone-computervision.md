@@ -5,7 +5,7 @@ author: Alex Strick van Linschoten
 categories:
 - redactionmodel
 - computervision
-- tools
+- useful-tools
 - debugging
 - jupyter
 date: '2022-03-12'

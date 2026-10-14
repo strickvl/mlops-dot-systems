@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - books-i-read
   - finetuning
-  - llm
   - llms
 date: "2025-01-26"
 description: "Explores when and how to implement finetuning effectively, looking at key technical aspects like memory considerations and PEFT, while emphasising fine-tuning as a last-resort approach after simpler solutions like prompt engineering and RAG have been exhausted."

@@ -8,7 +8,6 @@ categories:
   - learning
   - amman
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-03-20"
 description: "Reflections on finishing two-and-a-half months at Qasid Arabic Institute and deciding to shift focus toward studying ammiya dialect in Amman instead."

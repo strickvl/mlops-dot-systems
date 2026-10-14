@@ -4,7 +4,6 @@ categories:
   - books-i-read
   - datasets
   - datalabelling
-  - llm
   - llms
   - finetuning
 date: "2025-02-05"

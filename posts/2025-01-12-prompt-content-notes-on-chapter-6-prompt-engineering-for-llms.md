@@ -1,10 +1,10 @@
 ---
 author: Alex Strick van Linschoten
 categories:
-  - llm
+  - llms
   - prompt-engineering
   - books-i-read
-  - RAG
+  - rag
 date: "2025-01-12"
 description: "Chapter 5 of 'Prompt Engineering for LLMs' explores static content (fixed instructions and few-shot examples) versus dynamic content (runtime-assembled context like RAG) in prompts, offering tactical guidance on implementation choices, tradeoffs, and potential pitfalls while emphasising practical examples throughout."
 layout: post

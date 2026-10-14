@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - books-i-read
   - inference
-  - llm
   - llms
   - hardware
 date: "2025-02-07"

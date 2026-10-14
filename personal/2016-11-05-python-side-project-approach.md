@@ -3,8 +3,7 @@ author: Alex Strick van Linschoten
 categories:
   - tech
   - coding
-  - languages
-  - technology
+  - language
   - pythonsideproject
 date: "2016-11-05"
 description: "How I'm structuring my Python side-project: building the core functionality as a standalone program first, then adding a web interface later."

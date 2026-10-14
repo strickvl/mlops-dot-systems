@@ -4,7 +4,7 @@ aliases:
 author: Alex Strick van Linschoten
 categories:
 - python
-- tools
+- useful-tools
 date: '2022-02-27'
 description: The parse, yarl and datefinder packages are all ways in Python to help
   parse input data of different formats and types. Nothing essential here, but useful

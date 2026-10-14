@@ -7,7 +7,6 @@ categories:
   - jordan
   - amman
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-02-04"
 description: "How I'm deepening my Arabic studies through daily speaking practice and immersive classroom work at Qasid."

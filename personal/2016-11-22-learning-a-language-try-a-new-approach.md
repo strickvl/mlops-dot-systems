@@ -5,7 +5,6 @@ categories:
   - study
   - learning
   - skills
-  - languages
   - dutch
   - arabic
   - dari

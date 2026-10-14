@@ -3,7 +3,7 @@ aliases:
 - /tools/docker/computervision/2022/03/25/paperspace-docker-icevision.html
 author: Alex Strick van Linschoten
 categories:
-- tools
+- useful-tools
 - docker
 - computervision
 date: '2022-03-25'

@@ -5,8 +5,6 @@ categories:
   - tech
   - deep-learning
   - data
-  - technology
-  - deeplearning
 date: "2021-05-28"
 description: 'Some reflections on the "black box" problem in deep learning and why neural networks can be difficult to interpret.'
 layout: post

@@ -5,7 +5,7 @@ author: Alex Strick van Linschoten
 categories:
 - debugging
 - testing
-- tools
+- useful-tools
 - calmcode
 date: '2021-11-25'
 description: entr is a useful tool to rerun things when watched files change. It's

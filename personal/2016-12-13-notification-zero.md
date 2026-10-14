@@ -5,9 +5,7 @@ categories:
   - tech
   - useful-tools
   - iphone
-  - tools
   - writing
-  - technology
   - distraction
   - focus
 date: "2016-12-13"

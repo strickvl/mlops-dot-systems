@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - language
   - useful-tools
-  - languages
   - media
 date: "2015-09-18"
 description: "Reflections on ecolinguism and the ethics behind which languages we choose to learn, discussed through an interview about language study and community building."

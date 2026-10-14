@@ -5,7 +5,7 @@ categories:
   - useful-tools
   - javascript
   - web
-  - technology
+  - tech
   - launchschool
 date: "2020-12-10"
 description: "A basic overview of the Handlebars templating language and how to use it with JavaScript to separate HTML from your code."

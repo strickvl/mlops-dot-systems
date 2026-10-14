@@ -2,13 +2,12 @@
 author: Alex Strick van Linschoten
 categories:
   - claude
-  - llm
   - llms
   - miniproject
   - openai
   - prompt-engineering
   - softwareengineering
-  - tools
+  - useful-tools
 date: "2025-03-16"
 description: "Insights from a week of building an LLM-based knowledge database, highlighting experiences with local models, prompt engineering patterns, development tools like Ollama and RepoPrompt, and software engineering principles that enhance AI-assisted development workflows."
 layout: post

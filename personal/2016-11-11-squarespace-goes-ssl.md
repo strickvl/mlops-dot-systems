@@ -6,7 +6,6 @@ categories:
   - security
   - internet
   - web
-  - technology
   - blogging
 date: "2016-11-11"
 description: "News on Squarespace offering free SSL for all hosted sites, and why it matters for security and SEO."

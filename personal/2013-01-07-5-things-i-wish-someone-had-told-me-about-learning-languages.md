@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - language
   - study
-  - languages
 date: "2013-01-07"
 description: "Reflections on what I wish I'd known about language learning, based on years of studying Arabic, Farsi, Pashto, and other languages."
 layout: post

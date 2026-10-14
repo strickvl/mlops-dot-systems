@@ -6,7 +6,7 @@ categories:
 - python
 - jupyter
 - fastai
-- tools
+- useful-tools
 date: '2022-01-06'
 description: Some early thoughts on the benefits and possible drawbacks of using fastai's
   'nbdev' literate programming tool which is a suite of tools that allows you to Python

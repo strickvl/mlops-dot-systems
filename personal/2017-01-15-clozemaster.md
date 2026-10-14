@@ -6,9 +6,7 @@ categories:
   - memory
   - useful-tools
   - study
-  - languages
   - learning
-  - tools
 date: "2017-01-15"
 description: "Exploring Clozemaster, a language learning tool that teaches vocabulary through cloze tests based on real sentences from Tatoeba, and why learning words in context is more effective than memorization alone."
 layout: post

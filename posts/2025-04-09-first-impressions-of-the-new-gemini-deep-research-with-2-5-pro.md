@@ -3,7 +3,7 @@ author: Alex Strick van Linschoten
 categories:
   - agents
   - google
-  - tools
+  - useful-tools
   - openai
   - research
 date: "2025-04-09"

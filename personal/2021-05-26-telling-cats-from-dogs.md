@@ -3,8 +3,7 @@ author: Alex Strick van Linschoten
 categories:
   - deep-learning
   - software
-  - technology
-  - deeplearning
+  - tech
 date: "2021-05-26"
 description: "How neural networks learn to classify images differently than traditional programming, illustrated with a cat vs. dog classification example."
 layout: post

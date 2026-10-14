@@ -3,7 +3,7 @@ aliases:
 - /tools/redactionmodel/computervision/datavalidation/2022/04/26/data-validation-great-expectations-part-2.html
 author: Alex Strick van Linschoten
 categories:
-- tools
+- useful-tools
 - redactionmodel
 - computervision
 - datavalidation

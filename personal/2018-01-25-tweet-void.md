@@ -5,8 +5,6 @@ categories:
   - tech
   - useful-tools
   - social-media
-  - tools
-  - technology
 date: "2018-01-25"
 description: "How I used a Chrome extension to stop mindlessly scrolling Twitter and reclaim some time."
 layout: post

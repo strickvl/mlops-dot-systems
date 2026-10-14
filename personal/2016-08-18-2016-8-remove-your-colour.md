@@ -5,7 +5,6 @@ categories:
   - tech
   - hack
   - iphone
-  - technology
 date: "2016-08-18"
 description: "A simple trick for resisting digital distraction: switch your devices to grayscale and remove the color that apps and websites use to keep you hooked."
 layout: post

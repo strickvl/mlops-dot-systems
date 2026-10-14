@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - environment
   - tech
-  - technology
   - web
   - ecology
 date: "2016-10-28"

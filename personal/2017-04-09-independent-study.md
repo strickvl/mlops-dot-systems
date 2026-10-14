@@ -7,7 +7,6 @@ categories:
   - languagelearner'sjournal
   - coaching
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-04-09"
 description: "How I'm approaching independent study in Arabic dialect, from reading unglossed media articles to seeking out immersive experiences beyond the classroom."

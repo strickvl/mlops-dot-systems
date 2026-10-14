@@ -5,7 +5,6 @@ categories:
   - productivity
   - tech
   - useful-tools
-  - tools
   - writing
   - research
   - phdtoolsseries

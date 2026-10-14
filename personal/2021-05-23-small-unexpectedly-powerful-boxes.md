@@ -4,8 +4,6 @@ categories:
   - tech
   - useful-tools
   - deep-learning
-  - technology
-  - deeplearning
 date: "2021-05-23"
 description: "Why GPUs are the small, powerful boxes powering everything from your screen to deep learning models—and why they've been impossible to find."
 layout: post

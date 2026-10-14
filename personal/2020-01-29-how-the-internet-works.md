@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - tech
   - coding
-  - technology
   - launchschool
   - internet
 date: "2020-01-29"

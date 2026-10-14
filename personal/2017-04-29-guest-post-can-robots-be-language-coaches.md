@@ -4,7 +4,6 @@ categories:
   - language
   - incremental-elephant
   - coaching
-  - languages
   - coachbot
   - languagecoaching
 date: "2017-04-29"

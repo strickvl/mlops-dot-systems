@@ -5,7 +5,6 @@ categories:
   - study
   - learning
   - education
-  - languages
   - languagecoaching
 date: "2023-08-10"
 description: "Tips on learning a language efficiently, from someone who started with almost nothing to reach conversational ability."

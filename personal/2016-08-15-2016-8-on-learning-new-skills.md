@@ -8,7 +8,7 @@ categories:
   - tsp
   - skills
   - writing
-  - languages
+  - language
 date: "2016-08-15"
 description: "Reflections on learning new skills and expanding literacy in data science, statistics, and Python—and the practical challenges that come with it."
 layout: post

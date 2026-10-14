@@ -7,7 +7,6 @@ categories:
   - incremental-elephant
   - publishing
   - plateau-ebook
-  - languages
   - masterarabic
   - languagecoaching
 date: "2017-02-13"

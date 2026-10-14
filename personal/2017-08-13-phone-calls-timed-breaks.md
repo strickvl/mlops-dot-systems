@@ -7,7 +7,6 @@ categories:
   - jordan
   - amman
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-08-13"
 description: "How taking extended breaks and daily small pauses improved my Arabic learning, and what I gained from spontaneous language practice during time off."

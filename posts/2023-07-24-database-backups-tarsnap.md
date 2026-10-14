@@ -1,10 +1,10 @@
 ---
 author: Alex Strick van Linschoten
 categories:
-  - databases
+  - database
   - skillbuilding
   - softwareengineering
-  - tools
+  - useful-tools
   - miniproject
 date: "2023-07-24"
 description: "I added a cronjob to automate database backups for my MathsPrompt questions."

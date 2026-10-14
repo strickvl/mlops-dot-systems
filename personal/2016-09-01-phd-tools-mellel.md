@@ -6,7 +6,6 @@ categories:
   - tech
   - useful-tools
   - mellel
-  - tools
   - writing
   - research
   - phdtoolsseries

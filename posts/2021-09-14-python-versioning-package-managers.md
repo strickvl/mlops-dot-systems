@@ -4,7 +4,7 @@ aliases:
 author: Alex Strick van Linschoten
 categories:
 - python
-- tools
+- useful-tools
 date: '2021-09-14'
 description: Getting a development environment setup for Python and having to choose
   between pyenv vs virtualenv vs venv

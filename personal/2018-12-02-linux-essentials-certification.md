@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - tech
   - linux
-  - technology
 date: "2018-12-02"
 description: "I earned the LPI Linux Essentials certification and here's what I learned from studying for and taking the exam."
 layout: post

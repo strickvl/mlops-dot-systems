@@ -6,7 +6,7 @@ categories:
   - general
   - amman
   - syria
-  - languages
+  - language
   - artificialintelligence
   - translation
   - war

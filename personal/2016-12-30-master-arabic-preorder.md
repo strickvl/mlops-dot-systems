@@ -6,7 +6,6 @@ categories:
   - incremental-elephant
   - study
   - writing
-  - languages
   - masterarabic
   - arabic
 date: "2016-12-30"

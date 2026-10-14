@@ -12,7 +12,6 @@ categories:
   - study
   - learning
   - anki
-  - languages
   - srsfoundation
   - spaced-repetition
 date: "2016-09-08"

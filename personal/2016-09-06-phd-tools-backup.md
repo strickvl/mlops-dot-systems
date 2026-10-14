@@ -4,8 +4,6 @@ categories:
   - tech
   - useful-tools
   - phd
-  - tools
-  - technology
   - phdtoolsseries
   - storage
   - backup

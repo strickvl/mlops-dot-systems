@@ -4,7 +4,6 @@ categories:
   - arabic
   - language
   - memory
-  - languages
   - learning
   - languagecoaching
 date: "2017-01-27"

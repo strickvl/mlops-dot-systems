@@ -3,8 +3,7 @@ author: Alex Strick van Linschoten
 categories:
   - language
   - farsi
-  - podcasts
-  - languages
+  - podcast
   - persian
   - dari
 date: "2018-11-07"

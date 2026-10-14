@@ -4,8 +4,7 @@ categories:
   - tech
   - books
   - music
-  - technology
-  - podcasts
+  - podcast
 date: "2016-11-12"
 description: "Reflections on a Steven Johnson podcast series exploring how technological innovation and cultural shifts have shaped our sonic landscape, with a focus on episode 3's discussion of broken machines and new music."
 layout: post

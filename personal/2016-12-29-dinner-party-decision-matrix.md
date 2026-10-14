@@ -4,7 +4,6 @@ categories:
   - coding
   - useful-tools
   - python
-  - tools
   - food
 date: "2016-12-29"
 description: "I built a Python tool to solve my dinner party dilemma using weighted decision-making—and learned some valuable lessons about lists, dictionaries, and testing along the way."

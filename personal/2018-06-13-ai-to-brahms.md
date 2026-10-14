@@ -6,7 +6,6 @@ categories:
   - coding
   - music
   - machinelearning
-  - technology
 date: "2018-06-13"
 description: "Reflections on attending PyLondinium and CogX conferences, and how an evening of classical music provided perspective on what humans uniquely offer."
 layout: post

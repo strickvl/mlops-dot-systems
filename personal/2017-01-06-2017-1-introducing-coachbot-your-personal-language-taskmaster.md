@@ -6,7 +6,6 @@ categories:
   - tech
   - language
   - productivity
-  - languages
   - pythonsideproject
   - coachbot
 date: "2017-01-06"

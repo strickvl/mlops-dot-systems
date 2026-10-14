@@ -7,7 +7,6 @@ categories:
   - raspberrypi
   - lpic
   - linux
-  - technology
 date: "2018-12-31"
 description: "Starting a new series working through the LPIC-1 exam using a Raspberry Pi as my learning environment, and the setup steps I took to get it running."
 layout: post

@@ -4,8 +4,6 @@ categories:
   - tech
   - deep-learning
   - academia
-  - technology
-  - deeplearning
 date: "2021-05-23"
 description: "How theoretical misunderstandings about neural networks held back the field of deep learning for decades."
 layout: post

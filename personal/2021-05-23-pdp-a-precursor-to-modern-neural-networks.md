@@ -4,8 +4,6 @@ categories:
   - tech
   - deep-learning
   - history
-  - technology
-  - deeplearning
 date: "2021-05-23"
 description: "Looking back at the foundational PDP work from 1968 and how its eight core principles anticipate what we now call deep learning."
 layout: post

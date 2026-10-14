@@ -4,10 +4,9 @@ categories:
   - phd
   - productivity
   - useful-tools
-  - tools
   - writing
   - tinderbox
-  - technology
+  - tech
   - phdtoolsseries
   - thinking
 date: "2016-08-25"

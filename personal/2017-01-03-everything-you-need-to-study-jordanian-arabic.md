@@ -9,7 +9,6 @@ categories:
   - arabicpodcast
   - amman
   - masterarabic
-  - languages
   - arabic
 date: "2017-01-03"
 description: "My review of the best resources for learning Jordanian Arabic, from textbooks and vocabulary guides to listening materials and comedy shows."

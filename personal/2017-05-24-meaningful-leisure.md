@@ -8,7 +8,6 @@ categories:
   - language
   - amman
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-05-24"
 description: "Reflections on shifting to a third phase of Arabic study focused on making genuine friendships and participating in everyday leisure activities around Amman, rather than structured classroom learning."

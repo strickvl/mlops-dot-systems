@@ -7,7 +7,6 @@ categories:
   - study
   - learning
   - plateau-ebook
-  - languages
   - arabic
 date: "2016-12-09"
 description: "My recommendation for intermediate Arabic learners: the Arabic Voices series by Lingualism, which uses authentic monologues from across the Arab world to navigate dialect differences."

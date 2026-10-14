@@ -6,8 +6,6 @@ categories:
   - deep-learning
   - software
   - education
-  - technology
-  - deeplearning
 date: "2021-05-23"
 description: "Challenging common myths about what you need to get started with deep learning, and why domain expertise matters more than you'd think."
 layout: post

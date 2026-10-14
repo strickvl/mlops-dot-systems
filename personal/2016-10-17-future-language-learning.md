@@ -3,9 +3,8 @@ author: Alex Strick van Linschoten
 categories:
   - language
   - useful-tools
-  - languages
   - learning
-  - technology
+  - tech
 date: "2016-10-17"
 description: "I tried Duolingo's new Bots feature for language learning and discovered it's far more limited than the marketing suggested—the conversations run on rails, not free-flowing dialogue."
 layout: post

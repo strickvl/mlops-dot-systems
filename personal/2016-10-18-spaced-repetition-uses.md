@@ -5,11 +5,10 @@ categories:
   - coding
   - useful-tools
   - study
-  - tools
   - learning
   - memorisation
   - work
-  - technology
+  - tech
   - spaced-repetition
 date: "2016-10-18"
 description: "Exploring different applications for spaced repetition beyond vocabulary learning—from remembering birthdays to retaining key insights from books and articles."

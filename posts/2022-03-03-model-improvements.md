@@ -5,7 +5,7 @@ author: Alex Strick van Linschoten
 categories:
 - redactionmodel
 - computervision
-- tools
+- useful-tools
 date: '2022-03-03'
 description: I used a series of techniques to improve the performance of my model
   while creating a pathway to (hopefully) bigger gains going forward.

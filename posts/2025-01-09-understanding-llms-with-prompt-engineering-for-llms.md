@@ -1,7 +1,7 @@
 ---
 author: Alex Strick van Linschoten
 categories:
-  - llm
+  - llms
   - prompt-engineering
   - books-i-read
   - tokenisation

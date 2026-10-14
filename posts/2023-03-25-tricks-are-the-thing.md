@@ -4,7 +4,7 @@ categories:
 - mathematics
 - mu123
 - q31
-- deeplearning
+- deep-learning
 date: '2023-03-25'
 description: "I've enjoyed learning about quadratic equations and trigonometry for my Maths degree, and am struck by how many incremental steps along the way contributed to the total edifice of understanding."
 layout: post

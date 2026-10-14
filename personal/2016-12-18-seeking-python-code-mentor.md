@@ -4,7 +4,6 @@ categories:
   - language
   - coding
   - study
-  - languages
   - learning
 date: "2016-12-18"
 description: "Looking for a Python code mentor to help guide a web app project involving a frontend, Python backend, and PostgreSQL database."

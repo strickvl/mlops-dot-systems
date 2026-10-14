@@ -8,7 +8,6 @@ categories:
   - productivity
   - data
   - software
-  - technology
 date: "2018-01-17"
 description: "I discovered Tabula, a tool that extracts table data from PDFs and exports it to formats like CSV and JSON."
 layout: post

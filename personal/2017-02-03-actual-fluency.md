@@ -5,7 +5,6 @@ categories:
   - language
   - podcast
   - learning
-  - languages
   - interview
   - languagecoaching
 date: "2017-02-03"

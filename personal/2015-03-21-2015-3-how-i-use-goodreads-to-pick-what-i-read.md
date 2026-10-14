@@ -6,7 +6,6 @@ categories:
   - useful-tools
   - data
   - quantifiedself
-  - technology
 date: "2015-03-21"
 description: "How I use Goodreads to pick what I read, sorting my reading list by average rating to balance challenging books with more accessible ones."
 layout: post

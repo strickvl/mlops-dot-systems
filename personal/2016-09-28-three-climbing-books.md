@@ -3,7 +3,7 @@ author: Alex Strick van Linschoten
 categories:
   - books
   - climbing
-  - reviews
+  - review
   - ecology
 date: "2016-09-28"
 description: "I read three climbing books back-to-back and here are my thoughts on what they each brought to the table."

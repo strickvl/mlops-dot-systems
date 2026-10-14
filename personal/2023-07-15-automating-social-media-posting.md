@@ -6,7 +6,6 @@ categories:
   - useful-tools
   - automation
   - social-media
-  - technology
 date: "2023-07-15"
 description: "How I set up automation to post my blog updates to social media using Zapier, Buffer, and ChatGPT."
 layout: post

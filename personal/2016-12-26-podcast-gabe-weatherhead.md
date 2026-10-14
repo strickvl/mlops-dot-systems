@@ -7,7 +7,6 @@ categories:
   - data
   - database
   - devonthink
-  - technology
   - social-media
   - software
 date: "2016-12-26"

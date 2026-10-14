@@ -4,7 +4,6 @@ categories:
   - arabic
   - language
   - lessonslearnt
-  - languages
   - learning
   - languagecoaching
 date: "2017-02-23"

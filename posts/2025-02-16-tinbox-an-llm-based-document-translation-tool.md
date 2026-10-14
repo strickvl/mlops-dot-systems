@@ -2,13 +2,12 @@
 author: Alex Strick van Linschoten
 categories:
   - translation
-  - llm
   - llms
-  - languages
+  - language
   - research
   - miniproject
   - python
-  - tools
+  - useful-tools
 date: "2025-02-16"
 description: "Explores an open-source tool I built that tackles the challenges of large-scale document translation using LLMs. Born from my experience as both a historian working with Afghan primary sources and a developer, it offers innovative solutions to common translation problems through smart chunking algorithms and local model support, making multilingual content more accessible for researchers and developers alike."
 layout: post

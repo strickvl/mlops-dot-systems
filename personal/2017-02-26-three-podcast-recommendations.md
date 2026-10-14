@@ -2,7 +2,6 @@
 author: Alex Strick van Linschoten
 categories:
   - podcast
-  - podcasts
 date: "2017-02-26"
 description: "Three podcast recommendations for expanding your listening habits: science-fiction and technology, American foreign policy behind the scenes, and nuclear security."
 layout: post

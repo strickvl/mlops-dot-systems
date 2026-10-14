@@ -4,7 +4,6 @@ categories:
   - tech
   - coding
   - udacity
-  - technology
 date: "2016-09-17"
 description: "Reflections on hitting a wall while working through Udacity's data analysis nanodegree—what happens when the difficulty jumps and you can't seem to break through."
 layout: post

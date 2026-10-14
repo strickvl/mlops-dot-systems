@@ -3,8 +3,8 @@ author: Alex Strick van Linschoten
 categories:
   - knot
   - environment
-  - languages
-  - technology
+  - language
+  - tech
   - climate
   - empathy
   - reading

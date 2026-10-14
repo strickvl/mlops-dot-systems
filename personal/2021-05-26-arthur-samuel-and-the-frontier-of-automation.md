@@ -5,8 +5,7 @@ categories:
   - deep-learning
   - statistics
   - machinelearning
-  - technology
-  - deeplearning
+  - tech
 date: "2021-05-26"
 description: "How machine learning as we know it today traces back to Arthur Samuel's 1962 essay on automating computers to learn from their experience."
 layout: post

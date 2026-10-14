@@ -4,8 +4,7 @@ categories:
   - afghanistan
   - language
   - pashto
-  - podcasts
-  - languages
+  - podcast
 date: "2018-11-05"
 description: "I returned to studying Pashto after a few years away and compiled a list of podcasts for language learners, since options are limited despite millions of Pashto speakers worldwide."
 layout: post

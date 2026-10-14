@@ -6,7 +6,7 @@ categories:
 - redactionmodel
 - computervision
 - python
-- tools
+- useful-tools
 date: '2022-02-10'
 description: I iterated through several prototypes to get to a script that could autogenerate
   synthetic training data for my computer vision model. I hoped to bootstrap my training

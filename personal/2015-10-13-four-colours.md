@@ -4,7 +4,6 @@ categories:
   - podcast
   - useful-tools
   - notes
-  - tools
   - pens
   - writing
 date: "2015-10-13"

@@ -6,7 +6,7 @@ categories:
 - fastai
 - computervision
 - redactionmodel
-- tools
+- useful-tools
 date: '2022-05-07'
 description: I created a few deployed MVP demos showcasing models I'd created while
   participating in the fastai course, uploading them to the Huggingface Hub and using

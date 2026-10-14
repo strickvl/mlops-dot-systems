@@ -5,7 +5,6 @@ categories:
   - useful-tools
   - software
   - security
-  - technology
 date: "2016-11-17"
 description: "How I encrypted my Dropbox files using Boxcryptor to secure my digital life."
 layout: post

@@ -2,7 +2,6 @@
 author: Alex Strick van Linschoten
 categories:
   - books-i-read
-  - llm
   - llms
   - agents
   - rag

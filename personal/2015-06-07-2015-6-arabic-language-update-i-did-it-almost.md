@@ -5,9 +5,7 @@ categories:
   - useful-tools
   - study
   - learning
-  - tools
   - middlebury
-  - languages
   - arabic
 date: "2015-06-07"
 description: "How I prepared for an intensive Arabic language course by logging 100 hours of study in June, using iTalki lessons, podcasts, and extensive reading to refresh skills I hadn't used in a decade."

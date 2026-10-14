@@ -5,8 +5,6 @@ categories:
   - tech
   - useful-tools
   - deep-learning
-  - technology
-  - deeplearning
 date: "2021-05-23"
 description: "Specific areas where deep learning has already surpassed human-level performance, from translation and medical imaging to protein folding and game-playing."
 layout: post

@@ -7,7 +7,6 @@ categories:
   - languagelearner'sjournal
   - learning
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-02-18"
 description: "Reflections on a week of Arabic study highs and lows, and what preparation and confidence taught me about speaking fluently."

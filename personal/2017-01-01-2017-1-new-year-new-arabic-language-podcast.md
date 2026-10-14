@@ -6,7 +6,6 @@ categories:
   - podcast
   - arabicpodcast
   - amman
-  - languages
   - masterarabic
   - arabic
 date: "2017-01-01"

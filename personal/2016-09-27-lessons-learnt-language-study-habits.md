@@ -4,7 +4,6 @@ categories:
   - language
   - study
   - lessonslearnt
-  - languages
   - learning
 date: "2016-09-27"
 description: "What I've learned about the study habits that actually move the needle for language learners, based on coaching dozens of students."

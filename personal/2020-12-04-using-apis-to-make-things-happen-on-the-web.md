@@ -5,7 +5,7 @@ categories:
   - javascript
   - internet
   - web
-  - technology
+  - tech
   - launchschool
 date: "2020-12-04"
 description: "How API calls unlock creative possibilities on the web, and what I learned about the simple text behind so much of our online interaction."

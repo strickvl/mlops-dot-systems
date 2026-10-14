@@ -9,7 +9,7 @@ categories:
   - q31
   - skillbuilding
   - softwareengineering
-  - tools
+  - useful-tools
   - miniproject
 date: "2023-07-23"
 description: "I built a tool to help me practice the parts of mathematics that I find hardest. I also have been reading some books about Rust and I also wanted to play around with that so used it for the server / backend."

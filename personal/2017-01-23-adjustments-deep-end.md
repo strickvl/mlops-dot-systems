@@ -6,7 +6,6 @@ categories:
   - incremental-elephant
   - coaching
   - taylorjournal
-  - languages
   - languagecoaching
 date: "2017-01-23"
 description: "My adjustments to studying Arabic intensively—how I'm managing a heavy workload at language school and strategies like Anki cards and grammar resources that help me actually understand what I'm learning rather than just getting through homework."

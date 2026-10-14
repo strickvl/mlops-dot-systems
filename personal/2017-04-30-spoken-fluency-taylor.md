@@ -4,7 +4,6 @@ categories:
   - arabic
   - language
   - languagelearner'sjournal
-  - languages
   - speaking
   - languagecoaching
   - reading

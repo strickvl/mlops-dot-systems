@@ -7,7 +7,6 @@ categories:
   - goals
   - study
   - learning
-  - languages
   - masterarabic
 date: "2017-01-04"
 description: "Some reflections on distinguishing between internal and external goals, and why focusing on what you actually control leads to better outcomes."

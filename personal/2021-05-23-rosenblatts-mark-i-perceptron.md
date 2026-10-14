@@ -5,8 +5,6 @@ categories:
   - coding
   - useful-tools
   - deep-learning
-  - technology
-  - deeplearning
 date: "2021-05-23"
 description: "I learned about Rosenblatt's Mark I Perceptron, the 1958 machine that pioneered artificial neural networks and how Minsky and Papert's critique inadvertently triggered the first AI winter."
 layout: post

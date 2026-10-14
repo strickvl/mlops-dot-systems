@@ -1,7 +1,7 @@
 ---
 author: Alex Strick van Linschoten
 categories:
-  - tools
+  - useful-tools
   - anthropic
   - claude
   - miniproject

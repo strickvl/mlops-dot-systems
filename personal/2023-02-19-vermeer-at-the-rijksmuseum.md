@@ -2,7 +2,7 @@
 author: Alex Strick van Linschoten
 categories:
   - art
-  - reviews
+  - review
   - netherlands
 date: "2023-02-19"
 description: "I visited the Vermeer exhibition at the Rijksmuseum in Amsterdam and was struck by how seeing his works together—especially the small Delft landscapes—created a different impact than encountering them separately across different galleries."

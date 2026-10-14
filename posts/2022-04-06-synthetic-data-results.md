@@ -3,7 +3,7 @@ aliases:
 - /tools/redactionmodel/computervision/2022/04/06/synthetic-data-results.html
 author: Alex Strick van Linschoten
 categories:
-- tools
+- useful-tools
 - redactionmodel
 - computervision
 date: '2022-04-06'

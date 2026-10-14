@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - language
   - useful-tools
-  - languages
   - arabic
   - learning
 date: "2015-09-02"

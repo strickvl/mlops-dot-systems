@@ -6,7 +6,6 @@ categories:
   - taskpaper
   - mac
   - omnifocus
-  - technology
 date: "2017-01-05"
 description: "How I copy hierarchical task lists from Taskpaper into Omnifocus using a simple paste trick."
 layout: post

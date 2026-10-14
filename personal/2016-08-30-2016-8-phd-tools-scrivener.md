@@ -8,7 +8,6 @@ categories:
   - research
   - phdtoolsseries
   - writing
-  - tools
 date: "2016-08-30"
 description: "How I used Scrivener to manage the structure and word count of my PhD thesis."
 layout: post

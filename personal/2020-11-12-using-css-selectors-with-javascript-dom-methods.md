@@ -4,7 +4,7 @@ categories:
   - coding
   - javascript
   - web
-  - technology
+  - tech
   - launchschool
 date: "2020-11-12"
 description: "How I learned to use CSS selectors with JavaScript DOM methods like querySelector and querySelectorAll."

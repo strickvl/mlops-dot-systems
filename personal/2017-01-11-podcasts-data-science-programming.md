@@ -6,7 +6,6 @@ categories:
   - useful-tools
   - data
   - python
-  - podcasts
 date: "2017-01-11"
 description: "My favorite podcasts for learning about data science and programming, from shows focused on career journeys to deep dives on industry trends."
 layout: post

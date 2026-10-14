@@ -4,7 +4,6 @@ categories:
   - language
   - study
   - learning
-  - languages
   - icelandic
   - pronunciation
 date: "2016-09-04"

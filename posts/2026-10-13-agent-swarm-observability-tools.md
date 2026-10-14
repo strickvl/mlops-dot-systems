@@ -5,7 +5,7 @@ categories:
   - swarms
   - observability
   - agents
-  - tools
+  - useful-tools
 date: "2026-10-13"
 description: "Why agent swarms need observability tools built for them: a 2,000-agent example, the historian's case for treating agent explanations as testimony rather than fact, and a look at what exists so far."
 layout: post

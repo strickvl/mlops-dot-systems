@@ -3,7 +3,6 @@ author: Alex Strick van Linschoten
 categories:
   - language
   - study
-  - languages
   - learning
 date: "2017-01-05"
 description: "Why randomising your learning through interleaved practice helps concepts stick better than studying topics in isolation."

@@ -9,7 +9,6 @@ categories:
   - review
   - database
   - research
-  - technology
   - software
   - reading
 date: "2016-12-09"

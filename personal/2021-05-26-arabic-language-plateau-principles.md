@@ -6,7 +6,6 @@ categories:
   - study
   - learning
   - skills
-  - languages
   - arabicintermediateplateau
   - arabic
 date: "2021-05-26"

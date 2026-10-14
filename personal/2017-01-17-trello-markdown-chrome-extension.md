@@ -3,10 +3,9 @@ author: Alex Strick van Linschoten
 categories:
   - useful-tools
   - data
-  - tools
   - database
   - internet
-  - technology
+  - tech
   - trello
 date: "2017-01-17"
 description: "I discovered a Chrome extension that exports Trello boards to Markdown and other formats, solving my need to work with hundreds of notes offline."

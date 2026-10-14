@@ -1,7 +1,7 @@
 ---
 author: Alex Strick van Linschoten
 categories:
-  - reviews
+  - review
   - bollywood
   - film
 date: "2020-06-11"

@@ -4,7 +4,6 @@ categories:
   - language
   - general
   - memorisation
-  - languages
   - islam
   - skills
 date: "2016-05-25"

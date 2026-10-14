@@ -5,7 +5,6 @@ categories:
   - language
   - study
   - learning
-  - languages
   - languagecoaching
   - reading
 date: "2017-04-15"

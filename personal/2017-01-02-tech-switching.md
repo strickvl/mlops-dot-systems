@@ -6,7 +6,6 @@ categories:
   - software
   - media
   - blogging
-  - technology
 date: "2017-01-02"
 description: "A rant about tech writers constantly switching between applications without explaining why, and a plea for more substantive reasoning behind their recommendations."
 layout: post

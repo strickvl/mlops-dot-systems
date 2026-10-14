@@ -4,8 +4,7 @@ categories:
   - productivity
   - useful-tools
   - facebook
-  - tools
-  - technology
+  - tech
 date: "2016-09-24"
 description: "How I use the News Feed Eradicator Chrome extension to disable Facebook's feed and avoid its distractions."
 layout: post

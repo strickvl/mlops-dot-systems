@@ -2,9 +2,8 @@
 author: Alex Strick van Linschoten
 categories:
   - language
-  - languages
   - web
-  - tools
+  - useful-tools
 date: "2017-03-10"
 description: "A recommendation for Language Transfer, a free audio course that's great for getting your ear attuned to a new language."
 layout: post

@@ -5,9 +5,7 @@ categories:
   - productivity
   - tech
   - useful-tools
-  - tools
   - accountability
-  - technology
   - beeminder
   - phdtoolsseries
 date: "2016-08-22"

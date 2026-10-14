@@ -5,7 +5,6 @@ categories:
   - deep-learning
   - study
   - fastai
-  - deeplearning
 date: "2021-05-27"
 description: "My notes from Jeremy Howard's FastAI Lesson 0 video on how to approach learning deep learning effectively."
 layout: post
