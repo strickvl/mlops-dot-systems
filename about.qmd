@@ -15,23 +15,78 @@ about:
       href: https://github.com/strickvl
     - icon: mastodon
       text: Mastodon
-      href: https://sigmoid.social/web/@alexstrick
+      href: https://mastodon.social/@strickvl
+    - icon: database
+      text: Hugging Face
+      href: https://huggingface.co/strickvl
 
 ---
 
-I am an ML Engineer working at ZenML. This blog is a place for me to process and
-share what I learn along the way.
+I spent around fifteen years as a historian and researcher, mostly in and about
+Afghanistan, before moving into software in 2021. Since then I've been an ML
+engineer at ZenML, working on [ZenML](https://github.com/zenml-io/zenml) and
+[Kitaru](https://kitaru.ai). I live in Delft, in the Netherlands, with two cats.
 
-I built [Ekko](https://ekko-realtime.com), an open-source framework allowing
-developers to easily add realtime infrastructure and in-transit message
-processing to web applications. I have multiple years of experience in the
-Python, Ruby and JavaScript ecosystems and am comfortable working with Go,
-PostgreSQL, AWS cloud infrastructure and Docker.
+Most of my historical work came down to reading large piles of messy,
+contradictory sources, deciding which ones to trust, and turning them into
+something structured enough to reason about. That turns out to be most of the
+work of evaluating and training agents. Reading an agent's trace is source
+criticism: its account of what it did is
+[testimony, not fact](/posts/2026-10-13-agent-swarm-observability-tools.html).
+Building an eval or an
+[RL environment](/posts/2026-06-20-my-first-rl-environment.html) means turning
+a messy record into a task you can check, which is what I did with ISAF press
+releases on the way to
+[finetuned models that beat GPT-4](/posts/2024-07-01-full-finetuned-model-evaluation.html).
+I'm always happy to talk about evals, RL environments or agent observability;
+the easiest way to reach me is on [LinkedIn](https://linkedin.com/in/strickvl)
+or [Twitter](https://twitter.com/strickvl).
 
-I have a PhD in History and authored several books based on my research work in
-Afghanistan. I have [a different long-standing blog](https://www.alexstrick.com)
-that I will combine with this one at some point, but for now I intend to post
-technical posts here.
+This site has two halves. The [technical](/technical.html) side is where I work
+things out in public: these days that's mostly agents, reinforcement learning
+for agents, and evals. The [personal](/personal.html) side goes back to 2010
+and covers Afghanistan, language learning, maths, learning how to learn, and
+the books I've been reading. If you're not sure where to start, the
+[series](/series.html) collect longer runs of posts about a single project,
+course or book. Each half has its own RSS feed
+([technical](/technical.xml), [personal](/personal.xml)).
 
-I built [Gemini by Example](https://www.geminibyexample.com) as a reference
-resource for the Gemini API / SDK.
+The two halves meet more often than you might expect. Some of the tools below
+are for historians and researchers, and I publish datasets on
+[Hugging Face](https://huggingface.co/strickvl), including ISAF press releases
+from Afghanistan and records from the Guantánamo military commissions.
+
+## Books
+
+- [*DeepSeek in Practice*](https://www.packtpub.com/en-us/product/deepseek-in-practice-9781806020850)
+  (Packt, 2025), with Andy Peng and Duarte O. Carmo
+- *An Enemy We Created: The Myth of the Taliban-Al Qaeda Merger in Afghanistan*
+  (2012), with Felix Kuehn
+- *Poetry of the Taliban* (2012), edited with Felix Kuehn
+- *My Life with the Taliban* (2010), Abdul Salam Zaeef's memoir, edited with
+  Felix Kuehn
+- *Master Arabic* (2017), a guide for intermediate Arabic students
+
+Felix and I also run [First Draft Publishing](https://www.firstdraft-publishing.com),
+a small publishing house for niche-interest books.
+
+## Other things I've made
+
+- The [LLMOps Database](https://www.zenml.io/llmops-database), which I curate:
+  over 2,000 real-world case studies of LLMs in production
+- [AIE Talks](https://aietalks.com), summaries and timestamps for every talk on
+  the AI Engineer YouTube channel
+- [MLOps Talks](https://mlopstalks.com), the same for the MLOps Community's
+  talks, podcast episodes and meetups
+- [hinbox](https://github.com/strickvl/hinbox), which pulls people, places and
+  organisations out of historical documents
+- [tinbox](https://github.com/strickvl/tinbox), a translator in a box
+- [panlabel](https://github.com/strickvl/panlabel), a converter between data
+  annotation formats
+- [Sources & Methods](https://www.sourcesandmethods.com), a podcast I ran with
+  Matt Trevithick about what people read and the tools they use to get their
+  work done
+- [Gemini by Example](https://www.geminibyexample.com), a reference for the
+  Gemini API and SDK
+- [Ekko](https://ekko-realtime.com), an open-source framework for adding
+  realtime messaging to web applications
