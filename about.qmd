@@ -23,7 +23,7 @@ about:
 ---
 
 I spent around fifteen years as a historian and researcher, mostly in and about
-Afghanistan, before moving into software in 2021. Since then I've been an ML
+Afghanistan, before moving into software in 2021. Since then I've been an AI/ML
 engineer at ZenML, working on [ZenML](https://github.com/zenml-io/zenml) and
 [Kitaru](https://kitaru.ai). I live in Delft, in the Netherlands, with two cats.
 
