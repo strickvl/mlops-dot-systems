@@ -2657,7 +2657,21 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "I am an ML Engineer working at ZenML. This blog is a place for me to process and share what I learn along the way.\nI built Ekko, an open-source framework allowing developers to easily add realtime infrastructure and in-transit message processing to web applications. I have multiple years of experience in the Python, Ruby and JavaScript ecosystems and am comfortable working with Go, PostgreSQL, AWS cloud infrastructure and Docker.\nI have a PhD in History and authored several books based on my research work in Afghanistan. I have a different long-standing blog that I will combine with this one at some point, but for now I intend to post technical posts here.\nI built Gemini by Example as a reference resource for the Gemini API / SDK."
+    "text": "I spent around fifteen years as a historian and researcher, mostly in and about Afghanistan, before moving into software in 2021. Since then I’ve been an ML engineer at ZenML, working on ZenML and Kitaru. I live in Delft, in the Netherlands, with two cats.\nMost of my historical work came down to reading large piles of messy, contradictory sources, deciding which ones to trust, and turning them into something structured enough to reason about. That turns out to be most of the work of evaluating and training agents. Reading an agent’s trace is source criticism: its account of what it did is testimony, not fact. Building an eval or an RL environment means turning a messy record into a task you can check, which is what I did with ISAF press releases on the way to finetuned models that beat GPT-4. I’m always happy to talk about evals, RL environments or agent observability; the easiest way to reach me is on LinkedIn or Twitter.\nThis site has two halves. The technical side is where I work things out in public: these days that’s mostly agents, reinforcement learning for agents, and evals. The personal side goes back to 2010 and covers Afghanistan, language learning, maths, learning how to learn, and the books I’ve been reading. If you’re not sure where to start, the series collect longer runs of posts about a single project, course or book. Each half has its own RSS feed (technical, personal).\nThe two halves meet more often than you might expect. Some of the tools below are for historians and researchers, and I publish datasets on Hugging Face, including ISAF press releases from Afghanistan and records from the Guantánamo military commissions."
+  },
+  {
+    "objectID": "about.html#books",
+    "href": "about.html#books",
+    "title": "About",
+    "section": "Books",
+    "text": "Books\n\nDeepSeek in Practice (Packt, 2025), with Andy Peng and Duarte O. Carmo\nAn Enemy We Created: The Myth of the Taliban-Al Qaeda Merger in Afghanistan (2012), with Felix Kuehn\nPoetry of the Taliban (2012), edited with Felix Kuehn\nMy Life with the Taliban (2010), Abdul Salam Zaeef’s memoir, edited with Felix Kuehn\nMaster Arabic (2017), a guide for intermediate Arabic students\n\nFelix and I also run First Draft Publishing, a small publishing house for niche-interest books."
+  },
+  {
+    "objectID": "about.html#other-things-ive-made",
+    "href": "about.html#other-things-ive-made",
+    "title": "About",
+    "section": "Other things I’ve made",
+    "text": "Other things I’ve made\n\nThe LLMOps Database, which I curate: over 2,000 real-world case studies of LLMs in production\nAIE Talks, summaries and timestamps for every talk on the AI Engineer YouTube channel\nMLOps Talks, the same for the MLOps Community’s talks, podcast episodes and meetups\nhinbox, which pulls people, places and organisations out of historical documents\ntinbox, a translator in a box\npanlabel, a converter between data annotation formats\nSources & Methods, a podcast I ran with Matt Trevithick about what people read and the tools they use to get their work done\nGemini by Example, a reference for the Gemini API and SDK\nEkko, an open-source framework for adding realtime messaging to web applications"
   },
   {
     "objectID": "blog/index.html",
