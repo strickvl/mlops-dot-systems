@@ -20,6 +20,7 @@
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 1</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
 <p>Companies at the frontier of model and agent development keep posting about their work on ‘agent swarms’. There was the <a href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/">Hugging Face</a> / <a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/">OpenAI incident</a>, but also <a href="https://cursor.com/blog/agent-swarm-model-economics">Cursor has written</a>, as have <a href="https://www.primeintellect.ai/blog/on-the-nature-of-the-swarm">Prime Intellect</a>. Even Kevin Kelly recently <a href="https://kevinkelly.substack.com/p/swarm-intelligence">weighed in</a>.</p>
 <p>I got to wondering a bit about what observability looks like for these agent swarms. You have to assume that the frontier labs doing testing and research work in this area have created their own tools to help them understand how the individual agents / subsystems behave and then also how this contributes to the overall output.</p>
 <p>This article, and a few that might follow, are about some questions I asked while thinking through the problem of swarm observability. I’ll talk through some UX ideas I had while imagining what the frontier labs have in-house in terms of tools to help them understand their own swarms.</p>
@@ -59,6 +60,7 @@
 <p>In my next post I’ll get into the kinds of evidence you’d expect to be captured by a swarm observability tool, and think through some of the options for capturing that evidence. I’ll also run through some of the common questions that practitioners ask of their swarms and their outputs. These three things can help build up the outline of what a useful interface might contain.</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -79,6 +81,7 @@
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 7 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div><div class="series-box"><div class="series-box-head"><span class="series-part">Part 12 of 12</span> <a href="../series.html#isaf-press-releases">ISAF Press Releases</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a> <span class="series-date">Apr 2024</span></li><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-15-isafpr-first-finetune.html">Finetuning my first LLM(s) for structured data extraction with axolotl</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-07-01-full-finetuned-model-evaluation.html">My finetuned models beat OpenAI's GPT-4</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>I wanted to write a bit about the status of the underlying dataset we’ll use for my first environment / RL training, since as I was getting that together I realised a few things that needed attention and (aside from the heatwave that’s addled my brain this past week) that’s what I’ve mostly been busy with since I last wrote.</p>
 <p>I’ll go through the problems I hit and how I addressed those in the data.</p>
 <section id="the-answer-key-is-wrong" class="level2">
@@ -127,6 +130,7 @@
 <p>Up next (I hope!) is moving on to finally setting up the reward function and rollout for doing this via a <code>verifiers</code> environment…</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -147,6 +151,7 @@
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 6 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div><div class="series-box"><div class="series-box-head"><span class="series-part">Part 11 of 12</span> <a href="../series.html#isaf-press-releases">ISAF Press Releases</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a> <span class="series-date">Apr 2024</span></li><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-15-isafpr-first-finetune.html">Finetuning my first LLM(s) for structured data extraction with axolotl</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-07-01-full-finetuned-model-evaluation.html">My finetuned models beat OpenAI's GPT-4</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>Today’s the day I finally managed to start to put things into practice. <a href="https://alexstrick.com/technical.html#category=agentic-rl">So far</a> I’ve mainly looked at the RL process at a high level, sticking to things like <a href="https://alexstrick.com/posts/2026-06-16-rl-stages.html">the main stages of the process</a> and <a href="https://alexstrick.com/posts/2026-06-19-reading-rl-environment-landscape.html">some of the tools that exist</a>. I went into this all with the idea that I’d try to get my hands dirty so today I did some work with what happens to the data we feed into the training process, and I also used <code>verifiers</code> to construct my first RL environment.</p>
 <section id="shifting-from-labels-to-rewards" class="level2">
 <h2 class="anchored" data-anchor-id="shifting-from-labels-to-rewards">Shifting from Labels to Rewards</h2>
@@ -853,6 +858,7 @@ font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
 <p>I’m also very curious to look at <a href="https://docs.primeintellect.ai/verifiers/reference#rubric-classes">the <code>Rubric</code> object</a> from <code>verifiers</code>, since that is sort of at the core of what I’ll be working on (i.e.&nbsp;defining rewards of various kinds).</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -873,6 +879,7 @@ font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 5 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>I’m mostly through my first pass at understanding the world of agentic RL at a conceptual level. As <a href="https://alexstrick.com/posts/2026-06-16-rl-stages.html">a little refresher</a>, here are the five concepts you really have to have in mind:</p>
 <ol type="1">
 <li>Tasks – the problems or input that you attempt to solve / handle</li>
@@ -930,6 +937,7 @@ font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
 <p>The bigger point to make, though, and the one I’d heartily endorse for anyone else drowning in the tooling explosion is that you shouldn’t try to memorise the frameworks. New software is born every day it seems. Just learn the grid and bring some skepticism and you’ll have enough to navigate the space.</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -949,6 +957,7 @@ font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 4 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div><div class="series-box"><div class="series-box-head"><span class="series-part">Part 10 of 12</span> <a href="../series.html#isaf-press-releases">ISAF Press Releases</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a> <span class="series-date">Apr 2024</span></li><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-15-isafpr-first-finetune.html">Finetuning my first LLM(s) for structured data extraction with axolotl</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-07-01-full-finetuned-model-evaluation.html">My finetuned models beat OpenAI's GPT-4</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>So far we’ve been looking at the high-level processes and components of reinforcement learning for agents, but I just finished learning about how the trainer / training process works and wanted to give some thoughts on that.</p>
 <section id="grpo-explained" class="level2">
 <h2 class="anchored" data-anchor-id="grpo-explained">GRPO Explained</h2>
@@ -1078,6 +1087,7 @@ font-style: inherit;"># keep them a valid prob. distribution</span></span></code
 </ul>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -1098,6 +1108,7 @@ font-style: inherit;"># keep them a valid prob. distribution</span></span></code
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div><div class="series-box"><div class="series-box-head"><span class="series-part">Part 9 of 12</span> <a href="../series.html#isaf-press-releases">ISAF Press Releases</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a> <span class="series-date">Apr 2024</span></li><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-15-isafpr-first-finetune.html">Finetuning my first LLM(s) for structured data extraction with axolotl</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-07-01-full-finetuned-model-evaluation.html">My finetuned models beat OpenAI's GPT-4</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a> <span class="series-date">Jul 2024</span></li><li class="series-here"><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>It probably would help to ground our discussion of some of this RL terminology to look at an example. I mentioned that we could use the old ISAF press releases task (structured data extraction) as a starting point, so here is some data from that:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><span class="er" style="color: #AD0000;
 background-color: null;
@@ -1733,6 +1744,7 @@ For example, when asked to "segment customers with status enabled," the model le
 <p>The examples above are fairly simplistic, but you can imagine that there are scenarios where you have to think carefully about exactly what behaviours you want to reward. For example, think about whether it’s worse to miss a field in a response, or to invent one? If a completely hallucinated value is worse than missing a field, then you’d want your reward function to punish those false values more than missing fields. And then if “I don’t know” is safe as an answer you can tolerate blank values.</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -1753,6 +1765,7 @@ For example, when asked to "segment customers with status enabled," the model le
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li class="series-here"><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>Last time I wrote we were talking at a high level about the different possible approaches to improving performance, especially when talking about more complex agentic workflows. Since then I’ve learned more about what exactly is involved in the reinforcement learning process and I’m going to lay that out today.</p>
 <p>While for supervised fine-tuning you have your (fixed) dataset, a model (to either update in part of more substantially) and a trainer, there are five broad pieces or stages that we can talk about for RL:</p>
 <ol type="1">
@@ -1795,6 +1808,7 @@ For example, when asked to "segment customers with status enabled," the model le
 </ul>
 
 
+<div class="series-footer"></div>
 
  ]]></description>
   <category>agents</category>
@@ -1813,6 +1827,7 @@ For example, when asked to "segment customers with status enabled," the model le
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 7</span> <a href="../series.html#agentic-rl">Agentic RL</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>I’ve been reading about reinforcement learning around the edges for a long while, and recently it seems to be something that you can find people doing in production systems more and more. I thought I’d attempt a bit of directed study and focus on the topic, so what follows is the first in a series of blogs where I capture what I’m learning and how I think about it. As always, these are mostly for myself, but they might serve some purpose for others so I will publish them here as I progress.</p>
 <section id="motivation" class="level2">
 <h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
@@ -2121,6 +2136,7 @@ font-style: inherit;">return</span> model</span></code></pre></div></div>
 </ul>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -2140,6 +2156,7 @@ font-style: inherit;">return</span> model</span></code></pre></div></div>
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 4 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li class="series-here"><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>It’s important to instrument your AI applications! I hope this can more or less be taken as given just as you’d expect a non-AI-infused app to capture logs. When you’re evaluating your LLM-powered system, you need to have capture the inputs and outputs both at an end-to-end level in terms of the way the user experiences things as well as with more fine-grained granularity for all the internal workings.</p>
 <p>My goal with this blog is to first demonstrate how Phoenix and <code>litellm</code> can work together, and then to make sure that we are able to group all spans together under a single trace.</p>
 <p>I’ll write the blog as I work so at this point I’m not sure exactly how this will turn out.</p>
@@ -3016,6 +3033,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>So there you have it! Some clarity. I’ll have to play around to see whether I go with the Langfuse route or the Phoenix route and which feels most ergonomic in the <code>hinbox</code> codebase. Appreciate the quick feedback from the Phoenix team, though!</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -3038,6 +3056,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 5 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li class="series-here"><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>I <a href="https://mlops.systems/posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">previously tried (and failed)</a> to setup LLM tracing for hinbox using Arize Phoenix and litellm. Since this is sort of a priority for being able to follow along with the <a href="https://maven.com/parlance-labs/evals">Hamel / Shreya evals course</a> with my practical application, I’ll take another stab using a tool with which I’m familiar: <a href="https://www.braintrust.dev/">Braintrust</a>. Let’s start simple and then if it works the way we want we can set things up for <code>hinbox</code> as well.</p>
 <section id="simple-braintrust-tracing-with-litellm-callbacks" class="level2">
 <h2 class="anchored" data-anchor-id="simple-braintrust-tracing-with-litellm-callbacks">Simple Braintrust tracing with litellm callbacks</h2>
@@ -3596,6 +3615,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>I’ll make a separate blog where I actually go into how I set up + instrumented <code>hinbox</code> for this kind of tracing while continuing to use <code>litellm</code>.</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -3618,6 +3638,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li class="series-here"><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>I’ve been working on a project called <a href="https://github.com/strickvl/hinbox"><code>hinbox</code></a> - a flexible entity extraction system designed to help historians and researchers build structured knowledge databases from collections of primary source documents. At its core, <code>hinbox</code> processes historical documents, academic papers, books and news articles to automatically extract and organize information about people, organizations, locations, and events.</p>
 <p>The tool works by ingesting batches of documents and intelligently identifying entities across sources. What makes it interesting is the iterative improvement aspect: as you feed more documents into the system, entity profiles become richer and more comprehensive. When <code>hinbox</code> encounters a person or organization it’s seen before, it updates their profile with new information rather than creating duplicates. I’ve been testing it extensively with Guantánamo Bay media sources - a domain where I have deep expertise from my previous career as a historian - which allows me to rigorously evaluate the quality of its extractions.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -3705,6 +3726,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p><em>The hinbox repository is available on <a href="https://github.com/strickvl/hinbox">GitHub</a> for anyone interested in following along or contributing. All feedback welcome as this evolves from prototype to something genuinely useful for research applications.</em></p>
 
 
+<div class="series-footer"></div>
 </section>
 </section>
 
@@ -3729,6 +3751,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li class="series-here"><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>I came across this quote in a happy coincidence after attending the second session of the evals course:</p>
 <p><img src="https://alexstrick.com/posts/images/2025-05-23-error-analysis-to-find-failure-modes/patchett-quote.png" class="img-fluid"></p>
 <p>It’s obviously a bit abstract, but I thought it was a nice oblique reflection on the topic being discussed. Both the main session and the office hours were mostly focused on the first part of the analyse-measure-improve loop that was introduced <a href="https://mlops.systems/posts/2025-05-20-how-to-think-about-evals.html">earlier in the week</a>.</p>
@@ -3811,6 +3834,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>I might only get round to doing some deep practical work on that next week or the week after, but I’ll be sure to keep up the notes and reflections on the course sessions here as we go.</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -3831,6 +3855,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>Today was the first session of Hamel + Shreya’s course, “<a href="maven.com/parlance-labs/evals/">AI Evals for Engineers and PMs</a>”. The first session was all about mental models for thinking about the topic as a whole, mixed in with some teasers of practical examples and advice.</p>
 <p>I’ll try to keep up with blogging about what I learn as we go. Most of the actual content will go up online at some point in the future, I’m assuming, so not much point writing up super detailed notes. (There is also a book coming, which I assume will be great, and about which you can <a href="https://www.youtube.com/watch?v=OJItZndMUII">learn more here</a>.) So in general I’ll try to be doing the following as I blog along:</p>
 <ul>
@@ -3926,6 +3951,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>As I’m sure you can detect, I’m really enthusiastic about the lesson to come and will work in the meanwhile on some of the readings that have been set as well as the homework task of writing a system prompt for a LLM-powered recipe recommendation application!</p>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>
@@ -4525,6 +4551,7 @@ font-style: inherit;">\</span></span>
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 8 of 8</span> <a href="../series.html#ai-engineering">Reading 'AI Engineering'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-01-19-notes-on-ai-engineering-chapter-1.html">Notes on 'AI Engineering' (Chip Huyen) chapter 1</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html">Notes on 'AI Engineering' (Chip Huyen) chapter 3</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html">Notes on 'AI Engineering' (Chip Huyen) chapter 4</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html">Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html">Dataset Engineering: The Art and Science of Data Preparation</a> <span class="series-date">Feb 2025</span></li><li><a href="../posts/2025-02-07-ai-engineering-chapter-9.html">Notes on 'AI Engineering' chapter 9: Inference Optimisation</a> <span class="series-date">Feb 2025</span></li><li class="series-here"><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a> <span class="series-date">Feb 2025</span></li></ol></details></div>
 <p>Chapter 10 of Chip Huyen’s “AI Engineering,” focuses on two fundamental aspects: architectural patterns in AI engineering and methods for gathering and using user feedback. The chapter presents a progressive architectural framework that evolves from simple API calls to complex agent-based systems, while also diving deep into the crucial aspect of user feedback collection and analysis.</p>
 <section id="progressive-architecture-patterns" class="level2">
 <h2 class="anchored" data-anchor-id="progressive-architecture-patterns">1. Progressive Architecture Patterns</h2>
@@ -4692,6 +4719,7 @@ font-style: inherit;">\</span></span>
 </ul>
 
 
+<div class="series-footer"></div>
 </section>
 </section>
 
@@ -4714,6 +4742,7 @@ font-style: inherit;">\</span></span>
 
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 7 of 8</span> <a href="../series.html#ai-engineering">Reading 'AI Engineering'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-01-19-notes-on-ai-engineering-chapter-1.html">Notes on 'AI Engineering' (Chip Huyen) chapter 1</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html">Notes on 'AI Engineering' (Chip Huyen) chapter 3</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html">Notes on 'AI Engineering' (Chip Huyen) chapter 4</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html">Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html">Dataset Engineering: The Art and Science of Data Preparation</a> <span class="series-date">Feb 2025</span></li><li class="series-here"><a href="../posts/2025-02-07-ai-engineering-chapter-9.html">Notes on 'AI Engineering' chapter 9: Inference Optimisation</a> <span class="series-date">Feb 2025</span></li><li><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a> <span class="series-date">Feb 2025</span></li></ol></details></div>
 <p>What follows are my notes on chapter 9 of Chip Huyen’s ‘AI Engineering’ book. This chapter was on optimising your inference and I learned a lot while reading it! There are interesting techniques like prompt caching and architectural considerations that I was vaguely aware of but hadn’t fully appreciated how they might work in real inference systems.</p>
 <section id="chapter-9-overview" class="level2">
 <h2 class="anchored" data-anchor-id="chapter-9-overview">Chapter 9: Overview</h2>
@@ -5008,6 +5037,7 @@ font-style: inherit;">\</span></span>
 </ul>
 
 
+<div class="series-footer"></div>
 </section>
 
  ]]></description>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Series – Alex Strick van Linschoten</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles/series.css">
+<meta property="og:title" content="Series – Alex Strick van Linschoten">
+<meta property="og:description" content="Personal and technical writings from Alex Strick van Linschoten">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="Series – Alex Strick van Linschoten">
+<meta name="twitter:description" content="Personal and technical writings from Alex Strick van Linschoten">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed series-page fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./technical.html"> 
+<span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./personal.html"> 
+<span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./all.html"> 
+<span class="menu-text">All</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./series.html" aria-current="page"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./til.html"> 
+<span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="./technical.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Series</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Some of my writing comes in runs: a project, a course or a book I worked through over weeks or months. Each series below is listed in reading order.</p>
+<div class="series-filters" role="group" aria-label="Filter series">
+<button type="button" data-filter="all" aria-pressed="true">All <span>13</span></button>
+<button type="button" data-filter="technical" aria-pressed="false">Technical <span>10</span></button>
+<button type="button" data-filter="personal" aria-pressed="false">Personal <span>3</span></button>
+</div><div class="series-axis" aria-hidden="true">
+<span style="left:0.00%">2016</span>
+<span style="left:18.18%">2018</span>
+<span style="left:36.36%">2020</span>
+<span style="left:54.55%">2022</span>
+<span style="left:72.73%">2024</span>
+<span style="left:90.91%">2026</span>
+</div><div class="series-timeline">
+<section class="series-entry" id="agent-swarm-observability" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical ongoing" style="left:97.73%;width:0.60%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Oct 2026 – now · 1 parts</span><span class="series-ongoing">ongoing</span></div>
+<h2 class="anchored">Agent Swarm Observability</h2><p>What it would take to understand swarms of thousands of agents, and why today's tracing tools fall short.</p><ol class="series-parts"><li><a href="./posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a><span class="series-date">Oct 2026</span></li></ol></section>
+<section class="series-entry" id="agentic-rl" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical ongoing" style="left:94.70%;width:3.03%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Jun 2026 – now · 7 parts</span><span class="series-ongoing">ongoing</span></div>
+<h2 class="anchored">Agentic RL</h2><p>Learning reinforcement learning for agents from the ground up, using the ISAF extraction task as a running example.</p><ol class="series-parts"><li><a href="./posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a><span class="series-date">Jun 2026</span></li><li><a href="./posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a><span class="series-date">Jun 2026</span></li><li><a href="./posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a><span class="series-date">Jun 2026</span><span class="series-also">also part 9 of <a href="#isaf-press-releases">ISAF Press Releases</a></span></li><li><a href="./posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a><span class="series-date">Jun 2026</span><span class="series-also">also part 10 of <a href="#isaf-press-releases">ISAF Press Releases</a></span></li><li><a href="./posts/2026-06-19-reading-rl-environment-landscape.html">How to read an RL framework without believing its README</a><span class="series-date">Jun 2026</span></li><li><a href="./posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a><span class="series-date">Jun 2026</span><span class="series-also">also part 11 of <a href="#isaf-press-releases">ISAF Press Releases</a></span></li><li><a href="./posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a><span class="series-date">Jun 2026</span><span class="series-also">also part 12 of <a href="#isaf-press-releases">ISAF Press Releases</a></span></li></ol></section>
+<section class="series-entry" id="evals-course" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:84.85%;width:0.76%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>May 2025 – Jun 2025 · 5 parts</span></div>
+<h2 class="anchored">The Evals Course</h2><p>Notes and projects from working through an LLM evaluation course, covering error analysis, failure modes and tracing.</p><ol class="series-parts"><li><a href="./posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a><span class="series-date">May 2025</span></li><li><a href="./posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a><span class="series-date">May 2025</span></li><li><a href="./posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a><span class="series-date">May 2025</span></li><li><a href="./posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a><span class="series-date">Jun 2025</span></li><li><a href="./posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a><span class="series-date">Jun 2025</span></li></ol></section>
+<section class="series-entry" id="ai-engineering" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:81.82%;width:0.76%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Jan 2025 – Feb 2025 · 8 parts</span></div>
+<h2 class="anchored">Reading 'AI Engineering'</h2><p>Chapter-by-chapter notes on Chip Huyen's book.</p><ol class="series-parts"><li><a href="./posts/2025-01-19-notes-on-ai-engineering-chapter-1.html">Notes on 'AI Engineering' (Chip Huyen) chapter 1</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html">Notes on 'AI Engineering' (Chip Huyen) chapter 3</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html">Notes on 'AI Engineering' (Chip Huyen) chapter 4</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html">Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html">Dataset Engineering: The Art and Science of Data Preparation</a><span class="series-date">Feb 2025</span></li><li><a href="./posts/2025-02-07-ai-engineering-chapter-9.html">Notes on 'AI Engineering' chapter 9: Inference Optimisation</a><span class="series-date">Feb 2025</span></li><li><a href="./posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a><span class="series-date">Feb 2025</span></li></ol></section>
+<section class="series-entry" id="prompt-engineering-for-llms" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:81.82%;width:0.60%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Jan 2025 – Jan 2025 · 4 parts</span></div>
+<h2 class="anchored">Reading 'Prompt Engineering for LLMs'</h2><p>Chapter notes on John Berryman and Albert Ziegler's book.</p><ol class="series-parts"><li><a href="./posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html">Starting to read Prompt Engineering for LLMs</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html">Prompt Content: Notes on 'Prompt Engineering for LLMs' ch 5</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html">Assembling the Prompt: Notes on 'Prompt Engineering for LLMs' ch 6</a><span class="series-date">Jan 2025</span></li><li><a href="./posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html">Final notes on 'Prompt Engineering for LLMs'</a><span class="series-date">Jan 2025</span></li></ol></section>
+<section class="series-entry" id="isaf-press-releases" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:75.00%;width:19.70%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Apr 2024 – Jun 2026 · 12 parts</span></div>
+<h2 class="anchored">ISAF Press Releases</h2><p>Turning thousands of ISAF press releases into structured data, from GPT-4 baselines to finetuned models and RL.</p><ol class="series-parts"><li><a href="./posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a><span class="series-date">Apr 2024</span></li><li><a href="./posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a><span class="series-date">Jun 2024</span></li><li><a href="./posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a><span class="series-date">Jun 2024</span></li><li><a href="./posts/2024-06-15-isafpr-first-finetune.html">Finetuning my first LLM(s) for structured data extraction with axolotl</a><span class="series-date">Jun 2024</span></li><li><a href="./posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a><span class="series-date">Jun 2024</span></li><li><a href="./posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a><span class="series-date">Jun 2024</span></li><li><a href="./posts/2024-07-01-full-finetuned-model-evaluation.html">My finetuned models beat OpenAI's GPT-4</a><span class="series-date">Jul 2024</span></li><li><a href="./posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a><span class="series-date">Jul 2024</span></li><li><a href="./posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a><span class="series-date">Jun 2026</span><span class="series-also">also part 3 of <a href="#agentic-rl">Agentic RL</a></span></li><li><a href="./posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a><span class="series-date">Jun 2026</span><span class="series-also">also part 4 of <a href="#agentic-rl">Agentic RL</a></span></li><li><a href="./posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a><span class="series-date">Jun 2026</span><span class="series-also">also part 6 of <a href="#agentic-rl">Agentic RL</a></span></li><li><a href="./posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a><span class="series-date">Jun 2026</span><span class="series-also">also part 7 of <a href="#agentic-rl">Agentic RL</a></span></li></ol></section>
+<section class="series-entry" id="balochi-language-model" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:66.67%;width:0.76%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>May 2023 – Jun 2023 · 6 parts</span></div>
+<h2 class="anchored">Balochi Language Model</h2><p>First steps towards language models for Balochi, a low-resource language. Risks, datasets and tokenisation.</p><ol class="series-parts"><li><a href="./posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a><span class="series-date">May 2023</span></li><li><a href="./posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a><span class="series-date">May 2023</span></li><li><a href="./posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a><span class="series-date">May 2023</span></li><li><a href="./posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a><span class="series-date">Jun 2023</span></li><li><a href="./posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a><span class="series-date">Jun 2023</span></li><li><a href="./posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a><span class="series-date">Jun 2023</span></li></ol></section>
+<section class="series-entry" id="mu123" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:61.36%;width:6.82%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Oct 2022 – Jul 2023 · 6 parts</span></div>
+<h2 class="anchored">MU123 Maths</h2><p>Going back to maths through the Open University's MU123 module.</p><ol class="series-parts"><li><a href="./posts/2022-10-16-notational-precedence.html">Avoiding BIDMAS, or how J does notation</a><span class="series-date">Oct 2022</span></li><li><a href="./posts/2023-01-01-on-mathematical-literacy.html">On mathematical literacy</a><span class="series-date">Jan 2023</span></li><li><a href="./posts/2023-03-25-tricks-are-the-thing.html">The Trick Is The Thing, Part II</a><span class="series-date">Mar 2023</span></li><li><a href="./posts/2023-05-02-logarithms-exponents-mu123.html">Exponents and Logarithms: a MU123 review</a><span class="series-date">May 2023</span></li><li><a href="./posts/2023-05-14-mu123-complete-maths.html">Finishing MU123</a><span class="series-date">May 2023</span></li><li><a href="./posts/2023-07-23-maths-prompt-rust-project.html">Building MathsPrompt: a tool to help me review and practice problems for my degree</a><span class="series-date">Jul 2023</span></li></ol></section>
+<section class="series-entry" id="robust-python" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:53.79%;width:1.52%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Dec 2021 – Feb 2022 · 9 parts</span></div>
+<h2 class="anchored">Reading 'Robust Python'</h2><p>Notes on Patrick Viafore's book about types, enums, data classes and invariants.</p><ol class="series-parts"><li><a href="./posts/2021-12-29-robust-python-1.html">What makes code robust?</a><span class="series-date">Dec 2021</span></li><li><a href="./posts/2021-12-30-robust-python-2.html">What's special about types in Python?</a><span class="series-date">Dec 2021</span></li><li><a href="./posts/2022-01-03-robust-python-3.html">Getting practical with type annotations and `mypy`</a><span class="series-date">Jan 2022</span></li><li><a href="./posts/2022-01-08-robust-python-4.html">Different ways to constrain types in Python</a><span class="series-date">Jan 2022</span></li><li><a href="./posts/2022-01-18-robust-python-5.html">Using type annotation with collections in Python</a><span class="series-date">Jan 2022</span></li><li><a href="./posts/2022-01-22-robust-python-6.html">Using mypy for Python type checking</a><span class="series-date">Jan 2022</span></li><li><a href="./posts/2022-01-30-robust-python-8.html">How and where to use enums in Python</a><span class="series-date">Jan 2022</span></li><li><a href="./posts/2022-02-05-robust-python-9.html">Upgrade your Python dicts with data classes</a><span class="series-date">Feb 2022</span></li><li><a href="./posts/2022-02-08-robust-python-10.html">What are invariants and how can they help make your Python classes more robust?</a><span class="series-date">Feb 2022</span></li></ol></section>
+<section class="series-entry" id="redaction-model" data-section="technical">
+<div class="series-track" aria-hidden="true"><i class="technical" style="left:51.52%;width:9.09%"></i></div>
+<div class="series-meta"><span class="series-section technical">technical</span><span>Sep 2021 – Sep 2022 · 17 parts</span></div>
+<h2 class="anchored">Redaction Model</h2><p>A year-long computer vision project detecting redactions in documents, from a first classifier to thinking about production.</p><ol class="series-parts"><li><a href="./posts/2021-09-06-redaction-classification-chapter-2.html">Training a classifier to detect redacted documents with fastai</a><span class="series-date">Sep 2021</span></li><li><a href="./posts/2021-11-29-prodigy-object-detection-training.html">How to annotate image data for object detection with Prodigy</a><span class="series-date">Nov 2021</span></li><li><a href="./posts/2021-11-30-vfnet-basics.html">What is VFNet?</a><span class="series-date">Nov 2021</span></li><li><a href="./posts/2021-12-11-redaction-progress-week-one.html">73% accuracy for redaction object detection</a><span class="series-date">Dec 2021</span></li><li><a href="./posts/2021-12-15-redaction-taxonomy.html">A Taxonomy of Redaction</a><span class="series-date">Dec 2021</span></li><li><a href="./posts/2022-01-16-midway-report-redaction-project.html">A Midway Report on my Computer Vision Project</a><span class="series-date">Jan 2022</span></li><li><a href="./posts/2022-02-10-synthetic-image-data.html">It's raining bboxes: how I wrote a Python script to create 2097 synthetic images to help improve my machine learning model</a><span class="series-date">Feb 2022</span></li><li><a href="./posts/2022-03-03-model-improvements.html">Incremental Improvements to my Redaction Detection Model</a><span class="series-date">Mar 2022</span></li><li><a href="./posts/2022-03-12-fiftyone-computervision.html">Figuring out why my object detection model is underperforming with FiftyOne, a great tool you probably haven't heard of</a><span class="series-date">Mar 2022</span></li><li><a href="./posts/2022-04-06-synthetic-data-results.html">'I guess this is what data-centric AI is!': Performance boosts after training with synthetic data</a><span class="series-date">Apr 2022</span></li><li><a href="./posts/2022-04-19-data-validation-great-expectations-part-1.html">How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</a><span class="series-date">Apr 2022</span></li><li><a href="./posts/2022-04-26-data-validation-great-expectations-part-2.html">How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 2)</a><span class="series-date">Apr 2022</span></li><li><a href="./posts/2022-04-28-data-validation-great-expectations-part-3.html">How to trust the data you feed your model: alternative data validation solutions in a computer vision context (part 3)</a><span class="series-date">Apr 2022</span></li><li><a href="./posts/2022-05-07-redaction-mvp-huggingface.html">A painless way to create an MVP demo using computer vision models</a><span class="series-date">May 2022</span></li><li><a href="./posts/2022-05-24-data-versioning-dvc.html">More Data, More Problems: Using DVC to handle data versioning for a computer vision problem</a><span class="series-date">May 2022</span></li><li><a href="./posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span class="series-date">May 2022</span></li><li><a href="./posts/2022-09-07-serialisation.html">Storing Bytes: what data serialisation is and why you need it for machine learning</a><span class="series-date">Sep 2022</span></li></ol></section>
+<section class="series-entry" id="language-learners-journal" data-section="personal">
+<div class="series-track" aria-hidden="true"><i class="personal" style="left:9.09%;width:6.82%"></i></div>
+<div class="series-meta"><span class="series-section personal">personal</span><span>Jan 2017 – Oct 2017 · 10 parts</span></div>
+<h2 class="anchored">Language Learner's Journal</h2><p>Following Taylor's Arabic studies in Amman, one check-in at a time.</p><ol class="series-parts"><li><a href="./personal/2017-01-16-introducing-taylor.html">Language Learner's Journal: Introducing Taylor</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-01-23-adjustments-deep-end.html">Language Learner's Journal: Adjustments at the Deep End</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-02-04-deepening-my-studies.html">Language Learner's Journal: Deepening My Studies</a><span class="series-date">Feb 2017</span></li><li><a href="./personal/2017-02-18-llj-keeping-pace.html">Language Learner's Journal: Keeping Pace</a><span class="series-date">Feb 2017</span></li><li><a href="./personal/2017-03-20-leaving-qasid.html">Language Learner's Journal: Leaving Qasid</a><span class="series-date">Mar 2017</span></li><li><a href="./personal/2017-04-09-independent-study.html">Language Learner's Journal: Independent Study</a><span class="series-date">Apr 2017</span></li><li><a href="./personal/2017-04-30-spoken-fluency-taylor.html">Language Learner's Journal: Increasing Spoken Fluency</a><span class="series-date">Apr 2017</span></li><li><a href="./personal/2017-05-24-meaningful-leisure.html">Language Learner's Journal: Meaningful Leisure</a><span class="series-date">May 2017</span></li><li><a href="./personal/2017-08-13-phone-calls-timed-breaks.html">Language Learner's Journal: Phone Calls and Timed Breaks</a><span class="series-date">Aug 2017</span></li><li><a href="./personal/2017-10-20-language-learners-journal-homestay-edition.html">Language Learner's Journal: Homestay Edition</a><span class="series-date">Oct 2017</span></li></ol></section>
+<section class="series-entry" id="master-arabic" data-section="personal">
+<div class="series-track" aria-hidden="true"><i class="personal" style="left:8.33%;width:1.52%"></i></div>
+<div class="series-meta"><span class="series-section personal">personal</span><span>Dec 2016 – Feb 2017 · 7 parts</span></div>
+<h2 class="anchored">Master Arabic</h2><p>Writing and launching 'Master Arabic', a book for intermediate students.</p><ol class="series-parts"><li><a href="./personal/2016-12-30-master-arabic-preorder.html">Pre-Order Now: 'Master Arabic'</a><span class="series-date">Dec 2016</span></li><li><a href="./personal/2017-01-01-2017-1-new-year-new-arabic-language-podcast.html">New Year, New Arabic-language Podcast</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-01-03-everything-you-need-to-study-jordanian-arabic.html">Everything You Need to Study Jordanian Arabic</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-01-04-internal-vs-external-goals.html">Things We Control: On Internal vs External Goals</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-01-12-master-arabic-whats-in-the-premium-edition.html">Master Arabic: What's in the Premium Edition?</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-01-15-master-arabic-behind-cover.html">Master Arabic: Behind the Cover</a><span class="series-date">Jan 2017</span></li><li><a href="./personal/2017-02-13-master-arabic-out-now.html">'Master Arabic' is Out Today!</a><span class="series-date">Feb 2017</span></li></ol></section>
+<section class="series-entry" id="phd-tools" data-section="personal">
+<div class="series-track" aria-hidden="true"><i class="personal" style="left:5.30%;width:0.76%"></i></div>
+<div class="series-meta"><span class="series-section personal">personal</span><span>Aug 2016 – Sep 2016 · 19 parts</span></div>
+<h2 class="anchored">PhD Tools</h2><p>The software, habits and small comforts that got me through a PhD.</p><ol class="series-parts"><li><a href="./personal/2016-08-22-2016-8-phd-tools-beeminder.html">PhD Tools: Beeminder</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-08-24-2016-8-phd-tools-trello.html">PhD Tools: Visualise Structure and Kanban Flow with Trello</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-08-25-phd-tools-tinderbox.html">PhD Tools: Think better with Tinderbox</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-08-26-phd-tools-devonthink.html">PhD Tools: DevonThink for File Storage and Discovery</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-08-29-2016-8-phd-tools-pinboard.html">PhD Tools: Save your web links with Pinboard</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-08-30-2016-8-phd-tools-scrivener.html">PhD Tools: Scrivener for Writing Long Things</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-08-31-phd-tools-bookends.html">PhD Tools: Bookends for Managing References</a><span class="series-date">Aug 2016</span></li><li><a href="./personal/2016-09-01-phd-tools-mellel.html">PhD Tools: Mellel for Layout and Final Presentation</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-02-2016-8-phd-tools-rescuetime.html">PhD Tools: RescueTime for Time Tracking</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-05-phd-tools-freedom.html">PhD Tools: Turn Off the Internet with Freedom</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-06-phd-tools-backup.html">PhD Tools: Backup Systems for Staving off Sadness</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-07-phd-tools-omnifocus.html">PhD Tools: Omnifocus for Managing your Non-PhD Life</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-09-phd-tools-the-secret-to-finishing-your-phd.html">PhD Tools: The Secret to Finishing Your PhD</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-12-2016-9-phd-tools-vitamin-r-and-the-pomodoro-technique-for-getting-going.html">PhD Tools: Vitamin-R and the Pomodoro Technique for Getting Going</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-13-phd-tools-freewriting.html">PhD Tools: Freewriting and Journalling to Think Through your Work</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-13-phdtools-pen-paper.html">PhD Tools: Pen and Paper</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-14-phd-tools-primary-sources.html">PhD Tools: 'Always return to your primary sources'</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-15-phd-tools-goodreads.html">PhD Tools: Goodreads for Cross-Pollination</a><span class="series-date">Sep 2016</span></li><li><a href="./personal/2016-09-19-phd-tools-tea.html">PhD Tools: Tea</a><span class="series-date">Sep 2016</span></li></ol></section>
+</div>
+<script>
+document.querySelectorAll(".series-filters button").forEach(btn => btn.addEventListener("click", () => {
+  const f = btn.dataset.filter;
+  document.querySelectorAll(".series-filters button").forEach(b => b.setAttribute("aria-pressed", b === btn));
+  document.querySelectorAll(".series-entry").forEach(s => { s.hidden = f !== "all" && s.dataset.section !== f; });
+}));
+</script>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

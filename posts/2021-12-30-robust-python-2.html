@@ -159,6 +159,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -252,6 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 9</span> <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2021-12-29-robust-python-1.html">What makes code robust?</a> <span class="series-date">Dec 2021</span></li><li class="series-here"><a href="../posts/2021-12-30-robust-python-2.html">What's special about types in Python?</a> <span class="series-date">Dec 2021</span></li><li><a href="../posts/2022-01-03-robust-python-3.html">Getting practical with type annotations and `mypy`</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-08-robust-python-4.html">Different ways to constrain types in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-18-robust-python-5.html">Using type annotation with collections in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-22-robust-python-6.html">Using mypy for Python type checking</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-30-robust-python-8.html">How and where to use enums in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-02-05-robust-python-9.html">Upgrade your Python dicts with data classes</a> <span class="series-date">Feb 2022</span></li><li><a href="../posts/2022-02-08-robust-python-10.html">What are invariants and how can they help make your Python classes more robust?</a> <span class="series-date">Feb 2022</span></li></ol></details></div>
 <p>The first section of <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8"><em>Robust Python</em></a> dives into types. We begin by taking a step back to think about what exactly types are being used for, and what they might bring us. Python was not (<a href="https://stackoverflow.com/questions/32557920/what-are-type-hints-in-python-3-5">until v3.5</a>) a language with which you could easily use typing. I remember going to <a href="http://pylondinium.org/2018/">the Pylondinium conference</a> in London in 2018 and going to <a href="https://pylondinium.org/2018/talk.html?talk_id=24">a talk by Bernat Gabor</a> about type hints in Python. Back then I didn’t have much of a sense of how new they were to many people, but even now I don’t get the feeling that they’ve been universally adopted. Hence Patrick’s book, I suppose…</p>
 <p>A type is defined in the book as being “a communication method”, both to / for computers (“mechanical representation”) as well as for humans (“semantic representation”). For the computer, when a variable is of a certain type this determines what methods can be called on that particular object. As such, though I’m straying into territory I don’t fully understand, I believe it also helps with compilation efficiency. (Python is a dynamically-typed language so any errors or type mismatches will only become apparent at runtime, however).</p>
 <p>For humans, types can help signal intent. This connects with <a href="https://mlops.systems/robustpython/python/books-i-read/2021/12/29/robust-python-1.html">my previous chapter summary</a> from this book where I stated that code should communicate intent well to be considered ‘robust’. Take the following simple code snippet:</p>
@@ -281,6 +286,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This chapter didn’t add too many new concepts or skills to my current understanding of the benefits of types, but it was useful to have this concept of ‘communicating intent’ to be reiterated. When I think back to how I’ve heard types mentioned in the past, they often get cast in a technical sense, whereas thinking about communication between developers I think is a more motivating framing.</p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 2 of 9 in <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2021-12-29-robust-python-1.html"><small>← Part 1</small>What makes code robust?</a><a class="series-next" href="../posts/2022-01-03-robust-python-3.html"><small>Part 3 →</small>Getting practical with type annotations and `mypy`</a></div></nav></div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

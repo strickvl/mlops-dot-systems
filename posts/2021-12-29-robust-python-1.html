@@ -124,6 +124,10 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -217,6 +221,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 9</span> <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2021-12-29-robust-python-1.html">What makes code robust?</a> <span class="series-date">Dec 2021</span></li><li><a href="../posts/2021-12-30-robust-python-2.html">What's special about types in Python?</a> <span class="series-date">Dec 2021</span></li><li><a href="../posts/2022-01-03-robust-python-3.html">Getting practical with type annotations and `mypy`</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-08-robust-python-4.html">Different ways to constrain types in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-18-robust-python-5.html">Using type annotation with collections in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-22-robust-python-6.html">Using mypy for Python type checking</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-30-robust-python-8.html">How and where to use enums in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-02-05-robust-python-9.html">Upgrade your Python dicts with data classes</a> <span class="series-date">Feb 2022</span></li><li><a href="../posts/2022-02-08-robust-python-10.html">What are invariants and how can they help make your Python classes more robust?</a> <span class="series-date">Feb 2022</span></li></ol></details></div>
 <p>We use a lot of modern Python idioms, libraries and patterns at work, so I’ve been wanting to get up to speed on that and maybe even actively contribute to this general direction. A recently-published book, <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?qid=&amp;me=&amp;tag=soumet-20&amp;_encoding=UTF8">Robust Python: Write Clean and Maintainable Code</a> by <a href="https://www.linkedin.com/in/patviafore/">Patrick Viafore</a>, seems like it answers many of the questions I have around this topic. It is quite dense in terms of the amount of new things per chapter, so I’ll be working my way through it in the coming months and reflecting on things as I encounter them.</p>
 <p>The first chapter is mainly about setting the scene for all the technical pieces that follow. Patrick asks the core questions: what is robust code and why do we even care? What problems does it solve to think about code in this way.</p>
 <p>What I took away was that a robust codebase emphasises good communication as well as avoiding accidental complexity. A lot has been written about ‘clean code’ and how to achieve this, but it seems that ‘Robust Python’ is arguing for looking a bit further into the future, when you have to come back to refactor your code three months after you wrote it, or when your colleague needs to do the same.</p>
@@ -232,6 +237,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The first part of the book is all about type annotation, using <code>mypy</code>, and how working with types helps makes your code more robust. We use a lot of this at work so I’m excited to take a deep dive into this.</p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 1 of 9 in <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><div class="series-nav-links"><span></span><a class="series-next" href="../posts/2021-12-30-robust-python-2.html"><small>Part 2 →</small>What's special about types in Python?</a></div></nav></div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -159,6 +159,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -252,6 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 9</span> <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2021-12-29-robust-python-1.html">What makes code robust?</a> <span class="series-date">Dec 2021</span></li><li><a href="../posts/2021-12-30-robust-python-2.html">What's special about types in Python?</a> <span class="series-date">Dec 2021</span></li><li class="series-here"><a href="../posts/2022-01-03-robust-python-3.html">Getting practical with type annotations and `mypy`</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-08-robust-python-4.html">Different ways to constrain types in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-18-robust-python-5.html">Using type annotation with collections in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-22-robust-python-6.html">Using mypy for Python type checking</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-30-robust-python-8.html">How and where to use enums in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-02-05-robust-python-9.html">Upgrade your Python dicts with data classes</a> <span class="series-date">Feb 2022</span></li><li><a href="../posts/2022-02-08-robust-python-10.html">What are invariants and how can they help make your Python classes more robust?</a> <span class="series-date">Feb 2022</span></li></ol></details></div>
 <p>The third chapter of <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?_encoding=UTF8&amp;me=&amp;tag=soumet-20&amp;qid=">‘Robust Python’</a> offers a quick introduction to the practicalities of type annotations in Python. We also see tools like <code>mypy</code> being used to catch places where the reality of your code doesn’t necessarily match the type annotations that you’ve stated.</p>
 <p>For the first, a quick example can suffice:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>name: <span class="bu">str</span> <span class="op">=</span> <span class="st">"alex"</span></span>
@@ -270,6 +275,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>One forward-looking benefit covered by this chapter was how having code covered with type annotations and type checking could give you the confidence to change things in the codebase that otherwise you would have hesitated to even approach. There are, of course, also some tradeoffs and disadvantages to adding this in: particularly around speed of iteration and possibly flexibility, but the book makes a strong case for why most large Python codebases could probably use type checking as part of their arsenal.</p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 3 of 9 in <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2021-12-30-robust-python-2.html"><small>← Part 2</small>What's special about types in Python?</a><a class="series-next" href="../posts/2022-01-08-robust-python-4.html"><small>Part 4 →</small>Different ways to constrain types in Python</a></div></nav></div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

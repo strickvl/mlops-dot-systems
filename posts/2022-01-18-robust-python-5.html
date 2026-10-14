@@ -159,6 +159,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -263,6 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 5 of 9</span> <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2021-12-29-robust-python-1.html">What makes code robust?</a> <span class="series-date">Dec 2021</span></li><li><a href="../posts/2021-12-30-robust-python-2.html">What's special about types in Python?</a> <span class="series-date">Dec 2021</span></li><li><a href="../posts/2022-01-03-robust-python-3.html">Getting practical with type annotations and `mypy`</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-08-robust-python-4.html">Different ways to constrain types in Python</a> <span class="series-date">Jan 2022</span></li><li class="series-here"><a href="../posts/2022-01-18-robust-python-5.html">Using type annotation with collections in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-22-robust-python-6.html">Using mypy for Python type checking</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-01-30-robust-python-8.html">How and where to use enums in Python</a> <span class="series-date">Jan 2022</span></li><li><a href="../posts/2022-02-05-robust-python-9.html">Upgrade your Python dicts with data classes</a> <span class="series-date">Feb 2022</span></li><li><a href="../posts/2022-02-08-robust-python-10.html">What are invariants and how can they help make your Python classes more robust?</a> <span class="series-date">Feb 2022</span></li></ol></details></div>
 <p>The fifth chapter of <a href="https://www.amazon.com/Robust-Python-Patrick-Viafore-ebook-dp-B09982C9FX/dp/B09982C9FX/ref=mt_other?_encoding=UTF8&amp;me=&amp;tag=soumet-20&amp;qid=">‘Robust Python’</a> continues on from <a href="https://mlops.systems/robustpython/python/books-i-read/2022/01/08/robust-python-4.html">where we left off</a> last time. We saw how to apply type annotations when simple things like strings, integers and floats were involved. This chapter deals with the different ways you annotate your types when collections get involved.</p>
 <p>We start with the context for why this is even something that requires a separate chapter to deal with. This involves the difference between homogenous and heterogeneous types. For a Python list, we could say it had homogenous types if all the items were of the same type (strings, e.g.). If this list contains multiple different types (a mix of strings and integers, e.g.) then we’d have to say it contained heterogenous types. This is of importance given that the presence of multiple types in a single list is going to require you to handle the types differently. Even in the most trivial of examples (as with strings and integers being together), the interfaces for both are different. Try adding a string to an integer in Python and see what happens.</p>
 <p>So it’s actually not quite true to say that a collection of homogenous types have to all be exactly the same type, but they must share common interfaces and ideally be handled using the same logic. If you think about it, in the real world heterogenous types are pretty common occurrences. There are often situations where, for example, you have to handle the output of API calls or data that doesn’t derive from code that’s in yous control and then you’ll perhaps be dealing with a dictionary that contains all sorts of types.</p>
@@ -341,6 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now that’s a handy little decorator! It’ll handle all the raising of appropriate errors above based on whether you passed in the right type or not. It works for classes as well. You’re welcome, and thanks <a href="https://twitter.com/fishnets88">Vincent</a> for making the introductory video!</p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 5 of 9 in <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2022-01-08-robust-python-4.html"><small>← Part 4</small>Different ways to constrain types in Python</a><a class="series-next" href="../posts/2022-01-22-robust-python-6.html"><small>Part 6 →</small>Using mypy for Python type checking</a></div></nav></div>
 </section>
 
 </main> <!-- /main -->

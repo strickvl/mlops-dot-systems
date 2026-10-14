@@ -167,6 +167,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -274,6 +278,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 12</span> <a href="../series.html#isaf-press-releases">ISAF Press Releases</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a> <span class="series-date">Apr 2024</span></li><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a> <span class="series-date">Jun 2024</span></li><li class="series-here"><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-15-isafpr-first-finetune.html">Finetuning my first LLM(s) for structured data extraction with axolotl</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a> <span class="series-date">Jun 2024</span></li><li><a href="../posts/2024-07-01-full-finetuned-model-evaluation.html">My finetuned models beat OpenAI's GPT-4</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a> <span class="series-date">Jul 2024</span></li><li><a href="../posts/2026-06-17-rl-terms-rewards.html">Reward design for RL, grounded in a structured-extraction task</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-18-grpo-explained.html">GRPO without the maths: how an RL trainer nudges the weights</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a> <span class="series-date">Jun 2026</span></li><li><a href="../posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a> <span class="series-date">Jun 2026</span></li></ol></details></div>
 <p>In <a href="https://mlops.systems/posts/2024-06-02-isafpr-prompting-baseline.html">the previous post</a> we looked at a single example where a prompt could help us extract structured data from some text. Here were were relying on the inbuilt capabilities of LLMs to ‘reason’ over the text and the task. In this post we’ll try to get a sense of the overall / aggregate performance of <code>gpt-4-turbo</code> on the ISAF Press Releases data extraction task.</p>
 <p>The first thing we need to do is to load and process the data. If you remember from last time, there were some fields that needed conversion so that we’re comparing apples to apples when we get back our result from the LLM.</p>
 <section id="loading-and-processing-the-data" class="level2">
@@ -995,6 +1000,7 @@ Wall time: 10min 4s</code></pre>
 <p>For now, though, the next step is to prepare our data for finetuning and then to actually run the finetuning. My preference is to select a base model which I can train on my local machine, but since we do have lots of credits with a variety of cloud providers I’ll try to run my finetuning on more powerful machines in the cloud as well.</p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 3 of 12 in <a href="../series.html#isaf-press-releases">ISAF Press Releases</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2024-06-02-isafpr-prompting-baseline.html"><small>← Part 2</small>Structured Data Extraction for ISAF Press Releases with Instructor</a><a class="series-next" href="../posts/2024-06-15-isafpr-first-finetune.html"><small>Part 4 →</small>Finetuning my first LLM(s) for structured data extraction with axolotl</a></div></nav></div>
 </section>
 
 </main> <!-- /main -->

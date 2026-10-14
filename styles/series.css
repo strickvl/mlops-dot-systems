@@ -1,0 +1,56 @@
+/* Series page (/series.html): timeline of every series, built by the
+   series-index shortcode from _series.json. Colours come from the Cosmo
+   theme's Bootstrap variables so they follow the site. */
+
+.series-page { --series-personal: #9a5b13; --series-personal-soft: #fbf1e4; }
+
+.series-filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 2rem; }
+.series-filters button {
+  font: inherit; font-size: .95rem; padding: .15rem .9rem; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--bs-border-color); background: var(--bs-body-bg); color: var(--bs-body-color);
+}
+.series-filters button span { color: var(--bs-secondary-color); font-size: .8rem; }
+.series-filters button[aria-pressed="true"] {
+  border-color: var(--bs-primary); background: rgba(var(--bs-primary-rgb), .1); color: var(--bs-primary); font-weight: 600;
+}
+
+.series-axis { position: relative; height: 1.4rem; margin-bottom: .25rem; }
+.series-axis span {
+  position: absolute; transform: translateX(-50%); font-size: .75rem;
+  color: var(--bs-secondary-color); font-variant-numeric: tabular-nums;
+}
+
+.series-timeline { display: flex; flex-direction: column; gap: 2.5rem; }
+.series-entry[hidden] { display: none; }
+.series-track { position: relative; height: 8px; border-radius: 4px; background: var(--bs-tertiary-bg); margin: .6rem 0 .8rem; }
+.series-track i { position: absolute; top: 0; bottom: 0; border-radius: 4px; background: var(--bs-primary); min-width: 6px; }
+.series-track i.personal { background: var(--series-personal); }
+.series-track i.ongoing { background: linear-gradient(90deg, var(--bs-primary) 70%, transparent); }
+
+.series-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .8rem; font-size: .85rem; color: var(--bs-secondary-color); }
+.series-section {
+  font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  padding: 0 .45rem; border-radius: 3px; background: rgba(var(--bs-primary-rgb), .1); color: var(--bs-primary);
+}
+.series-section.personal { background: var(--series-personal-soft); color: var(--series-personal); }
+
+.series-entry h2 { margin: .35rem 0 .2rem; border: 0; padding: 0; font-size: 1.6rem; }
+.series-entry > p { color: var(--bs-secondary-color); margin-bottom: .6rem; }
+
+.series-page .series-parts { list-style: none; counter-reset: part; padding: 0; margin: 0; }
+.series-page .series-parts li {
+  counter-increment: part; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: .1rem .6rem;
+  align-items: baseline; padding: .3rem 0; border-top: 1px solid var(--bs-border-color); line-height: 1.35;
+}
+.series-page .series-parts li::before {
+  content: counter(part); text-align: right; font-size: .8rem; color: var(--bs-secondary-color); font-variant-numeric: tabular-nums;
+}
+.series-page .series-parts li > a { color: var(--bs-body-color); text-decoration: none; min-width: 0; }
+.series-page .series-parts li > a:hover { color: var(--bs-primary); text-decoration: underline; }
+.series-page .series-date { font-size: .8rem; color: var(--bs-secondary-color); white-space: nowrap; }
+.series-also { grid-column: 2 / 4; font-size: .8rem; color: var(--bs-secondary-color); }
+
+@media (max-width: 576px) {
+  .series-page .series-parts li { grid-template-columns: 2rem 1fr; }
+  .series-page .series-date { display: none; }
+}

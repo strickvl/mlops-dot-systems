@@ -128,6 +128,10 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -247,6 +251,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li class="series-here"><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>I’ve been working on a project called <a href="https://github.com/strickvl/hinbox"><code>hinbox</code></a> - a flexible entity extraction system designed to help historians and researchers build structured knowledge databases from collections of primary source documents. At its core, <code>hinbox</code> processes historical documents, academic papers, books and news articles to automatically extract and organize information about people, organizations, locations, and events.</p>
 <p>The tool works by ingesting batches of documents and intelligently identifying entities across sources. What makes it interesting is the iterative improvement aspect: as you feed more documents into the system, entity profiles become richer and more comprehensive. When <code>hinbox</code> encounters a person or organization it’s seen before, it updates their profile with new information rather than creating duplicates. I’ve been testing it extensively with Guantánamo Bay media sources - a domain where I have deep expertise from my previous career as a historian - which allows me to rigorously evaluate the quality of its extractions.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -334,6 +339,7 @@ ul.task-list li input[type="checkbox"] {
 <p><em>The hinbox repository is available on <a href="https://github.com/strickvl/hinbox">GitHub</a> for anyone interested in following along or contributing. All feedback welcome as this evolves from prototype to something genuinely useful for research applications.</em></p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 3 of 5 in <a href="../series.html#evals-course">The Evals Course</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html"><small>← Part 2</small>Error analysis to find failure modes</a><a class="series-next" href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html"><small>Part 4 →</small>Trying to instrument an agentic app with Arize Phoenix and litellm</a></div></nav></div>
 </section>
 </section>
 

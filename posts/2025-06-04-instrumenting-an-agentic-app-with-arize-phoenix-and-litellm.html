@@ -163,6 +163,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -275,6 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 4 of 5</span> <a href="../series.html#evals-course">The Evals Course</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html">Error analysis to find failure modes</a> <span class="series-date">May 2025</span></li><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a> <span class="series-date">May 2025</span></li><li class="series-here"><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html">Trying to instrument an agentic app with Arize Phoenix and litellm</a> <span class="series-date">Jun 2025</span></li><li><a href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html">Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a> <span class="series-date">Jun 2025</span></li></ol></details></div>
 <p>It’s important to instrument your AI applications! I hope this can more or less be taken as given just as you’d expect a non-AI-infused app to capture logs. When you’re evaluating your LLM-powered system, you need to have capture the inputs and outputs both at an end-to-end level in terms of the way the user experiences things as well as with more fine-grained granularity for all the internal workings.</p>
 <p>My goal with this blog is to first demonstrate how Phoenix and <code>litellm</code> can work together, and then to make sure that we are able to group all spans together under a single trace.</p>
 <p>I’ll write the blog as I work so at this point I’m not sure exactly how this will turn out.</p>
@@ -619,6 +624,7 @@ Beijing</code></pre>
 <p>So there you have it! Some clarity. I’ll have to play around to see whether I go with the Langfuse route or the Phoenix route and which feels most ergonomic in the <code>hinbox</code> codebase. Appreciate the quick feedback from the Phoenix team, though!</p>
 
 
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 4 of 5 in <a href="../series.html#evals-course">The Evals Course</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html"><small>← Part 3</small>Building hinbox: An agentic research tool for historical document analysis</a><a class="series-next" href="../posts/2025-06-04-instrumenting-an-agentic-app-with-braintrust-and-litellm.html"><small>Part 5 →</small>Testing out instrumenting LLM tracing for litellm with Braintrust and Langfuse</a></div></nav></div>
 </section>
 
 </main> <!-- /main -->

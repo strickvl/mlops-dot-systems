@@ -46,3 +46,37 @@ body.all-page #quarto-margin-sidebar .category.active {
     color: #4b5563;
     cursor: pointer;
 }
+
+/* ===== Series box inside posts =====
+   Added by filters/series-box.lua to any post with `series:` in its
+   frontmatter: a box at the top, previous/next links at the bottom. */
+
+.series-box {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    background: var(--bs-tertiary-bg);
+    padding: .7rem 1rem;
+    margin: 0 0 1rem;
+}
+.series-box-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; }
+.series-part { font-size: .85rem; color: var(--bs-secondary-color); font-variant-numeric: tabular-nums; }
+.series-box-head a { font-weight: 600; }
+.series-ongoing {
+    font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #1f8a4c;
+}
+.series-box summary { cursor: pointer; font-size: .9rem; color: var(--bs-primary); margin-top: .2rem; }
+.series-box .series-parts { margin: .5rem 0 0; padding-left: 1.6rem; font-size: .95rem; }
+.series-box .series-parts li { padding: .1rem 0; }
+.series-box .series-here > a { font-weight: 700; color: var(--bs-body-color); }
+.series-box .series-date { font-size: .8rem; color: var(--bs-secondary-color); margin-left: .3rem; }
+
+.series-footer { border-top: 2px solid var(--bs-border-color); margin-top: 2.5rem; padding-top: 1rem; }
+.series-nav + .series-nav { margin-top: 1.2rem; }
+.series-nav-label { font-size: .85rem; color: var(--bs-secondary-color); }
+.series-nav-links { display: flex; justify-content: space-between; gap: 1rem; margin-top: .4rem; flex-wrap: wrap; }
+.series-nav-links a { text-decoration: none; max-width: 48%; }
+.series-nav-links .series-next { text-align: right; margin-left: auto; }
+.series-nav-links small {
+    display: block; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--bs-secondary-color);
+}
+@media (max-width: 576px) { .series-nav-links a { max-width: 100%; } }
