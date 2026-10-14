@@ -3,7 +3,9 @@ project:
   pre-render:
     - uv run scripts/build_series.py
     - uv run scripts/build_related.py
-  post-render: uv run scripts/cache_bust.py
+  post-render:
+    - uv run scripts/preview_cards.py
+    - uv run scripts/cache_bust.py
   render:
     - "**/*.qmd"
     - "**/*.md"
