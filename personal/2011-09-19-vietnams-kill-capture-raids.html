@@ -243,6 +243,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I’m looking forward to reading some statistical studies of these kinds of operations as found in Iraq and Afghanistan in recent years. There are various people formerly serving in the military in both countries who are writing up their experiences as Masters or PhD theses. Please leave a comment below if you know of any related research in the works.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2011-09-13-those-40-al-qaeda-insurgents.html">Those '40 al-Qaeda insurgents'...</a><span>Personal · 2011</span></li><li><a href="../personal/2011-04-03-the-kill-team.html">'The Kill Team'</a><span>Personal · 2011</span></li><li><a href="../personal/2011-05-16-more-isaf-press-release-data.html">More data on 'Kill-Capture' Raids</a><span>Personal · 2011</span></li><li><a href="../personal/2010-02-02-john-nagl-and-the-future-of-counterinsurgency.html">John Nagl and 'the future of counterinsurgency'</a><span>Personal · 2010</span></li><li><a href="../personal/2011-12-07-entropy-and-insurgent-radicalisation-an-isaf-goal.html">Entropy and insurgent radicalisation: an ISAF goal?</a><span>Personal · 2011</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

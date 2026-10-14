@@ -234,6 +234,21 @@ ul.task-list li input[type="checkbox"] {
 <p>There’s rumoured to be a Beeminder/Clozemaster direct service connection in the works, but until then I’ll use Clozemaster’s own daily reminder tool.&nbsp;<em>A più tardi</em>.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-15-clozemaster.html">ClozeMaster: learn words in context</a><span>Personal · 2017</span></li><li><a href="../personal/2023-08-10-language-study-zero-to-hero.html">Language Learning Crash Course: from slightly more than zero to slightly less than advanced</a><span>Personal · 2023</span></li><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li><li><a href="../personal/2017-03-10-language-transfer.html">Audio Courses with Language Transfer</a><span>Personal · 2017</span></li><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I hope you get a chance to give this book a read. Not only is it some work that I spent a good chunk of time working on, but it’s a really useful and moving account of someone who passed through Guantánamo. In particular, Sami was often on a hunger strike so there is a lot of detail on his mental state and coping mechanisms, as well as the way the medical authorities at Guantánamo attempted to ‘deal’ with the problem.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2014-09-16-our-first-publication-i-am-akbar-agha.html">Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider</a><span>Personal · 2014</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li><li><a href="../personal/2017-01-15-master-arabic-behind-cover.html">Master Arabic: Behind the Cover</a><span>Personal · 2017</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li><li><a href="../personal/2019-09-10-taliban-mutmain-preorder.html">New book, new ways to order</a><span>Personal · 2019</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

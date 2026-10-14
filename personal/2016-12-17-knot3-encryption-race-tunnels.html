@@ -276,6 +276,21 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="https://www.alexstrick.com/blog/into-eternity-review">I wrote yesterday</a> about “Into Eternity” (trailer <a href="https://www.youtube.com/watch?v=qoyKe-HxmFk">here</a>), one of my favourite documentaries of the past year. It’s filmed with an idiosyncratic approach to detail and atmosphere. I am ignorant about where Finnish director Michael Madsen gets his influences from, but I certainly look forward to seeing more. Just today I saw another documentary, “<a href="http://www.imdb.com/title/tt5895028/">13th</a>”, which focuses on the ways that racial inequality has manifested itself in the United States, specifically in the prison system. This is a powerful statement, particularly for American viewers, I imagine, and it made me think about the ways that similar trends are to be found back in Europe.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-12-09-knot2-translation-as-trauma.html">Knot 2: Translation as Trauma, Taxis and Artificial Intelligence</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-02-knot1-solitary-confinement-digital-security.html">Knot 1: Solitary Confinement &amp; Digital Security</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-28-knot4-empathy-tech-climate.html">Knot 4: Empathy, Tech Scepticism and Climate Change</a><span>Personal · 2016</span></li><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a><span>Technical · 2024</span></li><li><a href="../personal/2015-09-09-2015-9-sources-and-methods-back-for-season-2.html">Sources and Methods: Back for Season 2</a><span>Personal · 2015</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

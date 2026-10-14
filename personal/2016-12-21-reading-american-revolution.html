@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 <p>One of the points that I found most interesting was how Washington seemed to go about selecting his books. There were fewer titles at the time, so he seemed to have more opportunity or necessity for deep reading (annotating copies line-by-line, for example) than in the present day where it’s probably easier to develop habits of wide/extensive reading that are ultimately shallow. A fascinating section in this respect was where Washington decides he needs to overhaul his farm and agricultural practices, and Harrison shows how he used what he read to take a risky but ultimately profitable decision to reform and overhaul how he managed his land.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-06-19-big-long-book.html">Robert Caro's Big Long Book</a><span>Personal · 2017</span></li><li><a href="../personal/2016-09-15-phd-tools-goodreads.html">PhD Tools: Goodreads for Cross-Pollination</a><span>Personal · 2016</span></li><li><a href="../personal/2014-12-22-some-books-and-other-things-from-2014.html">Some Books and Other Things from 2014</a><span>Personal · 2014</span></li><li><a href="../personal/2016-12-25-syria-revolution-first-draft.html">Syria’s Revolution: The First Draft</a><span>Personal · 2016</span></li><li><a href="../personal/2012-12-29-some-things-i-read.html">Some Things I Read</a><span>Personal · 2012</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

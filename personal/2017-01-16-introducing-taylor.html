@@ -242,6 +242,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 1 of 10 in <a href="../series.html#language-learners-journal">Language Learner's Journal</a></div><div class="series-nav-links"><span></span><a class="series-next" href="../personal/2017-01-23-adjustments-deep-end.html"><small>Part 2 →</small>Language Learner's Journal: Adjustments at the Deep End</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-06-07-2015-6-arabic-language-update-i-did-it-almost.html">Arabic Language Update: I did it! (Almost)</a><span>Personal · 2015</span></li><li><a href="../personal/2017-01-01-2017-1-new-year-new-arabic-language-podcast.html">New Year, New Arabic-language Podcast</a><span>Personal · 2017</span></li><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li><li><a href="../personal/2017-04-17-on-reading-in-arabic-the-evidence.html">On Reading in Arabic: The Evidence</a><span>Personal · 2017</span></li><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -239,6 +239,21 @@ ul.task-list li input[type="checkbox"] {
 <p>The main difference here is that we have some labels which are used to know whether the predictions are correct or not. The loss is a way of measuring the performance of our model that is suited for updating our parameters (that used to be referred to as weights).</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2021-05-23-held-back-by-misunderstanding.html">Held back by misunderstanding</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-23-pdp-a-precursor-to-modern-neural-networks.html">PDP: a precursor to modern neural networks?</a><span>Personal · 2021</span></li><li><a href="../personal/2018-06-04-ml-with-weka.html">Machine Learning with Weka</a><span>Personal · 2018</span></li><li><a href="../personal/2021-05-23-deep-learning-best-in-show.html">Deep Learning: Best in Show?</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-23-removing-barriers-deep-learning-edition.html">Removing Barriers: Deep Learning Edition</a><span>Personal · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

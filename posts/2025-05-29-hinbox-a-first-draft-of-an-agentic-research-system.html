@@ -331,7 +331,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The goal is documenting this improvement process in detail through subsequent blog posts. Rather than abstract discussions of evaluation methodology, I want to show concrete examples of how these techniques apply to a real system with measurable outputs. What does systematic prompt engineering actually look like in practice? How do you design effective test suites for complex agentic pipelines? When do local models outperform cloud APIs for specific tasks?</p>
 </section>
 <section id="context-for-future-technical-content" class="level3">
-<h3 class="anchored" data-anchor-id="context-for-future-technical-content">Context for Future Technical Content</h3>
+<h3 class="anchored">Context for Future Technical Content</h3>
 <p>Honestly, the main reason for writing this overview wasn’t to launch anything - it was to establish context. I wanted a reference point for future technical posts that dive deep into evaluation methodology and iterative improvement without needing to repeatedly explain what hinbox is or why I’m working on it. The interesting content will be showing how systematic AI development practices apply to concrete research problems.</p>
 <p>This feels like the right kind of project for exploring these questions: complex enough to surface real challenges, focused enough to enable rigorous evaluation, and personally meaningful enough to sustain the extended iteration cycles that proper system improvement requires. Plus, having worked extensively in the domain I’m testing makes it much easier to distinguish between genuine improvements and superficial metrics optimisation.</p>
 <p>More technical deep-dives coming soon as the evals work progresses. The real learning happens in the systematic refinement process, not the initial build.</p>
@@ -340,6 +340,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 3 of 5 in <a href="../series.html#evals-course">The Evals Course</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-05-23-error-analysis-to-find-failure-modes.html"><small>← Part 2</small>Error analysis to find failure modes</a><a class="series-next" href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html"><small>Part 4 →</small>Trying to instrument an agentic app with Arize Phoenix and litellm</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="context-for-future-technical-content">Related posts</h2><ul><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a><span>Technical · 2025</span></li><li><a href="../posts/2025-02-16-tinbox-an-llm-based-document-translation-tool.html">Tinbox: an LLM-based document translation tool</a><span>Technical · 2025</span></li><li><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a><span>Technical · 2025</span></li><li><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a><span>Technical · 2026</span></li><li><a href="../posts/2024-03-24-publishing-afghanistan-dataset-huggingface.html">Publishing the ISAF Press Releases dataset</a><span>Technical · 2024</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 

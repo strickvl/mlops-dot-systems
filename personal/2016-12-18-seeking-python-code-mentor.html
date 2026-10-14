@@ -236,6 +236,21 @@ ul.task-list li input[type="checkbox"] {
 <p>P.S. You can <a href="https://www.alexstrick.com/blog/?category=Coding">read some</a> <a href="https://www.alexstrick.com/blog/?category=Coding">blogposts</a> where I discuss my coding progress, and you can also <a href="https://github.com/strickvl/">find me on Github</a>.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-11-05-python-side-project-approach.html">Python Side-Project: Approach</a><span>Personal · 2016</span></li><li><a href="../personal/2013-02-04-learning-to-code.html">Learning to Code</a><span>Personal · 2013</span></li><li><a href="../posts/2021-09-18-reading-python.html">Reading Python Code</a><span>Technical · 2021</span></li><li><a href="../posts/2021-09-18-writing-code.html">Writing Code</a><span>Technical · 2021</span></li><li><a href="../personal/2016-08-15-2016-8-on-learning-new-skills.html">On Learning New Skills, #showyourwork and other housekeeping</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

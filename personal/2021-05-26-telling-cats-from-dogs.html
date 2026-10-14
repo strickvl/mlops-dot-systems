@@ -234,6 +234,21 @@ ul.task-list li input[type="checkbox"] {
 <p>If you use transfer learning, too, you even can use a pretrained model (which is already pretty good at recognising features from images). You can then fine-tune that model to get really good at the specific task you need it to do. (Note, that’s exactly what you do in the first chapter of Howard/Gugger’s&nbsp;<a href="https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=sr_1_1?dchild=1&amp;qid=1621784082&amp;keywords=deep%2525252Blearning%2525252Bfor%2525252Bcoders&amp;tag=soumet-20&amp;sr=8-1">Deep Learning for Coders</a>).</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-05-02-pet-cat-image-classifier-fastai.html">How my pet cat taught me a lesson about validation data for image classification</a><span>Technical · 2022</span></li><li><a href="../personal/2021-05-28-on-the-interpretability-of-models.html">On the interpretability of models</a><span>Personal · 2021</span></li><li><a href="../posts/2021-09-10-chapter1and2recall.html">Retrieval Practice with fastai chapters 1 and 2</a><span>Technical · 2021</span></li><li><a href="../posts/2022-05-15-fashion-mnist-neural-network.html">A neural network for Fashion MNIST data</a><span>Technical · 2022</span></li><li><a href="../personal/2021-05-23-held-back-by-misunderstanding.html">Held back by misunderstanding</a><span>Personal · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

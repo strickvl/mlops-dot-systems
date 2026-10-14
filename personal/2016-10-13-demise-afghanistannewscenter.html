@@ -234,6 +234,21 @@ ul.task-list li input[type="checkbox"] {
 <p>So this is just a paean to a resource that’s now lost to us. All the articles still exist, thankfully, distributed across a thousand different news outlets and services, and you can still collate all these together, but the ability to search and index these articles is now lost to us. Its sudden and unexpected demise should, moreover, offer a lesson to others who hope to offer such services in the future.Please, PLEASE, find a way to ensure that these useful services are managed so as to be sustainable over the long-term. Even if this means finding an institutional home for the data, it’ll be worth it over the long-term.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a><span>Technical · 2024</span></li><li><a href="../personal/2015-08-28-2015-8-afp-covers-the-taliban-sources-project.html">AFP covers the Taliban Sources Project</a><span>Personal · 2015</span></li><li><a href="../personal/2012-11-26-writing-the-history-of-the-taliban-movement.html">Writing the history of the Taliban movement</a><span>Personal · 2012</span></li><li><a href="../personal/2011-08-20-an-appeal-for-funding.html">An Appeal for Funding</a><span>Personal · 2011</span></li><li><a href="../personal/2016-12-02-himal-article-2014.html">Reading the Taliban: Himal Magazine article</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

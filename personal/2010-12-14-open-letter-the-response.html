@@ -286,6 +286,21 @@ ul.task-list li input[type="checkbox"] {
 <p>8am or <em>Hasht-e Sobh</em> daily newspaper also <a href="http://8am.af/index.php?option=com_content&amp;view=article&amp;id=16257:1389-09-24-07-00-41&amp;catid=90:1387-08-17-17-39-04&amp;Itemid=489">disagrees</a> with the premise of the article (also in Dari)</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-12-11-an-open-letter-to-president-obama.html">An Open Letter to President Obama</a><span>Personal · 2010</span></li><li><a href="../personal/2014-08-09-two-new-co-authored-reports-on-afghanistan.html">Two new co-authored reports on Afghanistan</a><span>Personal · 2014</span></li><li><a href="../personal/2015-08-28-2015-8-afp-covers-the-taliban-sources-project.html">AFP covers the Taliban Sources Project</a><span>Personal · 2015</span></li><li><a href="../personal/2019-09-10-taliban-mutmain-preorder.html">New book, new ways to order</a><span>Personal · 2019</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -259,6 +259,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I think there’s not a single answer for this which is, again, why I see the end result as people bringing these things in-house where they get to develop and refine what makes their particular flavour of research unique. (In the human-generated research world this is very much the case, where certain institutions (or even particular authors) are known for how deep they go, or what kinds of sources they prefer, or how they choose to feature or highlight the primary sources they access, and so on.) There are many possible variations of how this manifest, and I hope that we’re headed into a world where all the AI ‘deep researchers’ will be unique and quirky in all the best senses of that word.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2021-05-23-deep-learning-best-in-show.html">Deep Learning: Best in Show?</a><span>Personal · 2021</span></li><li><a href="../posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">Deep learning tricks all the way down, with a bit of mathematics for good measure</a><span>Technical · 2022</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a><span>Technical · 2024</span></li><li><a href="../personal/2016-09-07-phd-tools-omnifocus.html">PhD Tools: Omnifocus for Managing your Non-PhD Life</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-28-knot4-empathy-tech-climate.html">Knot 4: Empathy, Tech Scepticism and Climate Change</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

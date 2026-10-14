@@ -347,6 +347,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 5 of 9 in <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2022-01-08-robust-python-4.html"><small>← Part 4</small>Different ways to constrain types in Python</a><a class="series-next" href="../posts/2022-01-22-robust-python-6.html"><small>Part 6 →</small>Using mypy for Python type checking</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2021-09-18-reading-python.html">Reading Python Code</a><span>Technical · 2021</span></li><li><a href="../personal/2018-07-08-regex-python-search.html">Using Regex with Python to Find Strings</a><span>Personal · 2018</span></li><li><a href="../personal/2018-06-24-python-virtual-environments-testing-environments-and-markdown-strikethrough.html">Python Virtual Environments, Testing Environments and Markdown Strikethrough</a><span>Personal · 2018</span></li><li><a href="../posts/2022-09-07-serialisation.html">Storing Bytes: what data serialisation is and why you need it for machine learning</a><span>Technical · 2022</span></li><li><a href="../posts/2022-02-10-synthetic-image-data.html">It's raining bboxes: how I wrote a Python script to create 2097 synthetic images to help improve my machine learning model</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

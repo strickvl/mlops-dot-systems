@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 <p>If I have one criticism of the book, it is the perspective. I would far rather have read a book by one of the survivors, or at least to hear the story in their words. I understand that European publishers feel like they need a white face to relay the stories of ‘the other’, I just wish it wasn’t the case. Nevertheless, this was a sensitively written account and one I will be recommending to friends and family.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-02-lynne-kelly-podcast.html">The ways memory skills augment your life</a><span>Personal · 2017</span></li><li><a href="../personal/2017-01-15-master-arabic-behind-cover.html">Master Arabic: Behind the Cover</a><span>Personal · 2017</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li><li><a href="../personal/2010-12-22-deedee-derksen-picks-her-2010-books.html">Deedee Derksen picks her 2010 books</a><span>Personal · 2010</span></li><li><a href="../personal/2016-12-25-syria-revolution-first-draft.html">Syria’s Revolution: The First Draft</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

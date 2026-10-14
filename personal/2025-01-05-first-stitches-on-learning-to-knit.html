@@ -285,6 +285,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Down the line, and depending on how the feedback from my first swatches goes, I’d like to maybe try some other courses and perhaps even the <a href="https://tkga.org/certification/master-hand-knitting/">Master Hand Knitting certification</a>. I’ll also be dipping into the <a href="https://www.amazon.com/Fearless-Knitting-Workbook-Jennifer-Seiffert/dp/1596681497">Fearless Knitting Workbook</a> which is also swatch-based, a format I’ve been really enjoying as it allows me to get fast feedback and improve my skills.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-09-29-learning-without-seams.html">Learning Without Seams</a><span>Personal · 2016</span></li><li><a href="../personal/2015-10-13-four-colours.html">Four Colours</a><span>Personal · 2015</span></li><li><a href="../personal/2017-01-23-adjustments-deep-end.html">Language Learner's Journal: Adjustments at the Deep End</a><span>Personal · 2017</span></li><li><a href="../personal/2016-08-15-2016-8-on-learning-new-skills.html">On Learning New Skills, #showyourwork and other housekeeping</a><span>Personal · 2016</span></li><li><a href="../personal/2017-02-04-deepening-my-studies.html">Language Learner's Journal: Deepening My Studies</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

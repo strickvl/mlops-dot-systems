@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>These are two key misunderstandings identified by the Howard/Gugger <a href="https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=sr_1_1?tag=soumet-20&amp;sr=8-1&amp;keywords=deep%25252Blearning%25252Bfor%25252Bcoders&amp;dchild=1&amp;qid=1621784082">short introduction</a> and I’m sure I’ll read more of these in <a href="https://www.amazon.com/Genius-Makers-Mavericks-Brought-Facebook-ebook/dp/B08CD1M43L/ref=sr_1_1?dchild=1&amp;qid=1621785566&amp;keywords=genius%252Bmakers&amp;tag=soumet-20&amp;sr=8-1">Genius Makers</a>. It’s amazing, but not entirely surprising, that a non-generous and unimaginative misreading of the literature could be responsible for such an effective trashing of a research path.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2021-05-28-on-the-interpretability-of-models.html">On the interpretability of models</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-23-removing-barriers-deep-learning-edition.html">Removing Barriers: Deep Learning Edition</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-23-pdp-a-precursor-to-modern-neural-networks.html">PDP: a precursor to modern neural networks?</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html">Arthur Samuel and the 'Frontier of Automation'</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-23-deep-learning-best-in-show.html">Deep Learning: Best in Show?</a><span>Personal · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

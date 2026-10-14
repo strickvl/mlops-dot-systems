@@ -225,6 +225,21 @@ ul.task-list li input[type="checkbox"] {
 <p>In a few weeks I’ll be posting from the road: Mullah Zaeef’s <a href="http://www.mylifewiththetaliban.com/">My Life With The Taliban</a> is finally going on sale (pre-order at Amazon.com <a href="http://www.amazon.com/gp/product/0231701489?ie=UTF8&amp;tag=alexstrick-20&amp;link_code=as3&amp;camp=211189&amp;creative=373489&amp;creativeASIN=0231701489">here</a> and at Amazon.co.uk <a href="http://www.amazon.co.uk/gp/product/1849040265?ie=UTF8&amp;tag=mylifwittheta-21&amp;link_code=as3&amp;camp=2506&amp;creative=9298&amp;creativeASIN=1849040265">here</a>). <a href="http://www.felixkuehn.com">Felix</a> and I will be travelling round the UK and USA in January, February and March. You can find a list of the public events we’ll be participating in on the <a href="http://www.mylifewiththetaliban.com/My_Life_With_The_Taliban/Events.html">book website</a>.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2019-09-10-taliban-mutmain-preorder.html">New book, new ways to order</a><span>Personal · 2019</span></li><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2012-12-29-some-things-i-read.html">Some Things I Read</a><span>Personal · 2012</span></li><li><a href="../personal/2014-09-16-our-first-publication-i-am-akbar-agha.html">Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider</a><span>Personal · 2014</span></li><li><a href="../personal/2016-12-09-knot2-translation-as-trauma.html">Knot 2: Translation as Trauma, Taxis and Artificial Intelligence</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

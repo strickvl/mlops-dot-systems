@@ -273,6 +273,21 @@ ul.task-list li input[type="checkbox"] {
 <p>To my knowledge, not a single mujahid remained in the prison’s political ward, but there was a room for the mentally ill and they remained inside the prison. As for the other wounded and sick prisoners, all were freed. There was even a wounded prisoner with two iron bars in his legs, during his walk inside the tunnel the two bars were broken and he fainted of extreme pain. Nevertheless, the mujahideen carried him in this condition, got him out of the tunnel and transported him by car.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li><li><a href="../personal/2010-04-11-back-home.html">Back Home</a><span>Personal · 2010</span></li><li><a href="../personal/2014-09-16-our-first-publication-i-am-akbar-agha.html">Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider</a><span>Personal · 2014</span></li><li><a href="../personal/2011-09-13-those-40-al-qaeda-insurgents.html">Those '40 al-Qaeda insurgents'...</a><span>Personal · 2011</span></li><li><a href="../personal/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying.html">Reading the Afghan Taliban: 67 Sources You Should Be Studying</a><span>Personal · 2015</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

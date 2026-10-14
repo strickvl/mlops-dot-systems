@@ -228,6 +228,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Read the rest up at the website <a href="http://www.afghanistancalltoreason.com">www.afghanistancalltoreason.com</a> and note that the list of signatures is growing and being updated as more people learn about the letter. Please support this initiative by forwarding the text of the letter onwards.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-12-14-open-letter-the-response.html">Open Letter: The Response (UPDATED)</a><span>Personal · 2010</span></li><li><a href="../personal/2011-08-20-an-appeal-for-funding.html">An Appeal for Funding</a><span>Personal · 2011</span></li><li><a href="../personal/2010-12-28-an-appeal.html">UPDATED: An Appeal</a><span>Personal · 2010</span></li><li><a href="../personal/2011-05-03-the-afghan-taliban-react-to-bin-ladens-death.html">The Afghan Taliban react to bin Laden's death</a><span>Personal · 2011</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

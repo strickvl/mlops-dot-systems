@@ -238,6 +238,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 1 of 9 in <a href="../series.html#robust-python">Reading 'Robust Python'</a></div><div class="series-nav-links"><span></span><a class="series-next" href="../posts/2021-12-30-robust-python-2.html"><small>Part 2 →</small>What's special about types in Python?</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2021-09-18-reading-python.html">Reading Python Code</a><span>Technical · 2021</span></li><li><a href="../posts/2021-09-18-writing-code.html">Writing Code</a><span>Technical · 2021</span></li><li><a href="../personal/2018-06-24-python-virtual-environments-testing-environments-and-markdown-strikethrough.html">Python Virtual Environments, Testing Environments and Markdown Strikethrough</a><span>Personal · 2018</span></li><li><a href="../posts/2021-10-25-debugging.html">Some things I learned about debugging</a><span>Technical · 2021</span></li><li><a href="../personal/2016-08-15-2016-8-on-learning-new-skills.html">On Learning New Skills, #showyourwork and other housekeeping</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -234,6 +234,21 @@ ul.task-list li input[type="checkbox"] {
 <p>You can download and listen to the episode over on the main Sources &amp; Methods website <a href="https://launchschool.com/forum">here</a>.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2019-02-16-solid-study-habits-for-coders.html">Solid Study Habits for Coders</a><span>Personal · 2019</span></li><li><a href="../personal/2016-10-15-skills-development-foundations.html">Skills Development: Foundations</a><span>Personal · 2016</span></li><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li><li><a href="../personal/2017-02-23-core-language-learning-beliefs.html">Core Language Learning Beliefs</a><span>Personal · 2017</span></li><li><a href="../personal/2016-10-30-scratch-below-surface-dhh.html">Scratching Below the Surface with David Heinemeier Hansson</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -371,6 +371,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-05-02-pet-cat-image-classifier-fastai.html">How my pet cat taught me a lesson about validation data for image classification</a><span>Technical · 2022</span></li><li><a href="../posts/2021-09-06-redaction-classification-chapter-2.html">Training a classifier to detect redacted documents with fastai</a><span>Technical · 2021</span></li><li><a href="../personal/2021-05-26-telling-cats-from-dogs.html">Telling Cats from Dogs</a><span>Personal · 2021</span></li><li><a href="../personal/2021-05-27-fastai-lesson-zero.html">FastAI Lesson Zero: video notes</a><span>Personal · 2021</span></li><li><a href="../posts/2022-01-06-nbdev-early-impressions.html">Learning about 'nbdev' while building a Python package for PDF machine learning datasets</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

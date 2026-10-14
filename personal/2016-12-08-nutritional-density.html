@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I think there are a lot worse things we could do than strive for nutritional density in dietary choices, and I’ve also been thinking more about how it probably applies to the kinds of information we consume. This could mean choosing books that are perhaps older, but are less ephemeral or have stood the test of time. For language-learning, perhaps it means really diving deep in one text to really suck the marrow from each and every sentence (if you’ll excuse the carnivorous image). I’ve been slowly weaning myself off the output of social and non-social media for this very reason, though perhaps now I’ve only started to gain the vocabulary to describe what I was doing. In any case, food for thought for a Thursday evening.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-05-randomise-your-learning.html">Randomise Your Learning</a><span>Personal · 2017</span></li><li><a href="../personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html">Arthur Samuel and the 'Frontier of Automation'</a><span>Personal · 2021</span></li><li><a href="../personal/2015-09-18-2015-9-ecolinguism-and-the-ethics-of-learning-new-languages.html">Ecolinguism and the ethics of learning new languages</a><span>Personal · 2015</span></li><li><a href="../personal/2016-10-15-skills-development-foundations.html">Skills Development: Foundations</a><span>Personal · 2016</span></li><li><a href="../personal/2016-08-15-2016-8-on-learning-new-skills.html">On Learning New Skills, #showyourwork and other housekeeping</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -235,6 +235,21 @@ ul.task-list li input[type="checkbox"] {
 <p>This is great news, and they deserve some credit for rolling this out. Google is making a push to encourage most websites to be secured in this way – not doing so may even harm your search rankings – so it’s probably a trend that’s coming for most people eventually. In any case, if you’re using Squarespace as your host, make sure you turn it on!</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-12-02-knot1-solitary-confinement-digital-security.html">Knot 1: Solitary Confinement &amp; Digital Security</a><span>Personal · 2016</span></li><li><a href="../personal/2016-10-28-greengeeks-ecological-footprint.html">A Greener Technological Footprint</a><span>Personal · 2016</span></li><li><a href="../personal/2016-08-29-2016-8-phd-tools-pinboard.html">PhD Tools: Save your web links with Pinboard</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-05-phd-tools-freedom.html">PhD Tools: Turn Off the Internet with Freedom</a><span>Personal · 2016</span></li><li><a href="../personal/2013-01-02-useful-tools-pinboard.html">Useful Tools: Pinboard</a><span>Personal · 2013</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

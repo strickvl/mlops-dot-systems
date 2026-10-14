@@ -231,6 +231,21 @@ transformed_array = example_array.map(&amp;:upcase) # =&gt; ["ALEX", "JOHN", "TE
 transformed_array = example_array.reduce(:+) # =&gt; 25</code></pre>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2019-02-13-ruby-zip.html">Using Ruby's .zip method to combine arrays</a><span>Personal · 2019</span></li><li><a href="../personal/2019-02-25-using-rubys-digits-method.html">Using Ruby's .digits method</a><span>Personal · 2019</span></li><li><a href="../posts/2021-12-29-j-language.html">Exploring J, an array programming language</a><span>Technical · 2021</span></li><li><a href="../posts/2022-01-30-robust-python-8.html">How and where to use enums in Python</a><span>Technical · 2022</span></li><li><a href="../personal/2013-02-04-learning-to-code.html">Learning to Code</a><span>Personal · 2013</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

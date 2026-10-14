@@ -226,6 +226,21 @@ ul.task-list li input[type="checkbox"] {
 <p>It’s good to be reminded of this when thinking about most things, but especially when discussing ideology and influence with regard to the war in Afghanistan and the identity of the various groups fighting. People have thoughts; ideas do more than just ‘emerge’. I’m just as guilty of this as anyone else, but I think writing on the nature of the Taliban, for example, could become a lot clearer if we stuck to the agency of real people rather than abstractions.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2012-11-26-writing-the-history-of-the-taliban-movement.html">Writing the history of the Taliban movement</a><span>Personal · 2012</span></li><li><a href="../personal/2016-12-02-himal-article-2014.html">Reading the Taliban: Himal Magazine article</a><span>Personal · 2016</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li><li><a href="../personal/2013-09-23-taliban-time-travel-or-how-our-understanding-is-almost-always-two-years-old.html">Taliban Time Travel, or How Our Understanding Is Almost Always Two Years Old</a><span>Personal · 2013</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

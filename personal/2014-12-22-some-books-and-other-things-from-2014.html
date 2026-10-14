@@ -243,6 +243,21 @@ ul.task-list li input[type="checkbox"] {
 <p><em>[Read previous year-end posts here: <a href="http://www.alexstrick.com/a-different-place/2013/12/the-best-books-i-read-in-2013">2013</a>, <a href="http://www.alexstrick.com/a-different-place/2012/12/some-things-i-read">2012</a>, and&nbsp;<a href="http://www.alexstrick.com/a-different-place/2010/12/the-best-books-of-2010">2010</a>.]</em></p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-12-16-the-best-books-i-read-in-2015.html">The Best Books I Read in 2015</a><span>Personal · 2015</span></li><li><a href="../personal/2016-12-21-best-books-2016.html">The Best Books I Read in 2016</a><span>Personal · 2016</span></li><li><a href="../personal/2022-12-27-2022-readings.html">2022 Readings</a><span>Personal · 2022</span></li><li><a href="../personal/2013-12-27-the-best-books-i-read-in-2013.html">The Best Books I Read in 2013</a><span>Personal · 2013</span></li><li><a href="../personal/2015-03-21-2015-3-how-i-use-goodreads-to-pick-what-i-read.html">How I use Goodreads to pick what I read</a><span>Personal · 2015</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -249,6 +249,21 @@ ul.task-list li input[type="checkbox"] {
 <p>If you’re currently using web hosting of some sort, I’d encourage you to check out <a href="https://www.greengeeks.com/track/strickvl/cp-default">GreenGeeks</a> or some other eco-friendly option.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-10-11-exist.html">Seeing The Forest But For The Trees: On Exist.io</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-05-phd-tools-freedom.html">PhD Tools: Turn Off the Internet with Freedom</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-11-squarespace-goes-ssl.html">Squarespace Goes SSL</a><span>Personal · 2016</span></li><li><a href="../personal/2016-08-18-2016-8-remove-your-colour.html">Remove Your Colour</a><span>Personal · 2016</span></li><li><a href="../posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html">Writing a custom Terraform provider to deploy Huggingface Spaces</a><span>Technical · 2024</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

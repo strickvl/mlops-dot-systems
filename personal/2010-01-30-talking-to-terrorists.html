@@ -229,6 +229,21 @@ ul.task-list li input[type="checkbox"] {
 <p>As such, the book <a href="http://www.amazon.co.uk/Talking-Terrorists-Northern-Ireland-Politics/dp/1850659672%3FSubscriptionId%3D0PZ7TM66EXQCXFVTMTR2%26tag%3Dalexstrick-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1850659672">“Talking to Terrorists: Making Peace in Northern Ireland and the Basque Country (Crises in World Politics)” (John Bew, Martyn Frampton, Inigo Gurruchaga)</a> is an absolute must-read for policy-makers who see a future (or an end-game) in the possibility of some sort of negotiated settlement with the Taliban.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-07-07-irish-parallels.html">Irish Parallels</a><span>Personal · 2010</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li><li><a href="../personal/2010-01-01-5-books-everyone-should-read-about-afghanistan.html">5 Books Everyone Should Read About Afghanistan</a><span>Personal · 2010</span></li><li><a href="../personal/2012-11-26-writing-the-history-of-the-taliban-movement.html">Writing the history of the Taliban movement</a><span>Personal · 2012</span></li><li><a href="../personal/2010-02-02-john-nagl-and-the-future-of-counterinsurgency.html">John Nagl and 'the future of counterinsurgency'</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

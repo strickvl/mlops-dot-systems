@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>The things we’re working on have completely filled our plates for the next half year or so: a collection of Taliban ‘poems’ or songs that we’re putting out a translation of next year; a second volume together with <a href="http://www.mylifewiththetaliban.com/" title="My Life With the Taliban">Mullah Zaeef</a> on the history of the Taliban movement 1980s-present day that we hope will address all the things everyone said he neglected to mention in the first book; and a large research project for New York University on the extent of links between the Taliban and al Qaeda (and all the various affiliates of both) which tackles everything from the 1970s onwards.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-11-07-marie-colvin-in-kandahar-for-the-sunday-times.html">Marie Colvin in Kandahar for the Sunday Times</a><span>Personal · 2010</span></li><li><a href="../personal/2010-04-18-kandahar-survey.html">Kandahar Survey</a><span>Personal · 2010</span></li><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2010-01-01-5-books-everyone-should-read-about-afghanistan.html">5 Books Everyone Should Read About Afghanistan</a><span>Personal · 2010</span></li><li><a href="../personal/2010-01-08-staying-apart.html">Staying Apart</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

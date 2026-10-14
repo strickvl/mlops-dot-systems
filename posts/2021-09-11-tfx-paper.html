@@ -284,6 +284,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I wasn’t active in the field in 2017, so it’s hard for me to be able to reconstruct exactly how prescient or not this paper was in some of its diagnoses of the problem. It doesn’t seem that TFX was the total solution that perhaps it was pitched as being, but nonetheless it seems an important engineering achievement for Google.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2025-01-19-notes-on-ai-engineering-chapter-1.html">Notes on 'AI Engineering' (Chip Huyen) chapter 1</a><span>Technical · 2025</span></li><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a><span>Technical · 2026</span></li><li><a href="../posts/2025-02-07-ai-engineering-chapter-9.html">Notes on 'AI Engineering' chapter 9: Inference Optimisation</a><span>Technical · 2025</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 

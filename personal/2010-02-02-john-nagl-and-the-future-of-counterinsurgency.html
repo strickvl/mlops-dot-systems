@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Finally, the most worrying of all was his suggestion that, for the future, maybe “the military needs to become more like the State Department, and the State Department need to become more like the military.” One of the biggest problems – in my analysis – that we suffer from in southern Afghanistan is western political establishments’ almost complete reliance on the military to form policy in the absence of their own more creative and useful alternatives. We see this with the United States in particular, but also in the United Kingdom. What we most certainly DON’T need, is a further creep of political power into the hands of the military who, we must remember, only come with a limited toolbox and set of resources to respond to different kinds of problems, notwithstanding Professor Nagl’s hopes to the contrary.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-01-30-talking-to-terrorists.html">'Talking to Terrorists'</a><span>Personal · 2010</span></li><li><a href="../personal/2011-12-07-entropy-and-insurgent-radicalisation-an-isaf-goal.html">Entropy and insurgent radicalisation: an ISAF goal?</a><span>Personal · 2011</span></li><li><a href="../personal/2011-09-19-vietnams-kill-capture-raids.html">Vietnam's Kill-Capture Raids</a><span>Personal · 2011</span></li><li><a href="../personal/2012-11-26-writing-the-history-of-the-taliban-movement.html">Writing the history of the Taliban movement</a><span>Personal · 2012</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

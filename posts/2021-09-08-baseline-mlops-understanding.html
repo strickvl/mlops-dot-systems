@@ -230,6 +230,21 @@ ul.task-list li input[type="checkbox"] {
 <p>The kinds of things that you can do with machine learning models are incredibly diverse, so it stands to reason that the people who operationalise all these models have quite varied opinions and approaches to how best to do this. Even the deployment scenarios are pretty different and involve different technology stacks. There is an idea of a ‘full stack machine learning engineer’, which apparently means someone who just knows everything across the board; I hope to be able to delve into some of these areas and the key technologies represented in each space in due course on this blog.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li><li><a href="../personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html">Arthur Samuel and the 'Frontier of Automation'</a><span>Personal · 2021</span></li><li><a href="../posts/2022-01-16-midway-report-redaction-project.html">A Midway Report on my Computer Vision Project</a><span>Technical · 2022</span></li><li><a href="../posts/2022-04-04-ml-portfolio-best-practices.html">Some characteristics of best-in-class ML portfolio projects</a><span>Technical · 2022</span></li><li><a href="../personal/2018-06-04-ml-with-weka.html">Machine Learning with Weka</a><span>Personal · 2018</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

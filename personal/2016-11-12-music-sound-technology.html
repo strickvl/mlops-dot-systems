@@ -227,6 +227,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Episode 3 (“Strange Loops and Circuit Benders (Or, How New Music Comes from Broken Machines)”) was an exploration of sound, how our sound universe has been changing alongside technological developments and cultural evolution. Johnson talks to Alex Ross (of <a href="https://www.amazon.com/Rest-Noise-Listening-Twentieth-Century-ebook/dp/B000UZQIDI/ref=sr_1_1?ie=UTF8&amp;sr=1-1&amp;s=digital-text&amp;keywords=the%2Brest%2Bis%2Bnoise&amp;tag=soumet-20&amp;qid=1478952080">The Rest is Noise</a> fame) about how new sounds started to enter into the sonic vocabulary of musicians and creators. The other episodes are interesting, too. If you’re interested in music and/or technology, you might want to check this one out.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2014-10-23-fa8eri6cf9zjmigzx2hasdgg8pek57.html">Sources &amp; Methods: Podcast Follow-Up</a><span>Personal · 2014</span></li><li><a href="../personal/2016-10-30-scratch-below-surface-dhh.html">Scratching Below the Surface with David Heinemeier Hansson</a><span>Personal · 2016</span></li><li><a href="../personal/2018-06-13-ai-to-brahms.html">From AI to to Brahms</a><span>Personal · 2018</span></li><li><a href="../personal/2014-09-07-sources-methods-or-why-i-started-a-podcast.html">Sources &amp; Methods, or why I started a podcast</a><span>Personal · 2014</span></li><li><a href="../personal/2017-02-26-three-podcast-recommendations.html">Three Podcast Recommendations</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

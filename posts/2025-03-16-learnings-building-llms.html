@@ -310,6 +310,21 @@ ul.task-list li input[type="checkbox"] {
 <p>This case exemplifies a core principle of effective ML implementation: when dealing with complex, multi-faceted challenges, breaking them into targeted sub-problems often yields better outcomes than attempting end-to-end solutions—especially when working with constrained computational resources. While this approach may increase processing time, the quality improvement justifies the trade-off for many practical applications.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html">Starting to read Prompt Engineering for LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html">Final notes on 'Prompt Engineering for LLMs'</a><span>Technical · 2025</span></li><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a><span>Technical · 2025</span></li><li><a href="../posts/2024-07-07-all-the-things-i-learned-while-trending-on-hacker-news.html">All the things I learned while trending on Hacker News</a><span>Technical · 2024</span></li><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

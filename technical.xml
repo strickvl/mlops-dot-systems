@@ -61,6 +61,21 @@
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -131,6 +146,21 @@
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -859,6 +889,21 @@ font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -938,6 +983,21 @@ font-style: inherit;">=</span> build_env()</span></code></pre></div></div>
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -1088,6 +1148,21 @@ font-style: inherit;"># keep them a valid prob. distribution</span></span></code
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -1745,6 +1820,21 @@ For example, when asked to "segment customers with status enabled," the model le
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -1809,6 +1899,21 @@ For example, when asked to "segment customers with status enabled," the model le
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>agents</category>
@@ -2137,6 +2242,21 @@ font-style: inherit;">return</span> model</span></code></pre></div></div>
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -3034,6 +3154,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -3616,6 +3751,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -3718,7 +3868,7 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>The goal is documenting this improvement process in detail through subsequent blog posts. Rather than abstract discussions of evaluation methodology, I want to show concrete examples of how these techniques apply to a real system with measurable outputs. What does systematic prompt engineering actually look like in practice? How do you design effective test suites for complex agentic pipelines? When do local models outperform cloud APIs for specific tasks?</p>
 </section>
 <section id="context-for-future-technical-content" class="level3">
-<h3 class="anchored" data-anchor-id="context-for-future-technical-content">Context for Future Technical Content</h3>
+<h3 class="anchored">Context for Future Technical Content</h3>
 <p>Honestly, the main reason for writing this overview wasn’t to launch anything - it was to establish context. I wanted a reference point for future technical posts that dive deep into evaluation methodology and iterative improvement without needing to repeatedly explain what hinbox is or why I’m working on it. The interesting content will be showing how systematic AI development practices apply to concrete research problems.</p>
 <p>This feels like the right kind of project for exploring these questions: complex enough to surface real challenges, focused enough to enable rigorous evaluation, and personally meaningful enough to sustain the extended iteration cycles that proper system improvement requires. Plus, having worked extensively in the domain I’m testing makes it much easier to distinguish between genuine improvements and superficial metrics optimisation.</p>
 <p>More technical deep-dives coming soon as the evals work progresses. The real learning happens in the systematic refinement process, not the initial build.</p>
@@ -3727,6 +3877,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 
@@ -3835,6 +4000,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -3952,6 +4132,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -4004,6 +4199,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>I think there’s not a single answer for this which is, again, why I see the end result as people bringing these things in-house where they get to develop and refine what makes their particular flavour of research unique. (In the human-generated research world this is very much the case, where certain institutions (or even particular authors) are known for how deep they go, or what kinds of sources they prefer, or how they choose to feature or highlight the primary sources they access, and so on.) There are many possible variations of how this manifest, and I hope that we’re headed into a world where all the AI ‘deep researchers’ will be unique and quirky in all the best senses of that word.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>agents</category>
@@ -4091,6 +4301,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>This case exemplifies a core principle of effective ML implementation: when dealing with complex, multi-faceted challenges, breaking them into targeted sub-problems often yields better outcomes than attempting end-to-end solutions—especially when working with constrained computational resources. While this approach may increase processing time, the quality improvement justifies the trade-off for many practical applications.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -4149,6 +4374,21 @@ font-style: inherit;">print</span>(my_llm_application())</span></code></pre></di
 <p>If you’re interested in trying this out yourself, you can find the code and setup instructions in the <a href="https://github.com/strickvl/mcp-beeminder">GitHub repository</a>. While this implementation focuses on Beeminder, the same principles could be applied to create MCP servers for other services and tools.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -4456,6 +4696,21 @@ font-style: inherit;">\</span></span>
 <p>The code is available at <a href="https://github.com/strickvl/tinbox">GitHub</a>, and I welcome contributions and feedback.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -4530,6 +4785,21 @@ font-style: inherit;">\</span></span>
 <p>Overall it was a good start to the course: made me think and also got my hands dirty working on a very simple agent with tools using <code>smolagent</code> and a Gradio demo app in the Hugging Face Hub. I’ll write more after unit two next week.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -4708,7 +4978,7 @@ font-style: inherit;">\</span></span>
 </ul>
 </section>
 <section id="implementation-considerations" class="level3">
-<h3 class="anchored" data-anchor-id="implementation-considerations">Implementation Considerations</h3>
+<h3 class="anchored">Implementation Considerations</h3>
 <p>The implementation of feedback systems requires careful attention to:</p>
 <ul>
 <li>UI/UX design for feedback collection</li>
@@ -4720,6 +4990,21 @@ font-style: inherit;">\</span></span>
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 
@@ -5038,6 +5323,21 @@ font-style: inherit;">\</span></span>
 
 
 <div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>

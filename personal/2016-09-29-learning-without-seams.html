@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>So there’s a tension, and that tension instructive in helping you find good models. I’ve been trying to write more about <a href="http://www.alexstrick.com/blog/coding-chronicles-failure">my own failures</a> on this blog so as to balance things out. Whenever I’m learning a new skill, I try to find different types of models. Firstly, people who have reached the heavens, who are trailblazers and who break new ground in their particular skill / discipline. Secondly, those who are a few steps behind, and who really have had to work to get there. It’s this second kind of model where you’re more likely to see the seams of their journey, and you’ll most likely be able to learn from them.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-11-20-different-kinds-of-climbing.html">Different Kinds of Climbing</a><span>Personal · 2016</span></li><li><a href="../personal/2016-10-15-skills-development-foundations.html">Skills Development: Foundations</a><span>Personal · 2016</span></li><li><a href="../personal/2016-10-30-scratch-below-surface-dhh.html">Scratching Below the Surface with David Heinemeier Hansson</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-23-inner-game-review.html">The Inner Game: How a Perspective Shift Can Radically Improve Your Performance</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-05-fuheis-climbing-2.html">Climbing Fuheis: Two and a Half Ascents</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

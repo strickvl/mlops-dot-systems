@@ -389,6 +389,21 @@ In this post you learned:
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 14 of 17 in <a href="../series.html#redaction-model">Redaction Model</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2022-04-28-data-validation-great-expectations-part-3.html"><small>← Part 13</small>How to trust the data you feed your model: alternative data validation solutions in a computer vision context (part 3)</a><a class="series-next" href="../posts/2022-05-24-data-versioning-dvc.html"><small>Part 15 →</small>More Data, More Problems: Using DVC to handle data versioning for a computer vision problem</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-01-06-nbdev-early-impressions.html">Learning about 'nbdev' while building a Python package for PDF machine learning datasets</a><span>Technical · 2022</span></li><li><a href="../posts/2022-03-25-paperspace-docker-icevision.html">Building my own image to use IceVision with Paperspace</a><span>Technical · 2022</span></li><li><a href="../posts/2024-03-31-writing-a-custom-terraform-provider-to-deploy-huggingface-spaces.html">Writing a custom Terraform provider to deploy Huggingface Spaces</a><span>Technical · 2024</span></li><li><a href="../posts/2022-05-02-pet-cat-image-classifier-fastai.html">How my pet cat taught me a lesson about validation data for image classification</a><span>Technical · 2022</span></li><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 

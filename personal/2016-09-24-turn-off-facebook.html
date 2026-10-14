@@ -234,6 +234,21 @@ ul.task-list li input[type="checkbox"] {
 <p>So I write this now to encourage you all to turn off your News Feeds with the extension, even though I realise this might mean you might not see the next time I post something. (There are, in any case, many other ways to follow my writings/blog: <a href="http://www.alexstrick.com/pageURL?format=rss">RSS</a>, <a href="https://twitter.com/strickvl">twitter</a> and via <a href="http://alexstrick.us2.list-manage.com/subscribe?u=95ede971ea04215e1c027c6cb&amp;id=2acaad0357">email newsletter</a>, for instance).</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2018-01-25-tweet-void.html">Tweeting to the Void</a><span>Personal · 2018</span></li><li><a href="../personal/2016-12-13-notification-zero.html">Notification Zero</a><span>Personal · 2016</span></li><li><a href="../personal/2023-07-15-automating-social-media-posting.html">Automating social media posting for my new blogposts</a><span>Personal · 2023</span></li><li><a href="../personal/2016-09-05-phd-tools-freedom.html">PhD Tools: Turn Off the Internet with Freedom</a><span>Personal · 2016</span></li><li><a href="../personal/2016-08-18-2016-8-remove-your-colour.html">Remove Your Colour</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

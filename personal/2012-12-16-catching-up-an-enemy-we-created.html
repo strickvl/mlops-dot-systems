@@ -230,6 +230,21 @@ ul.task-list li input[type="checkbox"] {
 <p>If you haven’t had a chance, perhaps take a look next time you’re in a bookshop. It’s about a lot more than just the Taliban-Al-Qaeda relationship. You can read some <a href="http://www.anenemywecreated.com/An_Enemy_We_Created/Reviews.html">excerpts from the reviews</a> over here.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2019-09-10-taliban-mutmain-preorder.html">New book, new ways to order</a><span>Personal · 2019</span></li><li><a href="../personal/2012-12-29-some-things-i-read.html">Some Things I Read</a><span>Personal · 2012</span></li><li><a href="../personal/2011-05-13-talqaeda-the-timeline.html">TalQaeda: the Timeline</a><span>Personal · 2011</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

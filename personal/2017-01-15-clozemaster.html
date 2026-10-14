@@ -237,6 +237,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Clozemaster, therefore, is a great tool for someone who has mastered the basics of grammar in their language of study but who wants to grow their vocabulary further. At that stage, it doesn’t help to learn words in isolation like services like Memrise have you doing. Instead, learn through reading, or learn through services like Clozemaster. The service is free and would be ideal for someone who’s just finished Duolingo in a particular language (for example).</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-06-22-italian-mini-challenge.html">Italian Comprehension: Putting Myself On the Hook</a><span>Personal · 2017</span></li><li><a href="../personal/2013-01-13-a-jedi-mind-trick-and-three-other-approaches-to-learning-vocabulary.html">A Jedi-Mind Trick and Three Other Approaches to Learning Vocabulary</a><span>Personal · 2013</span></li><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li><li><a href="../personal/2014-08-05-how-to-learn-a-language-to-fluency-interview-with-gabe-wyner.html">How to learn a language to fluency: interview with Gabe Wyner</a><span>Personal · 2014</span></li><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

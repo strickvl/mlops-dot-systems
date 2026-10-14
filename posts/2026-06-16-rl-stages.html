@@ -268,6 +268,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 2 of 7 in <a href="../series.html#agentic-rl">Agentic RL</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2026-06-13-rl-high-level-primer.html"><small>← Part 1</small>Off the frontier API: distillation, graded SFT, and RL for agents</a><a class="series-next" href="../posts/2026-06-17-rl-terms-rewards.html"><small>Part 3 →</small>Reward design for RL, grounded in a structured-extraction task</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html">Arthur Samuel and the 'Frontier of Automation'</a><span>Personal · 2021</span></li><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a><span>Technical · 2025</span></li><li><a href="../posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">Deep learning tricks all the way down, with a bit of mathematics for good measure</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

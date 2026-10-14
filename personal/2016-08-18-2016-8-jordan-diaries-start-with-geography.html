@@ -230,6 +230,21 @@ ul.task-list li input[type="checkbox"] {
 <p>To that end, I’m starting off with Memrise’s <a href="http://www.memrise.com/course/311471/governorates-of-jordan/"><em>Governorates of Jordan</em>&nbsp;course</a>, which teaches you all the names, plus their administrative capital town. I’ll be doing the same with Amman’s geography over the coming days, too, though no pre-written course exists so I will have to make one myself. For Amman, I can combine the more abstract map-work with travelling to see the various places with my own eyes. Then I can combine the two together for a solid grasp of the geography and different neighborhoods. In due course I will also be travelling around the various parts of Jordan for myself, but for now I have to content myself with learning all their names.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-03-everything-you-need-to-study-jordanian-arabic.html">Everything You Need to Study Jordanian Arabic</a><span>Personal · 2017</span></li><li><a href="../personal/2017-03-20-leaving-qasid.html">Language Learner's Journal: Leaving Qasid</a><span>Personal · 2017</span></li><li><a href="../personal/2017-02-04-deepening-my-studies.html">Language Learner's Journal: Deepening My Studies</a><span>Personal · 2017</span></li><li><a href="../personal/2017-05-24-meaningful-leisure.html">Language Learner's Journal: Meaningful Leisure</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-09-independent-study.html">Language Learner's Journal: Independent Study</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

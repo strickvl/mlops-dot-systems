@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>All in all, some strong character portraits, and I feel some precedents set for future films. I half wonder if there’s a sequel where Gabbar escapes from the surely-minimum-security prison to which he gets sent.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2014-09-16-our-first-publication-i-am-akbar-agha.html">Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider</a><span>Personal · 2014</span></li><li><a href="../personal/2016-11-29-arrival-faces.html">Looking the Wrong Way: Faces in 'Arrival'</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-02-himal-article-2014.html">Reading the Taliban: Himal Magazine article</a><span>Personal · 2016</span></li><li><a href="../personal/2012-12-29-some-things-i-read.html">Some Things I Read</a><span>Personal · 2012</span></li><li><a href="../personal/2013-07-20-book-of-the-week-al-shabab-in-somalia.html">Book of the Week: 'Al-Shabab in Somalia'</a><span>Personal · 2013</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

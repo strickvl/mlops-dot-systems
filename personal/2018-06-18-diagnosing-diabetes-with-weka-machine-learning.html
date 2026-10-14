@@ -323,6 +323,21 @@ ul.task-list li input[type="checkbox"] {
 <p>The next problem I want to tackle is that of the <a href="https://archive.ics.uci.edu/ml/datasets/Soybean+(Large)">UCI soybean dataset</a>. Each instance describes properties of a crop of soybeans and the task is to predict which of the 19 diseases the crop suffers. Again, the dataset isn’t huge but it is a multivariate classification problem so there are new challenges to be tackled there.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2018-06-04-ml-with-weka.html">Machine Learning with Weka</a><span>Personal · 2018</span></li><li><a href="../posts/2023-03-05-stable-eights-adversarial.html">Tricking my digits classifier with diffusion</a><span>Technical · 2023</span></li><li><a href="../personal/2021-05-26-arthur-samuel-and-the-frontier-of-automation.html">Arthur Samuel and the 'Frontier of Automation'</a><span>Personal · 2021</span></li><li><a href="../posts/2022-05-12-seven-steps-gradient-calculations.html">Some foundations for machine learning with PyTorch</a><span>Technical · 2022</span></li><li><a href="../posts/2021-09-06-redaction-classification-chapter-2.html">Training a classifier to detect redacted documents with fastai</a><span>Technical · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

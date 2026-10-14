@@ -375,6 +375,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Most of this makes a lot of intuitive sense to me. The parts that don’t are what is going on with the gradient calculations and finding of derivatives and so on. For now, it appears that I can get away without understanding precisely how that works. It is enough to appreciate that we have a way to make these calculations, and those calculations are optimised for us</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="takeaways-from-the-seven-step-process">Related posts</h2><ul><li><a href="../posts/2022-05-14-sgd-fashion-mnist.html">Using the seven-step SGD process for Fashion MNIST</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-11-fashion-mnist-pixel-similarity.html">A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-15-fashion-mnist-neural-network.html">A neural network for Fashion MNIST data</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-13-sgd-whole-game.html">Stochastic Gradient Descent: a mini-example of the whole game</a><span>Technical · 2022</span></li><li><a href="../posts/2023-03-05-stable-eights-adversarial.html">Tricking my digits classifier with diffusion</a><span>Technical · 2023</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

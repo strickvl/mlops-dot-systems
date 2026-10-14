@@ -230,6 +230,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Tomorrow I want to start working on my regex search-and-rename function. I’ll start by figuring out the right regex string to use for my search, then I’ll figure out how to add in <code>re.search</code> into my script.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2021-09-14-python-versioning-package-managers.html">A Baseline Python Development Setup</a><span>Technical · 2021</span></li><li><a href="../personal/2018-07-08-regex-python-search.html">Using Regex with Python to Find Strings</a><span>Personal · 2018</span></li><li><a href="../posts/2021-09-18-reading-python.html">Reading Python Code</a><span>Technical · 2021</span></li><li><a href="../personal/2016-11-05-python-side-project-approach.html">Python Side-Project: Approach</a><span>Personal · 2016</span></li><li><a href="../posts/2021-10-25-debugging.html">Some things I learned about debugging</a><span>Technical · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>But this seemed to me one of those lessons that the wall teaches you in climbing that are applicable to life outside: sometimes it’s better just to keep moving. Focus and reflection on your route or your goals is useful, but perhaps not best done while you’re mid-route. There are usually inflection points at staggered intervals (when you finish a shorter project, when you do a weekly or monthly review of your activities and so on) when it’s good to stop and reflect. But when you’re mid-flow, exerting the effort and starting to slip off the wall, this isn’t the time for reflection. In fact, reflection will sap your ability to keep moving forward. You just need to keep pushing on, keep delivering, keep pushing out the words, or whatever it is that you’re doing.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-10-21-letting-go.html">Letting Go</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-02-existential-battles-climbing-amman.html">Existential Battles: Climbing in Amman</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-05-fuheis-climbing-2.html">Climbing Fuheis: Two and a Half Ascents</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-20-different-kinds-of-climbing.html">Different Kinds of Climbing</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-02-climbing-routes-without-numbers.html">Climbing Routes Without Numbers</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -228,6 +228,21 @@ ul.task-list li input[type="checkbox"] {
 <p>This is maybe all we’re going to get for the moment, but this admission is a crucial first step in tackling the issue of the Taliban and al-Qaeda. Let’s hope it’s part of a larger political development.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2011-05-03-the-afghan-taliban-react-to-bin-ladens-death.html">The Afghan Taliban react to bin Laden's death</a><span>Personal · 2011</span></li><li><a href="../personal/2016-12-02-himal-article-2014.html">Reading the Taliban: Himal Magazine article</a><span>Personal · 2016</span></li><li><a href="../personal/2011-09-13-those-40-al-qaeda-insurgents.html">Those '40 al-Qaeda insurgents'...</a><span>Personal · 2011</span></li><li><a href="../personal/2010-11-07-marie-colvin-in-kandahar-for-the-sunday-times.html">Marie Colvin in Kandahar for the Sunday Times</a><span>Personal · 2010</span></li><li><a href="../personal/2013-09-23-taliban-time-travel-or-how-our-understanding-is-almost-always-two-years-old.html">Taliban Time Travel, or How Our Understanding Is Almost Always Two Years Old</a><span>Personal · 2013</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

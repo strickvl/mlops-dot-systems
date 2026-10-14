@@ -234,6 +234,21 @@ let arrayVersion = Array.prototype.slice.call(liveCollection); // returns that l
 <p>(For more on this, there are some very useful explanations in <a href="https://stackoverflow.com/questions/7056925/how-does-array-prototype-slice-call-work">this stackoverflow post</a>.)</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2020-10-13-what-is-lexical-scope.html">What is Lexical Scope?</a><span>Personal · 2020</span></li><li><a href="../personal/2020-10-15-understanding-the-use-cases-for-closures-in-javascript.html">Understanding the use cases for Closures in JavaScript</a><span>Personal · 2020</span></li><li><a href="../personal/2019-02-13-ruby-zip.html">Using Ruby's .zip method to combine arrays</a><span>Personal · 2019</span></li><li><a href="../personal/2020-12-04-using-apis-to-make-things-happen-on-the-web.html">Using APIs to make things happen on the web</a><span>Personal · 2020</span></li><li><a href="../personal/2020-02-12-two-ruby-patterns-around-map-and-reduce.html">Two Ruby patterns around map and reduce</a><span>Personal · 2020</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

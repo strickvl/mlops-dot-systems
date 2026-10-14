@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Read the rest over at <a href="http://www.currentintelligence.net/afghanwire/2010/11/22/five-things-david-petraeus-wants-you-to-believe.html">Current Intelligence</a>.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2011-05-01-the-petraeus-effect.html">The Petraeus Effect</a><span>Personal · 2011</span></li><li><a href="../personal/2010-02-02-john-nagl-and-the-future-of-counterinsurgency.html">John Nagl and 'the future of counterinsurgency'</a><span>Personal · 2010</span></li><li><a href="../personal/2010-07-03-hope-is-not-a-strategy.html">Hope Is Not A Strategy</a><span>Personal · 2010</span></li><li><a href="../personal/2010-01-30-talking-to-terrorists.html">'Talking to Terrorists'</a><span>Personal · 2010</span></li><li><a href="../personal/2010-12-14-open-letter-the-response.html">Open Letter: The Response (UPDATED)</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

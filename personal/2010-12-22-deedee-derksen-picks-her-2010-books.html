@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I haven’t yet started Tony Blair’s <a href="http://amzn.to/f5obnF">eulogy to himself</a>. Judging from the bits I’ve read here and there, I don’t have high expectations. Not only does it beg for a good edit (I assume he made the fatal mistake of writing it himself as it reads like a column in Good Housekeeping). But Blair’s take on civil liberties would make Dostum blush (read Dave Eggers’s wonderful <a href="http://amzn.to/guBd6J"><em>Zeitoun</em></a>, also out this year, for the sharpest antidote to Blair’s call for the suspension of Habeas Corpus). Perhaps just as offensively, Blair expresses no remorse over Iraq, and lumps all Islamists together, conflating Hamas and Hizbollah with al-Qaeda, and portraying them as an existential threat, the gravest ever faced by mankind, perhaps with the exception of Gordon Brown. And all this from one of most successful politicians of our times and the man currently entrusted to bringing peace to the Middle East. Now that’s a great piece of fiction.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li><li><a href="../personal/2010-04-24-jere-van-dyks-captive.html">Jere van Dyk's 'Captive'</a><span>Personal · 2010</span></li><li><a href="../personal/2017-06-26-the-exile-review.html">The book you need to read on bin Laden's life post-2001</a><span>Personal · 2017</span></li><li><a href="../personal/2014-09-16-our-first-publication-i-am-akbar-agha.html">Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider</a><span>Personal · 2014</span></li><li><a href="../personal/2013-12-27-the-best-books-i-read-in-2013.html">The Best Books I Read in 2013</a><span>Personal · 2013</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

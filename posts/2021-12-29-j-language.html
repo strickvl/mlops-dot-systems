@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Very much as a project to indulge my curiosity, I will be exploring J over the coming months. I have been listening to the back catalogue of <a href="https://www.arraycast.com">The Array Cast</a> podcast, and I will be slowly working my way through <a href="https://code.jsoftware.com/wiki/Main_Page">some of the resources</a> listed on the official J site. Let me know if you have experience working with J!</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-13-developing-android-udacity.html">Developing for Android with Udacity</a><span>Personal · 2017</span></li><li><a href="../personal/2013-02-04-learning-to-code.html">Learning to Code</a><span>Personal · 2013</span></li><li><a href="../posts/2022-10-16-notational-precedence.html">Avoiding BIDMAS, or how J does notation</a><span>Technical · 2022</span></li><li><a href="../posts/2021-09-18-writing-code.html">Writing Code</a><span>Technical · 2021</span></li><li><a href="../personal/2017-01-05-randomise-your-learning.html">Randomise Your Learning</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

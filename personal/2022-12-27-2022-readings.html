@@ -235,6 +235,21 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2014-12-22-some-books-and-other-things-from-2014.html">Some Books and Other Things from 2014</a><span>Personal · 2014</span></li><li><a href="../personal/2016-12-21-best-books-2016.html">The Best Books I Read in 2016</a><span>Personal · 2016</span></li><li><a href="../personal/2015-12-16-the-best-books-i-read-in-2015.html">The Best Books I Read in 2015</a><span>Personal · 2015</span></li><li><a href="../personal/2013-12-27-the-best-books-i-read-in-2013.html">The Best Books I Read in 2013</a><span>Personal · 2013</span></li><li><a href="../personal/2016-09-15-phd-tools-goodreads.html">PhD Tools: Goodreads for Cross-Pollination</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

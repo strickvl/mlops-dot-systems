@@ -227,6 +227,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I write all of this mainly because it’s useful from time to time to step out of the weeds and remind oneself <em>why</em> any or all of this is actually useful.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2020-10-13-what-is-lexical-scope.html">What is Lexical Scope?</a><span>Personal · 2020</span></li><li><a href="../personal/2020-12-03-how-events-drive-programming-for-the-web.html">How events drive programming for the web</a><span>Personal · 2020</span></li><li><a href="../personal/2020-12-10-a-basic-overview-of-how-to-use-handlebars.html">A basic overview of how to use Handlebars</a><span>Personal · 2020</span></li><li><a href="../personal/2020-12-04-using-apis-to-make-things-happen-on-the-web.html">Using APIs to make things happen on the web</a><span>Personal · 2020</span></li><li><a href="../posts/2021-12-29-j-language.html">Exploring J, an array programming language</a><span>Technical · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

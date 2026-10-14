@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I’m not entirely sure what <code>.digits</code> is actually used / useful for, given the speed issues.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2019-02-13-ruby-zip.html">Using Ruby's .zip method to combine arrays</a><span>Personal · 2019</span></li><li><a href="../personal/2020-02-12-two-ruby-patterns-around-map-and-reduce.html">Two Ruby patterns around map and reduce</a><span>Personal · 2020</span></li><li><a href="../personal/2013-02-04-learning-to-code.html">Learning to Code</a><span>Personal · 2013</span></li><li><a href="../posts/2022-10-16-notational-precedence.html">Avoiding BIDMAS, or how J does notation</a><span>Technical · 2022</span></li><li><a href="../posts/2021-12-29-j-language.html">Exploring J, an array programming language</a><span>Technical · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

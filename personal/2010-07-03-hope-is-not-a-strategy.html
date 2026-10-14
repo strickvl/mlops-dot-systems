@@ -236,6 +236,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I say it again. Hope. Is. Not. A. Strategy.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-01-30-talking-to-terrorists.html">'Talking to Terrorists'</a><span>Personal · 2010</span></li><li><a href="../personal/2010-02-02-john-nagl-and-the-future-of-counterinsurgency.html">John Nagl and 'the future of counterinsurgency'</a><span>Personal · 2010</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li><li><a href="../personal/2010-12-28-an-appeal.html">UPDATED: An Appeal</a><span>Personal · 2010</span></li><li><a href="../personal/2010-12-11-an-open-letter-to-president-obama.html">An Open Letter to President Obama</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

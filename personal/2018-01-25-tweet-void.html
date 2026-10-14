@@ -235,6 +235,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Try it; see how you feel about having something standing in the way of your social media fix. Let me know how you get on.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-09-24-turn-off-facebook.html">Turn Off Facebook's News Feed</a><span>Personal · 2016</span></li><li><a href="../personal/2023-07-15-automating-social-media-posting.html">Automating social media posting for my new blogposts</a><span>Personal · 2023</span></li><li><a href="../personal/2016-12-13-notification-zero.html">Notification Zero</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-05-phd-tools-freedom.html">PhD Tools: Turn Off the Internet with Freedom</a><span>Personal · 2016</span></li><li><a href="../personal/2010-01-01-new-year-new-website.html">New Year, New Website</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

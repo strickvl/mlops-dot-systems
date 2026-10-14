@@ -320,6 +320,21 @@ ul.task-list li input[type="checkbox"] {
 <p>UPDATE: This continues to be added to as recommendations come in from various places here and there. (Last Update: January 3, 2015)</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-12-26-reading-the-afghan-taliban-67-sources-you-should-be-studying.html">Reading the Afghan Taliban: 67 Sources You Should Be Studying</a><span>Personal · 2015</span></li><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2010-01-01-5-books-everyone-should-read-about-afghanistan.html">5 Books Everyone Should Read About Afghanistan</a><span>Personal · 2010</span></li><li><a href="../personal/2010-04-11-back-home.html">Back Home</a><span>Personal · 2010</span></li><li><a href="../personal/2010-06-21-kandahar-timeline-1979-2010.html">Kandahar Timeline 1979-2010</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

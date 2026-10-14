@@ -460,6 +460,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 5 of 5 in <a href="../series.html#evals-course">The Evals Course</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-06-04-instrumenting-an-agentic-app-with-arize-phoenix-and-litellm.html"><small>← Part 4</small>Trying to instrument an agentic app with Arize Phoenix and litellm</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html">Final notes on 'Prompt Engineering for LLMs'</a><span>Technical · 2025</span></li><li><a href="../posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html">Starting to read Prompt Engineering for LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a><span>Technical · 2024</span></li><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2024-06-17-one-click-finetuning.html">One-click LLM finetuning with Predibase, OpenPipe and OpenAI</a><span>Technical · 2024</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

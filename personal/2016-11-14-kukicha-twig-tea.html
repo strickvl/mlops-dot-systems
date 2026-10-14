@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Given <a href="https://www.alexstrick.com/blog/phd-tools-tea">my sensitivity to green tea</a>, this is a great alternative that gives some mental kick but doesn’t completely kick me over. I’ve since noted that Rishi Tea, my supplier of choice, also <a href="http://www.rishi-tea.com/product/kukicha-organic-japanese-green-tea/green-tea">sells bags of kukicha</a>, and I look forward to drinking more going forward.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-11-resetting-baseline-caffeine.html">Resetting my base line: caffeine edition</a><span>Personal · 2017</span></li><li><a href="../personal/2016-09-19-phd-tools-tea.html">PhD Tools: Tea</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-08-nutritional-density.html">Nutritional Density</a><span>Personal · 2016</span></li><li><a href="../personal/2017-01-15-clozemaster.html">ClozeMaster: learn words in context</a><span>Personal · 2017</span></li><li><a href="../personal/2016-11-05-fuheis-climbing-2.html">Climbing Fuheis: Two and a Half Ascents</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

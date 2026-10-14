@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>So a few weeks back I instituted a caffeine-only-very-seldom policy. It’s working well so far. I feel much better, more focused, less jittery, and when I <em>do</em> choose to drink a cup of <a href="http://shop.numitea.com/Chocolate-Puerh/p/NUMIS-10360&amp;c=NumiTeaStore@Teabag@Puerh">chocolate puerh</a>, for example, as I did this morning, one is more than enough. (I’ve done similar things in the past with salt and sugar and had equally positive experiences.) As always, <a href="https://www.beeminder.com/">Beeminder</a> is holding my hand all the way.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-09-19-phd-tools-tea.html">PhD Tools: Tea</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-14-kukicha-twig-tea.html">Kukicha or Twig Tea</a><span>Personal · 2016</span></li><li><a href="../personal/2016-08-23-2016-8-walking-with-words.html">Walking with Words</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-16-2016-9-phd-tools-sleep-movement.html">PhD Tools: Sleep and Movement to Nourish the Body</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-15-phd-tools-goodreads.html">PhD Tools: Goodreads for Cross-Pollination</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

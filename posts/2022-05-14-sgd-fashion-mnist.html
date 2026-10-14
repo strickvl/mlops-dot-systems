@@ -662,6 +662,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>So there we have it. We learned how to create a linear learner. Obviously 96.8% accuracy is pretty good, but it could be better. Next time we’re going to add the final touches to this process by creating a neural network, adding layers of nonlinearity to ensure our function can fit the complex patterns in our data.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="some-extra-fastai-abstractions">Related posts</h2><ul><li><a href="../posts/2022-05-12-seven-steps-gradient-calculations.html">Some foundations for machine learning with PyTorch</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-11-fashion-mnist-pixel-similarity.html">A dress is not a pullover: learning about PyTorch Tensors and pixel similarity using the Fashion MNIST dataset</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-15-fashion-mnist-neural-network.html">A neural network for Fashion MNIST data</a><span>Technical · 2022</span></li><li><a href="../posts/2022-10-24-foundations-mnist-basics.html">From the foundation up: Fashion-MNIST basics from Lesson 10</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-13-sgd-whole-game.html">Stochastic Gradient Descent: a mini-example of the whole game</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

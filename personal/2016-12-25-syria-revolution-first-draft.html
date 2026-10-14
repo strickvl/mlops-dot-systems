@@ -238,6 +238,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I hope we get to read other histories of Syria (and other countries) that employ the same logic.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2015-11-22-on-untangling-syrias-socially-mediated-war.html">On Untangling Syria's Socially Mediated War</a><span>Personal · 2015</span></li><li><a href="../personal/2014-12-10-new-book-an-educators-tale.html">New book: An Educator's Tale</a><span>Personal · 2014</span></li><li><a href="../personal/2018-05-06-prisoner345translation.html">My First Arabic Book Translation</a><span>Personal · 2018</span></li><li><a href="../personal/2013-07-20-book-of-the-week-al-shabab-in-somalia.html">Book of the Week: 'Al-Shabab in Somalia'</a><span>Personal · 2013</span></li><li><a href="../personal/2014-09-16-our-first-publication-i-am-akbar-agha.html">Our First Publication: 'I Am Akbar Agha', Memoir of a Taliban Insider</a><span>Personal · 2014</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

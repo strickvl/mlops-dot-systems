@@ -274,7 +274,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The trick – as with so many things – is to do a little bit every day rather than by hoping to cram things in to just a few mega-sessions lasting 5 hours each spaced out over a year. Want to learn Arabic, or Pashto? Do half an hour of <a href="http://www.farnamstreetblog.com/2012/07/what-is-deliberate-practice/">deliberate practice</a> every day for a year and I guarantee you’ll be able to have a conversation using what you learnt during that year.</p>
 </section>
 <section id="learning-the-arabic-alphabet-is-your-biggest-barrier-to-studying-arabic-or-pashto-or-farsidari-and-it-isnt-actually-difficult" class="level3">
-<h3 class="anchored" data-anchor-id="learning-the-arabic-alphabet-is-your-biggest-barrier-to-studying-arabic-or-pashto-or-farsidari-and-it-isnt-actually-difficult"><strong>5. Learning the Arabic alphabet is your biggest barrier to studying Arabic (or Pashto or Farsi/Dari) – and it isn’t actually difficult</strong></h3>
+<h3 class="anchored"><strong>5. Learning the Arabic alphabet is your biggest barrier to studying Arabic (or Pashto or Farsi/Dari) – and it isn’t actually difficult</strong></h3>
 <p>This one’s just a bonus, since I’ve come across this particular hump in a lot of people wanting to study languages that use the Arabic alphabet or variants thereof. Lots of people think that Arabic is hard to learn because of the alphabet, and this seems to be a really common reason for people not bothering to start.</p>
 <p>This is really unfortunate, because the alphabet is actually really easy. There are <a href="http://www.myeasyarabic.com/site/what_is_arabic_alphabet.html">good online courses</a> that teach you how to write and read Arabic letters, and once you’ve overcome that obstacle your confidence will already be so much higher that the rest that follows will seem easy.</p>
 <p>Seriously, if your main reason for not starting to study Arabic (or Pashto, or Farsi/Dari) is the alphabet, you don’t have a leg to stand on.</p>
@@ -285,6 +285,21 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="http://how-to-learn-any-language.com/forum/member-language-profile.asp?PF=157099">My profile on how-to-learn-any-language.com</a>, a really excellent site for discussing learning methods, finding self-study materials and in general discussing the study of languages.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="learning-the-arabic-alphabet-is-your-biggest-barrier-to-studying-arabic-or-pashto-or-farsidari-and-it-isnt-actually-difficult">Related posts</h2><ul><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li><li><a href="../personal/2023-08-10-language-study-zero-to-hero.html">Language Learning Crash Course: from slightly more than zero to slightly less than advanced</a><span>Personal · 2023</span></li><li><a href="../personal/2017-02-23-core-language-learning-beliefs.html">Core Language Learning Beliefs</a><span>Personal · 2017</span></li><li><a href="../personal/2016-09-27-lessons-learnt-language-study-habits.html">Lessons Learnt: Language Study Habits That Work</a><span>Personal · 2016</span></li><li><a href="../personal/2017-02-14-how-to-learn-languages-without-teachers.html">How to learn a language without a teacher</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

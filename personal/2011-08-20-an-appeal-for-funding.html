@@ -227,6 +227,21 @@ ul.task-list li input[type="checkbox"] {
 <p>If you are a donor and are interested in funding this project, please get in touch with me, Felix or Anand at the ‘Contact Alex’ section on the right.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2012-11-26-writing-the-history-of-the-taliban-movement.html">Writing the history of the Taliban movement</a><span>Personal · 2012</span></li><li><a href="../personal/2016-10-05-taliban-reader-announcement.html">Coming Soon: The Taliban Reader</a><span>Personal · 2016</span></li><li><a href="../personal/2015-11-29-obedience-to-the-amir-or-how-to-understand-how-the-taliban-functions.html">'Obedience to the Amir', or how the Afghan Taliban govern</a><span>Personal · 2015</span></li><li><a href="../personal/2015-08-28-2015-8-afp-covers-the-taliban-sources-project.html">AFP covers the Taliban Sources Project</a><span>Personal · 2015</span></li><li><a href="../personal/2019-09-10-taliban-mutmain-preorder.html">New book, new ways to order</a><span>Personal · 2019</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

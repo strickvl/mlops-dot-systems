@@ -272,6 +272,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 1 of 1 in <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a></div><div class="series-nav-links"><span></span></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a><span>Technical · 2025</span></li><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li><li><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a><span>Technical · 2025</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a><span>Technical · 2025</span></li><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a><span>Technical · 2026</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

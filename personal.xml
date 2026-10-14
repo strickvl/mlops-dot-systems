@@ -67,6 +67,21 @@
 <p><em>I’m still working through these ideas. If you’ve thought about this differently, I’d genuinely like to hear it.</em></p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -133,6 +148,21 @@
 <p>Down the line, and depending on how the feedback from my first swatches goes, I’d like to maybe try some other courses and perhaps even the <a href="https://tkga.org/certification/master-hand-knitting/">Master Hand Knitting certification</a>. I’ll also be dipping into the <a href="https://www.amazon.com/Fearless-Knitting-Workbook-Jennifer-Seiffert/dp/1596681497">Fearless Knitting Workbook</a> which is also swatch-based, a format I’ve been really enjoying as it allows me to get fast feedback and improve my skills.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -247,6 +277,21 @@
 <p>Nevertheless, it’s useful to be aware of the bigger picture and I hope that this blog served as a highly general overview that can drive further exploration and experiments in your own language-learning journey!</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -403,6 +448,21 @@
 </ul>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 
@@ -433,6 +493,21 @@
 <p>I held off, thinking I’d want to set up some system fully under my control involving serverless function calls and so on, but then I was reminded that I already use <a href="https://zapier.com/">Zapier</a> for some other administrative tasks. So this afternoon I set up and turned on some automation for social media posting to my Mastodon, Twitter and LinkedIn accounts. Posting happens at one step removed since I queue my posts in <a href="https://buffer.com">Buffer</a> so that they go out at a time when people are more likely to see them. I apologise / don’t apologise for this. My blog writings remain wholly un-automated; it would completely remove the point of ‘learning through writing’ if I were to automate the things that I blog about. My social media postings (just one post per blogpost so as not to spam you all) are from now on automated. As an additional courtesy / discourtesy, I’ve tweaked the prompt such that the social media posts should always read just slightly ‘off’ and will be labelled with an <code>#automated</code> hashtag.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>productivity</category>
@@ -491,6 +566,21 @@
 </ul>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>books</category>
@@ -518,6 +608,21 @@
 <p>Some of this also has to do with the fact that when you train your model, you do so assuming that the model will be used on data that the model hasn’t seen. In this (common) use case, it becomes a bit harder to say exactly why a certain prediction was made, though there are a lot of ways we can start to open up the black box.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>science</category>
@@ -630,6 +735,21 @@
 </ul>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>productivity</category>
@@ -701,6 +821,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>The next posts will offer a roadmap to the different resources available to the intermediate student of Arabic and some of the ways you can utilise these resources. It won’t be exhaustive, but I’m pretty sure that most will find something of use in them. Feel free to <a href="https://twitter.com/strickvl">get in touch</a> if you have specific things you want me to tackle in terms of skill development in Arabic.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>
@@ -737,6 +872,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>The main difference here is that we have some labels which are used to know whether the predictions are correct or not. The loss is a way of measuring the performance of our model that is suited for updating our parameters (that used to be referred to as weights).</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>science</category>
@@ -767,6 +917,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>If you use transfer learning, too, you even can use a pretrained model (which is already pretty good at recognising features from images). You can then fine-tune that model to get really good at the specific task you need it to do. (Note, that’s exactly what you do in the first chapter of Howard/Gugger’s&nbsp;<a href="https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=sr_1_1?dchild=1&amp;qid=1621784082&amp;keywords=deep%2525252Blearning%2525252Bfor%2525252Bcoders&amp;tag=soumet-20&amp;sr=8-1">Deep Learning for Coders</a>).</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>deep-learning</category>
@@ -796,6 +961,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>The really great thing about the <a href="https://www.fast.ai">fastai</a> course is how it successfully has managed to democratise Deep Learning as a technology. I always enjoy reading about niche areas where specific burning problems were solved because someone took the opportunity to educate themselves.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>coding</category>
@@ -824,6 +1004,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>These are two key misunderstandings identified by the Howard/Gugger <a href="https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=sr_1_1?tag=soumet-20&amp;sr=8-1&amp;keywords=deep%25252Blearning%25252Bfor%25252Bcoders&amp;dchild=1&amp;qid=1621784082">short introduction</a> and I’m sure I’ll read more of these in <a href="https://www.amazon.com/Genius-Makers-Mavericks-Brought-Facebook-ebook/dp/B08CD1M43L/ref=sr_1_1?dchild=1&amp;qid=1621785566&amp;keywords=genius%252Bmakers&amp;tag=soumet-20&amp;sr=8-1">Genius Makers</a>. It’s amazing, but not entirely surprising, that a non-generous and unimaginative misreading of the literature could be responsible for such an effective trashing of a research path.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>tech</category>
@@ -865,6 +1060,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>This feels like a book that would reward returning to for a proper in-depth read later on in my studies.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>tech</category>
@@ -896,6 +1106,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>If you are a domain expert in something that has nothing to do with Deep Learning or data science, you probably have a lot of problems that are like low-hanging fruit in terms of your ability to use powerful techniques like Deep Learning to solve them.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>tech</category>
@@ -960,6 +1185,21 @@ If they don’t get enough rest, they can get overtraining injuries or burnout.<
 <p>GPUs also happen to be heavily used (for similar reasons) for cryptocurrency mining and accordingly there has been a worldwide shortage for some time. Between the crypto bros and the deep learning practitioners, the price got inflated for a while. Nvidia has made <a href="https://www.digitaltrends.com/computing/nvidia-lite-hash-rate-ampere-cards-crypto-limiter/">some attempts</a> to limit crypto miners from using their hardware, but to inconclusive effect.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
  ]]></description>
   <category>tech</category>
@@ -1258,6 +1498,21 @@ var context={
 <p>I will need more practical experience to really unpack the implications of using Handlebars, but I am looking forward to getting to use it with a better sense of control now that I understand the fundamentals.</p>
 
 
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
  ]]></description>

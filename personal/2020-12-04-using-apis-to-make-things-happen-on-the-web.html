@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I was also conscious of how much creativity and widened thinking has gone into expanding the possibilities of what HTML, CSS and a bit of JavaScript can do over the internet. Some of these capabilities mean that we’re straining the possibilities in this area or that, but above all I take away some inspiration in how people made do with what they had instead of feeling like they needed to reinvent the wheel.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2020-12-03-how-events-drive-programming-for-the-web.html">How events drive programming for the web</a><span>Personal · 2020</span></li><li><a href="../personal/2017-01-13-developing-android-udacity.html">Developing for Android with Udacity</a><span>Personal · 2017</span></li><li><a href="../personal/2020-10-15-understanding-the-use-cases-for-closures-in-javascript.html">Understanding the use cases for Closures in JavaScript</a><span>Personal · 2020</span></li><li><a href="../personal/2016-10-17-future-language-learning.html">Bots: Part of the Future of Language Learning?</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-05-python-side-project-approach.html">Python Side-Project: Approach</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

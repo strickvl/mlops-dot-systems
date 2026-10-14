@@ -403,6 +403,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 16 of 17 in <a href="../series.html#redaction-model">Redaction Model</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2022-05-24-data-versioning-dvc.html"><small>← Part 15</small>More Data, More Problems: Using DVC to handle data versioning for a computer vision problem</a><a class="series-next" href="../posts/2022-09-07-serialisation.html"><small>Part 17 →</small>Storing Bytes: what data serialisation is and why you need it for machine learning</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2021-09-08-baseline-mlops-understanding.html">A Baseline Understanding of MLOps</a><span>Technical · 2021</span></li><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2021-09-11-tfx-paper.html">Six problems TFX was trying to solve in 2017</a><span>Technical · 2021</span></li><li><a href="../posts/2026-06-13-rl-high-level-primer.html">Off the frontier API: distillation, graded SFT, and RL for agents</a><span>Technical · 2026</span></li><li><a href="../posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html">Dataset Engineering: The Art and Science of Data Preparation</a><span>Technical · 2025</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

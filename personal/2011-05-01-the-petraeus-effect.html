@@ -226,6 +226,21 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>UPDATE:</strong> Just for a sense of the overall numbers, between November 30, 2009 and today (May 1, 2011) there were 3,167 official ISAF press releases issued. The number that refer to raids, detentions or deaths of insurgency members is just over 1,500.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2011-05-16-more-isaf-press-release-data.html">More data on 'Kill-Capture' Raids</a><span>Personal · 2011</span></li><li><a href="../personal/2013-01-15-isafs-first-fifteen-days.html">ISAF's First Fifteen Days</a><span>Personal · 2013</span></li><li><a href="../personal/2011-09-13-those-40-al-qaeda-insurgents.html">Those '40 al-Qaeda insurgents'...</a><span>Personal · 2011</span></li><li><a href="../personal/2010-11-22-petraeus-lisbon-and-the-great-pr-push.html">Petraeus, Lisbon and the Great PR Push</a><span>Personal · 2010</span></li><li><a href="../personal/2012-12-10-catching-up-aan-report-on-isaf-night-raids.html">Catching Up: AAN Report on ISAF Night Raids</a><span>Personal · 2012</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -294,6 +294,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 4 of 17 in <a href="../series.html#redaction-model">Redaction Model</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2021-11-30-vfnet-basics.html"><small>← Part 3</small>What is VFNet?</a><a class="series-next" href="../posts/2021-12-15-redaction-taxonomy.html"><small>Part 5 →</small>A Taxonomy of Redaction</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-05-21-nlp-redaction-classifier.html">Redaction Image Classifier: NLP Edition</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-02-pet-cat-image-classifier-fastai.html">How my pet cat taught me a lesson about validation data for image classification</a><span>Technical · 2022</span></li><li><a href="../posts/2021-09-10-chapter1and2recall.html">Retrieval Practice with fastai chapters 1 and 2</a><span>Technical · 2021</span></li><li><a href="../posts/2024-06-03-isafpr-evaluating-baseline.html">Evaluating the Baseline Performance of GPT-4-Turbo for Structured Data Extraction</a><span>Technical · 2024</span></li><li><a href="../posts/2026-06-20-my-first-rl-environment.html">My first RL environment: three stages, no trainer</a><span>Technical · 2026</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

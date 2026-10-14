@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>To purchase a gift subscription,&nbsp;<a href="https://incrementalelephant.org/contact/">please get in touch here</a>.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li><li><a href="../personal/2017-01-06-2017-1-introducing-coachbot-your-personal-language-taskmaster.html">Introducing CoachBot: Your Personal Language Taskmaster</a><span>Personal · 2017</span></li><li><a href="../personal/2017-01-08-language-coach-how-to.html">How to best work with a language coach</a><span>Personal · 2017</span></li><li><a href="../personal/2017-03-10-language-transfer.html">Audio Courses with Language Transfer</a><span>Personal · 2017</span></li><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

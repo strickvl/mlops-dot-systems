@@ -252,6 +252,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I will update this page as and when I discover more. One of the big missing pieces is BBC Pashto. I can’t seem to find any of their broadcasts / materials online in a subscribable format.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2018-11-07-learn-persian-farsi-dari-with-podcasts.html">Learn Persian / Farsi / Dari with Podcasts</a><span>Personal · 2018</span></li><li><a href="../personal/2017-01-01-2017-1-new-year-new-arabic-language-podcast.html">New Year, New Arabic-language Podcast</a><span>Personal · 2017</span></li><li><a href="../personal/2016-08-21-learn-afghanistan-districts-anki.html">Learn all the districts of Afghanistan with Anki!</a><span>Personal · 2016</span></li><li><a href="../personal/2014-09-05-an-ankified-urdu-frequency-dictionary.html">An Ankified Urdu Frequency Dictionary</a><span>Personal · 2014</span></li><li><a href="../personal/2017-03-10-language-transfer.html">Audio Courses with Language Transfer</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

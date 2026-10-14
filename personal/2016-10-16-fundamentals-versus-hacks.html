@@ -248,6 +248,21 @@ ul.task-list li input[type="checkbox"] {
 <p>There is a time and place for tweaks and fine-tuning and smaller productivity wins, but unless you’re finding a way to sort out your fundamentals, you’re missing a great opportunity.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-10-15-skills-development-foundations.html">Skills Development: Foundations</a><span>Personal · 2016</span></li><li><a href="../personal/2016-08-15-2016-8-on-learning-new-skills.html">On Learning New Skills, #showyourwork and other housekeeping</a><span>Personal · 2016</span></li><li><a href="../personal/2019-02-16-solid-study-habits-for-coders.html">Solid Study Habits for Coders</a><span>Personal · 2019</span></li><li><a href="../posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html">Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a><span>Technical · 2025</span></li><li><a href="../posts/2021-09-18-writing-code.html">Writing Code</a><span>Technical · 2021</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

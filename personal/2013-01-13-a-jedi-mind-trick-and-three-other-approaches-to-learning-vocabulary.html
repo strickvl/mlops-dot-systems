@@ -280,7 +280,7 @@ ul.task-list li input[type="checkbox"] {
 <p><em>The trick here, and it’s really important, is to do it every day.</em> If you only do it once a week, then you’ll forget words more often (as the forgetting curve means you’ll have missed the chance to reactivate or ‘reset’ the curve on words during the week). I really strongly recommend you do your Anki words once a day. Some days there won’t be any words, or very few (depending on how many your course has you learning).</p>
 </section>
 <section id="writingreading-for-extra-imprinting" class="level3">
-<h3 class="anchored" data-anchor-id="writingreading-for-extra-imprinting"><strong>4. (Writing/Reading for Extra Imprinting)</strong></h3>
+<h3 class="anchored"><strong>4. (Writing/Reading for Extra Imprinting)</strong></h3>
 <p>If you really want to get to a high level in your vocab learning, then use it to support your more general skills. i.e.&nbsp;you should use the vocab words <em>in context</em>.</p>
 <p>When I use Anki, I sometimes like to take each word (when it comes up on the screen for testing/study) and before I give my answer, I first make myself use that word in a sentence. This allows me to practice grammar structures, and also creates new associations for that word with other pieces of material. (For the memory, more associations are better, since things are recalled via these webs/networks of signals in the mind). Even better, write these sentences down (although by now we’re talking study/exercises that take a bit of time, rather than just Anki etc, which would take maximum 20 minutes per day).</p>
 <p>The ideal place for practicing your writing is <a href="http://www.lang-8.com/">lang-8.com</a>, where you can get a free account. The principle here is that everyone corrects everyone else. i.e.&nbsp;when you put up a few sentences of writing practice, native Arabic speakers (or whatever language) will correct your sentences, but ideally you should correct their English sentences etc to return the favour. It’s all free, and done on an honour system, so you get as much as you give etc.</p>
@@ -290,6 +290,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Anyway, none of this is a substitute for the somewhat-hard work that goes into learning vocabulary, but it certainly can shortcut things. Particularly if you start inputting your vocabulary into Anki early on in the course of your language studies, and reviewing it every day throughout the year, by the end of a year you’ll be in a really good place compared to others.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="writingreading-for-extra-imprinting">Related posts</h2><ul><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li><li><a href="../personal/2017-01-27-how-to-learn-a-page-of-verbs.html">How to learn a page of verbs</a><span>Personal · 2017</span></li><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li><li><a href="../personal/2023-08-10-language-study-zero-to-hero.html">Language Learning Crash Course: from slightly more than zero to slightly less than advanced</a><span>Personal · 2023</span></li><li><a href="../personal/2017-01-23-adjustments-deep-end.html">Language Learner's Journal: Adjustments at the Deep End</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

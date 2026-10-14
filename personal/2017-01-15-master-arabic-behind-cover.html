@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 6 of 7 in <a href="../series.html#master-arabic">Master Arabic</a></div><div class="series-nav-links"><a class="series-prev" href="../personal/2017-01-12-master-arabic-whats-in-the-premium-edition.html"><small>← Part 5</small>Master Arabic: What's in the Premium Edition?</a><a class="series-next" href="../personal/2017-02-13-master-arabic-out-now.html"><small>Part 7 →</small>'Master Arabic' is Out Today!</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2018-05-06-prisoner345translation.html">My First Arabic Book Translation</a><span>Personal · 2018</span></li><li><a href="../personal/2017-01-09-classical-arabic-sources-methods.html">Classical Arabic and a Sources and Methods Recap</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-09-independent-study.html">Language Learner's Journal: Independent Study</a><span>Personal · 2017</span></li><li><a href="../personal/2017-01-16-introducing-taylor.html">Language Learner's Journal: Introducing Taylor</a><span>Personal · 2017</span></li><li><a href="../personal/2017-04-17-on-reading-in-arabic-the-evidence.html">On Reading in Arabic: The Evidence</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

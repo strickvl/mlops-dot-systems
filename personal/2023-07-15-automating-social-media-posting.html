@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I held off, thinking I’d want to set up some system fully under my control involving serverless function calls and so on, but then I was reminded that I already use <a href="https://zapier.com/">Zapier</a> for some other administrative tasks. So this afternoon I set up and turned on some automation for social media posting to my Mastodon, Twitter and LinkedIn accounts. Posting happens at one step removed since I queue my posts in <a href="https://buffer.com">Buffer</a> so that they go out at a time when people are more likely to see them. I apologise / don’t apologise for this. My blog writings remain wholly un-automated; it would completely remove the point of ‘learning through writing’ if I were to automate the things that I blog about. My social media postings (just one post per blogpost so as not to spam you all) are from now on automated. As an additional courtesy / discourtesy, I’ve tweaked the prompt such that the social media posts should always read just slightly ‘off’ and will be labelled with an <code>#automated</code> hashtag.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-09-24-turn-off-facebook.html">Turn Off Facebook's News Feed</a><span>Personal · 2016</span></li><li><a href="../personal/2018-01-25-tweet-void.html">Tweeting to the Void</a><span>Personal · 2018</span></li><li><a href="../personal/2010-01-01-new-year-new-website.html">New Year, New Website</a><span>Personal · 2010</span></li><li><a href="../personal/2017-01-02-tech-switching.html">Pet Peeve: Tech Switching</a><span>Personal · 2017</span></li><li><a href="../personal/2016-12-13-notification-zero.html">Notification Zero</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

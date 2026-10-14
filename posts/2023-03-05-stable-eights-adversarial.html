@@ -766,11 +766,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>I discovered that FastAI’s <code>learn.predict()</code> function does some things to whatever you pass in, such that if you use it in the process above you’ll hit an error where it says that there are no longer any gradients to update / accumulate. This is why we’re passing our image values or our tensor directly into the model to get our predictions since this bypasses whatever FastAI is doing. I wasn’t able to fully grok / dig into exactly what’s happening there, but perhaps this is something to look into in the future.</p>
 <section id="debugging-tips" class="level3">
-<h3 class="anchored" data-anchor-id="debugging-tips">Debugging tips</h3>
+<h3 class="anchored">Debugging tips</h3>
 <p>On Saturday, I had basically a whole day of hitting lots of walls, somewhat-opaque PyTorch error messages galore. The thing that really seemed to help the most (and that my study group colleagues did with me on Sunday morning) was just to break out each individual step separately, inspecting the return values and the <code>.shape</code> and so on.</p>
 <p>Doing this systematically, interrogating what you expect to happen vs what you see being returned or happening definetely seems like the way to go. At this level of (non-)abstraction, however, there were quite a few PyTorch messages that were hard to wrap my head around. I suppose when you do this often enough you get an intuition for the kinds of ways these things fail, and how to massage your data into the formats required.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="debugging-tips">Related posts</h2><ul><li><a href="../posts/2023-03-18-stable-eights-part-two.html">Building Blocks For Better Stable Eights</a><span>Technical · 2023</span></li><li><a href="../posts/2022-10-17-fastai-part-2-lesson-9-stable-diffusion.html">Deep learning tricks all the way down, with a bit of mathematics for good measure</a><span>Technical · 2022</span></li><li><a href="../posts/2022-05-12-seven-steps-gradient-calculations.html">Some foundations for machine learning with PyTorch</a><span>Technical · 2022</span></li><li><a href="../posts/2021-09-16-ch4-tensors.html">Tensors all the way down</a><span>Technical · 2021</span></li><li><a href="../posts/2022-05-14-sgd-fashion-mnist.html">Using the seven-step SGD process for Fashion MNIST</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 

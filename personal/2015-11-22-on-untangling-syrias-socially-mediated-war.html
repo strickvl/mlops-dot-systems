@@ -259,6 +259,21 @@ ul.task-list li input[type="checkbox"] {
 <p>In a separate but not-unrelated note, I have been thinking of ways that I can stay engaged in what’s going on in Syria beyond just consuming reports at one step removed. I’m working with a beta-testing team using a piece of software called <a href="https://meedan.com/en/bridge/">Bridge</a> – made by the lovely team at <a href="https://meedan.com/en/">Meedan</a> – which allows for the translation of social media and the use of those translations as part of an embedded presentation online. I will be translating strands and snippets from certain parts of Syria’s social media universe in Arabic. More on this soon, I hope.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-12-25-syria-revolution-first-draft.html">Syria’s Revolution: The First Draft</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-09-knot2-translation-as-trauma.html">Knot 2: Translation as Trauma, Taxis and Artificial Intelligence</a><span>Personal · 2016</span></li><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a><span>Technical · 2024</span></li><li><a href="../personal/2015-08-28-2015-8-afp-covers-the-taliban-sources-project.html">AFP covers the Taliban Sources Project</a><span>Personal · 2015</span></li><li><a href="../personal/2011-05-01-the-petraeus-effect.html">The Petraeus Effect</a><span>Personal · 2011</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

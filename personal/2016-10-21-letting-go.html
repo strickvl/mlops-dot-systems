@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Every day is different. Progress isn’t necessarily linear. The things I thought I’d dealt with come back to confront me. But as long as the process — doing the climbing — is still of interest to me, then this isn’t a problem. I just have to keep showing up, keep climbing those walls.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-10-13-keep-moving.html">Keep Moving</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-02-existential-battles-climbing-amman.html">Existential Battles: Climbing in Amman</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-05-fuheis-climbing-2.html">Climbing Fuheis: Two and a Half Ascents</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-20-different-kinds-of-climbing.html">Different Kinds of Climbing</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-02-climbing-routes-without-numbers.html">Climbing Routes Without Numbers</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

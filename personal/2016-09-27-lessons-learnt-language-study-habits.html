@@ -246,6 +246,21 @@ ul.task-list li input[type="checkbox"] {
 <p><em>If you want to work with me on your language-learning goals, please <a href="http://www.alexstrick.com/language-coaching">read this overview</a> and get in touch with me using the link specified.</em></p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-02-23-core-language-learning-beliefs.html">Core Language Learning Beliefs</a><span>Personal · 2017</span></li><li><a href="../personal/2016-11-22-learning-a-language-try-a-new-approach.html">Learning a Language? Try a New Approach</a><span>Personal · 2016</span></li><li><a href="../personal/2017-01-23-adjustments-deep-end.html">Language Learner's Journal: Adjustments at the Deep End</a><span>Personal · 2017</span></li><li><a href="../personal/2017-02-18-llj-keeping-pace.html">Language Learner's Journal: Keeping Pace</a><span>Personal · 2017</span></li><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

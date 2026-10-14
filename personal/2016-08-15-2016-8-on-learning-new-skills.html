@@ -265,6 +265,21 @@ ul.task-list li input[type="checkbox"] {
 <p>My final piece of news is that <a href="http://www.felixkuehn.com/">Felix</a> and I have signed a contract to work on a new book for <a href="http://www.hurstpublishers.com/">Hurst</a> (title and all other details TBC) which will be an anthology of Taliban writings/statements. It’ll cover the whole gamut of their experience from the 1980s up until the present day. We’ll be drawing from the materials of the <a href="http://www.alexstrick.com/blog/2015/8/afp-covers-the-taliban-sources-project">Taliban Sources Project</a>&nbsp;as well as other sources we’ve gathered along the way in previous years. I’m quite excited about the project, and it’ll be an amazing resource once out. The problem for a lot of research, as I’ve mentioned <a href="http://www.alexstrick.com/blog/2015/12/reading-the-afghan-taliban-67-sources-you-should-be-studying">before</a>,&nbsp;is that the primary sources aren’t used half as much as they ought. We hope this project will offer a corrective in this respect.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-10-15-skills-development-foundations.html">Skills Development: Foundations</a><span>Personal · 2016</span></li><li><a href="../personal/2016-05-25-2016-5-memorisation-language-ninja.html">How to become a memorisation and language ninja</a><span>Personal · 2016</span></li><li><a href="../posts/2023-01-01-on-mathematical-literacy.html">On mathematical literacy</a><span>Technical · 2023</span></li><li><a href="../posts/2021-09-18-writing-code.html">Writing Code</a><span>Technical · 2021</span></li><li><a href="../personal/2023-08-06-all-the-things-i-wish-i-knew-about-studying-at-school.html">All the things I wish I knew about studying at school</a><span>Personal · 2023</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

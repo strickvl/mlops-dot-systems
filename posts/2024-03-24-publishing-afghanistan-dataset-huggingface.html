@@ -298,6 +298,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Finally, there was an unexpected amount of value in data that at first sight was fairly anodyne and mundane. It’s a good reminder that small projects with focused datasets can provide a lot of value.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="some-takeaways-from-the-project">Related posts</h2><ul><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a><span>Technical · 2024</span></li><li><a href="../personal/2011-05-16-more-isaf-press-release-data.html">More data on 'Kill-Capture' Raids</a><span>Personal · 2011</span></li><li><a href="../posts/2024-04-01-publishing-afghanwire-dataset.html">Introducing the Afghanwire Dataset: A Unique Collection of Translated Afghan Media Articles from 2006-2009</a><span>Technical · 2024</span></li><li><a href="../personal/2012-12-10-catching-up-aan-report-on-isaf-night-raids.html">Catching Up: AAN Report on ISAF Night Raids</a><span>Personal · 2012</span></li><li><a href="../personal/2011-05-01-the-petraeus-effect.html">The Petraeus Effect</a><span>Personal · 2011</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 
 </main> <!-- /main -->

@@ -231,6 +231,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Sources and Methods has <a href="https://www.sourcesandmethods.com/podcast/35-inbetweenisode">a new podcast out today</a>, too. This is an ‘inbetweenisode’ in which Matt and I discuss the past year, what we’ve been up to recently and some of our future plans. <a href="https://www.sourcesandmethods.com/contact/">Let us know</a> if you enjoyed this style of episode. We were thinking of doing more of these conversations between us where we take a deep-dive into a particular topic.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2017-01-01-2017-1-new-year-new-arabic-language-podcast.html">New Year, New Arabic-language Podcast</a><span>Personal · 2017</span></li><li><a href="../personal/2015-09-09-2015-9-sources-and-methods-back-for-season-2.html">Sources and Methods: Back for Season 2</a><span>Personal · 2015</span></li><li><a href="../personal/2016-12-09-the-two-books-every-intermediate-arabic-student-needs-to-read.html">The Two Books Every Intermediate Arabic Student Needs to Read</a><span>Personal · 2016</span></li><li><a href="../personal/2016-12-30-master-arabic-preorder.html">Pre-Order Now: 'Master Arabic'</a><span>Personal · 2016</span></li><li><a href="../personal/2017-04-17-on-reading-in-arabic-the-evidence.html">On Reading in Arabic: The Evidence</a><span>Personal · 2017</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

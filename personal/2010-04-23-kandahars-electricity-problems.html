@@ -232,6 +232,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Electricity would, at the very least, be something that the government and foreigners could point to as having improved – only, that is, if it can be maintained past just a few months. The last two times we had regular and reliable electricity – just after Governor Torialai Weesa was appointed to the post for a month or so, and in the run-up to the Presidential and Provincial Council Elections – nobody benefited from the provision of the service because (a) there was very little follow-up in terms of publicising and trying to advertise and remind people it was there and (b) because it soon stopped and people went back to moaning about how useless the government and foreigners are.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2010-04-12-hearts-and-minds.html">Hearts and Minds</a><span>Personal · 2010</span></li><li><a href="../personal/2010-04-18-kandahar-survey.html">Kandahar Survey</a><span>Personal · 2010</span></li><li><a href="../personal/2010-04-11-back-home.html">Back Home</a><span>Personal · 2010</span></li><li><a href="../personal/2010-12-28-an-appeal.html">UPDATED: An Appeal</a><span>Personal · 2010</span></li><li><a href="../personal/2010-01-08-staying-apart.html">Staying Apart</a><span>Personal · 2010</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

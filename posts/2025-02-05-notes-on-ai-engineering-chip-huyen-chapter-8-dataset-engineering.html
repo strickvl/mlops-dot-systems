@@ -415,7 +415,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 </section>
 <section id="data-inspection" class="level3">
-<h3 class="anchored" data-anchor-id="data-inspection">Data Inspection</h3>
+<h3 class="anchored">Data Inspection</h3>
 <p>The chapter emphasizes the importance of manual data inspection:</p>
 <ul>
 <li>Utilize various data exploration tools</li>
@@ -425,6 +425,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 6 of 8 in <a href="../series.html#ai-engineering">Reading 'AI Engineering'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html"><small>← Part 5</small>Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a><a class="series-next" href="../posts/2025-02-07-ai-engineering-chapter-9.html"><small>Part 7 →</small>Notes on 'AI Engineering' chapter 9: Inference Optimisation</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored" data-anchor-id="data-inspection">Related posts</h2><ul><li><a href="../posts/2022-04-19-data-validation-great-expectations-part-1.html">How to trust the data you feed your model: data validation with Great Expectations in a computer vision context (part 1)</a><span>Technical · 2022</span></li><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2024-06-25-evaluation-finetuning-manual-dataset.html">How to think about creating a dataset for LLM finetuning evaluation</a><span>Technical · 2024</span></li><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li><li><a href="../posts/2022-04-06-synthetic-data-results.html">'I guess this is what data-centric AI is!': Performance boosts after training with synthetic data</a><span>Technical · 2022</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 </section>
 </section>
 

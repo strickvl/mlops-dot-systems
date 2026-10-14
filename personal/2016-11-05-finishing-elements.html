@@ -233,6 +233,21 @@ ul.task-list li input[type="checkbox"] {
 <p>I am pleased to have made it to the end of the programme. I’m still at the beginning of what I consider to be a 2–3 year long programme of rehabilitation and reconditioning of my body. I now have a useful baseline which supports my climbing during the week, and from which I can now start doing more interesting training. I’m excited to get back to handstand work and I’m thinking I’ll start one of the other GMB programmes next up on the slate: either <a href="https://gmb.io/v/">Vitamins</a> or <a href="https://gmb.io/is/">Integral Strength</a>. <a href="https://gmb.io/ff/">Flexibility work</a> is another pretty important part of the work with my body that I really ought to do every day. I’m getting better with this, but the more it’s integrated as part of a programme, the more likely I will be to follow through.</p>
 
 
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../personal/2016-11-05-fuheis-climbing-2.html">Climbing Fuheis: Two and a Half Ascents</a><span>Personal · 2016</span></li><li><a href="../personal/2016-10-13-keep-moving.html">Keep Moving</a><span>Personal · 2016</span></li><li><a href="../personal/2016-10-21-letting-go.html">Letting Go</a><span>Personal · 2016</span></li><li><a href="../personal/2016-11-20-different-kinds-of-climbing.html">Different Kinds of Climbing</a><span>Personal · 2016</span></li><li><a href="../personal/2016-09-02-existential-battles-climbing-amman.html">Existential Battles: Climbing in Amman</a><span>Personal · 2016</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
