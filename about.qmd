@@ -60,12 +60,16 @@ from Afghanistan and records from the Guantánamo military commissions.
 
 - [*DeepSeek in Practice*](https://www.packtpub.com/en-us/product/deepseek-in-practice-9781806020850)
   (Packt, 2025), with Andy Peng and Duarte O. Carmo
-- *An Enemy We Created: The Myth of the Taliban-Al Qaeda Merger in Afghanistan*
+- [*The Taliban Reader*](https://hurstpublishers.com/book/the-taliban-reader/)
+  (2018), edited with Felix Kuehn
+- [*An Enemy We Created: The Myth of the Taliban-Al Qaeda Merger in Afghanistan*](https://hurstpublishers.com/book/an-enemy-we-created/)
   (2012), with Felix Kuehn
-- *Poetry of the Taliban* (2012), edited with Felix Kuehn
-- *My Life with the Taliban* (2010), Abdul Salam Zaeef's memoir, edited with
-  Felix Kuehn
-- *Master Arabic* (2017), a guide for intermediate Arabic students
+- [*Poetry of the Taliban*](https://hurstpublishers.com/book/poetry-of-the-taliban/)
+  (2012), edited with Felix Kuehn
+- [*My Life with the Taliban*](https://hurstpublishers.com/book/my-life-with-the-taliban/)
+  (2010), Abdul Salam Zaeef's memoir, edited with Felix Kuehn
+- [*Master Arabic*](https://incrementalelephant.gumroad.com/l/masterarabic-basic)
+  (2017), a guide for intermediate Arabic students
 
 Felix and I also run [First Draft Publishing](https://www.firstdraft-publishing.com),
 a small publishing house for niche-interest books.
