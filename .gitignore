@@ -194,3 +194,5 @@ design/
 
 **/*.quarto_ipynb
 _series.json
+_related.json
+_cache/

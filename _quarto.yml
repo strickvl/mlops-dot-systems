@@ -1,6 +1,8 @@
 project:
   type: website
-  pre-render: uv run scripts/build_series.py
+  pre-render:
+    - uv run scripts/build_series.py
+    - uv run scripts/build_related.py
   render:
     - "**/*.qmd"
     - "**/*.md"
@@ -53,6 +55,7 @@ format:
     css: styles.css
     filters:
       - filters/series-box.lua
+      - filters/related-posts.lua
     shortcodes:
       - filters/series-index.lua
     include-in-header:
