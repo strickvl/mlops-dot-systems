@@ -86,8 +86,8 @@ Producing these various versions of the data was something I learned from Brownl
 
 Weka does offer some nice tools for the initial exploration of the data. Here you can see two charts that are generated in the ‘explorer’ application. First we have a series of simple bar charts visualising all the individual attributes. Then we have a plot matrix showing how all the various attributes correlate to each other (or not, as was mostly the case for this data set).
 
-[caption id="" align="alignnone" width="2168"]![ Visualisation of Pima Indians dataset attributes (auto-generated in Weka) ](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/63880b21bd7f_image-asset.avif) Visualisation of Pima Indians dataset attributes (auto-generated in Weka) [/caption]
-[caption id="" align="alignnone" width="1444"]![ Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka) ](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/6991cd1ab463_fig2.avif) Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka) [/caption]
+![Visualisation of Pima Indians dataset attributes (auto-generated in Weka)](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/63880b21bd7f_image-asset.avif)
+![Plot matrix showing visualisation of correlations between all attributes (auto-generated using Weka)](images/2018-06-18-diagnosing-diabetes-with-weka-machine-learning/6991cd1ab463_fig2.avif)
 
 ## Choosing Algorithms and Training the Model
 

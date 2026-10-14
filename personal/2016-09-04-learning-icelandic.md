@@ -19,7 +19,7 @@ comments:
     repo: strickvl/mlops-dot-systems
 ---
 
-[caption id="" align="alignnone" width="1134"]![ Some pronunciation rules for vowels ](images/2016-09-04-learning-icelandic/31feac877e11_image-asset.avif) Some pronunciation rules for vowels [/caption]
+![Some pronunciation rules for vowels](images/2016-09-04-learning-icelandic/31feac877e11_image-asset.avif)
 
 Yesterday, mostly out of curiosity, I took my first lesson in Icelandic. I’m not anticipating this becoming a major driving force in my life, but I was provoked by someone’s explanation of the language’s pronunciation weirdnesses to learn more.
 

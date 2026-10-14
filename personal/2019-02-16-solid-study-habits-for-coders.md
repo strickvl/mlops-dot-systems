@@ -142,7 +142,7 @@ I use a slight variant of this [much](https://fs.blog/2012/04/feynman-technique/
 3. Identify any gaps in your explanation / understanding.
 4. Relearn / restudy / interrogate to fill in the gaps.
 
-[caption id="" align="alignnone" width="600"]![ Part of one of my Feynman reviews that I do on Saturday afternoons ](images/2019-02-16-solid-study-habits-for-coders/7d8071d9b5fd_IMG_0487.avif) Part of one of my Feynman reviews that I do on Saturday afternoons [/caption]
+![Part of one of my Feynman reviews that I do on Saturday afternoons](images/2019-02-16-solid-study-habits-for-coders/7d8071d9b5fd_IMG_0487.avif)
 
 You can use narrative / diagrams to condense and clarify your explanation. For my Launch School studies, I do this once a week on Saturdays. I keep a list of new methods that I’m learning about during the week. Particularly towards the end of RB101 these started to mount up. Then on the weekend, I’d take the list of methods and test myself by writing out (by hand, with pen and paper) code that illustrated how to use each method. If needed, I’d write or say out loud an explanation relating to that method. This is a humbling exercise; you realise that you don’t know the things that you thought you knew.
 

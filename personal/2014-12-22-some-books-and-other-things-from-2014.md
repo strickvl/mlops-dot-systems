@@ -18,7 +18,7 @@ comments:
 
 I have read 117 books so far this year. I think there are another five still likely to happen before the end of the month. [Goodreads](https://www.goodreads.com/) tells me that amounts to 28,616 pages or an average of roughly 80 pages per day. Seems like a lot, but it didn't feel that way. I set my goal for the year at 100 and it was consciously a very high number, almost unrealistically so. But in the end I never felt rushed, nor did it feel like a chore. As a result, next year I'm going to notch it up to 150. I enjoy reading books more than I fear the very occasional sense of pressure when I get behind on my reading. [Beeminder](https://www.beeminder.com/) has helped keep me honest and on track when it comes to my reading goals.
 
-[caption id="" align="alignnone" width="1354"]![ My Beeminder chart c. late November. I disabled it after I hit the 100 mark... ](images/2014-12-22-some-books-and-other-things-from-2014/ded47467c69c_Screen_Shot_2014-12-22_at_10.44.18.avif) My Beeminder chart c. late November. I disabled it after I hit the 100 mark... [/caption]
+![My Beeminder chart c. late November. I disabled it after I hit the 100 mark...](images/2014-12-22-some-books-and-other-things-from-2014/ded47467c69c_Screen_Shot_2014-12-22_at_10.44.18.avif)
 
 The breakdown of fiction:non-fiction in the books I read this year was pretty low (1:9 approx) but the gender balance was about 4:6 female-male, which isn't bad considering I was only side-glancing at that proportion as the year went on. For 2015, I will be consciously making sure to get more fiction in my reading diet, hopefully by as much as one-third or two-fifths of the total.
 

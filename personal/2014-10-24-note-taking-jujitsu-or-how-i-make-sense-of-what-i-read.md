@@ -88,7 +88,7 @@ First thing’s first: sync your kindle to the cloud. Just turn on the wifi/3G a
 
 Then plug your Kindle into your computer via USB. Then go into the “Documents” folder, and search for a file called “My Clippings.txt”. If you’ve been using your kindle for a while, it’s probably going to be quite large. Nevertheless, copy that file to your desktop. Feel free to eject your Kindle from your laptop now. We won’t be needing it any more.
 
-[caption id="" align="alignnone" width="1634"]![ An example of what you might see when you open your ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/646c39110e47_image-asset.avif) An example of what you might see when you open your "My Clippings.txt" file [/caption]
+![An example of what you might see when you open your "My Clippings.txt" file](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/646c39110e47_image-asset.avif)
 
 If you open the txt file that is now saved to your desktop, you’ll find all your clippings and annotations preserved in a useful plaintext format. This may solve your problems straightaway, in which case, congratulations: you now have all your annotations in a useful format that you can use however you wish.
 
@@ -136,7 +136,7 @@ The same goes for twitter. [I follow enough people](https://twitter.com/strickvl
 
 After reading articles on my Kindle (or sometimes on a mobile device like my iPad or iPhone), you can clip the article if you want to save it (just like making a clipping inside a book, only the entire article is saved).
 
-[caption id="" align="alignnone" width="2448"]![ This is what you see in an article when you click to ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/63b0658369bd_image-asset.avif) This is what you see in an article when you click to "Clip This Article" on a kindle... [/caption]
+![This is what you see in an article when you click to "Clip This Article" on a kindle...](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/63b0658369bd_image-asset.avif)
 
 Then your clippings will be captured in the ‘MyClippings.txt’ file as explained above and you can export them directly to DevonThink or Evernote or Tinderbox. (The main downside to doing things this way is that when the kindle clips it, all formatting is lost (including paragraph breaks)).
 
@@ -196,7 +196,7 @@ In this image you can see the information arranged as an outline, but here (belo
 
 Just to show you that it can handle complexity, here’s a map created by [Felix](http://felixkuehn.com) to help him figure out how people involved in militant Islamism were/are connected across different geographical sectors:
 
-[caption id="" align="alignnone" width="1966"]![ It's complicated... ](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cf88aec723b3_image-asset.avif) It's complicated... [/caption]
+![It's complicated...](images/2014-10-24-note-taking-jujitsu-or-how-i-make-sense-of-what-i-read/cf88aec723b3_image-asset.avif)
 
 I’ll often use Tinderbox maps to store outlines for how I’ll write a particular section or chapter, making notes inside the document, dragging quotes in from DevonThink to supplement the argument that’s being constructed.
 

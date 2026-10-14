@@ -29,7 +29,7 @@ Have you ever come across a PDF filled with useful data, but wanted to play arou
 
 I recently discovered a tool that solves this problem: [Tabula](http://tabula.technology/). It works on Windows and Mac and is *very* easy and intuitive to use. Simply take your page of data:
 
-[caption id="" align="alignnone" width="2040"]![ A page listing Kandahar's provincial council election polling stations from a few years back. Note the use of English and Dari scripts. Tabula handles all this without problems. ](images/2018-01-17-tabula-extracting-data-pdfs/21ec1627605d_ScreenShot_2018-01-17_at_15.53.31.avif) A page listing Kandahar's provincial council election polling stations from a few years back. Note the use of English and Dari scripts. Tabula handles all this without problems. [/caption]
+![A page listing Kandahar's provincial council election polling stations from a few years back. Note the use of English and Dari scripts. Tabula handles all this without problems.](images/2018-01-17-tabula-extracting-data-pdfs/21ec1627605d_ScreenShot_2018-01-17_at_15.53.31.avif)
 
 Then import the file into Tabula's web interface. It's surprisingly good at autodetecting where tables and table borders are, but you can do it manually if need be:
 

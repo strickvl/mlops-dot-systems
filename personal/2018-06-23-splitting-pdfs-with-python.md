@@ -23,7 +23,7 @@ I’ve found that a lot of the courses and tutorials teaching programming are bi
 
 For my specific problem, it was non-trivial to get even the most basic prototype working. Before even thinking about the PDF part, I wanted to loop over all the files in a particular folder and print out the names. This seems like a simple thing to do, and in the end it was (sort of), but the documentation doesn’t really lend itself to newbies. This is what one of the functions I used looks like in the documentation, for example:
 
-[caption id="" align="alignnone" width="600"]![ Not particularly intuitive... ](images/2018-06-23-splitting-pdfs-with-python/5cffab5418f2_ScreenShot_2018-06-23_at_22.20.20.avif) Not particularly intuitive... [/caption]
+![Not particularly intuitive...](images/2018-06-23-splitting-pdfs-with-python/5cffab5418f2_ScreenShot_2018-06-23_at_22.20.20.avif)
 
 Luckily, this being a fairly ordinary and common task, various people had suggested ways to iterate over some files and list the filenames. StackOverflow proved helpful, as did some friendly voices over on the [PythonistaCafe forum](https://www.pythonistacafe.com/). For a simple file list, `os.walk` seemed to be the easiest option, though someone has since let me know that for Python 3.5 onwards there’s also `glob` which looks a lot less verbose to use.
 
