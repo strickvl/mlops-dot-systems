@@ -25,7 +25,29 @@
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+    --header-bg: rgba(253, 252, 250, 0.9);
 }
+
+/* Dark mode: Quarto adds .quarto-dark to <body> when the dark theme is active */
+body.quarto-dark {
+    --bg-warm-white: #16130F;
+    --bg-white: #1E1A16;
+    --bg-soft: #231E19;
+    --text-primary: #ECE6DF;
+    --text-secondary: #B3AAA0;
+    --text-muted: #857C72;
+    --accent-rose: #EC9A82;
+    --accent-rose-light: #3A231C;
+    --accent-rose-dark: #F2B09C;
+    --accent-teal: #6DC0B8;
+    --border-soft: #2F2924;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+    --header-bg: rgba(22, 19, 15, 0.9);
+}
+
 
 /* ===== BASE STYLES ===== */
 body.personal-page {
@@ -38,7 +60,7 @@ body.personal-page {
 
 /* ===== NAVBAR ===== */
 body.personal-page #quarto-header {
-    background: rgba(253, 252, 250, 0.9) !important;
+    background: var(--header-bg) !important;
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-soft) !important;
 }

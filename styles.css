@@ -101,3 +101,19 @@ body.all-page #quarto-margin-sidebar .category.active {
 #related-posts.in-sidebar h2 { font-size: .875rem; text-transform: none; letter-spacing: 0; color: var(--bs-body-color); font-weight: 500; }
 #related-posts.in-sidebar li a { color: var(--bs-secondary-color); }
 #related-posts.in-sidebar li a:hover { color: var(--bs-primary); }
+
+/* ===== Dark mode adjustments for the rules above ===== */
+body.quarto-dark #quarto-margin-sidebar .quarto-listing-category-title,
+body.quarto-dark #quarto-margin-sidebar .category { color: #6b7280; }
+body.quarto-dark #quarto-margin-sidebar .category:hover,
+body.quarto-dark #quarto-margin-sidebar .category.active { color: #d1d5db; }
+body.quarto-dark .series-ongoing { color: #5fd18f; }
+/* Darkly leaves Bootstrap's tertiary background and border colour at their
+   light values; give the series and related-posts components dark ones. */
+body.quarto-dark .series-box,
+body.quarto-dark .series-footer,
+body.quarto-dark #related-posts,
+body.quarto-dark.series-page {
+    --bs-tertiary-bg: rgba(255, 255, 255, 0.05);
+    --bs-border-color: rgba(255, 255, 255, 0.14);
+}
