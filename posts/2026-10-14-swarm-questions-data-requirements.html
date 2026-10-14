@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alex Strick van Linschoten">
+<meta name="dcterms.date" content="2026-10-14">
+<meta name="description" content="What people actually ask about their agent swarms, what evidence a recorder needs to capture to answer them, and some first ideas (FUSE, eBPF, Tetragon) for capturing it.">
+
+<title>What Does a Swarm Recorder Need to Capture? – Alex Strick van Linschoten</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-df07115ad9f15e2ef3479c789e6873c8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles/technical.css?v=63db03acc8">
+<meta property="og:title" content="What Does a Swarm Recorder Need to Capture? – Alex Strick van Linschoten">
+<meta property="og:description" content="What people actually ask about their agent swarms, what evidence a recorder needs to capture to answer them, and some first ideas (FUSE, eBPF, Tetragon) for capturing it.">
+<meta property="og:site_name" content="Alex Strick van Linschoten">
+<meta name="twitter:title" content="What Does a Swarm Recorder Need to Capture? – Alex Strick van Linschoten">
+<meta name="twitter:description" content="What people actually ask about their agent swarms, what evidence a recorder needs to capture to answer them, and some first ideas (FUSE, eBPF, Tetragon) for capturing it.">
+<meta name="twitter:creator" content="@strickvl">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://alexstrick.com/cards/posts/2026-10-14-swarm-questions-data-requirements.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://alexstrick.com/cards/posts/2026-10-14-swarm-questions-data-requirements.png">
+</head>
+
+<body class="nav-fixed technical-page quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Alex Strick van Linschoten</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../technical.html"> 
+<span class="menu-text">Technical</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../personal.html"> 
+<span class="menu-text">Personal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../all.html"> 
+<span class="menu-text">All</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../series.html"> 
+<span class="menu-text">Series</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/strickvl"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://sigmoid.social/web/@alexstrick"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/strickvl"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../subscribe.html"> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-rss" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RSS</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-rss">    
+        <li>
+    <a class="dropdown-item" href="../technical.xml">
+ <span class="dropdown-text">Technical RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal.xml">
+ <span class="dropdown-text">Personal RSS</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-questions-do-people-have-about-their-swarms" id="toc-what-questions-do-people-have-about-their-swarms" class="nav-link active" data-scroll-target="#what-questions-do-people-have-about-their-swarms">What questions do people have about their swarms?</a></li>
+  <li><a href="#what-kinds-of-evidence-are-needed" id="toc-what-kinds-of-evidence-are-needed" class="nav-link" data-scroll-target="#what-kinds-of-evidence-are-needed">What kinds of evidence are needed?</a></li>
+  <li><a href="#how-to-capture-the-data" id="toc-how-to-capture-the-data" class="nav-link" data-scroll-target="#how-to-capture-the-data">How to capture the data?</a></li>
+  <li><a href="#are-we-a-tracing-provider-now" id="toc-are-we-a-tracing-provider-now" class="nav-link" data-scroll-target="#are-we-a-tracing-provider-now">Are we a tracing provider now?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">What Does a Swarm Recorder Need to Capture?</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">agentic-rl</div>
+    <div class="quarto-category">swarms</div>
+    <div class="quarto-category">observability</div>
+    <div class="quarto-category">agents</div>
+    <div class="quarto-category">useful-tools</div>
+    <div class="quarto-category">linux</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    What people actually ask about their agent swarms, what evidence a recorder needs to capture to answer them, and some first ideas (FUSE, eBPF, Tetragon) for capturing it.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alex Strick van Linschoten </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 14, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 2</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li class="series-here"><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
+<p><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Yesterday</a> we covered the problem at a high level. Today I thought we could talk about:</p>
+<ul>
+<li>common questions that people ask of their swarms and their outputs</li>
+<li>the kinds of evidence that you’d expect to be captured by a swarm observability tool</li>
+<li>some options for capturing that evidence</li>
+</ul>
+<p>For all of this I can’t give a strong answer as to exactly what’s going on inside the companies who actually have really large swarms operating at scale right now. We have some evidence from the few blog posts and vague comments on Twitter that some employees have made, but it’s admittedly not extremely detailed. So for what follows I’ve used what’s out there plus my own logical conclusions and imagination of the sorts of problems that people are facing.</p>
+<section id="what-questions-do-people-have-about-their-swarms" class="level2">
+<h2 class="anchored" data-anchor-id="what-questions-do-people-have-about-their-swarms">What questions do people have about their swarms?</h2>
+<p>Here’s a collection of some of the questions that came up in the practitioner accounts I could find:</p>
+<ul>
+<li>Why did two planners produce incompatible designs for the same component? [Cursor]</li>
+<li>Why did one file become a shared dumping ground? [Cursor]</li>
+<li>Why did adding agents mostly add lock waiting rather than useful work? [Cursor]</li>
+<li>Why was the whole system waiting for its slowest worker? [Cursor]</li>
+<li>Why do these components work separately but fail together? [Anthropic C compiler]</li>
+<li>Did the agent’s command kill the runner itself? [Anthropic C compiler]</li>
+<li>Did this session fail before the agent could do meaningful work? [Desplega]</li>
+<li>Why did this worker receive this task? [Desplega]</li>
+<li>Was the message actually delivered, or only attempted? [Claude Code agent teams]</li>
+<li>Is this worker idle, stalled or dead? [Gas Town]</li>
+<li>Why did the researcher miss obvious information: the query, the source choice, or a tool failure? [Anthropic Research]</li>
+<li>What happened inside the script that replaced many visible tool calls? [Desplega]</li>
+<li>Is this CPU or memory graph a real problem or a measurement error? [Desplega]</li>
+<li>Did the agent receive the missing information in the first place? [TraceElephant, MAST]</li>
+<li>What was the actual sequence of important actions? [METR]</li>
+<li>Did different instances collaborate, and through which channels? [METR]</li>
+<li>Did agents take steps to conceal what they did? [METR]</li>
+<li>What instructions were agents given, and how did their activity depart from them? [METR]</li>
+<li>Did a mid-run model change, rather than a coordination improvement, explain the change in results? [Extrapolated from OpenAI’s Navier–Stokes run]</li>
+<li>Would the same starting state succeed under a different model or harness? [Extrapolated from AgenTracer and Who&amp;When Pro]</li>
+</ul>
+</section>
+<section id="what-kinds-of-evidence-are-needed" class="level2">
+<h2 class="anchored" data-anchor-id="what-kinds-of-evidence-are-needed">What kinds of evidence are needed?</h2>
+<p>These questions give hints at the kinds of evidence that are needed from whatever is recording the swarm’s activity. We can then think about what kinds of information these questions need and come up with some rough guesses:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>What the record needs to answer it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Why did two planners produce incompatible designs for the same component?</td>
+<td>Model context, messages, harness decisions</td>
+</tr>
+<tr class="even">
+<td>Why did one file become a shared dumping ground?</td>
+<td>File versions, merges, activity versus progress</td>
+</tr>
+<tr class="odd">
+<td>Why did adding agents mostly add lock waiting rather than useful work?</td>
+<td>Locks and claims, resources, ordering</td>
+</tr>
+<tr class="even">
+<td>Why was the whole system waiting for its slowest worker?</td>
+<td>Harness decisions, background jobs, stop reasons</td>
+</tr>
+<tr class="odd">
+<td>Why do these components work separately but fail together?</td>
+<td>Transient file versions, environment, test results</td>
+</tr>
+<tr class="even">
+<td>Did the agent’s command kill the runner itself?</td>
+<td>Process execution, exits and signals</td>
+</tr>
+<tr class="odd">
+<td>Did this session fail before the agent could do meaningful work?</td>
+<td>Lifecycle, startup failures</td>
+</tr>
+<tr class="even">
+<td>Why did this worker receive this task?</td>
+<td>Harness routing decisions</td>
+</tr>
+<tr class="odd">
+<td>Was the message actually delivered, or only attempted?</td>
+<td>Message delivery, capture health</td>
+</tr>
+<tr class="even">
+<td>Is this worker idle, stalled or dead?</td>
+<td>Lifecycle, stop reasons</td>
+</tr>
+<tr class="odd">
+<td>Why did the researcher miss obvious information: the query, the source choice, or a tool failure?</td>
+<td>Model context, remote tools, memory retrieval</td>
+</tr>
+<tr class="even">
+<td>What happened inside the script that replaced many visible tool calls?</td>
+<td>Execution inside code mode, remote calls</td>
+</tr>
+<tr class="odd">
+<td>Is this CPU or memory graph a real problem or a measurement error?</td>
+<td>Resources, capture health</td>
+</tr>
+<tr class="even">
+<td>Did the agent receive the missing information in the first place?</td>
+<td>Model context, messages, compaction</td>
+</tr>
+<tr class="odd">
+<td>What was the actual sequence of important actions?</td>
+<td>Process execution, ordering, capture health</td>
+</tr>
+<tr class="even">
+<td>Did different instances collaborate, and through which channels?</td>
+<td>Messages, outside world, follow-the-text links</td>
+</tr>
+<tr class="odd">
+<td>Did agents take steps to conceal what they did?</td>
+<td>Process execution versus transcript, off-agent store</td>
+</tr>
+<tr class="even">
+<td>What instructions were agents given, and how did their activity depart from them?</td>
+<td>Model context, messages, human interventions</td>
+</tr>
+<tr class="odd">
+<td>Did a mid-run model change, rather than a coordination improvement, explain the change in results?</td>
+<td>Effective model, human interventions, ordering</td>
+</tr>
+<tr class="even">
+<td>Would the same starting state succeed under a different model or harness?</td>
+<td>Environment, replay with stated guarantees</td>
+</tr>
+</tbody>
+</table>
+<p>And then if we cluster all this together, we can start to put together a list of what needs capturing:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>What to capture</th>
+<th>What it lets you answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model context</td>
+<td>Exact requests and responses; effective model and settings; context compaction and what it dropped</td>
+<td>What did the agent actually see, which model was it really running on, and did it ever get the information it needed?</td>
+</tr>
+<tr class="even">
+<td>Identity and lifecycle</td>
+<td>Run, agent, session, attempt, process, call; spawn, restart, exit, signal, out-of-memory kill</td>
+<td>Which worker is this, is it alive, and why did it stop or never get started?</td>
+</tr>
+<tr class="odd">
+<td>Execution</td>
+<td>Every process that ran; calls made inside code-mode scripts; background jobs, retries, cache hits</td>
+<td>What actually ran, including work hidden inside scripts or the background, and did it match what the agent claimed?</td>
+</tr>
+<tr class="even">
+<td>Files</td>
+<td>Reads and writes with content hashes, byte ranges, temporary and half-written versions</td>
+<td>What state was each file in at the moment someone read or tested it?</td>
+</tr>
+<tr class="odd">
+<td>Coordination</td>
+<td>Locks, claims and merges; message send, delivery and rejection; scheduler and approval decisions</td>
+<td>Who owned what, who told whom what, did the message arrive, and why did the work get split up this way?</td>
+</tr>
+<tr class="even">
+<td>Outside world</td>
+<td>Network calls and remote tools; package installs; databases and shared services; effective environment</td>
+<td>Did something outside the agents change the result, or carry information between them?</td>
+</tr>
+<tr class="odd">
+<td>Memory</td>
+<td>Versions of memory entries; retrieval queries, filters and ranked results</td>
+<td>What did an agent know at a given moment, and why did it find or miss something it had stored?</td>
+</tr>
+<tr class="even">
+<td>Time and order</td>
+<td>Recorder sequence numbers; local order per machine; provable happened-before links</td>
+<td>In what order did things really happen, and what could have caused what?</td>
+</tr>
+<tr class="odd">
+<td>Evaluation and stopping</td>
+<td>Test and verifier versions, inputs and raw results; stop, cancel and budget reasons</td>
+<td>Did the work actually fail, was the test wrong, and did the agent finish or just run out of budget?</td>
+</tr>
+<tr class="even">
+<td>Integrity</td>
+<td>Off-agent append-only store; transcript-versus-execution checks; capture-health and drop counters; recorder overhead</td>
+<td>Can the record be trusted, and does a missing event mean nothing happened or only that nothing was captured?</td>
+</tr>
+<tr class="odd">
+<td>Humans and resources</td>
+<td>Human redirections and approvals; resource contention, throttling, queue waits</td>
+<td>Was the outcome caused by the agents, by a person stepping in, or by the machine running short of something?</td>
+</tr>
+<tr class="even">
+<td>Replay</td>
+<td>Historical playback, component re-execution and fresh runs, each with stated guarantees and side effects isolated</td>
+<td>Would the same starting point succeed or fail again, under the same setup or a different one?</td>
+</tr>
+<tr class="odd">
+<td>Live response</td>
+<td>Alerts and the ability to pause or stop parts of a running swarm</td>
+<td>Could anyone have noticed and stopped the problem while it was still happening?</td>
+</tr>
+</tbody>
+</table>
+<p>This list ends up being a sort of feature list for the kinds of tools that I have to imagine exist in some shape or form at the frontier labs and other places where people are doing research into agent swarms. After all, if you don’t have ways of capturing all these kinds of data, how can you hope to understand what the swarm got up to?</p>
+</section>
+<section id="how-to-capture-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-capture-the-data">How to capture the data?</h2>
+<p>As for the precise technical means of capturing agent swarm behaviour, here we move into areas where I am less familiar with the solutions.</p>
+<p>Some things are obvious. We can use pre-existing solutions for the traditional ‘LLM tracing’ that you are probably already familiar with. So here we already have a mental model for capturing the LLM calls (inputs, outputs, reasoning, tokens / cost etc) as well as tool calls, subagents and so on.</p>
+<p>For the rest, it becomes a lot harder. We need to be doing things like:</p>
+<ul>
+<li>capturing <strong>a log of all processes</strong> that ran in the agent’s machine / sandbox. (We need also to be capturing exit codes, stdout, stderr and things like this)</li>
+<li><strong>file reads + writes</strong>. This can take various forms: snapshots of filesystems, content hashes for each version of a file, matching each read by a process to the file version it saw, and so on.</li>
+</ul>
+<p>For the filesystem, we can use FUSE, which is a Linux feature that lets us wire in some custom logic (in our case, logging for the most part) to the actual filesystem. So instead of having the operating system kernel fully take charge of the logic around file handling, we can pass all these operations to some custom code that we write.</p>
+<p>There are some other similar options – <a href="https://man7.org/linux/man-pages/man7/fanotify.7.html"><code>fanotify</code></a> is one – but my investigations and searches suggested that sometimes the notifications (i.e.&nbsp;notifications about file actions) can get dropped, especially when the system’s under load. It’s much harder for the FUSE actions to be bypassed or skipped.</p>
+<p>For process logs, this is something we definitely need to keep track of because in the <a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/">Hugging Face incident</a>, agents built a way for them to show one command in the transcript of their activities but a different command actually being executed. When agents are running in <a href="https://blog.cloudflare.com/code-mode/">code mode</a>, you can have many commands being executed that are slightly more hidden away (depending on how you’re logging things). The same applies to messages sent between agents. We need to track how and what they are communicating between themselves. (Prime Intellect’s <a href="https://www.primeintellect.ai/blog/on-the-nature-of-the-swarm">blog on swarms</a> suggested that these messages will only grow in volume.)</p>
+<p>For watching processes, it seems like <a href="https://tetragon.io/">Tetragon</a> is a good place to start. It tracks what programs ran, who started them and how they ended. It’s an OSS tool from the Cilium project, and it’s built on top of eBPF. (eBPF, as I learned this week, is a feature of Linux that allows you – a little bit like we had with FUSE above – to load small programs into the kernel and attach them to specific moments, like “a new program is about to start” etc. Each time one of those moments happens anywhere on the machine, the little program runs, notes the details, and passes them out to Tetragon, which turns them into a stream of JSON events.) This is great for capturing places where what the agent claims it ran vs what it actually ran (esp useful in cases of deception) are different.</p>
+<p>(Interestingly, when I tried testing a POC version of this out, I was using Modal sandboxes, and it turns out that Modal’s VM kernel didn’t ship the BTF map needed for me to be able to use eBPF. A standard Ubuntu kernel (just a hosted machine in a different cloud provider) is what I ended up using instead.)</p>
+<p>In some ideal world, we are also capturing all this data because it allows us to do things like:</p>
+<ol type="a">
+<li>Replay: rerun the swarm from a particular point with some small thing changed or tweaked. (Maybe change what model is used, or add some extra instruction or see if an extra bit of context might make a difference)</li>
+<li>The whole universe of post-training / RL / finetuning / distillation and so on.</li>
+</ol>
+<p>All this data should probably live in an append-only store that lives outside the swarm. It should be written by our recording/recorder logic and never directly by the agents. And all the obvious things like taking sandbox failure and respawning of agents into account (since this is a common occurrence). That means keeping track of the agent identities, each session, each attempt and connecting all of the data through explicit links.</p>
+<p>I hadn’t thought about it, but actually the clocks of all the agents might drift from one another, so instead of trying to fit all events on a global timeline, rather we probably should connect events together by whatever logically and provably makes sense. e.g.&nbsp;if a message was sent from one agent to another, and we track the sending and the receiving on both sides, and the message’s hash remains unchanged in between, then this is probably good evidence to know which event happened first. Any events that we aren’t able to connect or link then we have to rely on (possibly unreliable) clocks.</p>
+</section>
+<section id="are-we-a-tracing-provider-now" class="level2">
+<h2 class="anchored" data-anchor-id="are-we-a-tracing-provider-now">Are we a tracing provider now?</h2>
+<p>There are even more details I started thinking through at this point, and it started to dawn on me that capturing all of this data was quite similar to what a provider like Langfuse or Braintrust is providing. In reality, we’re doing a little bit more, both in terms of the types of events we’re tracking as well as the volume. Ours is a bit easier in that we’re append-only, but still it can be quite a large flood when the swarm is up and running. I did quite a bit of testing (more in subsequent posts) to ensure that the POC recorder I built could handle a reasonable volume. Specifically, I tested how it held up when 100,000 events were sent at it.</p>
+<p>So by now we have a good idea of the kinds of evidence we want to save, as well as how to do it. I’ve been running some baby swarms over the past few days to test all this out and I’ll be sharing some visual ideas for how you might think about representing answers to the questions listed above (or the process of discovering the answers). I also plan on sharing the actual swarm data (traces / process tracking and so on) on Hugging Face as a public dataset because I didn’t have much joy so far in finding any other public data sources. More soon.</p>
+<p>P.S. If you’re working on swarm observability, please do reply to the thread or in the blog’s comments. I’d love to hear whether my guesses resonate with your experience.</p>
+
+
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 2 of 2 in <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2026-10-13-agent-swarm-observability-tools.html"><small>← Part 1</small>Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a></div></nav></div>
+<div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2022-05-31-redaction-production-introduction.html">It takes a tribe: how I'm thinking about putting my object detection model into production</a><span>Technical · 2022</span></li><li><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a><span>Technical · 2025</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a><span>Technical · 2025</span></li><li><a href="../posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox: An agentic research tool for historical document analysis</a><span>Technical · 2025</span></li><li><a href="../posts/2026-06-16-rl-stages.html">The Five Stages of Reinforcement Learning</a><span>Technical · 2026</span></li></ul></nav></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alexstrick\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="strickvl/mlops-dot-systems" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

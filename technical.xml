@@ -10,7 +10,302 @@
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.10.18</generator>
-<lastBuildDate>Mon, 12 Oct 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 13 Oct 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>What Does a Swarm Recorder Need to Capture?</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2026-10-14-swarm-questions-data-requirements.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 2</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li class="series-here"><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
+<p><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Yesterday</a> we covered the problem at a high level. Today I thought we could talk about:</p>
+<ul>
+<li>common questions that people ask of their swarms and their outputs</li>
+<li>the kinds of evidence that you’d expect to be captured by a swarm observability tool</li>
+<li>some options for capturing that evidence</li>
+</ul>
+<p>For all of this I can’t give a strong answer as to exactly what’s going on inside the companies who actually have really large swarms operating at scale right now. We have some evidence from the few blog posts and vague comments on Twitter that some employees have made, but it’s admittedly not extremely detailed. So for what follows I’ve used what’s out there plus my own logical conclusions and imagination of the sorts of problems that people are facing.</p>
+<section id="what-questions-do-people-have-about-their-swarms" class="level2">
+<h2 class="anchored" data-anchor-id="what-questions-do-people-have-about-their-swarms">What questions do people have about their swarms?</h2>
+<p>Here’s a collection of some of the questions that came up in the practitioner accounts I could find:</p>
+<ul>
+<li>Why did two planners produce incompatible designs for the same component? [Cursor]</li>
+<li>Why did one file become a shared dumping ground? [Cursor]</li>
+<li>Why did adding agents mostly add lock waiting rather than useful work? [Cursor]</li>
+<li>Why was the whole system waiting for its slowest worker? [Cursor]</li>
+<li>Why do these components work separately but fail together? [Anthropic C compiler]</li>
+<li>Did the agent’s command kill the runner itself? [Anthropic C compiler]</li>
+<li>Did this session fail before the agent could do meaningful work? [Desplega]</li>
+<li>Why did this worker receive this task? [Desplega]</li>
+<li>Was the message actually delivered, or only attempted? [Claude Code agent teams]</li>
+<li>Is this worker idle, stalled or dead? [Gas Town]</li>
+<li>Why did the researcher miss obvious information: the query, the source choice, or a tool failure? [Anthropic Research]</li>
+<li>What happened inside the script that replaced many visible tool calls? [Desplega]</li>
+<li>Is this CPU or memory graph a real problem or a measurement error? [Desplega]</li>
+<li>Did the agent receive the missing information in the first place? [TraceElephant, MAST]</li>
+<li>What was the actual sequence of important actions? [METR]</li>
+<li>Did different instances collaborate, and through which channels? [METR]</li>
+<li>Did agents take steps to conceal what they did? [METR]</li>
+<li>What instructions were agents given, and how did their activity depart from them? [METR]</li>
+<li>Did a mid-run model change, rather than a coordination improvement, explain the change in results? [Extrapolated from OpenAI’s Navier–Stokes run]</li>
+<li>Would the same starting state succeed under a different model or harness? [Extrapolated from AgenTracer and Who&amp;When Pro]</li>
+</ul>
+</section>
+<section id="what-kinds-of-evidence-are-needed" class="level2">
+<h2 class="anchored" data-anchor-id="what-kinds-of-evidence-are-needed">What kinds of evidence are needed?</h2>
+<p>These questions give hints at the kinds of evidence that are needed from whatever is recording the swarm’s activity. We can then think about what kinds of information these questions need and come up with some rough guesses:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>What the record needs to answer it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Why did two planners produce incompatible designs for the same component?</td>
+<td>Model context, messages, harness decisions</td>
+</tr>
+<tr class="even">
+<td>Why did one file become a shared dumping ground?</td>
+<td>File versions, merges, activity versus progress</td>
+</tr>
+<tr class="odd">
+<td>Why did adding agents mostly add lock waiting rather than useful work?</td>
+<td>Locks and claims, resources, ordering</td>
+</tr>
+<tr class="even">
+<td>Why was the whole system waiting for its slowest worker?</td>
+<td>Harness decisions, background jobs, stop reasons</td>
+</tr>
+<tr class="odd">
+<td>Why do these components work separately but fail together?</td>
+<td>Transient file versions, environment, test results</td>
+</tr>
+<tr class="even">
+<td>Did the agent’s command kill the runner itself?</td>
+<td>Process execution, exits and signals</td>
+</tr>
+<tr class="odd">
+<td>Did this session fail before the agent could do meaningful work?</td>
+<td>Lifecycle, startup failures</td>
+</tr>
+<tr class="even">
+<td>Why did this worker receive this task?</td>
+<td>Harness routing decisions</td>
+</tr>
+<tr class="odd">
+<td>Was the message actually delivered, or only attempted?</td>
+<td>Message delivery, capture health</td>
+</tr>
+<tr class="even">
+<td>Is this worker idle, stalled or dead?</td>
+<td>Lifecycle, stop reasons</td>
+</tr>
+<tr class="odd">
+<td>Why did the researcher miss obvious information: the query, the source choice, or a tool failure?</td>
+<td>Model context, remote tools, memory retrieval</td>
+</tr>
+<tr class="even">
+<td>What happened inside the script that replaced many visible tool calls?</td>
+<td>Execution inside code mode, remote calls</td>
+</tr>
+<tr class="odd">
+<td>Is this CPU or memory graph a real problem or a measurement error?</td>
+<td>Resources, capture health</td>
+</tr>
+<tr class="even">
+<td>Did the agent receive the missing information in the first place?</td>
+<td>Model context, messages, compaction</td>
+</tr>
+<tr class="odd">
+<td>What was the actual sequence of important actions?</td>
+<td>Process execution, ordering, capture health</td>
+</tr>
+<tr class="even">
+<td>Did different instances collaborate, and through which channels?</td>
+<td>Messages, outside world, follow-the-text links</td>
+</tr>
+<tr class="odd">
+<td>Did agents take steps to conceal what they did?</td>
+<td>Process execution versus transcript, off-agent store</td>
+</tr>
+<tr class="even">
+<td>What instructions were agents given, and how did their activity depart from them?</td>
+<td>Model context, messages, human interventions</td>
+</tr>
+<tr class="odd">
+<td>Did a mid-run model change, rather than a coordination improvement, explain the change in results?</td>
+<td>Effective model, human interventions, ordering</td>
+</tr>
+<tr class="even">
+<td>Would the same starting state succeed under a different model or harness?</td>
+<td>Environment, replay with stated guarantees</td>
+</tr>
+</tbody>
+</table>
+<p>And then if we cluster all this together, we can start to put together a list of what needs capturing:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>What to capture</th>
+<th>What it lets you answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model context</td>
+<td>Exact requests and responses; effective model and settings; context compaction and what it dropped</td>
+<td>What did the agent actually see, which model was it really running on, and did it ever get the information it needed?</td>
+</tr>
+<tr class="even">
+<td>Identity and lifecycle</td>
+<td>Run, agent, session, attempt, process, call; spawn, restart, exit, signal, out-of-memory kill</td>
+<td>Which worker is this, is it alive, and why did it stop or never get started?</td>
+</tr>
+<tr class="odd">
+<td>Execution</td>
+<td>Every process that ran; calls made inside code-mode scripts; background jobs, retries, cache hits</td>
+<td>What actually ran, including work hidden inside scripts or the background, and did it match what the agent claimed?</td>
+</tr>
+<tr class="even">
+<td>Files</td>
+<td>Reads and writes with content hashes, byte ranges, temporary and half-written versions</td>
+<td>What state was each file in at the moment someone read or tested it?</td>
+</tr>
+<tr class="odd">
+<td>Coordination</td>
+<td>Locks, claims and merges; message send, delivery and rejection; scheduler and approval decisions</td>
+<td>Who owned what, who told whom what, did the message arrive, and why did the work get split up this way?</td>
+</tr>
+<tr class="even">
+<td>Outside world</td>
+<td>Network calls and remote tools; package installs; databases and shared services; effective environment</td>
+<td>Did something outside the agents change the result, or carry information between them?</td>
+</tr>
+<tr class="odd">
+<td>Memory</td>
+<td>Versions of memory entries; retrieval queries, filters and ranked results</td>
+<td>What did an agent know at a given moment, and why did it find or miss something it had stored?</td>
+</tr>
+<tr class="even">
+<td>Time and order</td>
+<td>Recorder sequence numbers; local order per machine; provable happened-before links</td>
+<td>In what order did things really happen, and what could have caused what?</td>
+</tr>
+<tr class="odd">
+<td>Evaluation and stopping</td>
+<td>Test and verifier versions, inputs and raw results; stop, cancel and budget reasons</td>
+<td>Did the work actually fail, was the test wrong, and did the agent finish or just run out of budget?</td>
+</tr>
+<tr class="even">
+<td>Integrity</td>
+<td>Off-agent append-only store; transcript-versus-execution checks; capture-health and drop counters; recorder overhead</td>
+<td>Can the record be trusted, and does a missing event mean nothing happened or only that nothing was captured?</td>
+</tr>
+<tr class="odd">
+<td>Humans and resources</td>
+<td>Human redirections and approvals; resource contention, throttling, queue waits</td>
+<td>Was the outcome caused by the agents, by a person stepping in, or by the machine running short of something?</td>
+</tr>
+<tr class="even">
+<td>Replay</td>
+<td>Historical playback, component re-execution and fresh runs, each with stated guarantees and side effects isolated</td>
+<td>Would the same starting point succeed or fail again, under the same setup or a different one?</td>
+</tr>
+<tr class="odd">
+<td>Live response</td>
+<td>Alerts and the ability to pause or stop parts of a running swarm</td>
+<td>Could anyone have noticed and stopped the problem while it was still happening?</td>
+</tr>
+</tbody>
+</table>
+<p>This list ends up being a sort of feature list for the kinds of tools that I have to imagine exist in some shape or form at the frontier labs and other places where people are doing research into agent swarms. After all, if you don’t have ways of capturing all these kinds of data, how can you hope to understand what the swarm got up to?</p>
+</section>
+<section id="how-to-capture-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-capture-the-data">How to capture the data?</h2>
+<p>As for the precise technical means of capturing agent swarm behaviour, here we move into areas where I am less familiar with the solutions.</p>
+<p>Some things are obvious. We can use pre-existing solutions for the traditional ‘LLM tracing’ that you are probably already familiar with. So here we already have a mental model for capturing the LLM calls (inputs, outputs, reasoning, tokens / cost etc) as well as tool calls, subagents and so on.</p>
+<p>For the rest, it becomes a lot harder. We need to be doing things like:</p>
+<ul>
+<li>capturing <strong>a log of all processes</strong> that ran in the agent’s machine / sandbox. (We need also to be capturing exit codes, stdout, stderr and things like this)</li>
+<li><strong>file reads + writes</strong>. This can take various forms: snapshots of filesystems, content hashes for each version of a file, matching each read by a process to the file version it saw, and so on.</li>
+</ul>
+<p>For the filesystem, we can use FUSE, which is a Linux feature that lets us wire in some custom logic (in our case, logging for the most part) to the actual filesystem. So instead of having the operating system kernel fully take charge of the logic around file handling, we can pass all these operations to some custom code that we write.</p>
+<p>There are some other similar options – <a href="https://man7.org/linux/man-pages/man7/fanotify.7.html"><code>fanotify</code></a> is one – but my investigations and searches suggested that sometimes the notifications (i.e.&nbsp;notifications about file actions) can get dropped, especially when the system’s under load. It’s much harder for the FUSE actions to be bypassed or skipped.</p>
+<p>For process logs, this is something we definitely need to keep track of because in the <a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/">Hugging Face incident</a>, agents built a way for them to show one command in the transcript of their activities but a different command actually being executed. When agents are running in <a href="https://blog.cloudflare.com/code-mode/">code mode</a>, you can have many commands being executed that are slightly more hidden away (depending on how you’re logging things). The same applies to messages sent between agents. We need to track how and what they are communicating between themselves. (Prime Intellect’s <a href="https://www.primeintellect.ai/blog/on-the-nature-of-the-swarm">blog on swarms</a> suggested that these messages will only grow in volume.)</p>
+<p>For watching processes, it seems like <a href="https://tetragon.io/">Tetragon</a> is a good place to start. It tracks what programs ran, who started them and how they ended. It’s an OSS tool from the Cilium project, and it’s built on top of eBPF. (eBPF, as I learned this week, is a feature of Linux that allows you – a little bit like we had with FUSE above – to load small programs into the kernel and attach them to specific moments, like “a new program is about to start” etc. Each time one of those moments happens anywhere on the machine, the little program runs, notes the details, and passes them out to Tetragon, which turns them into a stream of JSON events.) This is great for capturing places where what the agent claims it ran vs what it actually ran (esp useful in cases of deception) are different.</p>
+<p>(Interestingly, when I tried testing a POC version of this out, I was using Modal sandboxes, and it turns out that Modal’s VM kernel didn’t ship the BTF map needed for me to be able to use eBPF. A standard Ubuntu kernel (just a hosted machine in a different cloud provider) is what I ended up using instead.)</p>
+<p>In some ideal world, we are also capturing all this data because it allows us to do things like:</p>
+<ol type="a">
+<li>Replay: rerun the swarm from a particular point with some small thing changed or tweaked. (Maybe change what model is used, or add some extra instruction or see if an extra bit of context might make a difference)</li>
+<li>The whole universe of post-training / RL / finetuning / distillation and so on.</li>
+</ol>
+<p>All this data should probably live in an append-only store that lives outside the swarm. It should be written by our recording/recorder logic and never directly by the agents. And all the obvious things like taking sandbox failure and respawning of agents into account (since this is a common occurrence). That means keeping track of the agent identities, each session, each attempt and connecting all of the data through explicit links.</p>
+<p>I hadn’t thought about it, but actually the clocks of all the agents might drift from one another, so instead of trying to fit all events on a global timeline, rather we probably should connect events together by whatever logically and provably makes sense. e.g.&nbsp;if a message was sent from one agent to another, and we track the sending and the receiving on both sides, and the message’s hash remains unchanged in between, then this is probably good evidence to know which event happened first. Any events that we aren’t able to connect or link then we have to rely on (possibly unreliable) clocks.</p>
+</section>
+<section id="are-we-a-tracing-provider-now" class="level2">
+<h2 class="anchored" data-anchor-id="are-we-a-tracing-provider-now">Are we a tracing provider now?</h2>
+<p>There are even more details I started thinking through at this point, and it started to dawn on me that capturing all of this data was quite similar to what a provider like Langfuse or Braintrust is providing. In reality, we’re doing a little bit more, both in terms of the types of events we’re tracking as well as the volume. Ours is a bit easier in that we’re append-only, but still it can be quite a large flood when the swarm is up and running. I did quite a bit of testing (more in subsequent posts) to ensure that the POC recorder I built could handle a reasonable volume. Specifically, I tested how it held up when 100,000 events were sent at it.</p>
+<p>So by now we have a good idea of the kinds of evidence we want to save, as well as how to do it. I’ve been running some baby swarms over the past few days to test all this out and I’ll be sharing some visual ideas for how you might think about representing answers to the questions listed above (or the process of discovering the answers). I also plan on sharing the actual swarm data (traces / process tracking and so on) on Hugging Face as a public dataset because I didn’t have much joy so far in finding any other public data sources. More soon.</p>
+<p>P.S. If you’re working on swarm observability, please do reply to the thread or in the blog’s comments. I’d love to hear whether my guesses resonate with your experience.</p>
+
+
+<div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+</section>
+
+ ]]></description>
+  <category>agentic-rl</category>
+  <category>swarms</category>
+  <category>observability</category>
+  <category>agents</category>
+  <category>useful-tools</category>
+  <category>linux</category>
+  <guid>https://alexstrick.com/posts/2026-10-14-swarm-questions-data-requirements.html</guid>
+  <pubDate>Tue, 13 Oct 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Reading the Swarm: Why Today’s Agent Tracing Tools Fall Short</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -21,7 +316,7 @@
 
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 1</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 2</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
 <p>Companies at the frontier of model and agent development keep posting about their work on ‘agent swarms’. There was the <a href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/">Hugging Face</a> / <a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/">OpenAI incident</a>, but also <a href="https://cursor.com/blog/agent-swarm-model-economics">Cursor has written</a>, as have <a href="https://www.primeintellect.ai/blog/on-the-nature-of-the-swarm">Prime Intellect</a>. Even Kevin Kelly recently <a href="https://kevinkelly.substack.com/p/swarm-intelligence">weighed in</a>.</p>
 <p>I got to wondering a bit about what observability looks like for these agent swarms. You have to assume that the frontier labs doing testing and research work in this area have created their own tools to help them understand how the individual agents / subsystems behave and then also how this contributes to the overall output.</p>
 <p>This article, and a few that might follow, are about some questions I asked while thinking through the problem of swarm observability. I’ll talk through some UX ideas I had while imagining what the frontier labs have in-house in terms of tools to help them understand their own swarms.</p>
@@ -5278,351 +5573,6 @@ font-style: inherit;">\</span></span>
   <guid>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</guid>
   <pubDate>Sat, 08 Feb 2025 23:00:00 GMT</pubDate>
   <media:content url="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/write.png" medium="image" type="image/png" height="103" width="144"/>
-</item>
-<item>
-  <title>Notes on ‘AI Engineering’ chapter 9: Inference Optimisation</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://alexstrick.com/posts/2025-02-07-ai-engineering-chapter-9.html</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 7 of 8</span> <a href="../series.html#ai-engineering">Reading 'AI Engineering'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-01-19-notes-on-ai-engineering-chapter-1.html">Notes on 'AI Engineering' (Chip Huyen) chapter 1</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html">Notes on 'AI Engineering' (Chip Huyen) chapter 3</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html">Notes on 'AI Engineering' (Chip Huyen) chapter 4</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html">Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html">Dataset Engineering: The Art and Science of Data Preparation</a> <span class="series-date">Feb 2025</span></li><li class="series-here"><a href="../posts/2025-02-07-ai-engineering-chapter-9.html">Notes on 'AI Engineering' chapter 9: Inference Optimisation</a> <span class="series-date">Feb 2025</span></li><li><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a> <span class="series-date">Feb 2025</span></li></ol></details></div>
-<p>What follows are my notes on chapter 9 of Chip Huyen’s ‘AI Engineering’ book. This chapter was on optimising your inference and I learned a lot while reading it! There are interesting techniques like prompt caching and architectural considerations that I was vaguely aware of but hadn’t fully appreciated how they might work in real inference systems.</p>
-<section id="chapter-9-overview" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-9-overview">Chapter 9: Overview</h2>
-<p>Machine learning inference optimization operates across three fundamental domains: model optimization, hardware optimization, and service optimization. While hardware optimization often requires significant investment and may offer limited individual leverage, model and service optimizations provide substantial opportunities for AI engineers to improve performance.</p>
-<blockquote class="blockquote">
-<p><strong>Critical Cost Insight</strong>: A 2023 survey revealed that inference can account for up to 90% of machine learning costs in deployed AI systems, often exceeding training costs. This emphasizes why inference optimization isn’t just an engineering challenge - it’s a critical business necessity.</p>
-</blockquote>
-</section>
-<section id="core-concepts-and-bottlenecks" class="level2">
-<h2 class="anchored" data-anchor-id="core-concepts-and-bottlenecks">Core Concepts and Bottlenecks</h2>
-<p>Understanding inference bottlenecks is essential for effective optimization. Two primary types of computational bottlenecks impact inference performance:</p>
-<blockquote class="blockquote">
-<p><strong>Compute-Bound Bottlenecks</strong>: Tasks that are limited by raw computational capacity, typically involving complex mathematical operations that take significant time to complete. These bottlenecks are particularly evident in computationally intensive operations within neural networks.</p>
-<p><strong>Memory Bandwidth-Bound Bottlenecks</strong>: Limitations arising from data transfer requirements between system components, particularly between memory and processors. This becomes especially relevant in Large Language Models where significant amounts of data need to be moved between different memory hierarchies.</p>
-</blockquote>
-<p>In Large Language Models (LLMs), different operations exhibit varying profiles of these bottlenecks. This understanding has led to architectural decisions such as decoupling the prefilling step from the decode step in production environments - a practice that has become increasingly common as organizations optimize their inference pipelines.</p>
-</section>
-<section id="inference-apis-and-service-patterns" class="level2">
-<h2 class="anchored" data-anchor-id="inference-apis-and-service-patterns">Inference APIs and Service Patterns</h2>
-<p>Two fundamental approaches to inference deployment exist:</p>
-<ol type="1">
-<li><strong>Online Inference APIs</strong>
-<ul>
-<li>Optimized for minimal latency</li>
-<li>Designed for real-time responses</li>
-<li>Typically more expensive per inference</li>
-<li>Critical for interactive applications</li>
-</ul></li>
-<li><strong>Batch Inference APIs</strong>
-<ul>
-<li>Optimized for cost efficiency</li>
-<li>Can tolerate longer processing times (potentially hours)</li>
-<li>Allows providers to optimize resource utilization</li>
-<li>Ideal for bulk processing tasks</li>
-</ul></li>
-</ol>
-</section>
-<section id="inference-performance-metrics" class="level2">
-<h2 class="anchored" data-anchor-id="inference-performance-metrics">Inference Performance Metrics</h2>
-<p>Several key metrics help quantify inference performance:</p>
-<section id="latency-components" class="level3">
-<h3 class="anchored" data-anchor-id="latency-components">Latency Components</h3>
-<ol type="1">
-<li><strong>Time to First Token</strong>
-<ul>
-<li>Measures duration between query submission and initial response</li>
-<li>Critical for user experience in interactive applications</li>
-<li>Often a key optimization target for real-time systems</li>
-</ul></li>
-<li><strong>Time per Output Token</strong>
-<ul>
-<li>Generation speed after the first token</li>
-<li>Impacts overall completion time</li>
-<li>Can vary based on model architecture and optimization</li>
-</ul></li>
-<li><strong>Inter-token Latency</strong>
-<ul>
-<li>Time intervals between consecutive tokens</li>
-<li>Affects perceived smoothness of generation</li>
-<li>Important for streaming applications</li>
-</ul></li>
-</ol>
-<p>Total latency can be expressed as: <code>time_to_first_token + (time_per_token × number_of_tokens)</code></p>
-</section>
-<section id="throughput-and-goodput-metrics" class="level3">
-<h3 class="anchored" data-anchor-id="throughput-and-goodput-metrics">Throughput and Goodput Metrics</h3>
-<blockquote class="blockquote">
-<p><strong>Throughput</strong>: The number of output tokens per second an inference service can generate across all users and requests. This raw metric provides insight into system capacity.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p><strong>Goodput</strong>: The number of requests per second that successfully meet the Service Level Objective (SLO). This metric offers a more realistic view of useful system capacity.</p>
-</blockquote>
-</section>
-<section id="resource-utilization-metrics" class="level3">
-<h3 class="anchored" data-anchor-id="resource-utilization-metrics">Resource Utilization Metrics</h3>
-<ol type="1">
-<li><strong>Model FLOPS Utilization (MFU)</strong>
-<ul>
-<li>Ratio of actual to theoretical FLOPS</li>
-<li>Indicates computational efficiency</li>
-<li>Key metric for hardware optimization</li>
-</ul></li>
-<li><strong>Model Bandwidth Utilization (MBU)</strong>
-<ul>
-<li>Percentage of achievable memory bandwidth utilized</li>
-<li>Critical for memory-intensive operations</li>
-<li>Helps identify memory bottlenecks</li>
-</ul></li>
-</ol>
-</section>
-</section>
-<section id="hardware-considerations-and-ai-accelerators" class="level2">
-<h2 class="anchored" data-anchor-id="hardware-considerations-and-ai-accelerators">Hardware Considerations and AI Accelerators</h2>
-<p>While NVIDIA GPUs dominate the market, various specialized chips exist for inference:</p>
-<section id="popular-ai-accelerators" class="level3">
-<h3 class="anchored" data-anchor-id="popular-ai-accelerators">Popular AI Accelerators</h3>
-<ul>
-<li>NVIDIA GPUs (market leader)</li>
-<li>AMD accelerators</li>
-<li>Google TPUs</li>
-<li>Various emerging specialized chips</li>
-</ul>
-<blockquote class="blockquote">
-<p><strong>Inference vs Training Hardware</strong>: Inference-optimized chips prioritize lower precision and faster memory access over large memory capacity, contrasting with training-focused hardware that requires substantial memory capacity.</p>
-</blockquote>
-<p>Key hardware optimization considerations include:</p>
-<ul>
-<li>Memory size and bandwidth requirements</li>
-<li>Chip architecture specifics</li>
-<li>Power consumption profiles</li>
-<li>Physical chip architecture variations</li>
-<li>Cost-performance ratios</li>
-</ul>
-</section>
-</section>
-<section id="model-optimization-techniques" class="level2">
-<h2 class="anchored" data-anchor-id="model-optimization-techniques">Model Optimization Techniques</h2>
-<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/inference-optimization-differences.png" class="img-fluid"></p>
-<section id="core-approaches" class="level3">
-<h3 class="anchored" data-anchor-id="core-approaches">Core Approaches</h3>
-<ol type="1">
-<li><strong>Quantization</strong>
-<ul>
-<li>Reduces numerical precision (e.g., 32-bit to 16-bit)</li>
-<li>Decreases memory footprint</li>
-<li>Weight-only quantization is particularly common</li>
-<li>Can halve model size with minimal performance impact</li>
-</ul></li>
-<li><strong>Pruning</strong>
-<ul>
-<li>Removes non-essential parameters</li>
-<li>Preserves core model behavior</li>
-<li>Multiple techniques available</li>
-<li>Requires careful validation</li>
-</ul></li>
-<li><strong>Distillation</strong>
-<ul>
-<li>Creates smaller, more efficient models</li>
-<li>Maintains key capabilities</li>
-<li>Covered extensively in Chapter 8</li>
-</ul></li>
-</ol>
-</section>
-<section id="advanced-decoding-strategies" class="level3">
-<h3 class="anchored" data-anchor-id="advanced-decoding-strategies">Advanced Decoding Strategies</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/pytorch-llama3-optimization.png" class="img-fluid"></p>
-<section id="speculative-decoding" class="level4">
-<h4 class="anchored" data-anchor-id="speculative-decoding">Speculative Decoding</h4>
-<p>This approach combines a large model with a smaller, faster model:</p>
-<ul>
-<li>Small model generates rapid initial outputs</li>
-<li>Large model verifies and corrects as needed</li>
-<li>Provides faster token generation</li>
-<li>Easy to implement</li>
-<li>Integrated into frameworks like VLLM and LamaCPU</li>
-</ul>
-</section>
-<section id="inference-with-reference" class="level4">
-<h4 class="anchored" data-anchor-id="inference-with-reference">Inference with Reference</h4>
-<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/inference_with_reference.png" class="img-fluid"></p>
-<ul>
-<li>Performs mini-RAG operations during decoding</li>
-<li>Retrieves relevant context from input query</li>
-<li>Requires additional memory overhead</li>
-<li>Useful for maintaining context accuracy</li>
-</ul>
-</section>
-<section id="parallel-decoding" class="level4">
-<h4 class="anchored" data-anchor-id="parallel-decoding">Parallel Decoding</h4>
-<p>Rather than strictly sequential token generation, this method:</p>
-<ul>
-<li>Generates multiple tokens simultaneously</li>
-<li>Uses resolution mechanisms to maintain coherence</li>
-<li>Implements look-ahead techniques</li>
-<li>Algorithmically complex but offers significant speed benefits</li>
-<li>Demonstrated success with look-ahead decoding method</li>
-</ul>
-</section>
-<section id="attention-optimization" class="level4">
-<h4 class="anchored" data-anchor-id="attention-optimization">Attention Optimization</h4>
-<p>Several strategies exist for optimizing attention mechanisms:</p>
-<ol type="1">
-<li><strong>Key-Value Cache Optimization</strong>
-<ul>
-<li>Critical for large context windows</li>
-<li>Requires substantial memory</li>
-<li>Various techniques for size reduction</li>
-</ul></li>
-<li><strong>Specialized Attention Kernels</strong>
-<ul>
-<li>Flash Attention as leading example</li>
-<li>Hardware-specific implementations</li>
-<li>Flash Attention 3 for H100 GPUs</li>
-</ul></li>
-</ol>
-<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" class="img-fluid"></p>
-</section>
-</section>
-</section>
-<section id="service-level-optimization" class="level2">
-<h2 class="anchored" data-anchor-id="service-level-optimization">Service-Level Optimization</h2>
-<section id="batching-strategies" class="level3">
-<h3 class="anchored" data-anchor-id="batching-strategies">Batching Strategies</h3>
-<ol type="1">
-<li><strong>Static Batching</strong>
-<ul>
-<li>Processes fixed-size batches</li>
-<li>Waits for complete batch (e.g., 100 requests)</li>
-<li>Simple but potentially inefficient</li>
-</ul></li>
-<li><strong>Dynamic Batching</strong>
-<ul>
-<li>Uses time windows for batch formation</li>
-<li>Processes incomplete batches after timeout</li>
-<li>Balances latency and throughput</li>
-</ul></li>
-<li><strong>Continuous Batching</strong>
-<ul>
-<li>Returns completed responses immediately</li>
-<li>Dynamically manages resource utilization</li>
-<li>Similar to a bus route that continuously picks up new passengers</li>
-<li>Optimizes occupation rate</li>
-<li>Based on Orca paper’s findings</li>
-</ul></li>
-</ol>
-</section>
-<section id="prefill-decode-decoupling" class="level3">
-<h3 class="anchored" data-anchor-id="prefill-decode-decoupling">Prefill-Decode Decoupling</h3>
-<ul>
-<li>Separates prefill and decode operations</li>
-<li>Essential for large-scale inference providers</li>
-<li>Allows optimal resource allocation</li>
-<li>Improves overall system efficiency</li>
-</ul>
-</section>
-<section id="prompt-caching" class="level3">
-<h3 class="anchored" data-anchor-id="prompt-caching">Prompt Caching</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/prompt_caching.png" class="img-fluid"></p>
-<ul>
-<li>Stores computations for overlapping text segments</li>
-<li>Offered by providers like Gemini and Anthropic</li>
-<li>May incur storage costs</li>
-<li>Requires careful cost-benefit analysis</li>
-<li>Must be explicitly enabled</li>
-</ul>
-</section>
-<section id="parallelism-strategies" class="level3">
-<h3 class="anchored" data-anchor-id="parallelism-strategies">Parallelism Strategies</h3>
-<ol type="1">
-<li><strong>Replica Parallelism</strong>
-<ul>
-<li>Creates multiple copies of the model</li>
-<li>Distributes requests across replicas</li>
-<li>Simplest form of parallelism</li>
-</ul></li>
-<li><strong>Tensor Parallelism</strong>
-<ul>
-<li>Splits individual tensors across devices</li>
-<li>Enables processing of larger models</li>
-<li>Requires careful coordination</li>
-</ul></li>
-<li><strong>Pipeline Parallelism</strong>
-<ul>
-<li>Divides model computation into stages</li>
-<li>Assigns stages to different devices</li>
-<li>Optimizes resource utilization</li>
-<li>Reduces memory requirements</li>
-</ul></li>
-<li><strong>Context Parallelism</strong>
-<ul>
-<li>Processes different parts of input context in parallel</li>
-<li>Particularly useful for long sequences</li>
-<li>Can significantly reduce latency</li>
-</ul></li>
-<li><strong>Sequence Parallelism</strong>
-<ul>
-<li>Processes multiple sequences simultaneously</li>
-<li>Leverages hardware-specific features</li>
-<li>Requires careful implementation</li>
-</ul></li>
-</ol>
-</section>
-</section>
-<section id="implementation-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="implementation-considerations">Implementation Considerations</h2>
-<p>When implementing inference optimizations:</p>
-<ul>
-<li>Multiple optimization techniques are typically combined in production</li>
-<li>Hardware-specific optimizations require careful testing</li>
-<li>Service-level optimizations often provide significant gains with minimal model modifications</li>
-<li>Optimization choices depend heavily on specific use cases and requirements</li>
-</ul>
-
-
-<div class="series-footer"></div>
-<div id="related-posts-home"></div><script>
-(() => {
-  const list = document.getElementById("related-posts");
-  const sidebar = document.getElementById("quarto-margin-sidebar");
-  const home = document.getElementById("related-posts-home");
-  if (!list || !sidebar || !home) return;
-  const place = () => {
-    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
-    (sidebarShown ? sidebar : home).appendChild(list);
-    list.classList.toggle("in-sidebar", sidebarShown);
-  };
-  place();
-  addEventListener("resize", place);
-})();
-</script>
-<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
-     and wherever a page uses the  shortcode (About, Subscribe). -->
-<section class="subscribe-box" aria-label="Subscribe by email">
-  <h2 class="anchored">Get new posts by email</h2>
-  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
-     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
-  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
-    <label for="subscribe-email" class="visually-hidden">Email address</label>
-    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
-    <button type="submit">Subscribe</button>
-  </form>
-</section>
-
-</section>
-
- ]]></description>
-  <category>books-i-read</category>
-  <category>inference</category>
-  <category>llms</category>
-  <category>hardware</category>
-  <guid>https://alexstrick.com/posts/2025-02-07-ai-engineering-chapter-9.html</guid>
-  <pubDate>Thu, 06 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://alexstrick.com/posts/images/2025-02-07-ai-engineering-chapter-9/flash-attention.png" medium="image" type="image/png" height="83" width="144"/>
 </item>
 </channel>
 </rss>
