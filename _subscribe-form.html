@@ -1,0 +1,13 @@
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the {{< subscribe >}} shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2>Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="/technical.xml">technical RSS</a> and <a href="/personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post"
+        target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</section>

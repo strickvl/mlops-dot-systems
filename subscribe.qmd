@@ -1,0 +1,8 @@
+---
+title: "Subscribe"
+page-layout: article
+---
+
+New posts go out by email when I publish them, both technical and personal. Emails come from [Buttondown](https://buttondown.com/strickvl), and you can unsubscribe from any of them.
+
+{{< subscribe >}}

@@ -45,6 +45,8 @@ website:
         href: https://sigmoid.social/web/@alexstrick
       - icon: twitter
         href: https://twitter.com/strickvl
+      - text: "Subscribe"
+        file: subscribe.qmd
       - text: "RSS"
         menu:
           - text: "Technical RSS"
@@ -62,8 +64,10 @@ format:
     filters:
       - filters/series-box.lua
       - filters/related-posts.lua
+      - filters/subscribe.lua
     shortcodes:
       - filters/series-index.lua
+      - filters/subscribe-shortcode.lua
     include-in-header:
       text: |
         <script defer data-domain="alexstrick.com"
