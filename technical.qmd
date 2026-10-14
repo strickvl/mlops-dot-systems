@@ -15,7 +15,7 @@ body-classes: technical-page
 css: styles/technical.css
 ---
 
-Writings on MLOps, machine learning, software engineering, and programming.
+Writing on agents, evals, reinforcement learning, finetuning, and the engineering around them.
 
-For personal writings on Afghanistan, books, languages, and life,
+For personal writing on Afghanistan, languages, maths and books,
 see the [personal blog](/personal.html).

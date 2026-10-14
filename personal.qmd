@@ -16,9 +16,9 @@ body-classes: personal-page
 css: styles/personal.css
 ---
 
-Writings on Afghanistan, books, languages, travel, and life.
+Writing on Afghanistan and history, language learning, maths, and books, going back to 2010.
 
-For technical content on MLOps, machine learning, and software engineering,
+For technical writing on agents, evals and machine learning,
 see the [technical blog](/technical.html).
 
 
