@@ -10,7 +10,175 @@
 <atom:link href="https://alexstrick.com/technical.xml" rel="self" type="application/rss+xml"/>
 <description>Personal and technical writings from Alex Strick van Linschoten</description>
 <generator>quarto-1.10.18</generator>
-<lastBuildDate>Tue, 13 Oct 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 30 Oct 2026 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Ten Ways to Look at 10,000 Agents</title>
+  <dc:creator>Alex Strick van Linschoten</dc:creator>
+  <link>https://alexstrick.com/posts/2026-10-31-swarm-observability.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 3</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li><li class="series-here"><a href="../posts/2026-10-31-swarm-observability.html">Ten Ways to Look at 10,000 Agents</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
+<p>I’ve been seeing more and more people writing about swarm observability so thought I’d post some of the work I’d been doing to think this through. This follows on from previous posts where I wrote about <a href="https://alexstrick.com/posts/2026-10-13-agent-swarm-observability-tools.html">the problems of just naively using agent tracing tools for swarms</a> as well as <a href="https://alexstrick.com/posts/2026-10-14-swarm-questions-data-requirements.html">the kinds of things that a swarm recorder needs to capture</a>.</p>
+<p>To that end, I built some (prototype versions of) tools to help AI engineers work with agent swarm traces and other signals. Specifically:</p>
+<ul>
+<li>a collector that tracks everything the agents in a swarm are doing, from filesystem writes and reads to inter-agent messages to traditional traces that you’re probably familiar with</li>
+<li>a viewer with a bunch of different modes (see the rest of the post below for some glimpses of these) to help someone trying to understand how a swarm behaved either during or post-run</li>
+<li>a simple agent (‘hodhod’) that comes with some deterministic tools to help quickly try to slide and dice the huge volume of data recorded by the collector, which can try to help understand how things worked (or where they failed)</li>
+</ul>
+<p>Today I’ll focus more on the viewer component as it’s easiest to understand.</p>
+<video src="images/mantiq/teaser.mp4" poster="images/mantiq/teaser-poster.jpg" controls="" muted="" playsinline="" preload="none" width="100%" aria-label="30-second tour of the Mantiq viewer">
+</video>
+<p>I had my old historian / humanities hat on when I was thinking through the problem of swarm observability, notably the question of how much to trust the signals that you get from the agents and agent teams within a swarm.</p>
+<p>In general, you have to reckon with the fact that the agent’s own account of what it did might be wrong, and the failure modes of a swarm are likely to be located in lots of different places, so you have to bring together multiple disparate signals.</p>
+<p>Mantiq records five things: model calls and tool calls, every process the kernel starts, every file read and write, messages between agents and container output.</p>
+<p>Here you can see the view of one smaller swarm, showing one simple view across a series of agents working to write a Lisp interpreter in Python.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/overview.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>Overview of one run: a Lisp interpreter built by a small swarm</figcaption>
+</figure>
+</div>
+<p>I thought it best to come up with a small visual language to help compress information. It seems complex when you look at it first time, but for someone working a lot with agent swarm traces, I think it can help you navigate the different views without the need to overload the UI with text.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/symbols-legend.png" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>The viewer’s legend of symbols</figcaption>
+</figure>
+</div>
+<p>When you have a swarm of thousands of agent nodes, you need ways of quickly traversing a large set of this data. Here’s an overview screen that allows you to see a 10,000 agent swarm’s progress working on a task. You can select particular problems observed in the data and see only the agents involved (one row = one agent).</p>
+<video src="images/mantiq/loop-rows.mp4" poster="images/mantiq/loop-rows-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="10,000-agent swarm, one row per agent, filtered by problem">
+</video>
+<p>This stack view, my personal favourite I think, gives you the same swarm data as a 3D stack. Teams are represented on the floor, and time is represented by moving up through the stack vertically (i.e.&nbsp;each slice).</p>
+<p>Failures that many teams carry out at once show up as a layer. You can click a slice or even a specific agent at a moment in time and see what the agent was doing, what messages it was sending and so on.</p>
+<p>It’s pretty easy to navigate through the swarm in this way with your trackpad or mouse.</p>
+<video src="images/mantiq/stack-3d-view.mp4" poster="images/mantiq/stack-3d-view-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="3D stack view: teams on the floor, time going up">
+</video>
+<p>Or skip the menus and a 3D view and pinch to zoom into the agent traces without being confronted by a wall of text..</p>
+<p>Here you go from swarm to team to agent rows even all the way down to a message that was sent or a file that was edited. Clicking anywhere within the UI at this point takes you the specific detail that you care about.</p>
+<video src="images/mantiq/loop-dive.mp4" poster="images/mantiq/loop-dive-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="Zooming from swarm to team to agent to a single message">
+</video>
+<p>I prototyped ten different ways to move through a 10,000 agent swarm. Some more favourites:</p>
+<ul>
+<li>constellation view, where you can see messages as lines between agents or agent teams</li>
+</ul>
+<video src="images/mantiq/constellation-view.mp4" poster="images/mantiq/constellation-view-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="Constellation view: messages as lines between agents">
+</video>
+<ul>
+<li>the problem funnel, where you can see how failure modes lead to other behaviours within the swarm (analysis for this generated by the ‘hodhod’ agent btw)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/sw-funnel.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>Problem funnel</figcaption>
+</figure>
+</div>
+<ul>
+<li>the treemap, where size = work and colour coding is the failure modes detected</li>
+</ul>
+<video src="images/mantiq/treemap.mp4" poster="images/mantiq/treemap-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="Treemap: size is work, colour is failure mode">
+</video>
+<ul>
+<li>contact sheet, where every team’s whole run is represented as a thumbnail</li>
+</ul>
+<video src="images/mantiq/contact-sheet.mp4" poster="images/mantiq/contact-sheet-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="Contact sheet: every team's run as a thumbnail">
+</video>
+<ul>
+<li>weather replay, where each agent is a dot coloured by whatever it was doing at the time. You can play it through at different speeds to scrub through and observe messages being sent or files being written (or whatever you’d like!)</li>
+</ul>
+<video src="images/mantiq/weather.mp4" poster="images/mantiq/weather-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="Weather replay: each agent a dot coloured by what it was doing">
+</video>
+<p>In terms of the actual task of someone entrusted with understanding what it was that an agent swarm did, or where it was behaving suboptimally, I focused on using the hodhod agent to build explanatory views to help answer specific questions.</p>
+<p>This is obviously easier done with smaller swarms, and I still have to work more at how this should be surfaced for very complex interactions, but a concept of these kinds of visual explanation could work is very similar to the standard “make an HTML artifact with visual elements”, just standardised around the symbols mentioned earlier.</p>
+<video src="images/mantiq/visual-explanation.mp4" poster="images/mantiq/visual-explanation-poster.jpg" muted="" loop="" playsinline="" preload="none" width="100%" aria-label="A case built by hodhod, explaining one question about a run">
+</video>
+<p>Here you can see pushes to git among a specific smaller agent team, all represented with the visual language.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/pushes.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>Git pushes within one agent team</figcaption>
+</figure>
+</div>
+<p>And here you can see how agents were pushing to specific files (with the diff on the right when you click on one of the squares.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/files.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>Pushes per file, with the diff on the right</figcaption>
+</figure>
+</div>
+<p>Inter-agent message communication can also be represented as a small grid, especially when you can narrow down a limited set of agents that you want to represent in this way. On the right you see the actual messages sent.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/messages.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>Messages between agents as a grid</figcaption>
+</figure>
+</div>
+<p>Put a bunch of runs together side by side and then you get a view which is like your traditional experiment trackers from machine learning days. I imagine these kinds of views would be somehow the least useful for a big swarm, but probably you want <em>some</em> way to represent this information from time to time!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://alexstrick.com/posts/images/mantiq/runs.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<figcaption>Runs side by side</figcaption>
+</figure>
+</div>
+<p>Anyway, lots of people somehow thinking about agent swarms and what it means to have observability for them. I loved this one from Ian Johnson which also had a lot of similar ideas and is gorgeous!</p>
+<blockquote class="twitter-tweet blockquote" data-dnt="true">
+<a href="https://x.com/enjalot/status/2111813743302582519">Ian Johnson (<span class="citation" data-cites="enjalot">@enjalot</span>) on X</a>
+</blockquote>
+<p>I think you have to think about the data layer at the same time as you think about the visualization, because standard LLM tracing providers are just not tracking all the things you’d want to track from an agent swarm.</p>
+<p>I have no inside information, but I have to imagine there are people at Anthropic, OpenAI or even maybe smaller places like Prime Intellect who are building these kinds of swarm observability tools internally.</p>
+<p>There’s no way to get your mind round all the data that a swarm outputs, so you have to have lots of different views that you can always be approaching your data from different perspectives.</p>
+<p>I also took a lot of inspiration from Mark Bernstein’s <a href="https://www.eastgate.com/Tinderbox/">Tinderbox</a> tool, which I’ve used for coming on twenty years now (!), and where you can switch views across your notes. I always found that very useful when writing books or thinking through research work.</p>
+<p>At any rate, if any of this resonates with you or you’re building these kinds of tools, please do reply below in the comments or send me an email. Would love to chat about how you’re thinking about these problems!</p>
+<script>
+// Start each lazy loop when it scrolls into view (this is when the MP4 downloads); pause it when it leaves.
+const io = new IntersectionObserver(es => es.forEach(e =>
+  e.isIntersecting ? e.target.play() : e.target.pause()), {threshold: 0.3});
+document.querySelectorAll('video[preload="none"]:not([controls])').forEach(v => io.observe(v));
+</script>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<div class="series-footer"></div>
+<div id="related-posts-home"></div><script>
+(() => {
+  const list = document.getElementById("related-posts");
+  const sidebar = document.getElementById("quarto-margin-sidebar");
+  const home = document.getElementById("related-posts-home");
+  if (!list || !sidebar || !home) return;
+  const place = () => {
+    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
+    (sidebarShown ? sidebar : home).appendChild(list);
+    list.classList.toggle("in-sidebar", sidebarShown);
+  };
+  place();
+  addEventListener("resize", place);
+})();
+</script>
+<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
+     and wherever a page uses the  shortcode (About, Subscribe). -->
+<section class="subscribe-box" aria-label="Subscribe by email">
+  <h2 class="anchored">Get new posts by email</h2>
+  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
+     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
+  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
+    <label for="subscribe-email" class="visually-hidden">Email address</label>
+    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+ ]]></description>
+  <category>agentic-rl</category>
+  <category>swarms</category>
+  <category>observability</category>
+  <category>agents</category>
+  <category>datasets</category>
+  <guid>https://alexstrick.com/posts/2026-10-31-swarm-observability.html</guid>
+  <pubDate>Fri, 30 Oct 2026 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>What Does a Swarm Recorder Need to Capture?</title>
   <dc:creator>Alex Strick van Linschoten</dc:creator>
@@ -21,7 +189,7 @@
 
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 2</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li class="series-here"><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 2 of 3</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li class="series-here"><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li><li><a href="../posts/2026-10-31-swarm-observability.html">Ten Ways to Look at 10,000 Agents</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
 <p><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Yesterday</a> we covered the problem at a high level. Today I thought we could talk about:</p>
 <ul>
 <li>common questions that people ask of their swarms and their outputs</li>
@@ -319,7 +487,7 @@
 
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 2</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
+<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 3</span> <a href="../series.html#agent-swarm-observability">Agent Swarm Observability</a> <span class="series-ongoing">ongoing</span></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm: Why Today's Agent Tracing Tools Fall Short</a> <span class="series-date">Oct 2026</span></li><li><a href="../posts/2026-10-14-swarm-questions-data-requirements.html">What Does a Swarm Recorder Need to Capture?</a> <span class="series-date">Oct 2026</span></li><li><a href="../posts/2026-10-31-swarm-observability.html">Ten Ways to Look at 10,000 Agents</a> <span class="series-date">Oct 2026</span></li></ol></details></div>
 <p>Companies at the frontier of model and agent development keep posting about their work on ‘agent swarms’. There was the <a href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/">Hugging Face</a> / <a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/">OpenAI incident</a>, but also <a href="https://cursor.com/blog/agent-swarm-model-economics">Cursor has written</a>, as have <a href="https://www.primeintellect.ai/blog/on-the-nature-of-the-swarm">Prime Intellect</a>. Even Kevin Kelly recently <a href="https://kevinkelly.substack.com/p/swarm-intelligence">weighed in</a>.</p>
 <p>I got to wondering a bit about what observability looks like for these agent swarms. You have to assume that the frontier labs doing testing and research work in this area have created their own tools to help them understand how the individual agents / subsystems behave and then also how this contributes to the overall output.</p>
 <p>This article, and a few that might follow, are about some questions I asked while thinking through the problem of swarm observability. I’ll talk through some UX ideas I had while imagining what the frontier labs have in-house in terms of tools to help them understand their own swarms.</p>
@@ -5357,225 +5525,6 @@ font-style: inherit;">\</span></span>
   <guid>https://alexstrick.com/posts/2025-02-11-starting-the-hugging-face-agents-course.html</guid>
   <pubDate>Mon, 10 Feb 2025 23:00:00 GMT</pubDate>
   <media:content url="https://alexstrick.com/posts/images/agents-certificate.png" medium="image" type="image/png" height="101" width="144"/>
-</item>
-<item>
-  <title>AI Engineering Architecture and User Feedback</title>
-  <dc:creator>Alex Strick van Linschoten</dc:creator>
-  <link>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 8 of 8</span> <a href="../series.html#ai-engineering">Reading 'AI Engineering'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-01-19-notes-on-ai-engineering-chapter-1.html">Notes on 'AI Engineering' (Chip Huyen) chapter 1</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-21-notes-on-ai-engineering-chip-huyen-chapter-3.html">Notes on 'AI Engineering' (Chip Huyen) chapter 3</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-22-notes-on-ai-engineering-chip-huyen-chapter-4.html">Notes on 'AI Engineering' (Chip Huyen) chapter 4</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-26-notes-on-ai-engineering-chip-huyen-chapter-7-finetuning.html">Notes on 'AI Engineering' (Chip Huyen) chapter 7: Finetuning</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-02-05-notes-on-ai-engineering-chip-huyen-chapter-8-dataset-engineering.html">Dataset Engineering: The Art and Science of Data Preparation</a> <span class="series-date">Feb 2025</span></li><li><a href="../posts/2025-02-07-ai-engineering-chapter-9.html">Notes on 'AI Engineering' chapter 9: Inference Optimisation</a> <span class="series-date">Feb 2025</span></li><li class="series-here"><a href="../posts/2025-02-09-ai-eg-chapter-10.html">AI Engineering Architecture and User Feedback</a> <span class="series-date">Feb 2025</span></li></ol></details></div>
-<p>Chapter 10 of Chip Huyen’s “AI Engineering,” focuses on two fundamental aspects: architectural patterns in AI engineering and methods for gathering and using user feedback. The chapter presents a progressive architectural framework that evolves from simple API calls to complex agent-based systems, while also diving deep into the crucial aspect of user feedback collection and analysis.</p>
-<section id="progressive-architecture-patterns" class="level2">
-<h2 class="anchored" data-anchor-id="progressive-architecture-patterns">1. Progressive Architecture Patterns</h2>
-<p>The evolution of AI engineering architecture typically follows a pattern of increasing complexity and capability. Each stage builds upon the previous one, adding new functionality while managing increased complexity.</p>
-<section id="base-layer-direct-model-integration" class="level3">
-<h3 class="anchored" data-anchor-id="base-layer-direct-model-integration">Base Layer: Direct Model Integration</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/simple.png" class="img-fluid"></p>
-<p>The simplest architectural pattern begins with direct queries to model APIs. While straightforward, this approach lacks the sophistication needed for most production applications.</p>
-</section>
-<section id="enhancement-layer-context-augmentation" class="level3">
-<h3 class="anchored" data-anchor-id="enhancement-layer-context-augmentation">Enhancement Layer: Context Augmentation</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/context.png" class="img-fluid"></p>
-<p>The first major enhancement comes through <strong>Retrieval-Augmented Generation (RAG)</strong>. This layer enriches model responses by incorporating custom data and sources into LLM queries, significantly improving response quality and relevance.</p>
-</section>
-<section id="protection-layer-guardrails-implementation" class="level3">
-<h3 class="anchored" data-anchor-id="protection-layer-guardrails-implementation">Protection Layer: Guardrails Implementation</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/guardrails.png" class="img-fluid"></p>
-<blockquote class="blockquote">
-<p><strong>Guardrails</strong>: Protective mechanisms that filter both inputs and outputs to ensure system safety and reliability.</p>
-</blockquote>
-<p>The protection layer implements two types of guardrails:</p>
-<ol type="1">
-<li><p><strong>Input Guardrails</strong>: Filter sensitive information before it reaches the LLM, such as:</p>
-<ul>
-<li>Personal customer information</li>
-<li>API keys</li>
-<li>Other confidential data</li>
-</ul></li>
-<li><p><strong>Output Guardrails</strong>: Monitor and manage model outputs for:</p>
-<ul>
-<li>Format compliance (e.g., valid JSON)</li>
-<li>Factual consistency</li>
-<li>Hallucination detection</li>
-<li>Toxic content filtering</li>
-<li>Privacy protection</li>
-</ul></li>
-</ol>
-</section>
-<section id="routing-layer-gateway-and-model-selection" class="level3">
-<h3 class="anchored" data-anchor-id="routing-layer-gateway-and-model-selection">Routing Layer: Gateway and Model Selection</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/extra_modules.png" class="img-fluid"></p>
-<p>This layer introduces two key components:</p>
-<blockquote class="blockquote">
-<p><strong>AI Gateway</strong>: A centralized access point for LLM interactions that manages costs, usage tracking, and API key abstraction.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p><strong>Model Router</strong>: An intent classifier that directs queries to appropriate models based on complexity and requirements.</p>
-</blockquote>
-<p>The routing layer enables cost optimization by directing simpler queries (like FAQ responses) to less expensive models while routing complex tasks to more sophisticated systems.</p>
-</section>
-<section id="performance-layer-caching-strategies" class="level3">
-<h3 class="anchored" data-anchor-id="performance-layer-caching-strategies">Performance Layer: Caching Strategies</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/cache.png" class="img-fluid"></p>
-<p>The architecture implements two distinct caching approaches:</p>
-<ol type="1">
-<li><p><strong>Exact Caching</strong>:</p>
-<ul>
-<li>Stores identical queries and their responses</li>
-<li>Particularly valuable for multi-step operations</li>
-<li>Requires careful consideration of cache eviction policies:
-<ul>
-<li>Least Recently Used (LRU)</li>
-<li>Least Frequently Used (LFU)</li>
-<li>First In, First Out (FIFO)</li>
-</ul></li>
-</ul></li>
-<li><p><strong>Semantic Caching</strong>:</p>
-<ul>
-<li>Uses embedding-based search to identify similar queries</li>
-<li>Depends on high-quality embeddings and reliable similarity metrics</li>
-<li>More prone to failure due to component complexity</li>
-</ul></li>
-</ol>
-<blockquote class="blockquote">
-<p><strong>Security Note</strong>: Cache implementations must carefully consider potential data leaks between users accessing similar queries.</p>
-</blockquote>
-</section>
-<section id="agent-layer-advanced-functionality" class="level3">
-<h3 class="anchored" data-anchor-id="agent-layer-advanced-functionality">Agent Layer: Advanced Functionality</h3>
-<p><img src="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/write.png" class="img-fluid"></p>
-<p>The final architectural layer introduces agent patterns, enabling:</p>
-<ul>
-<li>Retry loops for reliability</li>
-<li>Tool usage capabilities</li>
-<li>Action execution (email sending, file operations)</li>
-<li>Complex workflow orchestration</li>
-</ul>
-</section>
-</section>
-<section id="monitoring-and-observability" class="level2">
-<h2 class="anchored" data-anchor-id="monitoring-and-observability">Monitoring and Observability</h2>
-<p>The complete architecture requires robust monitoring systems tracking key metrics:</p>
-<ul>
-<li><strong>Mean Time to Detection (MTTD)</strong>: Time to identify issues</li>
-<li><strong>Mean Time to Response (MTTR)</strong>: Time to resolve detected issues</li>
-<li><strong>Change Failure Rate (CFR)</strong>: Percentage of deployments requiring fixes</li>
-</ul>
-<p>The monitoring system should track:</p>
-<ul>
-<li>Factual consistency</li>
-<li>Generation relevancy</li>
-<li>Safety metrics (toxicity, PII detection)</li>
-<li>Model quality through conversational signals</li>
-<li>Component-specific metrics (RAG, generation, vector database performance)</li>
-</ul>
-<section id="ai-pipeline-orchestration" class="level3">
-<h3 class="anchored" data-anchor-id="ai-pipeline-orchestration">AI Pipeline Orchestration</h3>
-<p>a discussion of AI pipeline orchestration, addressing the trade-offs between using existing frameworks (Langchain, Haystack, Llama Index) versus custom implementations. This decision should be based on specific project requirements, team expertise, and maintenance considerations.</p>
-</section>
-</section>
-<section id="user-feedback-systems" class="level2">
-<h2 class="anchored" data-anchor-id="user-feedback-systems">2. User Feedback Systems</h2>
-<p>The second major focus of the chapter explores comprehensive user feedback collection and utilization strategies.</p>
-<section id="feedback-collection-methods" class="level3">
-<h3 class="anchored" data-anchor-id="feedback-collection-methods">Feedback Collection Methods</h3>
-<ol type="1">
-<li><p><strong>Direct Feedback</strong>:</p>
-<ul>
-<li>Explicit mechanisms (thumbs up/down)</li>
-<li>Rating systems</li>
-<li>Free-form comments</li>
-</ul></li>
-<li><p><strong>Implicit Feedback</strong>:</p>
-<ul>
-<li>Early termination patterns</li>
-<li>Error corrections</li>
-<li>Sentiment analysis</li>
-<li>Response regeneration requests</li>
-<li>Dialogue diversity metrics</li>
-</ul></li>
-</ol>
-</section>
-<section id="feedback-collection-timing" class="level3">
-<h3 class="anchored" data-anchor-id="feedback-collection-timing">Feedback Collection Timing</h3>
-<p>Feedback can be gathered at various stages:</p>
-<ul>
-<li>Initial user preference specification</li>
-<li>During negative experiences</li>
-<li>When model confidence is low</li>
-<li>Through comparative choice interfaces (e.g., ChatGPT’s response preference selection)</li>
-</ul>
-</section>
-<section id="feedback-limitations" class="level3">
-<h3 class="anchored" data-anchor-id="feedback-limitations">Feedback Limitations</h3>
-<blockquote class="blockquote">
-<p><strong>Feedback Bias</strong>: User feedback systems inherently contain various biases that must be considered when making system improvements.</p>
-</blockquote>
-<p>Key limitations include:</p>
-<ul>
-<li>Negative experience bias (users more likely to report negative experiences)</li>
-<li>Self-selection bias in respondent demographics</li>
-<li>Preference and position biases</li>
-<li>Potential feedback loops affecting system evolution</li>
-</ul>
-</section>
-<section id="implementation-considerations" class="level3">
-<h3 class="anchored">Implementation Considerations</h3>
-<p>The implementation of feedback systems requires careful attention to:</p>
-<ul>
-<li>UI/UX design for feedback collection</li>
-<li>Balance between different user needs</li>
-<li>Monitoring feedback impact on system performance</li>
-<li>Regular inspection of production data</li>
-<li>Detection of system drift (prompts, user behavior, model changes)</li>
-</ul>
-
-
-<div class="series-footer"></div>
-<div id="related-posts-home"></div><script>
-(() => {
-  const list = document.getElementById("related-posts");
-  const sidebar = document.getElementById("quarto-margin-sidebar");
-  const home = document.getElementById("related-posts-home");
-  if (!list || !sidebar || !home) return;
-  const place = () => {
-    const sidebarShown = getComputedStyle(sidebar).display !== "none" && sidebar.offsetWidth > 0;
-    (sidebarShown ? sidebar : home).appendChild(list);
-    list.classList.toggle("in-sidebar", sidebarShown);
-  };
-  place();
-  addEventListener("resize", place);
-})();
-</script>
-<!-- Buttondown sign-up form. Shown at the end of every post (filters/subscribe.lua)
-     and wherever a page uses the  shortcode (About, Subscribe). -->
-<section class="subscribe-box" aria-label="Subscribe by email">
-  <h2 class="anchored">Get new posts by email</h2>
-  <p>Every new post, technical and personal, sent when I publish. Unsubscribe any time.
-     Prefer a feed reader? There's <a href="../technical.xml">technical RSS</a> and <a href="../personal.xml">personal RSS</a>.</p>
-  <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/strickvl" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/strickvl', 'popupwindow')">
-    <label for="subscribe-email" class="visually-hidden">Email address</label>
-    <input type="email" name="email" id="subscribe-email" placeholder="you@example.com" autocomplete="email" required="">
-    <button type="submit">Subscribe</button>
-  </form>
-</section>
-
-</section>
-</section>
-
- ]]></description>
-  <category>books-i-read</category>
-  <category>llms</category>
-  <category>llmops</category>
-  <category>evaluation</category>
-  <guid>https://alexstrick.com/posts/2025-02-09-ai-eg-chapter-10.html</guid>
-  <pubDate>Sat, 08 Feb 2025 23:00:00 GMT</pubDate>
-  <media:content url="https://alexstrick.com/posts/images/2025-02-09-ai-eg-chapter-10/write.png" medium="image" type="image/png" height="103" width="144"/>
 </item>
 </channel>
 </rss>
