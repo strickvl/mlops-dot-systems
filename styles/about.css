@@ -1,0 +1,15 @@
+/* About page (Quarto's "trestles" template: photo + links on the left, text on
+   the right). By default the whole block spans only the body column (~800px),
+   which leaves the text at ~47 characters per line. On wide screens, let it
+   span the page columns and give the photo a smaller share, so the text gets
+   ~70 characters per line. Below 992px Quarto stacks the two columns, and
+   these rules don't apply. */
+@media (min-width: 992px) {
+    div.quarto-about-trestles {
+        grid-column: page-start / page-end;
+    }
+
+    div.quarto-about-trestles .about-entity {
+        flex: 0 0 34%;
+    }
+}
