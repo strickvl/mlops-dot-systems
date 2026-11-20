@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles.css?v=9b8d88d54f">
 <link rel="stylesheet" href="../styles/technical.css?v=63db03acc8">
 <meta property="og:title" content="Building a Balochi Language Dataset for NLP Applications – Alex Strick van Linschoten">
 <meta property="og:description" content="I share my journey of building language models for Balochi, a language with few digital resources. I discuss assembling a dataset of 2.6 million Balochi words.">
@@ -307,6 +307,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Series</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../book-club.html"> 
+<span class="menu-text">Book Club</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -408,7 +412,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li class="series-here"><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div>
+<div class="series-box"><div><div class="series-box-head"><span class="series-part">Part 3 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li class="series-here"><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div></div>
 <p>I’m working on building out some language models and utilities for the Balochi language. (Read <a href="../technical.html#category=balochi">previous posts</a> in this series for the full context.) Even though there are some 8-10 million estimated speakers, it certainly falls into the category of being a ‘low-resource’ language. Many (most?) things that you’d take for granted when working with English-language models are either non-existent or bare bones for Balochi.</p>
 <p>The experimentation phase of a project like this rewards a fast iteration speed, so I’m looking for ways to keep moving forward. I don’t need to spend days running a single experiment to validate my ideas; I’m sufficiently green that small datasets and these frequent tweaks to what I’m doing will hopefully reward me.</p>
 <p>I did an initial survey of materials and resources that already exist, collecting a mix of more general language materials alongside some prior work that exists in the NLP space for Balochi. In particular, there are some small datasets on GitHub as well as some more targeted projects for Named Entity Recognition (NER). Since it’s my repository, I also threw in some blog posts that inspired me to get started in the first place (from <a href="https://ljvmiranda921.github.io">Lj Miranda</a> and <a href="https://kurianbenoy.com/blog.html#category=malayalamtextmodels">Kurian Benoy</a>, among others).</p>

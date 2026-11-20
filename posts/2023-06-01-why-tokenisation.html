@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles.css?v=9b8d88d54f">
 <link rel="stylesheet" href="../styles/technical.css?v=63db03acc8">
 <meta property="og:title" content="The What, Why, and How of Tokenisation in Machine Learning – Alex Strick van Linschoten">
 <meta property="og:description" content="The basics around the tokenisation process: why we do it, the spectrum of choices when you get to choose how to do it, and the family of algorithms most commonly used at the moment.">
@@ -342,6 +342,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Series</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../book-club.html"> 
+<span class="menu-text">Book Club</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -453,7 +457,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 4 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li class="series-here"><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div>
+<div class="series-box"><div><div class="series-box-head"><span class="series-part">Part 4 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li class="series-here"><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div></div>
 <p>For the types of machine learning that involve neural networks, the training process generally involves passing data and some weights into a function which we use to continually and iteratively optimise the weights. We hope that by showing lots of examples of the right way to do things (as per our data and annotations) we’ll emerge with a model (i.e.&nbsp;the updated weights) that performs the way we’d expect.</p>
 <p>This whole process has various kinds of mathematics at its core, some basic calculations and some higher-order ideas to help figure out how to improve the weights. For all this, we need our data to be in a form that can pass through these calculations. We’re in the domain of natural / human languages at the moment, so we need somehow to turn our words into some kind of numerical form. Tokenisation is a big part of that process.</p>
 <p>Most of what goes on with tokenisation is — to some extent — around finding a way to optimise the amount of data we have to feed into our model either during training or inference. We want to do both of these in the most efficient manner possible. Smaller amounts of data needed to train (or faster ways of processing the data) means you can do more with less.</p>

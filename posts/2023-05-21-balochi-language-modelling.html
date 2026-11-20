@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles.css?v=9b8d88d54f">
 <link rel="stylesheet" href="../styles/technical.css?v=63db03acc8">
 <meta property="og:title" content="Low-resource language models: making a start with Balochi – Alex Strick van Linschoten">
 <meta property="og:description" content="The Balochi language is underrepresented in NLP. I’m interested in contributing to the field by building a language model for Balochi from scratch and contributing training resources and datasets along the way.">
@@ -307,6 +307,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Series</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../book-club.html"> 
+<span class="menu-text">Book Club</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -407,7 +411,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 1 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div>
+<div class="series-box"><div><div class="series-box-head"><span class="series-part">Part 1 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li class="series-here"><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div></div>
 <p>Large Language Models are all the rage, but what do you do when the language you want to model is essentially unrepresented in the public datasets used for training? I have a few months before the start of my next maths module and I’d like to use the time in part to dive into the ins and outs of training your own language models from scratch.</p>
 <p>The language I’m working with is Balochi, in particular the dialect or subset of Balochi that is spoken in southeastern Iran. The parent subgroup of ‘Balochi’ is spoken by 8-10 million people, but those break down into a few varieties which is in turn driven to a large extent by geography. The kind of Balochi used in Pakistan is subject to different linguistic influences than the one I’m interested in, for example.</p>
 <p>Despite the existence of millions of people speaking this language (family), it is more or less unrepresented in benchmarks and so-called breakthroughs in language modelling. Even the raw data to represent the language is absent. Common Crawl, one popular source of data for training language models, <a href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages">doesn’t even include Balochi</a> as one of the languages represented in its corpus. Moreover, there’s no Balochi Wikipedia or anything really like it, so anyone hoping to work on language models in Balochi is first going to have to put together a corpus of data.</p>

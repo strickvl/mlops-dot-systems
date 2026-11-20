@@ -56,3 +56,29 @@
 }
 
 body.quarto-dark.series-page { --series-personal: #e0a35a; --series-personal-soft: #2c2216; }
+
+/* Book club page (/book-club.html): series that have a `book:` entry in
+   _series.yml, drawn by the book-club shortcode. Reuses the parts list above. */
+
+.bookshelf { display: flex; flex-direction: column; gap: 3rem; margin-top: 2rem; }
+.book-entry { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1.75rem; align-items: start; }
+.book-cover {
+  display: block; position: sticky; top: 5rem; border-radius: 2px 4px 4px 2px; overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 6px 18px rgba(0,0,0,.14); transition: transform .2s ease, box-shadow .2s ease;
+}
+.book-cover::after { /* a faint spine crease down the left edge */
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 6px;
+  background: linear-gradient(90deg, rgba(0,0,0,.18), rgba(255,255,255,.15) 60%, transparent);
+}
+.book-cover:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 12px 26px rgba(0,0,0,.18); }
+.book-cover img { display: block; width: 100%; height: auto; }
+.book-entry h2 { margin: .3rem 0 0; border: 0; padding: 0; font-size: 1.6rem; }
+.book-author { margin: .1rem 0 .6rem; font-style: italic; color: var(--bs-secondary-color); }
+.book-note { margin-bottom: .8rem; }
+
+@media (max-width: 576px) {
+  .book-entry { display: block; }
+  .book-cover { position: relative; top: 0; float: left; width: 5.5rem; margin: 0 1rem .5rem 0; }
+  .book-entry h2 { font-size: 1.3rem; }
+  .book-body .series-parts { clear: both; }
+}

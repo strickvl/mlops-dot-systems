@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles.css?v=9b8d88d54f">
 <link rel="stylesheet" href="../styles/technical.css?v=63db03acc8">
 <meta property="og:title" content="Assembling the Prompt: Notes on ‘Prompt Engineering for LLMs’ ch 6 – Alex Strick van Linschoten">
 <meta property="og:description" content="A detailed breakdown of Chapter 6 from ‘Prompt Engineering for LLMs,’ examining prompt structure, document types, and optimization strategies for effective prompt engineering, with practical tips on information positioning and context selection within prompts.">
@@ -307,6 +307,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Series</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../book-club.html"> 
+<span class="menu-text">Book Club</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -406,7 +410,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 3 of 4</span> <a href="../series.html#prompt-engineering-for-llms">Reading 'Prompt Engineering for LLMs'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html">Starting to read Prompt Engineering for LLMs</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html">Prompt Content: Notes on 'Prompt Engineering for LLMs' ch 5</a> <span class="series-date">Jan 2025</span></li><li class="series-here"><a href="../posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html">Assembling the Prompt: Notes on 'Prompt Engineering for LLMs' ch 6</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html">Final notes on 'Prompt Engineering for LLMs'</a> <span class="series-date">Jan 2025</span></li></ol></details></div>
+<div class="series-box has-cover"><a class="series-box-cover" href="../book-club.html#prompt-engineering-for-llms"><img src="../assets/books/prompt-engineering-for-llms.jpg" alt="Cover of Prompt Engineering for LLMs"></a><div><div class="series-box-head"><span class="series-part">Part 3 of 4</span> <a href="../book-club.html#prompt-engineering-for-llms">Reading 'Prompt Engineering for LLMs'</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2025-01-09-understanding-llms-with-prompt-engineering-for-llms.html">Starting to read Prompt Engineering for LLMs</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html">Prompt Content: Notes on 'Prompt Engineering for LLMs' ch 5</a> <span class="series-date">Jan 2025</span></li><li class="series-here"><a href="../posts/2025-01-13-assembling-the-prompt-notes-on-prompt-engineering-for-llms-ch-6.html">Assembling the Prompt: Notes on 'Prompt Engineering for LLMs' ch 6</a> <span class="series-date">Jan 2025</span></li><li><a href="../posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html">Final notes on 'Prompt Engineering for LLMs'</a> <span class="series-date">Jan 2025</span></li></ol></details></div></div>
 <p>Chapter 6 of “Prompt Engineering for LLMs” is devoted to how to structure the prompt and compose its various elements. We first learn about the different kinds of ‘documents’ that we can mimic with our prompts, then think about how to pick which pieces of context to include, and then think through how we might compose all of this together.</p>
 <p><img src="images/2025-01-13-assembling-the-prompt-ch-6/well-constructed-prompt.png" class="img-fluid"></p>
 <p>There’s a great figure to give you an idea of ‘the anatomy of a well-constructed prompt’ early on. The introduction is where you introduce the task, then you have the ‘valley of meh’ (which the LLM can struggle to recall or obey) and finally you have the refocusing and restatement of the task.</p>
@@ -440,7 +444,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The next chapter is all about the completion and how to make sure we receive meaningful and accurate responses from our LLM!</p>
 
 
-<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 3 of 4 in <a href="../series.html#prompt-engineering-for-llms">Reading 'Prompt Engineering for LLMs'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html"><small>← Part 2</small>Prompt Content: Notes on 'Prompt Engineering for LLMs' ch 5</a><a class="series-next" href="../posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html"><small>Part 4 →</small>Final notes on 'Prompt Engineering for LLMs'</a></div></nav></div>
+<div class="series-footer"><nav class="series-nav"><div class="series-nav-label">Part 3 of 4 in <a href="../book-club.html#prompt-engineering-for-llms">Reading 'Prompt Engineering for LLMs'</a></div><div class="series-nav-links"><a class="series-prev" href="../posts/2025-01-12-prompt-content-notes-on-chapter-6-prompt-engineering-for-llms.html"><small>← Part 2</small>Prompt Content: Notes on 'Prompt Engineering for LLMs' ch 5</a><a class="series-next" href="../posts/2025-01-17-final-notes-on-prompt-engineering-for-llms.html"><small>Part 4 →</small>Final notes on 'Prompt Engineering for LLMs'</a></div></nav></div>
 <div id="related-posts-home"><nav id="related-posts" aria-label="Related posts"><h2 class="anchored">Related posts</h2><ul><li><a href="../posts/2025-03-16-learnings-building-llms.html">Learnings from a week of building with local LLMs</a><span>Technical · 2025</span></li><li><a href="../posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a><span>Technical · 2025</span></li><li><a href="../personal/2016-08-30-2016-8-phd-tools-scrivener.html">PhD Tools: Scrivener for Writing Long Things</a><span>Personal · 2016</span></li><li><a href="../posts/2025-01-24-notes-on-ai-engineering-chip-huyen-chapter-6.html">Notes on 'AI Engineering' (Chip Huyen) chapter 6</a><span>Technical · 2025</span></li><li><a href="../posts/2024-06-02-isafpr-prompting-baseline.html">Structured Data Extraction for ISAF Press Releases with Instructor</a><span>Technical · 2024</span></li></ul></nav></div><script>
 (() => {
   const list = document.getElementById("related-posts");

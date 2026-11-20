@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css?v=e4e6f74e5f">
+<link rel="stylesheet" href="../styles.css?v=9b8d88d54f">
 <link rel="stylesheet" href="../styles/technical.css?v=63db03acc8">
 <meta property="og:title" content="Tokenizing Balochi with HuggingFace’s Tokenizer and FastAI/Spacy – Alex Strick van Linschoten">
 <meta property="og:description" content="I explore language tokenization using FastAI, Spacy, and Huggingface Tokenizers, with a special focus on the less-represented Balochi language. I share the challenges I faced due to language-specific limitations, my initiative to expand language metadata, and my plans to assess and enhance tokenization efficiency.">
@@ -342,6 +342,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Series</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../book-club.html"> 
+<span class="menu-text">Book Club</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../til.html"> 
 <span class="menu-text">TIL</span></a>
   </li>  
@@ -458,7 +462,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="series-box"><div class="series-box-head"><span class="series-part">Part 5 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li class="series-here"><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div>
+<div class="series-box"><div><div class="series-box-head"><span class="series-part">Part 5 of 6</span> <a href="../series.html#balochi-language-model">Balochi Language Model</a></div><details><summary>All parts</summary><ol class="series-parts"><li><a href="../posts/2023-05-21-balochi-language-modelling.html">Low-resource language models: making a start with Balochi</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-22-balochi-language-model-harms.html">The Risks of Language Models in Minority Languages</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-05-29-balochi-language-dataset.html">Building a Balochi Language Dataset for NLP Applications</a> <span class="series-date">May 2023</span></li><li><a href="../posts/2023-06-01-why-tokenisation.html">The What, Why, and How of Tokenisation in Machine Learning</a> <span class="series-date">Jun 2023</span></li><li class="series-here"><a href="../posts/2023-06-03-training-custom-balochi-tokenizer.html">Tokenizing Balochi with HuggingFace's Tokenizer and FastAI/Spacy</a> <span class="series-date">Jun 2023</span></li><li><a href="../posts/2023-06-04-token-odds-and-sods.html">Tokenizer Links</a> <span class="series-date">Jun 2023</span></li></ol></details></div></div>
 <p>In this blog I want to walk through how I trained my first tokenizer(s) on a small Balochi language corpus. I used the Huggingface Tokenizers library and FastAI / Spacy to get a sense of the interfaces involved. There’s also some naive pre-processing I did to get the corpus into a format that the tokenizer could handle. I’m not sure if this is the best way to do it, but it worked for this first iteration.</p>
 <p>We can get straight into the implementation details, but the general process was:</p>
 <ol type="1">

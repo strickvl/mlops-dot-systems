@@ -58,6 +58,10 @@ body.all-page #quarto-margin-sidebar .category.active {
     padding: .7rem 1rem;
     margin: 0 0 1rem;
 }
+.series-box.has-cover { display: flex; gap: .9rem; align-items: flex-start; }
+.series-box.has-cover > div { flex: 1; min-width: 0; }
+.series-box-cover { flex: none; width: 2.6rem; }
+.series-box-cover img { display: block; width: 100%; border-radius: 1px 2px 2px 1px; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
 .series-box-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; }
 .series-part { font-size: .85rem; color: var(--bs-secondary-color); font-variant-numeric: tabular-nums; }
 .series-box-head a { font-weight: 600; }
