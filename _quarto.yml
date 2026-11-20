@@ -17,6 +17,7 @@ project:
     - "!squarespace_export/**"
   resources:
     - llms.txt
+    - assets/books/
 
 website:
   title: "Alex Strick van Linschoten"
@@ -37,6 +38,8 @@ website:
     right:
       - text: "Series"
         file: series.qmd
+      - text: "Book Club"
+        file: book-club.qmd
       - text: "TIL"
         file: til.qmd
       - text: "About"

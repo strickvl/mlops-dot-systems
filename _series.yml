@@ -7,6 +7,10 @@
 #   section:       technical | personal
 #   description:   one or two sentences for the series page
 #   ongoing:       true while you're still adding posts (optional)
+#   book:          only for a series that works through one book. Moves the
+#                  series from /series.html to /book-club.html. Holds the
+#                  book's `title`, `author` and `cover` (an image in
+#                  assets/books/, about 400px tall).
 
 - id: agent-swarm-observability
   title: Agent Swarm Observability
@@ -29,11 +33,19 @@
   title: Reading 'AI Engineering'
   section: technical
   description: Chapter-by-chapter notes on Chip Huyen's book.
+  book:
+    title: AI Engineering
+    author: Chip Huyen
+    cover: assets/books/ai-engineering.jpg
 
 - id: prompt-engineering-for-llms
   title: Reading 'Prompt Engineering for LLMs'
   section: technical
   description: Chapter notes on John Berryman and Albert Ziegler's book.
+  book:
+    title: Prompt Engineering for LLMs
+    author: John Berryman and Albert Ziegler
+    cover: assets/books/prompt-engineering-for-llms.jpg
 
 - id: isaf-press-releases
   title: ISAF Press Releases
@@ -54,6 +66,10 @@
   title: Reading 'Robust Python'
   section: technical
   description: Notes on Patrick Viafore's book about types, enums, data classes and invariants.
+  book:
+    title: Robust Python
+    author: Patrick Viafore
+    cover: assets/books/robust-python.jpg
 
 - id: redaction-model
   title: Redaction Model

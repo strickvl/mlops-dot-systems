@@ -6,7 +6,8 @@
 # ]
 # ///
 """
-Build the series index that the series page and the in-post series boxes read.
+Build the series index that the series page, the book club page and the
+in-post series boxes read.
 
 Quarto renders each page on its own, so a post can't know it is "part 4 of 8"
 without someone looking at every post first. This script does that: it reads
@@ -72,6 +73,9 @@ def build(registry: list[dict], posts: list[dict]) -> dict:
         lines = "\n".join(f"  {src}: series '{i}' is not in _series.yml" for src, i in unknown)
         sys.exit(f"build_series: unknown series id(s):\n{lines}")
 
+    if missing := [s["id"] for s in registry if "book" in s and not (ROOT / s["book"].get("cover", "")).is_file()]:
+        sys.exit(f"build_series: book cover image missing for: {', '.join(missing)}")
+
     series, by_post = [], {}
     for s in registry:
         members = sorted((p for p in posts if s["id"] in p["series"]), key=lambda p: (p["date"], p["src"]))
@@ -80,6 +84,9 @@ def build(registry: list[dict], posts: list[dict]) -> dict:
             continue
         series.append({"id": s["id"], "title": s["title"], "section": s.get("section", "technical"),
                        "description": s.get("description", ""), "ongoing": bool(s.get("ongoing")),
+                       "page": "/book-club.html" if "book" in s else "/series.html",
+                       # left out, not null, when absent: Lua reads a JSON null as true
+                       **({"book": s["book"]} if "book" in s else {}),
                        "start": members[0]["date"], "end": members[-1]["date"],
                        "posts": [{k: p[k] for k in ("src", "url", "title", "date")} for p in members]})
         for i, p in enumerate(members):

@@ -42,6 +42,7 @@ uv run scripts/generate_descriptions.py --directory personal --dry-run
 - `all.qmd` - Combined chronological archive (lists `posts/` + `personal/`)
 - `styles.css` - Global CSS (e.g. tag-cloud styling); each listing page also loads its own `styles/<page>.css`
 - `series.qmd` - Series timeline page; series are defined in `_series.yml` (see "Series" below)
+- `book-club.qmd` - Book Club page: series that work through one book, shown with the book's cover (covers in `assets/books/`)
 - `about.qmd`, `til.qmd` - Other main pages
 
 ## Blog Post Format
@@ -74,6 +75,7 @@ aliases:
 - A post joins a series with one frontmatter line, e.g. `series: agentic-rl` (or a list for two series). Each series is defined once in `_series.yml`.
 - For adding, starting, finishing or renaming a series, follow the `blog-series` skill (`.agents/skills/blog-series/SKILL.md`).
 - Series are separate from categories: a post keeps its tags as before.
+- A series with a `book:` entry in `_series.yml` (title, author, cover image) is a book series: it appears on `/book-club.html` (the "Book Club" navbar link) instead of `/series.html`, and its in-post box shows the cover.
 
 **Related posts**: Every post of 150+ words gets five "Related posts", chosen across technical, personal and TIL by comparing what the posts say. `scripts/build_related.py` (second `pre-render` step) runs a local embedding model (`nomic-embed-text-v1.5` via fastembed) and writes `_related.json`; `filters/related-posts.lua` adds the list at the end of the post, and its inline script moves it into the right sidebar under the TOC when that sidebar is visible. Posts from the same series are left out (the series box already links them). Vectors are cached in `_cache/` (gitignored) by a hash of each post's text, so only new or edited posts are re-embedded; a fresh clone downloads the model (~0.5 GB) and embeds everything once, about 2 minutes. Quarto's `margin-footer` option can't be filled per post from a filter (Quarto reads it before filters run), which is why the script moves the list instead.
 

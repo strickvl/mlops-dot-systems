@@ -32,8 +32,10 @@ end
 
 local function top_box(s, here)
   local ongoing = s.ongoing and ' <span class="series-ongoing">ongoing</span>' or ""
-  return string.format([[<div class="series-box"><div class="series-box-head"><span class="series-part">Part %d of %d</span> <a href="/series.html#%s">%s</a>%s</div><details><summary>All parts</summary>%s</details></div>]],
-    here, #s.posts, s.id, esc(s.title), ongoing, parts_list(s, here))
+  local cover = s.book and string.format('<a class="series-box-cover" href="%s#%s"><img src="/%s" alt="Cover of %s"></a>',
+    s.page, s.id, s.book.cover, esc(s.book.title)) or ""
+  return string.format([[<div class="series-box%s">%s<div><div class="series-box-head"><span class="series-part">Part %d of %d</span> <a href="%s#%s">%s</a>%s</div><details><summary>All parts</summary>%s</details></div></div>]],
+    s.book and " has-cover" or "", cover, here, #s.posts, s.page, s.id, esc(s.title), ongoing, parts_list(s, here))
 end
 
 local function nav_link(p, label, cls)
@@ -43,8 +45,8 @@ end
 local function bottom_nav(s, here)
   local prev = s.posts[here - 1] and nav_link(s.posts[here - 1], "← Part " .. (here - 1), "series-prev") or "<span></span>"
   local nxt = s.posts[here + 1] and nav_link(s.posts[here + 1], "Part " .. (here + 1) .. " →", "series-next") or ""
-  return string.format([[<nav class="series-nav"><div class="series-nav-label">Part %d of %d in <a href="/series.html#%s">%s</a></div><div class="series-nav-links">%s%s</div></nav>]],
-    here, #s.posts, s.id, esc(s.title), prev, nxt)
+  return string.format([[<nav class="series-nav"><div class="series-nav-label">Part %d of %d in <a href="%s#%s">%s</a></div><div class="series-nav-links">%s%s</div></nav>]],
+    here, #s.posts, s.page, s.id, esc(s.title), prev, nxt)
 end
 
 function Pandoc(doc)
