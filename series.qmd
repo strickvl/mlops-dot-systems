@@ -5,7 +5,7 @@ body-classes: series-page
 css: styles/series.css
 ---
 
-Some of my writing comes in runs: a project, a course or a book I worked through over weeks or months. Each series below is listed in reading order.
+Some of my writing comes in runs: a project or a course I worked through over weeks or months. Each series below is listed in reading order. Notes on books I read chapter by chapter are in the [Book Club](book-club.qmd).
 
 {{< series-index >}}
 

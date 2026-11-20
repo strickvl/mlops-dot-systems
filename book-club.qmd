@@ -1,0 +1,10 @@
+---
+title: "Book Club"
+page-layout: article
+body-classes: series-page book-club-page
+css: styles/series.css
+---
+
+Some books I read slowly, a chapter or two at a time, writing notes as I go. Each book below lists those notes in reading order.
+
+{{< book-club >}}
