@@ -1,0 +1,43 @@
+# Alex Strick van Linschoten
+
+> Historian and researcher of Afghanistan for around fifteen years, then AI/ML engineer at ZenML since 2021, working on ZenML and Kitaru. Writes about agents, evals, reinforcement learning environments for agents and agent observability, and about Afghanistan, language learning and books. Lives in Delft, the Netherlands.
+
+Speaks or has learned English, Arabic, Pashto, Dari/Persian and Dutch. Author or editor of books on the Afghan Taliban (with Felix Kuehn, published by Hurst) and co-author of *DeepSeek in Practice* (Packt, 2025).
+
+Open to podcast and speaking invitations, advisory work, and research collaborations, especially on history, for legal teams, or on projects with a public-interest purpose. Happy to talk about evals, RL environments and agent observability.
+
+Contact: alexstrick [at] fastmail [dot] com, or LinkedIn (https://linkedin.com/in/strickvl) or Twitter (https://twitter.com/strickvl).
+
+## Now (updated November 2026)
+
+- Building Kitaru (https://kitaru.ai) at ZenML.
+- Making hinbox work with small local language models instead of frontier models.
+- Thinking about evals: what makes one trustworthy, and how to build them from messy real-world records.
+
+## Main pages
+
+- [About](https://alexstrick.com/about.html): background, books, projects and contact details
+- [Technical blog](https://alexstrick.com/technical.html): agents, evals, RL, finetuning, MLOps
+- [Personal blog](https://alexstrick.com/personal.html): Afghanistan, history, language learning, maths, books (since 2010)
+- [Series](https://alexstrick.com/series.html): multi-part runs of posts about one project, course or book
+
+## Start here
+
+- [Pain: A Love Story](https://alexstrick.com/personal/2019-01-31-pain-love-story.html): living with chronic pain
+- [How to think about evals](https://alexstrick.com/posts/2025-05-20-how-to-think-about-evals.html)
+- [Building hinbox](https://alexstrick.com/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html): an agentic research tool for historical documents
+- [My first RL environment](https://alexstrick.com/posts/2026-06-20-my-first-rl-environment.html)
+- [Reading the Swarm](https://alexstrick.com/posts/2026-10-13-agent-swarm-observability-tools.html): why today's agent tracing tools fall short
+- [Is this data actually good, or does it just look good?](https://alexstrick.com/posts/2026-06-28-cleaning-isaf-dataset-rigour.html)
+
+## Elsewhere
+
+- GitHub: https://github.com/strickvl
+- Hugging Face (datasets on Afghanistan and Guantánamo): https://huggingface.co/strickvl
+- Mastodon: https://mastodon.social/@strickvl
+
+## Optional
+
+- [Technical RSS](https://alexstrick.com/technical.xml)
+- [Personal RSS](https://alexstrick.com/personal.xml)
+- [Sitemap](https://alexstrick.com/sitemap.xml)

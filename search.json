@@ -2678,7 +2678,28 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "I spent around fifteen years as a historian and researcher, mostly in and about Afghanistan, before moving into software in 2021. Since then I’ve been an AI/ML engineer at ZenML, working on ZenML and Kitaru. I live in Delft, in the Netherlands, with two cats.\nMost of my historical work came down to reading large piles of messy, contradictory sources, deciding which ones to trust, and turning them into something structured enough to reason about. That turns out to be most of the work of evaluating and training agents. Reading an agent’s trace is source criticism: its account of what it did is testimony, not fact. Building an eval or an RL environment means turning a messy record into a task you can check, which is what I did with ISAF press releases on the way to finetuned models that beat GPT-4. I’m always happy to talk about evals, RL environments or agent observability; the easiest way to reach me is on LinkedIn or Twitter.\nThis site has two halves. The technical side is where I work things out in public: these days that’s mostly agents, reinforcement learning for agents, and evals. The personal side goes back to 2010 and covers Afghanistan, language learning, maths, learning how to learn, and the books I’ve been reading. If you’re not sure where to start, the series collect longer runs of posts about a single project, course or book. Each half has its own RSS feed (technical, personal).\nThe two halves meet more often than you might expect. Some of the tools below are for historians and researchers, and I publish datasets on Hugging Face, including ISAF press releases from Afghanistan and records from the Guantánamo military commissions."
+    "text": "I spent around fifteen years as a historian and researcher, mostly in and about Afghanistan, before moving into software in 2021. Since then I’ve been an AI/ML engineer at ZenML, working on ZenML and Kitaru. I live in Delft, in the Netherlands, with two cats. As well as English, I’ve learned Arabic, Pashto, Dari/Persian and Dutch.\nMost of my historical work came down to reading large piles of messy, contradictory sources, deciding which ones to trust, and turning them into something structured enough to reason about. That turns out to be most of the work of evaluating and training agents. Reading an agent’s trace is source criticism: its account of what it did is testimony, not fact. Building an eval or an RL environment means turning a messy record into a task you can check, which is what I did with ISAF press releases on the way to finetuned models that beat GPT-4.\nI’m always happy to talk about evals, RL environments or agent observability. I also welcome podcast and speaking invitations, advisory work, and research collaborations, especially on history, for legal teams, or on projects with a public-interest purpose. If you’re working on something interesting in these areas, I’d like to hear about it, whatever shape it takes. The easiest way to reach me is by email at alexstrick [at] fastmail [dot] com, or on LinkedIn or Twitter."
+  },
+  {
+    "objectID": "about.html#now",
+    "href": "about.html#now",
+    "title": "About",
+    "section": "Now",
+    "text": "Now\nUpdated November 2026.\n\nBuilding Kitaru at ZenML.\nWorking on hinbox in hard mode: getting it to pull people, places and organisations out of historical documents with small local language models instead of the latest frontier models.\nThinking a lot about evals in general: what makes one trustworthy, and how to build them from messy real-world records."
+  },
+  {
+    "objectID": "about.html#start-here",
+    "href": "about.html#start-here",
+    "title": "About",
+    "section": "Start here",
+    "text": "Start here\n\nPain: A Love Story: five years of living with chronic pain, and learning to live without clear answers\nHow to think about evals\nBuilding hinbox: an agentic research tool for historical documents\nMy first RL environment: three stages, no trainer\nReading the Swarm: why today’s agent tracing tools fall short\nIs this data actually good, or does it just look good?: cleaning the ISAF press releases dataset"
+  },
+  {
+    "objectID": "about.html#about-this-site",
+    "href": "about.html#about-this-site",
+    "title": "About",
+    "section": "About this site",
+    "text": "About this site\nThis site has two halves. The technical side is where I work things out in public: these days that’s mostly agents, reinforcement learning for agents, and evals. The personal side goes back to 2010 and covers Afghanistan, language learning, maths, learning how to learn, and the books I’ve been reading. If you’re not sure where to start, the series collect longer runs of posts about a single project, course or book. Each half has its own RSS feed (technical, personal).\nThe two halves meet more often than you might expect. Some of the tools below are for historians and researchers, and I publish datasets on Hugging Face, including ISAF press releases from Afghanistan and records from the Guantánamo military commissions."
   },
   {
     "objectID": "about.html#books",
@@ -2706,7 +2727,7 @@
     "href": "index.html",
     "title": "Alex Strick van Linschoten",
     "section": "",
-    "text": "Historian turned AI/ML engineer, at ZenML since 2021.\n      Writing about agents, evals and RL, and about\n      Afghanistan, languages and books.\n    \n  \n  \n  \n    \n      Technical\n      Engineering Blog\n      Agents, evals, reinforcement learning, finetuning, and the engineering around them.\n      \n        \n      \n    \n    \n    \n      Personal\n      Life & Letters\n      Afghanistan and history, language learning, maths, and books. Writing since 2010.\n      \n        \n      \n    \n  \n  \n  \n    \n      \n        \n      \n      GitHub\n    \n    \n    \n      \n        \n      \n      Mastodon\n    \n    \n    \n      \n        \n      \n      Twitter\n    \n    \n    \n      \n        \n      \n      LinkedIn\n    \n  \n  \n  \n    About me →\n    Read a series →\n    Get posts by email →"
+    "text": "Historian turned AI/ML engineer, at ZenML since 2021.\n      Writing about agents, evals and RL, and about\n      Afghanistan, languages and books.\n    \n    \n      Now\n      Building Kitaru, getting hinbox to work with small local models, and\n      thinking a lot about evals. More →\n    \n  \n  \n  \n    \n      Technical\n      Engineering Blog\n      Agents, evals, reinforcement learning, finetuning, and the engineering around them.\n      \n        \n      \n    \n    \n    \n      Personal\n      Life & Letters\n      Afghanistan and history, language learning, maths, and books. Writing since 2010.\n      \n        \n      \n    \n  \n  \n  \n    \n      \n        \n      \n      GitHub\n    \n    \n    \n      \n        \n      \n      Mastodon\n    \n    \n    \n      \n        \n      \n      Twitter\n    \n    \n    \n      \n        \n      \n      LinkedIn\n    \n  \n  \n  \n    About me →\n    Read a series →\n    Get posts by email →"
   },
   {
     "objectID": "series.html",

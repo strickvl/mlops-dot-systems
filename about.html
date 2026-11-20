@@ -76,6 +76,102 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<!-- Structured data (schema.org JSON-LD) describing Alex as a Person, plus the
+     books, so crawlers and agents can tell that the ML engineer and the
+     Afghanistan researcher are the same person. Included in the <head> of
+     index.qmd and about.qmd. Keep in sync with about.qmd and llms.txt. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://alexstrick.com/#person",
+      "name": "Alex Strick van Linschoten",
+      "url": "https://alexstrick.com/",
+      "image": "https://alexstrick.com/profile.jpg",
+      "description": "Historian and researcher of Afghanistan for around fifteen years, then AI/ML engineer at ZenML since 2021. Works on agents, evals, reinforcement learning environments for agents, and agent observability. Open to podcast and speaking invitations, advisory work, and research collaborations, especially on history, legal work, and public-interest projects.",
+      "jobTitle": "AI/ML Engineer",
+      "worksFor": { "@type": "Organization", "name": "ZenML", "url": "https://www.zenml.io" },
+      "homeLocation": { "@type": "Place", "name": "Delft, Netherlands" },
+      "knowsLanguage": ["English", "Arabic", "Pashto", "Dari", "Persian", "Dutch"],
+      "knowsAbout": [
+        "AI agents",
+        "LLM evaluation (evals)",
+        "Reinforcement learning environments for agents",
+        "Agent observability and tracing",
+        "LLM finetuning",
+        "Local and open-weight language models",
+        "MLOps",
+        "Information extraction from historical documents",
+        "Afghanistan",
+        "The Afghan Taliban",
+        "Historical research and source criticism",
+        "Language learning"
+      ],
+      "sameAs": [
+        "https://github.com/strickvl",
+        "https://linkedin.com/in/strickvl",
+        "https://twitter.com/strickvl",
+        "https://mastodon.social/@strickvl",
+        "https://huggingface.co/strickvl"
+      ]
+    },
+    {
+      "@type": "Book",
+      "name": "DeepSeek in Practice",
+      "datePublished": "2025",
+      "publisher": { "@type": "Organization", "name": "Packt" },
+      "url": "https://www.packtpub.com/en-us/product/deepseek-in-practice-9781806020850",
+      "author": [
+        { "@id": "https://alexstrick.com/#person" },
+        { "@type": "Person", "name": "Andy Peng" },
+        { "@type": "Person", "name": "Duarte O. Carmo" }
+      ]
+    },
+    {
+      "@type": "Book",
+      "name": "The Taliban Reader",
+      "datePublished": "2018",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/the-taliban-reader/",
+      "editor": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "An Enemy We Created: The Myth of the Taliban-Al Qaeda Merger in Afghanistan",
+      "datePublished": "2012",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/an-enemy-we-created/",
+      "author": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "Poetry of the Taliban",
+      "datePublished": "2012",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/poetry-of-the-taliban/",
+      "editor": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "My Life with the Taliban",
+      "datePublished": "2010",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/my-life-with-the-taliban/",
+      "author": { "@type": "Person", "name": "Abdul Salam Zaeef" },
+      "editor": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "Master Arabic",
+      "datePublished": "2017",
+      "url": "https://incrementalelephant.gumroad.com/l/masterarabic-basic",
+      "author": { "@id": "https://alexstrick.com/#person" }
+    }
+  ]
+}
+</script>
 <script defer="" data-domain="alexstrick.com" src="https://plausible.io/js/script.js"></script>
 
 
@@ -393,10 +489,34 @@ ul.task-list li input[type="checkbox"] {
   </div>
   <div class="about-contents"><main class="content" id="quarto-document-content">
 
-<p>I spent around fifteen years as a historian and researcher, mostly in and about Afghanistan, before moving into software in 2021. Since then I’ve been an AI/ML engineer at ZenML, working on <a href="https://github.com/zenml-io/zenml">ZenML</a> and <a href="https://kitaru.ai">Kitaru</a>. I live in Delft, in the Netherlands, with two cats.</p>
-<p>Most of my historical work came down to reading large piles of messy, contradictory sources, deciding which ones to trust, and turning them into something structured enough to reason about. That turns out to be most of the work of evaluating and training agents. Reading an agent’s trace is source criticism: its account of what it did is <a href="./posts/2026-10-13-agent-swarm-observability-tools.html">testimony, not fact</a>. Building an eval or an <a href="./posts/2026-06-20-my-first-rl-environment.html">RL environment</a> means turning a messy record into a task you can check, which is what I did with ISAF press releases on the way to <a href="./posts/2024-07-01-full-finetuned-model-evaluation.html">finetuned models that beat GPT-4</a>. I’m always happy to talk about evals, RL environments or agent observability; the easiest way to reach me is on <a href="https://linkedin.com/in/strickvl">LinkedIn</a> or <a href="https://twitter.com/strickvl">Twitter</a>.</p>
+<p>I spent around fifteen years as a historian and researcher, mostly in and about Afghanistan, before moving into software in 2021. Since then I’ve been an AI/ML engineer at ZenML, working on <a href="https://github.com/zenml-io/zenml">ZenML</a> and <a href="https://kitaru.ai">Kitaru</a>. I live in Delft, in the Netherlands, with two cats. As well as English, I’ve learned Arabic, Pashto, Dari/Persian and Dutch.</p>
+<p>Most of my historical work came down to reading large piles of messy, contradictory sources, deciding which ones to trust, and turning them into something structured enough to reason about. That turns out to be most of the work of evaluating and training agents. Reading an agent’s trace is source criticism: its account of what it did is <a href="./posts/2026-10-13-agent-swarm-observability-tools.html">testimony, not fact</a>. Building an eval or an <a href="./posts/2026-06-20-my-first-rl-environment.html">RL environment</a> means turning a messy record into a task you can check, which is what I did with ISAF press releases on the way to <a href="./posts/2024-07-01-full-finetuned-model-evaluation.html">finetuned models that beat GPT-4</a>.</p>
+<p>I’m always happy to talk about evals, RL environments or agent observability. I also welcome podcast and speaking invitations, advisory work, and research collaborations, especially on history, for legal teams, or on projects with a public-interest purpose. If you’re working on something interesting in these areas, I’d like to hear about it, whatever shape it takes. The easiest way to reach me is by email at alexstrick [at] fastmail [dot] com, or on <a href="https://linkedin.com/in/strickvl">LinkedIn</a> or <a href="https://twitter.com/strickvl">Twitter</a>.</p>
+<section id="now" class="level2">
+<h2 data-anchor-id="now">Now</h2>
+<p><em>Updated November 2026.</em></p>
+<ul>
+<li>Building <a href="https://kitaru.ai">Kitaru</a> at ZenML.</li>
+<li>Working on <a href="https://github.com/strickvl/hinbox">hinbox</a> in hard mode: getting it to pull people, places and organisations out of historical documents with small local language models instead of the latest frontier models.</li>
+<li>Thinking a lot about evals in general: what makes one trustworthy, and how to build them from messy real-world records.</li>
+</ul>
+</section>
+<section id="start-here" class="level2">
+<h2 data-anchor-id="start-here">Start here</h2>
+<ul>
+<li><a href="./personal/2019-01-31-pain-love-story.html">Pain: A Love Story</a>: five years of living with chronic pain, and learning to live without clear answers</li>
+<li><a href="./posts/2025-05-20-how-to-think-about-evals.html">How to think about evals</a></li>
+<li><a href="./posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html">Building hinbox</a>: an agentic research tool for historical documents</li>
+<li><a href="./posts/2026-06-20-my-first-rl-environment.html">My first RL environment</a>: three stages, no trainer</li>
+<li><a href="./posts/2026-10-13-agent-swarm-observability-tools.html">Reading the Swarm</a>: why today’s agent tracing tools fall short</li>
+<li><a href="./posts/2026-06-28-cleaning-isaf-dataset-rigour.html">Is this data actually good, or does it just look good?</a>: cleaning the ISAF press releases dataset</li>
+</ul>
+</section>
+<section id="about-this-site" class="level2">
+<h2 data-anchor-id="about-this-site">About this site</h2>
 <p>This site has two halves. The <a href="./technical.html">technical</a> side is where I work things out in public: these days that’s mostly agents, reinforcement learning for agents, and evals. The <a href="./personal.html">personal</a> side goes back to 2010 and covers Afghanistan, language learning, maths, learning how to learn, and the books I’ve been reading. If you’re not sure where to start, the <a href="./series.html">series</a> collect longer runs of posts about a single project, course or book. Each half has its own RSS feed (<a href="./technical.xml">technical</a>, <a href="./personal.xml">personal</a>).</p>
 <p>The two halves meet more often than you might expect. Some of the tools below are for historians and researchers, and I publish datasets on <a href="https://huggingface.co/strickvl">Hugging Face</a>, including ISAF press releases from Afghanistan and records from the Guantánamo military commissions.</p>
+</section>
 <section id="books" class="level2">
 <h2 data-anchor-id="books">Books</h2>
 <ul>
