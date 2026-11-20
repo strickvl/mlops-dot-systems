@@ -46,8 +46,6 @@ website:
         file: about.qmd
       - icon: github
         href: https://github.com/strickvl
-      - icon: mastodon
-        href: https://sigmoid.social/web/@alexstrick
       - icon: twitter
         href: https://twitter.com/strickvl
       - text: "Subscribe"

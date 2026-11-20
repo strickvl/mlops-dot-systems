@@ -1,6 +1,7 @@
 ---
 title: "About"
 image: profile.jpg
+css: styles/about.css
 about:
   template: trestles
   links:
