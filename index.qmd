@@ -3,10 +3,11 @@ pagetitle: "Alex Strick van Linschoten"
 page-layout: custom
 css: styles/landing.css
 include-in-header:
-  text: |
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  - text: |
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  - file: _person-jsonld.html
 ---
 
 ```{=html}
@@ -17,6 +18,11 @@ include-in-header:
       Historian turned AI/ML engineer, at ZenML since 2021.
       Writing about <em>agents</em>, <em>evals</em> and <em>RL</em>, and about
       <em>Afghanistan</em>, <em>languages</em> and <em>books</em>.
+    </p>
+    <p class="landing-now">
+      <span class="landing-now__label">Now</span>
+      Building Kitaru, getting hinbox to work with small local models, and
+      thinking a lot about evals. <a href="about.html#now">More →</a>
     </p>
   </div>
   

@@ -15,6 +15,8 @@ project:
     - "!**/README.md"
     - "!scripts/**"
     - "!squarespace_export/**"
+  resources:
+    - llms.txt
 
 website:
   title: "Alex Strick van Linschoten"

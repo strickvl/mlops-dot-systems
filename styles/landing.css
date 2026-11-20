@@ -106,6 +106,32 @@ body::before {
     font-family: var(--font-display);
 }
 
+.landing-now {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    max-width: 480px;
+    margin: 1.25rem auto 0;
+}
+
+.landing-now__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-right: 0.4em;
+}
+
+.landing-now a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.landing-now a:hover {
+    color: var(--text-primary);
+}
+
 /* Navigation Cards */
 .landing-nav {
     display: grid;

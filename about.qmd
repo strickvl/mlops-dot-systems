@@ -19,13 +19,15 @@ about:
     - icon: database
       text: Hugging Face
       href: https://huggingface.co/strickvl
-
+include-in-header:
+  - file: _person-jsonld.html
 ---
 
 I spent around fifteen years as a historian and researcher, mostly in and about
 Afghanistan, before moving into software in 2021. Since then I've been an AI/ML
 engineer at ZenML, working on [ZenML](https://github.com/zenml-io/zenml) and
 [Kitaru](https://kitaru.ai). I live in Delft, in the Netherlands, with two cats.
+As well as English, I've learned Arabic, Pashto, Dari/Persian and Dutch.
 
 Most of my historical work came down to reading large piles of messy,
 contradictory sources, deciding which ones to trust, and turning them into
@@ -38,9 +40,43 @@ Building an eval or an
 a messy record into a task you can check, which is what I did with ISAF press
 releases on the way to
 [finetuned models that beat GPT-4](/posts/2024-07-01-full-finetuned-model-evaluation.html).
-I'm always happy to talk about evals, RL environments or agent observability;
-the easiest way to reach me is on [LinkedIn](https://linkedin.com/in/strickvl)
-or [Twitter](https://twitter.com/strickvl).
+
+I'm always happy to talk about evals, RL environments or agent observability.
+I also welcome podcast and speaking invitations, advisory work, and research
+collaborations, especially on history, for legal teams, or on projects with a
+public-interest purpose. If you're working on something interesting in these
+areas, I'd like to hear about it, whatever shape it takes. The easiest way to
+reach me is by email at alexstrick [at] fastmail [dot] com, or on
+[LinkedIn](https://linkedin.com/in/strickvl) or
+[Twitter](https://twitter.com/strickvl).
+
+## Now
+
+*Updated November 2026.*
+
+- Building [Kitaru](https://kitaru.ai) at ZenML.
+- Working on [hinbox](https://github.com/strickvl/hinbox) in hard mode: getting
+  it to pull people, places and organisations out of historical documents with
+  small local language models instead of the latest frontier models.
+- Thinking a lot about evals in general: what makes one trustworthy, and how
+  to build them from messy real-world records.
+
+## Start here
+
+- [Pain: A Love Story](/personal/2019-01-31-pain-love-story.html): five years
+  of living with chronic pain, and learning to live without clear answers
+- [How to think about evals](/posts/2025-05-20-how-to-think-about-evals.html)
+- [Building hinbox](/posts/2025-05-29-hinbox-a-first-draft-of-an-agentic-research-system.html):
+  an agentic research tool for historical documents
+- [My first RL environment](/posts/2026-06-20-my-first-rl-environment.html):
+  three stages, no trainer
+- [Reading the Swarm](/posts/2026-10-13-agent-swarm-observability-tools.html):
+  why today's agent tracing tools fall short
+- [Is this data actually good, or does it just look good?](/posts/2026-06-28-cleaning-isaf-dataset-rigour.html):
+  cleaning the ISAF press releases dataset
+
+## About this site
+
 
 This site has two halves. The [technical](/technical.html) side is where I work
 things out in public: these days that's mostly agents, reinforcement learning

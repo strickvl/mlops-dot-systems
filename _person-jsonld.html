@@ -1,0 +1,96 @@
+<!-- Structured data (schema.org JSON-LD) describing Alex as a Person, plus the
+     books, so crawlers and agents can tell that the ML engineer and the
+     Afghanistan researcher are the same person. Included in the <head> of
+     index.qmd and about.qmd. Keep in sync with about.qmd and llms.txt. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://alexstrick.com/#person",
+      "name": "Alex Strick van Linschoten",
+      "url": "https://alexstrick.com/",
+      "image": "https://alexstrick.com/profile.jpg",
+      "description": "Historian and researcher of Afghanistan for around fifteen years, then AI/ML engineer at ZenML since 2021. Works on agents, evals, reinforcement learning environments for agents, and agent observability. Open to podcast and speaking invitations, advisory work, and research collaborations, especially on history, legal work, and public-interest projects.",
+      "jobTitle": "AI/ML Engineer",
+      "worksFor": { "@type": "Organization", "name": "ZenML", "url": "https://www.zenml.io" },
+      "homeLocation": { "@type": "Place", "name": "Delft, Netherlands" },
+      "knowsLanguage": ["English", "Arabic", "Pashto", "Dari", "Persian", "Dutch"],
+      "knowsAbout": [
+        "AI agents",
+        "LLM evaluation (evals)",
+        "Reinforcement learning environments for agents",
+        "Agent observability and tracing",
+        "LLM finetuning",
+        "Local and open-weight language models",
+        "MLOps",
+        "Information extraction from historical documents",
+        "Afghanistan",
+        "The Afghan Taliban",
+        "Historical research and source criticism",
+        "Language learning"
+      ],
+      "sameAs": [
+        "https://github.com/strickvl",
+        "https://linkedin.com/in/strickvl",
+        "https://twitter.com/strickvl",
+        "https://mastodon.social/@strickvl",
+        "https://huggingface.co/strickvl"
+      ]
+    },
+    {
+      "@type": "Book",
+      "name": "DeepSeek in Practice",
+      "datePublished": "2025",
+      "publisher": { "@type": "Organization", "name": "Packt" },
+      "url": "https://www.packtpub.com/en-us/product/deepseek-in-practice-9781806020850",
+      "author": [
+        { "@id": "https://alexstrick.com/#person" },
+        { "@type": "Person", "name": "Andy Peng" },
+        { "@type": "Person", "name": "Duarte O. Carmo" }
+      ]
+    },
+    {
+      "@type": "Book",
+      "name": "The Taliban Reader",
+      "datePublished": "2018",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/the-taliban-reader/",
+      "editor": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "An Enemy We Created: The Myth of the Taliban-Al Qaeda Merger in Afghanistan",
+      "datePublished": "2012",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/an-enemy-we-created/",
+      "author": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "Poetry of the Taliban",
+      "datePublished": "2012",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/poetry-of-the-taliban/",
+      "editor": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "My Life with the Taliban",
+      "datePublished": "2010",
+      "publisher": { "@type": "Organization", "name": "Hurst" },
+      "url": "https://hurstpublishers.com/book/my-life-with-the-taliban/",
+      "author": { "@type": "Person", "name": "Abdul Salam Zaeef" },
+      "editor": [{ "@id": "https://alexstrick.com/#person" }, { "@type": "Person", "name": "Felix Kuehn" }]
+    },
+    {
+      "@type": "Book",
+      "name": "Master Arabic",
+      "datePublished": "2017",
+      "url": "https://incrementalelephant.gumroad.com/l/masterarabic-basic",
+      "author": { "@id": "https://alexstrick.com/#person" }
+    }
+  ]
+}
+</script>
